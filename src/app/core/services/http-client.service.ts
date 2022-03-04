@@ -5,7 +5,7 @@ import { environment } from '../../../environments/environment';
 import { IRequestOptions } from '../interfaces/request-options.interface';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class HttpClientService {
   /**
@@ -28,6 +28,7 @@ export class HttpClientService {
    * @returns Observable
    */
   public get<T>(endpoint: string, params?: any | null, options?: IRequestOptions): Observable<T> {
+    console.warn('HttpClientService get:', endpoint, params, options);
     options = options || {};
     options = Object.assign(options, {params});
 

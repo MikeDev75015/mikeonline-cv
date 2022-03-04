@@ -1,34 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { ModuleWithProviders, NgModule, Optional, Provider, SkipSelf } from '@angular/core';
-import { EffectsModule } from '@ngrx/effects';
-import { StoreModule } from '@ngrx/store';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { reducers, metaReducers } from './ngrx';
-import { environment } from '../../environments/environment';
-import { CvInfosEffects } from './ngrx/effects/cv-infos.effects';
-import { HttpClientService } from './services/http-client.service';
 
 const importList = [
   CommonModule,
-  HttpClientModule,
-  EffectsModule.forRoot([
-    CvInfosEffects,
-  ]),
-  StoreModule.forRoot(reducers, { metaReducers }),
-  StoreDevtoolsModule.instrument({
-    maxAge: 25, // Retains last 25 states
-    logOnly: environment.production, // Restrict extension to log-only mode
-    autoPause: true, // Pauses recording actions and state changes when the extension window is not open
-  }),
-];
-
-const serviceList = [
-  HttpClientService,
 ];
 
 const providerList: Provider[] = [
-  serviceList,
 ];
 
 @NgModule({
