@@ -1,8 +1,11 @@
+// noinspection JSUnusedGlobalSymbols
+
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { map, mergeMap, tap } from 'rxjs/operators';
-import { HttpClientService } from '../../services/http-client.service';
+import { mergeMap, tap } from 'rxjs/operators';
+import { ApiV0Service } from '../../../shared/services/api-v0/api-v0.service';
+import { TagsService } from '../../../shared/services/tags/tags.service';
 import { IProject } from '../../interfaces/models/project.interface';
 import * as ProjectsActions from '../actions/projects.actions';
 
@@ -16,15 +19,23 @@ export class ProjectsEffects {
    */
   fetchProjects$ = createEffect(() => this.actions$.pipe(
     ofType(ProjectsActions.fetchProjects),
-    mergeMap(() => this.httpClientService.get<IProject[]>(`/v0/projects`)),
-    map((projectList) => {
+    mergeMap(() => this.apiV0Service.getData<IProject[]>('projects')),
+    tap((projectList) => {
       if (!projectList || !projectList.length) {
-        return ProjectsActions.fetchProjectsFailure();
+        this.store.dispatch(ProjectsActions.fetchProjectsFailure());
+        return;
       }
 
-      return ProjectsActions.fetchProjectsSuccess({ projectList });
+      this.tagsService.getAllTags().then((allTags) => {
+        this.store.dispatch(ProjectsActions.fetchProjectsSuccess({
+          projectList: projectList.map((project) => ({
+            ...project,
+            tagList: this.tagsService.getTagsByIds(project.tagIdList, allTags),
+          })),
+        }));
+      });
     }),
-  ));
+  ), { dispatch: false });
 
   /**
    * Effect for the fetchProjectsFailure action
@@ -40,11 +51,14 @@ export class ProjectsEffects {
    * @ignore
    * @param actions$
    * @param store
-   * @param httpClientService
+   * @param apiV0Service
+   * @param tagsService
    */
   constructor(
     private readonly actions$: Actions,
     private readonly store: Store,
-    private readonly httpClientService: HttpClientService,
-  ) {}
+    private readonly apiV0Service: ApiV0Service,
+    private readonly tagsService: TagsService,
+  ) {
+  }
 }

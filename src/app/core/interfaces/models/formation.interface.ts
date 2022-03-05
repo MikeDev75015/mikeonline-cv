@@ -10,8 +10,8 @@ export interface IFormation {
   certificate?: boolean;
   society?: string;
   place: string;
+  tagIdList: number[];
   detailList?: IDetail[];
-  tagIdList?: number[];
-  tagList?: ITag[];
   linkList?: ILink[];
+  tagList?: ITag[];
 }

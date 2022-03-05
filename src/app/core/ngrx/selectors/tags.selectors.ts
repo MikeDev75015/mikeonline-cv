@@ -1,6 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { TagsState } from '../reducers/tags.reducers';
 import * as TagsReducers from '../reducers/tags.reducers';
+import { TagsState } from '../reducers/tags.reducers';
 
 const tagsState = createFeatureSelector<TagsState>('tags');
 

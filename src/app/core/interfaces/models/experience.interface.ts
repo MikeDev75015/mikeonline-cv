@@ -12,8 +12,8 @@ export interface IExperience {
   jobType?: EJobType;
   society?: string;
   place: string;
+  tagIdList: number[];
   detailList?: IDetail[];
-  tagIdList?: number[];
-  tagList?: ITag[];
   linkList?: ILink[];
+  tagList?: ITag[];
 }

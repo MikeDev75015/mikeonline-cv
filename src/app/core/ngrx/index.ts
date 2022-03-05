@@ -17,12 +17,12 @@ import * as fromInterests from './reducers/interests.reducers';
  */
 export interface State {
   cvInfos: fromCvInfos.CvInfosState;
-  tagList: fromTags.TagsState;
-  competenceList: fromCompetences.CompetencesState;
-  experienceList: fromExperiences.ExperiencesState;
-  formationList: fromFormations.FormationsState;
-  projectList: fromProjects.ProjectsState;
-  interestList: fromInterests.InterestsState;
+  tags: fromTags.TagsState;
+  competences: fromCompetences.CompetencesState;
+  experiences: fromExperiences.ExperiencesState;
+  formations: fromFormations.FormationsState;
+  projects: fromProjects.ProjectsState;
+  interests: fromInterests.InterestsState;
 }
 
 /**
@@ -30,12 +30,12 @@ export interface State {
  */
 export const reducers: ActionReducerMap<State> = {
   cvInfos: fromCvInfos.reducer,
-  tagList: fromTags.reducer,
-  competenceList: fromCompetences.reducer,
-  experienceList: fromExperiences.reducer,
-  formationList: fromFormations.reducer,
-  projectList: fromProjects.reducer,
-  interestList: fromInterests.reducer,
+  tags: fromTags.reducer,
+  competences: fromCompetences.reducer,
+  experiences: fromExperiences.reducer,
+  formations: fromFormations.reducer,
+  projects: fromProjects.reducer,
+  interests: fromInterests.reducer,
 };
 
 /**

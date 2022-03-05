@@ -1,6 +1,7 @@
 import {IDetail} from '../detail.interface';
 import {ILink} from '../link.interface';
 import {IDescription} from '../description.interface';
+import { ITag } from './tag.interface';
 
 export interface ICompetence {
   id?: string;
@@ -12,9 +13,10 @@ export interface ICompetence {
     text: string;
     value: number;
   };
+  tagIdList: number[];
   subTitle?: string;
   description?: IDescription
   link?: ILink;
   detailList?: IDetail[];
-  tagIdList?: number[];
+  tagList?: ITag[];
 }

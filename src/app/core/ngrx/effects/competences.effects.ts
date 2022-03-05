@@ -1,9 +1,12 @@
+// noinspection JSUnusedGlobalSymbols
+
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { map, mergeMap, tap } from 'rxjs/operators';
+import { mergeMap, tap } from 'rxjs/operators';
+import { ApiV0Service } from '../../../shared/services/api-v0/api-v0.service';
+import { TagsService } from '../../../shared/services/tags/tags.service';
 import { ICompetence } from '../../interfaces/models/competence.interface';
-import { HttpClientService } from '../../services/http-client.service';
 import * as CompetencesActions from '../actions/competences.actions';
 
 /**
@@ -16,15 +19,23 @@ export class CompetencesEffects {
    */
   fetchCompetences$ = createEffect(() => this.actions$.pipe(
     ofType(CompetencesActions.fetchCompetences),
-    mergeMap(() => this.httpClientService.get<ICompetence[]>(`/v0/competences`)),
-    map((competenceList) => {
+    mergeMap(() => this.apiV0Service.getData<ICompetence[]>('competences')),
+    tap((competenceList) => {
       if (!competenceList || !competenceList.length) {
-        return CompetencesActions.fetchCompetencesFailure();
+        this.store.dispatch(CompetencesActions.fetchCompetencesFailure());
+        return;
       }
 
-      return CompetencesActions.fetchCompetencesSuccess({ competenceList });
+      this.tagsService.getAllTags().then((allTags) => {
+        this.store.dispatch(CompetencesActions.fetchCompetencesSuccess({
+          competenceList: competenceList.map((competence) => ({
+            ...competence,
+            tagList: this.tagsService.getTagsByIds(competence.tagIdList, allTags),
+          })),
+        }));
+      });
     }),
-  ));
+  ), { dispatch: false });
 
   /**
    * Effect for the fetchCompetencesFailure action
@@ -40,11 +51,14 @@ export class CompetencesEffects {
    * @ignore
    * @param actions$
    * @param store
-   * @param httpClientService
+   * @param apiV0Service
+   * @param tagsService
    */
   constructor(
     private readonly actions$: Actions,
     private readonly store: Store,
-    private readonly httpClientService: HttpClientService,
-  ) {}
+    private readonly apiV0Service: ApiV0Service,
+    private readonly tagsService: TagsService,
+  ) {
+  }
 }

@@ -1,8 +1,11 @@
+// noinspection JSUnusedGlobalSymbols
+
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { map, mergeMap, tap } from 'rxjs/operators';
-import { HttpClientService } from '../../services/http-client.service';
+import { mergeMap, tap } from 'rxjs/operators';
+import { ApiV0Service } from '../../../shared/services/api-v0/api-v0.service';
+import { TagsService } from '../../../shared/services/tags/tags.service';
 import { IExperience } from '../../interfaces/models/experience.interface';
 import * as ExperiencesActions from '../actions/experiences.actions';
 
@@ -16,15 +19,23 @@ export class ExperiencesEffects {
    */
   fetchExperiences$ = createEffect(() => this.actions$.pipe(
     ofType(ExperiencesActions.fetchExperiences),
-    mergeMap(() => this.httpClientService.get<IExperience[]>(`/v0/experiences`)),
-    map((experienceList) => {
+    mergeMap(() => this.apiV0Service.getData<IExperience[]>('experiences')),
+    tap((experienceList) => {
       if (!experienceList || !experienceList.length) {
-        return ExperiencesActions.fetchExperiencesFailure();
+        this.store.dispatch(ExperiencesActions.fetchExperiencesFailure());
+        return;
       }
 
-      return ExperiencesActions.fetchExperiencesSuccess({ experienceList });
+      this.tagsService.getAllTags().then((allTags) => {
+        this.store.dispatch(ExperiencesActions.fetchExperiencesSuccess({
+          experienceList: experienceList.map((experience) => ({
+            ...experience,
+            tagList: this.tagsService.getTagsByIds(experience.tagIdList, allTags),
+          })),
+        }));
+      });
     }),
-  ));
+  ), { dispatch: false });
 
   /**
    * Effect for the fetchExperiencesFailure action
@@ -40,11 +51,14 @@ export class ExperiencesEffects {
    * @ignore
    * @param actions$
    * @param store
-   * @param httpClientService
+   * @param apiV0Service
+   * @param tagsService
    */
   constructor(
     private readonly actions$: Actions,
     private readonly store: Store,
-    private readonly httpClientService: HttpClientService,
-  ) {}
+    private readonly apiV0Service: ApiV0Service,
+    private readonly tagsService: TagsService,
+  ) {
+  }
 }

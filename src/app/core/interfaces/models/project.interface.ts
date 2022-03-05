@@ -2,6 +2,7 @@ import {IImage} from '../image.interface';
 import {IDetail} from '../detail.interface';
 import {ILink} from '../link.interface';
 import {IDescription} from '../description.interface';
+import { ITag } from './tag.interface';
 
 export interface IProject {
   id: string;
@@ -13,6 +14,7 @@ export interface IProject {
   link: ILink;
   detailList: IDetail[];
   tagIdList: number[];
+  tagList?: ITag[];
   styles: {
     classicView: {
       title?: any;

@@ -1,8 +1,10 @@
+// noinspection JSUnusedGlobalSymbols
+
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { map, mergeMap, tap } from 'rxjs/operators';
-import { HttpClientService } from '../../services/http-client.service';
+import { ApiV0Service } from '../../../shared/services/api-v0/api-v0.service';
 import { IInterest } from '../../interfaces/models/interest.interface';
 import * as InterestsActions from '../actions/interests.actions';
 
@@ -16,7 +18,7 @@ export class InterestsEffects {
    */
   fetchInterests$ = createEffect(() => this.actions$.pipe(
     ofType(InterestsActions.fetchInterests),
-    mergeMap(() => this.httpClientService.get<IInterest[]>(`/v0/interests`)),
+    mergeMap(() => this.apiV0Service.getData<IInterest[]>('interests')),
     map((interestList) => {
       if (!interestList || !interestList.length) {
         return InterestsActions.fetchInterestsFailure();
@@ -40,11 +42,12 @@ export class InterestsEffects {
    * @ignore
    * @param actions$
    * @param store
-   * @param httpClientService
+   * @param apiV0Service
    */
   constructor(
     private readonly actions$: Actions,
     private readonly store: Store,
-    private readonly httpClientService: HttpClientService,
-  ) {}
+    private readonly apiV0Service: ApiV0Service,
+  ) {
+  }
 }

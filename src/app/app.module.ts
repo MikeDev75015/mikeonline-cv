@@ -17,7 +17,7 @@ import { FormationsEffects } from './core/ngrx/effects/formations.effects';
 import { InterestsEffects } from './core/ngrx/effects/interests.effects';
 import { ProjectsEffects } from './core/ngrx/effects/projects.effects';
 import { TagsEffects } from './core/ngrx/effects/tags.effects';
-import { HttpClientService } from './core/services/http-client.service';
+import { HttpClientService } from './core/services/http-client/http-client.service';
 
 @NgModule({
   declarations: [
