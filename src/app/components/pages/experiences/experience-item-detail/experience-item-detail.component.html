@@ -1,0 +1,15 @@
+<div *ngIf="detail">
+  <h4 *ngIf="detail.title">{{ detail.title | uppercase }}</h4>
+  <p *ngFor="let line of detail.lineList">
+    <span *ngIf="line.charAt(0) === '*'" class="fss" style="margin: 5px 0 2px; font-weight: 600;">
+      <span>&nbsp;</span>
+      <span>
+        {{ line.replace('* ', '') }}
+      </span>
+    </span>
+    <span class="fss" *ngIf="line.charAt(0) !== '*'">
+      <span>&nbsp;-&nbsp;</span>
+      <span>{{ line }}</span>
+    </span>
+  </p>
+</div>

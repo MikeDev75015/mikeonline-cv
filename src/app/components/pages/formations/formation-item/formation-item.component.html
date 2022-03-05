@@ -1,0 +1,68 @@
+<div *ngIf="form" class="line-header fbs w100" style="position: relative;">
+  <div class="w100 fss column">
+    <h3 class="fss wrap">
+      <span [innerHTML]="form.title"></span>
+      <span [innerHTML]="' - ' + form.society | incompressibleSpace"></span>
+    </h3>
+    <em [innerHTML]="form.place | incompressibleSpace"></em>
+  </div>
+  <h3 class="fes" style="text-align: right;">
+    <span
+      *ngIf="form.beginDate && !form.endDate">Depuis {{ form.beginDate | amLocale:'fr' | amDateFormat:'MMMM YYYY' }}</span>
+    <span *ngIf="form.beginDate && form.endDate">
+        De&nbsp;{{ form.beginDate | amLocale:'fr' | amDateFormat:'MMMM[&nbsp;]YYYY' }}
+      à&nbsp;{{ form.endDate | amLocale:'fr' | amDateFormat:'MMMM[&nbsp;]YYYY' }}
+    </span>
+    <span
+      *ngIf="!form.beginDate && form.endDate">{{ form.endDate | amLocale:'fr' | amDateFormat:'MMMM YYYY' | firstLetterUppercase }}</span>
+  </h3>
+</div>
+<ng-container *ngIf="form && form.tagList">
+  <div class="line-tags fss w100" style="flex-wrap: wrap;">
+    <ng-container *ngFor="let tag of form.tagList">
+      <p *ngIf="tag" [innerHTML]="tag.name" [title]="tag.name" class="chip fcc"></p>
+    </ng-container>
+  </div>
+</ng-container>
+<div
+  class="line-body w100"
+  [ngStyle]="{
+    'margin-bottom': enableOpenCloseButtons && opened ? '30px' : '0',
+    'overflow': opened && !masked ? overflow : 'hidden',
+    'padding-left': overflow === 'hidden' || (overflow === 'auto' && (!opened || masked)) ? lineBodyPaddingLeft : '30px'
+  }"
+  [@FormationItemComponentInOut]="opened ? 'in' : 'out'"
+  (@FormationItemComponentInOut.start)="onAnimation($event)"
+  (@FormationItemComponentInOut.done)="onAnimation($event)"
+>
+  <div
+    *ngIf="form && form.detailList"
+    [id]="'formation-detail-list-' + index"
+    class="fss w100 column"
+  >
+    <app-formation-item-detail *ngFor="let detail of form.detailList" [detail]="detail">
+    </app-formation-item-detail>
+  </div>
+</div>
+<div
+  *ngIf="enableOpenCloseButtons"
+  class="closed-layer w100 fce"
+  [@ClosedLayerInOut]="masked ? 'in' : 'out'"
+  (@ClosedLayerInOut.start)="onAnimation($event)"
+  (@ClosedLayerInOut.done)="onAnimation($event)"
+  (click)="toggleView('open')"
+>
+  <button
+    *ngIf="!opened && btnOpen"
+    class="btns-open-close-items btn-open-item blinking">
+    <i class="fas fa-hand-point-down" style="pointer-events: none;"></i>
+  </button>
+</div>
+<button
+  *ngIf="enableOpenCloseButtons && opened && !masked"
+  class="fcc btns-open-close-items btn-close-item blinking"
+  (click)="toggleView('close')"
+>
+  <i class="fas fa-hand-point-up" style="pointer-events: none;"></i>
+</button>
+

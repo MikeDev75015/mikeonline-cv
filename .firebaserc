@@ -1,0 +1,17 @@
+{
+  "projects": {
+    "default": "cv-mikeonline"
+  },
+  "targets": {
+    "cv-mikeonline": {
+      "hosting": {
+        "staging": [
+          "cv-mikeonline-staging"
+        ],
+        "production": [
+          "cv-mikeonline"
+        ]
+      }
+    }
+  }
+}

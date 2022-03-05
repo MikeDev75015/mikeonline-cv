@@ -1,0 +1,83 @@
+#COMPETENCES {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: flex-start;
+  position: relative;
+}
+
+.accordion {
+  min-width: 350px !important;
+}
+
+.pf_flip {
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.chip {
+  font-size: 20px;
+}
+
+.skill-details {
+  margin: 10px 0 30px;
+
+  p-knob {
+    pointer-events: none;
+  }
+
+  p {
+    color: #555555;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  > div {
+    > div {
+      margin: 0 10px;
+    }
+  }
+}
+
+:host ::ng-deep .p-knob-text {
+  font-size: 14px;
+}
+
+@media screen and (max-width: 840px) {
+  .chip {
+    font-size: 14px;
+  }
+
+  .skill-details {
+    margin: 10px 0 30px;
+
+    p {
+      color: #555555;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    > div {
+      align-items: flex-start !important;
+      flex-wrap: wrap;
+      max-width: 320px;
+
+      > div {
+        margin: 0 10px;
+      }
+
+      > div:first-of-type {
+        order: 2;
+      }
+
+      > div:nth-of-type(2) {
+        order: 1;
+        margin-bottom: 10px;
+      }
+
+      > div:last-of-type {
+        order: 3;
+      }
+    }
+  }
+}

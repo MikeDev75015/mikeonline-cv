@@ -1,0 +1,16 @@
+<div class="alert-popup">
+  <h5 mat-dialog-title>{{ data.title }}</h5>
+  <p mat-dialog-content>{{ data.msg }}</p>
+  <div style="margin-top: 30px;" class="fee w100" mat-dialog-actions>
+    <button
+      *ngFor="let btn of data.actionsList"
+      class="btns-alert-popup"
+      (click)="onAction(btn.action)"
+    >{{ btn.name }}</button>
+    <button
+      class="btns-alert-popup"
+      mat-dialog-close=""
+      (click)="onCloseBtn()"
+    >{{ data.closeBtnLabel }}</button>
+  </div>
+</div>

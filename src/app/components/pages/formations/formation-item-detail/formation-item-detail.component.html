@@ -1,0 +1,41 @@
+<div
+  *ngIf="detail"
+  [ngClass]="{'clickable': detail.url}"
+  (click)="detail.url ? openUrl(detail.url) : null"
+>
+  <h4 *ngIf="detail.title">{{ detail.title | uppercase }}</h4>
+  <div class="fss">
+    <div class="column">
+      <p *ngFor="let line of detail.lineList">
+
+        <!--  subtitle line  -->
+        <span *ngIf="line.charAt(0) === '*'" class="fss" style="margin: 5px 0 2px; font-weight: 600;">
+          <!--<span>*&nbsp;</span>-->
+          <span>
+            {{ line.replace('* ', '') }}
+            {{ detail.date ? ' (' + (detail.date | amLocale:'fr' | amDateFormat:'MMM YYYY') + ')' : '' }}
+          </span>
+        </span>
+        <!--  subtitle line  -->
+        <span *ngIf="line.charAt(0) === '#'" class="fss" style="margin: 5px 0 2px;">
+          <!--<span>*&nbsp;</span>-->
+          <span>
+            {{ line.replace('# ', '') }}
+            {{ detail.date ? ' (' + (detail.date | amLocale:'fr' | amDateFormat:'MMM YYYY') + ')' : '' }}
+          </span>
+        </span>
+
+        <!--  default line  -->
+        <span *ngIf="line.charAt(0) !== '*' && line.charAt(0) !== '#'" class="fss">
+          <span>&nbsp;-&nbsp;</span>
+          <span>
+            {{ line }}
+            {{ detail.date ? ' (' + (detail.date | amLocale:'fr' | amDateFormat:'MMM YYYY') + ')' : '' }}
+          </span>
+        </span>
+
+      </p>
+    </div>
+    <!--<p *ngIf="detail.date">&nbsp;({{ detail.date | amLocale:'fr' | amDateFormat:'MMM YYYY' }})</p>-->
+  </div>
+</div>

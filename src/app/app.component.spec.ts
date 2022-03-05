@@ -1,35 +1,54 @@
-import { TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { async, TestBed } from '@angular/core/testing';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
 import { RouterTestingModule } from '@angular/router/testing';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { MockComponent } from 'ng2-mock-component';
+import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
+import { AlertModule } from './core';
+import { AddComponentsService } from './core/services/add-components/add-components.service';
 
 describe('AppComponent', () => {
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule
+        HttpClientTestingModule,
+        RouterTestingModule,
+        MatIconModule,
+        MatMenuModule,
+        AlertModule,
+        ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
       ],
       declarations: [
-        AppComponent
+        AppComponent,
+        MockComponent({
+          selector: 'app-header',
+          inputs: [],
+        }),
+        MockComponent({
+          selector: 'app-main',
+          inputs: [],
+        }),
+        MockComponent({
+          selector: 'app-footer',
+          inputs: [],
+        }),
       ],
+      providers: [
+        AddComponentsService,
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  });
+  }));
 
   it('should create the app', () => {
+    TestBed.get(AddComponentsService);
     const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
+    const app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();
-  });
-
-  it(`should have as title 'ocv-front'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('ocv-front');
-  });
-
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('ocv-front app is running!');
   });
 });

@@ -1,0 +1,13 @@
+<section id="INTERETS">
+  <h3 class="animated-background" style="margin-bottom: 20px;">
+    <span>mes centres d'intérêts<span class="badge-element">{{ interestList.length }}</span></span>
+  </h3>
+  <div class="fcs w100">
+    <app-vertical-accordion
+      class="vertical-accordion"
+      [verticalAccordionContainerClass]="'vertical-accordion-container'"
+      [verticalAccordionItemClass]="'vertical-accordion-item'"
+      [itemList]="interestList"
+    ></app-vertical-accordion>
+  </div>
+</section>

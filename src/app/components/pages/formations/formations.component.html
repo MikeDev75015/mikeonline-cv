@@ -1,0 +1,16 @@
+<section id="FORMATIONS">
+  <h3 class="animated-background"><span>mes formations<span
+    class="badge-element">{{ formationList.length }}</span></span></h3>
+  <ng-container *ngIf="formationList.length">
+    <div class="exp w100 column fsc">
+      <ng-container *ngFor="let form of formationList; let i = index">
+        <app-formation-item
+          [form]="form"
+          [id]="'formation-item-' + i"
+          [index]="i"
+          class="fss w70 column form-line"
+        ></app-formation-item>
+      </ng-container>
+    </div>
+  </ng-container>
+</section>

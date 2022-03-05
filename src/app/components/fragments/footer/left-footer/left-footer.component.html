@@ -1,0 +1,7 @@
+<figure id="pdf-icon" title="Mon CV au format PDF" (click)="!downloading ? downloadCV() : null">
+  <img
+    class="fx-shake"
+    src="assets/img/pdf-web.png"
+    alt="Téléchargement du CV en PDF" aria-label="Download CV Pdf"
+    [ngStyle]="{'width': mobile ? '80px' : '120px', 'height': mobile ? '30px' : '44px'}">
+</figure>

@@ -9,7 +9,7 @@ export interface ICompetence {
   expertiseLevel: 1 | 2 | 3 | 4 | 5;
   priority: 1 | 2 | 3;
   startDate: string;
-  experienceYears?: {
+  experienceYears: {
     text: string;
     value: number;
   };

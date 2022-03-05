@@ -1,0 +1,33 @@
+<div id="fond-footer">
+  <mat-grid-list cols="4" rowHeight="50px">
+    <mat-grid-tile
+      [colspan]="classicTiles[0].cols"
+      [rowspan]="classicTiles[0].rows"
+      [style.background]="classicTiles[0].background">
+      <app-left-footer [mobile]="mobile || heightIsTooSmall" class="fcc w100 h100"></app-left-footer>
+    </mat-grid-tile>
+    <mat-grid-tile
+      [colspan]="mobile || heightIsTooSmall ? mobileTiles[0].cols : classicTiles[1].cols"
+      [rowspan]="mobile || heightIsTooSmall ? mobileTiles[0].rows : classicTiles[1].rows"
+      [style.background]="mobile || heightIsTooSmall ? mobileTiles[0].background : classicTiles[1].background">
+      <div class="fcc w100 h100 bottom-tile">
+        <app-bottom-footer [mobile]="mobile || heightIsTooSmall" class="fcc w100 h100"
+                           (copyrightClick)="onShowHeader()"></app-bottom-footer>
+      </div>
+    </mat-grid-tile>
+    <mat-grid-tile
+      (click)="onOpenContact()"
+      *ngIf="mobile || heightIsTooSmall"
+      [colspan]="mobileTiles[1].cols"
+      [rowspan]="mobileTiles[1].rows"
+      [style.background]="mobileTiles[1].background"
+    >
+      <div class="fcc wrap mobile-right-tile">
+        <figure class="fes"><i class="fas fa-phone-alt"></i></figure>
+        <figure class="fss"><i class="fas fa-envelope"></i></figure>
+        <figure class="fee"><i class="fas fa-map-marker-alt"></i></figure>
+        <figure class="fse"><i class="fas fa-share-alt"></i></figure>
+      </div>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>

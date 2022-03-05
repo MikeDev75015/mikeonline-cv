@@ -1,0 +1,21 @@
+<div
+  [class]="'btn-background' + (btnClass ? ' ' + btnClass : '')"
+>
+
+  <ng-container *ngIf="btnIcon">
+    <figure>
+      <i [class]="btnIcon"></i>
+    </figure>
+  </ng-container>
+
+  <ng-container *ngIf="btnImage && !btnIcon">
+    <figure>
+      <img [alt]="btnImage.alt" [src]="btnImage.src">
+    </figure>
+  </ng-container>
+
+  <ng-container *ngIf="btnText">
+    <p>{{ btnText }}</p>
+  </ng-container>
+
+</div>

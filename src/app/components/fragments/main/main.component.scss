@@ -1,0 +1,44 @@
+.no-pointer-events {
+  pointer-events: none !important;
+}
+
+.selected-menu {
+  background: #024873 !important;
+  color: white !important;
+  opacity: .5 !important;
+  pointer-events: none !important;
+
+  .matIcon {
+    color: white !important;
+  }
+}
+
+.hamburger-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 40px;
+  background: red;
+}
+
+@media screen and (min-width: 841px){
+  #menuTab {
+    display: flex;
+  }
+}
+@media screen and (max-width: 840px){
+  #menuMobile {
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+  }
+  .openMenu {
+    align-items: center !important;
+    justify-content: center !important;
+    left: 0 !important;
+    width: 100% !important;
+  }
+}

@@ -1,0 +1,124 @@
+<ng-container *ngIf="contact">
+  <ng-container
+    *ngIf="!mobileView && !heightIsTooSmall"
+    [ngTemplateOutlet]="classicViewTemplate"
+  ></ng-container>
+  <ng-container
+    *ngIf="mobileView || heightIsTooSmall"
+    [ngTemplateOutlet]="mobileViewTemplate"
+  ></ng-container>
+</ng-container>
+
+<ng-template #classicViewTemplate>
+  <aside class="contactInfos">
+
+    <div class="lieu">
+      <figure><i class="fas fa-map-marker-alt"></i></figure>
+      <p>{{ contact.location }}</p>
+    </div>
+
+    <div (click)="call()" aria-label="Call the Number" title="Me joindre par téléphone">
+      <figure><i class="fas fa-phone-alt"></i></figure>
+      <p>Me joindre par téléphone</p>
+    </div>
+
+    <div (click)="sendMail()" aria-label="Send a Mail" title="M'envoyer un email">
+      <figure><i class="fas fa-envelope"></i></figure>
+      <p>M'envoyer un email</p>
+    </div>
+
+    <div (click)="share()" aria-label="Share my page" title="Partager">
+      <figure><i class="fas fa-share-alt"></i></figure>
+      <p>Partager</p>
+    </div>
+
+    <div (click)="openURL(webLink.url)" *ngFor="let webLink of webLinkList">
+
+      <figure *ngIf="webLink.icon"><i [class]="webLink.icon"></i></figure>
+
+      <figure *ngIf="webLink.image" class="fcc figure-image">
+        <img [alt]="webLink.name" [src]="webLink.image.src">
+      </figure>
+
+      <p>{{ webLink.description }}</p>
+
+    </div>
+
+  </aside>
+</ng-template>
+
+<ng-template #mobileViewTemplate>
+  <div
+    id="contactMobile"
+    (@ContactComponentMobileViewInOut.done)="onAnimation($event)"
+    (@ContactComponentMobileViewInOut.start)="onAnimation($event)"
+    (click)="toggleContactMobileOpenClose()"
+    [@ContactComponentMobileViewInOut]="contactMobileOpened ? 'in' : 'out'"
+    [ngStyle]="{'max-height': (innerHeight - 50) + 'px', 'align-items': heightIsTooSmall ? 'flex-start' : 'center'}"
+    class="full-screen"
+  >
+    <div
+      (@MobileContactBtnsInOut.done)="onAnimation($event)"
+      (@MobileContactBtnsInOut.start)="onAnimation($event)"
+      [@MobileContactBtnsInOut]="showContactBtns"
+      class="fcc wrap"
+    >
+      <ng-container *ngIf="showContactBtns">
+        <app-btn-mobile-contact
+          [btnClass]="'lieu'"
+          [btnIcon]="'fas fa-map-marker-alt'"
+          [btnText]="contact.location"
+          aria-label="Working Place"
+          class="btn-mobile-contact"
+        ></app-btn-mobile-contact>
+      </ng-container>
+
+      <ng-container *ngIf="showContactBtns">
+        <app-btn-mobile-contact
+          (click)="call()"
+          [btnIcon]="'fas fa-phone-alt'"
+          [btnText]="'Me joindre par téléphone'"
+          aria-label="Call me"
+          class="btn-mobile-contact"
+          title="Me joindre par téléphone"
+        ></app-btn-mobile-contact>
+      </ng-container>
+
+      <ng-container *ngIf="showContactBtns">
+        <app-btn-mobile-contact
+          (click)="sendMail()"
+          [btnIcon]="'fas fa-envelope'"
+          [btnText]="'M\'envoyer un email'"
+          aria-label="Send a Mail"
+          class="btn-mobile-contact"
+          title="M'envoyer un email"
+        ></app-btn-mobile-contact>
+      </ng-container>
+
+      <ng-container *ngIf="showContactBtns">
+        <app-btn-mobile-contact
+          (click)="share()"
+          [btnIcon]="'fas fa-share-alt'"
+          [btnText]="'Partager mon CV'"
+          aria-label="Share my CV"
+          class="btn-mobile-contact"
+          title="Partager mon CV"
+        ></app-btn-mobile-contact>
+      </ng-container>
+
+      <ng-container *ngFor="let webLink of webLinkList">
+        <ng-container *ngIf="showContactBtns">
+          <app-btn-mobile-contact
+            (click)="openURL(webLink.url)"
+
+            [btnIcon]="webLink.icon ? webLink.icon : ''"
+            [btnImage]="webLink.image ? {src: webLink.image.src, alt: webLink.name} : {src:'', alt: ''}"
+            [btnText]="webLink.description"
+            [title]="webLink.description"
+            class="btn-mobile-contact"
+          ></app-btn-mobile-contact>
+        </ng-container>
+      </ng-container>
+    </div>
+  </div>
+</ng-template>

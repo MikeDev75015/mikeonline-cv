@@ -1,0 +1,5 @@
+<p class="fcc" [ngClass]="{'column': mobile}" style="cursor: pointer;" (click)="onCopyrightClick()">
+  <span>{{ credits.copyright }}</span>
+  {{ !mobile ? '&nbsp;' : '' }}
+  <span>{{ credits.owner }}</span>
+</p>

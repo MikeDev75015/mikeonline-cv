@@ -1,0 +1,26 @@
+.wrapper-header {
+  position: relative;
+}
+
+.app-main {
+  position: relative;
+  height: auto;
+  overflow: hidden;
+  width: 100%;
+  padding-bottom: 20px
+}
+
+.app-footer {
+  z-index: 1000;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 50px;
+}
+
+.app-contact {
+  z-index: 999;
+  position: absolute;
+  bottom: 60px;
+  right: -350px;
+}

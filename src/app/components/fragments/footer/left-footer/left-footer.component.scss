@@ -1,0 +1,17 @@
+#pdf-icon {
+  outline: none !important;
+  cursor: pointer;
+  opacity: 1;
+  transition: all .4s;
+  animation: blinking 3s linear;
+  animation-direction: reverse;
+}
+
+#pdf-icon:hover {
+  opacity: 1;
+  animation: blinking 1s linear;
+}
+
+#pdf-icon:active {
+  transform: translateY(4px);
+}

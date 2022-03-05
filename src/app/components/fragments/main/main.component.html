@@ -1,0 +1,85 @@
+<mat-tab-group
+  *ngIf="menuTab"
+  id="menuTab"
+  [(selectedIndex)]="indexTab"
+  mat-stretch-tabs
+  class="mat-elevation-z4"
+  [ngClass]="{'full-screen': hideHeader}"
+  (click)="updateHash($event)"
+>
+  <mat-tab label="Compétences">
+    <app-competences></app-competences>
+  </mat-tab>
+  <mat-tab label="Expériences">
+    <app-experiences></app-experiences>
+  </mat-tab>
+  <mat-tab label="Formations">
+    <app-formations></app-formations>
+  </mat-tab>
+  <mat-tab label="Portfolio">
+    <app-portfolio></app-portfolio>
+  </mat-tab>
+  <mat-tab label="Intérêts">
+    <app-interests></app-interests>
+  </mat-tab>
+</mat-tab-group>
+
+<div *ngIf="!menuTab" id="menuMobile" class="w100">
+  <button mat-icon-button [matMenuTriggerFor]="menu"
+          style="background: white; border-radius: 5px; box-shadow: 0px 2px 3px #024873; height: 38px;"
+          [ngStyle]="{'width': openedMenu ? '100%' : '70px'}"
+          aria-label="Display the Menu"
+          (click)="toggleMenu(true)">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <mat-menu class="matMenu" #menu="matMenu" overlapTrigger="true" (closed)="toggleMenu(false)">
+
+    <app-header></app-header>
+
+    <button mat-menu-item
+            [ngClass]="{'selected-menu': selectedMenu === 'competences'}"
+            (click)="selectMenu($event, 'competences')"
+            [disabled]="selectedMenu === 'Compétences'"
+            aria-label="Display the Skill Menu">
+      <mat-icon class="no-pointer-events matIcon">playlist_add_check</mat-icon>
+      <span class="no-pointer-events btn-title">Compétences</span>
+    </button>
+
+    <button mat-menu-item
+            [ngClass]="{'selected-menu': selectedMenu === 'experiences'}"
+            (click)="selectMenu($event, 'experiences')"
+            [disabled]="selectedMenu === 'Expériences'"
+            aria-label="Display the Experience Menu">
+      <mat-icon class="no-pointer-events matIcon">business_center</mat-icon>
+      <span class="no-pointer-events btn-title">Expériences</span>
+    </button>
+
+    <button mat-menu-item
+            [ngClass]="{'selected-menu': selectedMenu === 'formations'}"
+            (click)="selectMenu($event, 'formations')"
+            [disabled]="selectedMenu === 'Formations'"
+            aria-label="Display the Formation Menu">
+      <mat-icon class="no-pointer-events matIcon">school</mat-icon>
+      <span class="no-pointer-events btn-title">Formations</span>
+    </button>
+
+    <button mat-menu-item
+            [ngClass]="{'selected-menu': selectedMenu === 'portfolio'}"
+            (click)="selectMenu($event, 'portfolio')"
+            [disabled]="selectedMenu === 'Portfolio'"
+            aria-label="Display the Portfolio Menu">
+      <mat-icon class="no-pointer-events matIcon">code</mat-icon>
+      <span class="no-pointer-events btn-title">Portfolio</span>
+    </button>
+
+    <button mat-menu-item
+            [ngClass]="{'selected-menu': selectedMenu === 'interets'}"
+            (click)="selectMenu($event, 'interets')"
+            [disabled]="selectedMenu === 'Intérêts'"
+            aria-label="Display the Interest Menu">
+      <mat-icon class="no-pointer-events matIcon">whatshot</mat-icon>
+      <span class="no-pointer-events btn-title">Intérêts</span>
+    </button>
+
+  </mat-menu>
+</div>

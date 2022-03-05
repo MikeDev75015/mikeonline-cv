@@ -5,8 +5,7 @@ const importList = [
   CommonModule,
 ];
 
-const providerList: Provider[] = [
-];
+const providerList: Provider[] = [];
 
 @NgModule({
   declarations: [],

@@ -1,0 +1,32 @@
+<ng-container *ngIf="itemData">
+  <div [class]="itemClass">
+    <div class="vertical-accordion-item-header" (click)="!expanded ? onOpenItem() : null">
+      <p class="vertical-accordion-item-header-title" [innerHTML]="itemData.title | oneLetterByLine"></p>
+    </div>
+    <ng-container *ngIf="true">
+      <div
+        [class]="'vertical-accordion-item-body'"
+        [@VerticalAccordionItemComponentBodyInOut]="expanded ? 'in' : 'out'"
+        (@VerticalAccordionItemComponentBodyInOut.start)="onAnimation($event)"
+        (@VerticalAccordionItemComponentBodyInOut.done)="onAnimation($event)"
+      >
+        <p
+          class="vertical-accordion-item-body-content"
+        >{{ itemData.description }}</p>
+        <br *ngIf="itemData.link && itemData.link.url">
+        <p
+          *ngIf="itemData.link && itemData.link.url"
+          class="vertical-accordion-item-body-link"
+        >
+          <a
+            [href]="itemData.link.url"
+            target="_blank"
+            rel="noopener"
+          >
+            {{ itemData.link.title ? itemData.link.title : 'Cliquer pour voir' }}
+          </a>
+        </p>
+      </div>
+    </ng-container>
+  </div>
+</ng-container>
