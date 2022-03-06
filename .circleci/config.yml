@@ -155,13 +155,13 @@ workflows:
   ##################################### DEFAULT WORKFLOW - ignore test/.*, master & develop #####################################
   ci-default-workflow:
     jobs:
-      - ci-test-job:
-          filters:
-            branches:
-              ignore:
-                - master
-                - develop
-                - /test\/.*/
+#      - ci-test-job:
+#          filters:
+#            branches:
+#              ignore:
+#                - master
+#                - develop
+#                - /test\/.*/
       - ci-build-job-staging:
           requires:
             - ci-test-job
@@ -176,8 +176,6 @@ workflows:
   ci-cd-workflow-test:
     jobs:
       - ci-build-job-staging:
-          #          requires:
-          #            - ci-test-job
           filters:
             branches:
               only:
