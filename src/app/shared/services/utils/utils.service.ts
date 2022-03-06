@@ -4,7 +4,7 @@ import * as moment from 'moment';
 import { lastValueFrom } from 'rxjs';
 import { ITag } from '../../../core/interfaces/models/tag.interface';
 import { IShareData } from '../../../core/interfaces/share-data.interface';
-import { AlertService } from '../../../modules/alert/alert.service';
+import { AlertService } from '../../../core/modules/alert/alert.service';
 import { DataService } from '../data/data.service';
 
 declare global {

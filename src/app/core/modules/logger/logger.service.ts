@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
 import * as moment from 'moment';
-import {HttpClient} from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+import { lastValueFrom } from 'rxjs';
+import { environment } from '../../../../environments/environment';
+import { HttpClientService } from '../../services/http-client/http-client.service';
 
 const fileDateFormat = 'YYYY-MM-DD[_]HH-mm-ss[_]';
 const jsonDateFormat = 'L[ ]LTS';
@@ -24,24 +25,24 @@ export class LoggerService {
   appName = environment.APP_NAME;
 
   constructor(
-    private readonly http: HttpClient
+    private readonly httpClientService: HttpClientService,
   ) {}
 
   public log = this.logsEnabled ? console.log : this.writeLog;
   public err = this.logsEnabled ? console.error : this.writeErr;
   public warn = this.logsEnabled ? console.warn : this.writeWarn;
 
-  private writeLog(log: any, ...optionalParams: any[]) {
+  private writeLog(log: any, ...optionalParams: any[]): void {
     this.sendToWriteFile(this.fileFormat('log', this.buildMsg(log, optionalParams)))
       .then(console.log).catch(console.error);
   }
 
-  private writeErr(err: any, ...optionalParams: any[]) {
+  private writeErr(err: any, ...optionalParams: any[]): void {
     this.sendToWriteFile(this.fileFormat('error', this.buildMsg(err, optionalParams)))
       .then(console.log).catch(console.error);
   }
 
-  private writeWarn(warn: any, ...optionalParams: any[]) {
+  private writeWarn(warn: any, ...optionalParams: any[]): void {
     this.sendToWriteFile(this.fileFormat('warning', this.buildMsg(warn, optionalParams)))
       .then(console.log).catch(console.error);
   }
@@ -68,7 +69,7 @@ export class LoggerService {
   }
 
   private sendToWriteFile(payload: ILogsPayload): Promise<any> {
-    return this.http.post<any>(environment.BACKEND_URL + '/write-json-logs', payload).toPromise();
+    return lastValueFrom(this.httpClientService.post<any>('/write-json-logs', payload));
   }
 }
 

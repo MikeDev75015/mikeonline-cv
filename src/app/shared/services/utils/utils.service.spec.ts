@@ -1,5 +1,5 @@
 import {TestBed} from '@angular/core/testing';
-import { AlertModule } from '../../../modules/alert/alert.module';
+import { AlertModule } from '../../../core/modules/alert/alert.module';
 
 import {UtilsService} from './utils.service';
 import {HttpClientTestingModule} from '@angular/common/http/testing';

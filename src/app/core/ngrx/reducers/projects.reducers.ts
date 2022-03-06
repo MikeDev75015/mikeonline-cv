@@ -7,7 +7,7 @@ import * as ProjectsActions from '../actions/projects.actions';
  * Projects State
  */
 export interface ProjectsState extends EntityState<IProject> {
-  selectedProjectId?: number;
+  loaded: boolean;
 }
 
 /**
@@ -19,7 +19,7 @@ export const adapter: EntityAdapter<IProject> = createEntityAdapter<IProject>();
  * Projects Initial State
  */
 export const initialState: ProjectsState = adapter.getInitialState({
-  selectedProjectId: undefined,
+  loaded: false,
 });
 
 /**
@@ -27,7 +27,10 @@ export const initialState: ProjectsState = adapter.getInitialState({
  */
 const projectsReducer = createReducer(
   initialState,
-  on(ProjectsActions.fetchProjectsSuccess, (state: ProjectsState, { projectList }) => adapter.addMany(projectList, state)),
+  on(ProjectsActions.fetchProjectsSuccess, (state: ProjectsState, { projectList }) => ({
+    ...adapter.addMany(projectList, state),
+    loaded: true,
+  })),
 );
 
 /**

@@ -13,6 +13,14 @@ export const selectCompetencesState = createSelector(
 );
 
 /**
+ * Creates an ngrx selector allowing to get the loaded status
+ */
+export const selectCompetencesLoaded = createSelector(
+  competencesState,
+  (state: CompetencesState) => state.loaded,
+);
+
+/**
  * Get the selectors
  */
 const { selectAll } = CompetencesReducers.adapter.getSelectors(selectCompetencesState);

@@ -7,7 +7,7 @@ import * as InterestsActions from '../actions/interests.actions';
  * Interests State
  */
 export interface InterestsState extends EntityState<IInterest> {
-  selectedInterestId?: number;
+  loaded: boolean;
 }
 
 /**
@@ -19,7 +19,7 @@ export const adapter: EntityAdapter<IInterest> = createEntityAdapter<IInterest>(
  * Interests Initial State
  */
 export const initialState: InterestsState = adapter.getInitialState({
-  selectedInterestId: undefined,
+  loaded: false,
 });
 
 /**
@@ -27,7 +27,10 @@ export const initialState: InterestsState = adapter.getInitialState({
  */
 const interestsReducer = createReducer(
   initialState,
-  on(InterestsActions.fetchInterestsSuccess, (state: InterestsState, { interestList }) => adapter.addMany(interestList, state)),
+  on(InterestsActions.fetchInterestsSuccess, (state: InterestsState, { interestList }) => ({
+    ...adapter.addMany(interestList, state),
+    loaded: true,
+  })),
 );
 
 /**

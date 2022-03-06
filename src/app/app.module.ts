@@ -53,6 +53,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { EffectsModule } from '@ngrx/effects';
 import { metaReducers, reducers } from './core/ngrx';
+import { ApplicationEffects } from './core/ngrx/effects/application.effects';
 import { CompetencesEffects } from './core/ngrx/effects/competences.effects';
 import { CvInfosEffects } from './core/ngrx/effects/cv-infos.effects';
 import { ExperiencesEffects } from './core/ngrx/effects/experiences.effects';
@@ -63,10 +64,10 @@ import { TagsEffects } from './core/ngrx/effects/tags.effects';
 import { AddComponentsService } from './core/services/add-components/add-components.service';
 import { HttpClientService } from './core/services/http-client/http-client.service';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { PdfCreatorService } from './core/services/pdf-creator/pdf-creator.service';
-import { AlertModule } from './modules/alert/alert.module';
-import { LoggerModule } from './modules/logger/logger.module';
+import { AlertModule } from './core/modules/alert/alert.module';
+import { LoggerModule } from './core/modules/logger/logger.module';
 import { HeaderTitleFormatPipe, IncompressibleSpacePipe, FirstLetterUppercasePipe } from './shared';
 
 @NgModule({
@@ -100,10 +101,13 @@ import { HeaderTitleFormatPipe, IncompressibleSpacePipe, FirstLetterUppercasePip
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
+    NoopAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
     StoreModule.forRoot(reducers, { metaReducers }),
     EffectsModule.forRoot([
+      ApplicationEffects,
       CvInfosEffects,
       TagsEffects,
       CompetencesEffects,
@@ -124,7 +128,6 @@ import { HeaderTitleFormatPipe, IncompressibleSpacePipe, FirstLetterUppercasePip
       // or after 30 seconds (whichever comes first).
       registrationStrategy: 'registerWhenStable:30000'
     }),
-    BrowserAnimationsModule,
     MatTabsModule,
     MatMenuModule,
     MatIconModule,

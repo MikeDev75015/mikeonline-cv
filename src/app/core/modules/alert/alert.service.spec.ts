@@ -1,7 +1,7 @@
 import {TestBed} from '@angular/core/testing';
 
 import {AlertService} from './alert.service';
-import {MatDialogModule} from '@angular/material';
+import {MatDialogModule} from '@angular/material/dialog';
 
 describe('AlertService', () => {
   beforeEach(() => TestBed.configureTestingModule({

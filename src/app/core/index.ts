@@ -27,6 +27,6 @@ export {IProject} from './interfaces/models/project.interface';
 export {ITag} from './interfaces/models/tag.interface';
 
 // modules
-export {LoggerModule} from '../modules/logger/logger.module';
-export {AlertModule} from '../modules/alert/alert.module';
+export {LoggerModule} from './modules/logger/logger.module';
+export {AlertModule} from './modules/alert/alert.module';
 

@@ -1,14 +1,17 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { IFormation } from '../../../core';
-import { DataService } from '../../../shared/services/data/data.service';
+import { DataService } from '../../../shared';
 
 @Component({
   selector: 'app-formations',
   templateUrl: './formations.component.html',
-  styleUrls: ['./formations.component.scss']
+  styleUrls: ['./formations.component.scss'],
 })
-export class FormationsComponent implements OnInit {
+export class FormationsComponent implements OnInit, OnDestroy {
   formationList: any[] = [];
+
+  private subscriptionList: Subscription[] = [];
 
   constructor(
     private readonly dataService: DataService,
@@ -16,6 +19,20 @@ export class FormationsComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.formationList = await this.dataService.getFormations<IFormation[]>();
+    this.subscriptionList.push(
+      this.dataService.isFormationsLoaded().subscribe((loaded) => {
+        if (loaded) {
+          this.dataService.getFormations<IFormation[]>().then(
+            (list) => {
+              this.formationList = list;
+            },
+          );
+        }
+      }),
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionList.forEach((s) => s.unsubscribe());
   }
 }

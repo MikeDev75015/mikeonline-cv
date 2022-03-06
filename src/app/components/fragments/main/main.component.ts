@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewContainerRef} from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit, ViewContainerRef } from '@angular/core';
 import { AddComponentsService } from '../../../core/services/add-components/add-components.service';
 import { ContactOpenCloseService } from '../../../core/services/contact-open-close/contact-open-close.service';
 
@@ -7,7 +7,7 @@ import { ContactOpenCloseService } from '../../../core/services/contact-open-clo
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss']
 })
-export class MainComponent implements OnInit {
+export class MainComponent implements OnInit, AfterViewInit {
   @Input() hideHeader = false;
   selectedMenu = '';
   openedMenu = false;
@@ -19,17 +19,19 @@ export class MainComponent implements OnInit {
     { hash: 'experiences', name: 'Expériences'},
     { hash: 'formations', name: 'Formations'},
     { hash: 'portfolio', name: 'Portfolio'},
-    { hash: 'interets', name: 'Intérêts'}
+    { hash: 'interests', name: 'Intérêts'}
   ];
-  urlHash = MainComponent.getActualHashOrSetDefault();
-  indexTab = this.urlHash ? this.moduleToShowList.findIndex(mod => mod.hash === this.urlHash) : 0;
 
-  iconesToAdd = [
-    {id: '#icone-comp', icone: '<i class="material-icons">playlist_add_check</i>'},
-    {id: '#icone-exp', icone: '<i class="material-icons">business_center</i>'},
-    {id: '#icone-form', icone: '<i class="material-icons">school</i>'},
-    {id: '#icone-port', icone: '<i class="material-icons">code</i>'},
-    {id: '#icone-int', icone: '<i class="material-icons">whatshot</i>'}
+  urlHash = MainComponent.getActualHashOrSetDefault();
+
+  indexTab = this.urlHash ? this.moduleToShowList.findIndex((module) => module.hash === this.urlHash) : 0;
+
+  iconsToAdd: { id: string, icon: string }[] = [
+    { id: '#icon-comp', icon: '<i class="material-icons">playlist_add_check</i>' },
+    { id: '#icon-exp', icon: '<i class="material-icons">business_center</i>' },
+    { id: '#icon-form', icon: '<i class="material-icons">school</i>' },
+    { id: '#icon-port', icon: '<i class="material-icons">code</i>' },
+    { id: '#icon-int', icon: '<i class="material-icons">whatshot</i>' },
   ];
 
   constructor(
@@ -38,59 +40,68 @@ export class MainComponent implements OnInit {
     private readonly contactOpenCloseService: ContactOpenCloseService
   ) {}
 
-  ngOnInit() {
-    this.that = this;
+  private static isMissingLabelsIcons(): boolean {
+    return !document.querySelector('#icon-comp') ||
+      !document.querySelector('#icon-form') ||
+      !document.querySelector('#icon-form') ||
+      !document.querySelector('#icon-port') ||
+      !document.querySelector('#icon-int');
+  }
+
+  ngOnInit(): void {
     if (window.innerWidth > 840 && !this.menuTab) {
       this.menuTab = true;
-      if (
-        !document.querySelector('#icone-comp') ||
-        !document.querySelector('#icone-form') ||
-        !document.querySelector('#icone-form') ||
-        !document.querySelector('#icone-port') ||
-        !document.querySelector('#icone-int')
-      ) { this.addIconsToLabels(); }
-    } else { this.initModules(this.that); }
+    } else { this.initModules(this); }
 
     window.addEventListener('resize', () => {
-      this.refreshView(this.that);
+      this.refreshView(this);
     });
 
     window.location.hash = `#${this.urlHash}`;
     this.selectedMenu = this.urlHash;
   }
 
-  refreshView(that: any) {
-    if (window.innerWidth > 840 && !that.menuTab) {
+  ngAfterViewInit(): void {
+    if (this.menuTab && MainComponent.isMissingLabelsIcons()) {
+      this.addIconsToLabels();
+    }
+  }
+
+  refreshView(that: any, forceRefresh = false) {
+    if (window.innerWidth > 840 && (!that.menuTab || forceRefresh)) {
       that.menuTab = true;
       // @ts-ignore
-      const elToClear = document.querySelector('app-main').nextElementSibling;
-      if (elToClear && elToClear.nodeName !== 'APP-FOOTER') {
-        // console.log("module à effacer : " + elToClear.nodeName);
+      const moduleToRemove = document.querySelector('app-main').nextElementSibling;
+      if (moduleToRemove && moduleToRemove.nodeName !== 'APP-FOOTER') {
         // @ts-ignore
-        elToClear.parentElement.removeChild(elToClear);
+        moduleToRemove.parentElement.removeChild(moduleToRemove);
       }
-    } else if (window.innerWidth < 841 && that.menuTab) {
+    } else if (window.innerWidth < 841 && (that.menuTab || forceRefresh)) {
       that.menuTab = false;
       // @ts-ignore
-      const elToClear = document.querySelector('app-main').nextElementSibling;
-      if (!elToClear || (elToClear && elToClear.nodeName === 'APP-FOOTER')) {
+      const moduleToRemove = document.querySelector('app-main').nextElementSibling;
+      if (!moduleToRemove || (moduleToRemove && moduleToRemove.nodeName === 'APP-FOOTER')) {
         that.initModules(that);
       }
+    }
+
+    if (this.menuTab && MainComponent.isMissingLabelsIcons()) {
+      this.addIconsToLabels();
     }
   }
 
   addIconsToLabels() {
     let ref = 0;
 
-    for (let i = 0; i < this.iconesToAdd.length; i++) {
+    for (let i = 0; i < this.iconsToAdd.length; i++) {
       setTimeout(() => {
-        if (ref === i && !document.querySelector(this.iconesToAdd[i].id)) {
+        if (ref === i && !document.querySelector(this.iconsToAdd[i].id)) {
           const el = document.querySelector('#mat-tab-label-0-' + i);
-          const icone = document.createElement('span');
-          icone.id = this.iconesToAdd[i].id;
-          icone.style.pointerEvents = 'none';
-          icone.innerHTML = this.iconesToAdd[i].icone;
-          if (el) { el.insertBefore(icone, el.firstChild); }
+          const icon = document.createElement('span');
+          icon.id = this.iconsToAdd[i].id;
+          icon.style.pointerEvents = 'none';
+          icon.innerHTML = this.iconsToAdd[i].icon;
+          if (el) { el.insertBefore(icon, el.firstChild); }
         }
         ref++;
       }, 500);

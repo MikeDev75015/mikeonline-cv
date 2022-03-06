@@ -42,6 +42,7 @@ const defaultTimings = {in: '50ms', out: '50ms'};
  *
  * @param component, the component or element where the animation is located
  * @param delay, the payload to specify the incoming and outgoing delays, 500ms by default
+ * @param staggerDelay
  * @param inPayload, the payload representing input state, opacity at 1 by default
  * @param outPayload, the payload representing the exit state, opacity at 0 by default
  * @constructor

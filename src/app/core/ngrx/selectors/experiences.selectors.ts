@@ -1,6 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { ExperiencesState } from '../reducers/experiences.reducers';
 import * as ExperiencesReducers from '../reducers/experiences.reducers';
+import { ExperiencesState } from '../reducers/experiences.reducers';
 
 const experiencesState = createFeatureSelector<ExperiencesState>('experiences');
 
@@ -10,6 +10,14 @@ const experiencesState = createFeatureSelector<ExperiencesState>('experiences');
 export const selectExperiencesState = createSelector(
   experiencesState,
   (state: ExperiencesState) => state,
+);
+
+/**
+ * Creates an ngrx selector allowing to get the loaded status
+ */
+export const selectExperiencesLoaded = createSelector(
+  experiencesState,
+  (state: ExperiencesState) => state.loaded,
 );
 
 /**

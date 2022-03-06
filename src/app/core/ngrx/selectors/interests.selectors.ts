@@ -13,6 +13,14 @@ export const selectInterestsState = createSelector(
 );
 
 /**
+ * Creates an ngrx selector allowing to get the loaded status
+ */
+export const selectInterestsLoaded = createSelector(
+  interestsState,
+  (state: InterestsState) => state.loaded,
+);
+
+/**
  * Get the selectors
  */
 const { selectAll } = InterestsReducers.adapter.getSelectors(selectInterestsState);

@@ -13,6 +13,14 @@ export const selectFormationsState = createSelector(
 );
 
 /**
+ * Creates an ngrx selector allowing to get the loaded status
+ */
+export const selectFormationsLoaded = createSelector(
+  formationsState,
+  (state: FormationsState) => state.loaded,
+);
+
+/**
  * Get the selectors
  */
 const { selectAll } = FormationsReducers.adapter.getSelectors(selectFormationsState);

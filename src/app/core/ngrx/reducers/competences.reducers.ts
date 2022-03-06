@@ -7,7 +7,7 @@ import * as CompetencesActions from '../actions/competences.actions';
  * Competences State
  */
 export interface CompetencesState extends EntityState<ICompetence> {
-  selectedCompetenceId?: number;
+  loaded: boolean;
 }
 
 /**
@@ -19,7 +19,7 @@ export const adapter: EntityAdapter<ICompetence> = createEntityAdapter<ICompeten
  * Competences Initial State
  */
 export const initialState: CompetencesState = adapter.getInitialState({
-  selectedCompetenceId: undefined,
+  loaded: false,
 });
 
 /**
@@ -27,7 +27,10 @@ export const initialState: CompetencesState = adapter.getInitialState({
  */
 const competencesReducer = createReducer(
   initialState,
-  on(CompetencesActions.fetchCompetencesSuccess, (state: CompetencesState, { competenceList }) => adapter.addMany(competenceList, state)),
+  on(CompetencesActions.fetchCompetencesSuccess, (state: CompetencesState, { competenceList }) =>({
+    ...adapter.addMany(competenceList, state),
+    loaded: true,
+  })),
 );
 
 /**

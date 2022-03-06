@@ -1,14 +1,17 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { IInterest } from '../../../core';
-import { DataService } from '../../../shared/services/data/data.service';
+import { DataService } from '../../../shared';
 
 @Component({
   selector: 'app-interests',
   templateUrl: './interests.component.html',
   styleUrls: ['./interests.component.scss']
 })
-export class InterestsComponent implements OnInit {
+export class InterestsComponent implements OnInit, OnDestroy {
   interestList: IInterest[] = [];
+
+  private subscriptionList: Subscription[] = [];
 
   constructor(
     private readonly dataService: DataService,
@@ -16,6 +19,20 @@ export class InterestsComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.interestList = await this.dataService.getInterests<IInterest[]>();
+    this.subscriptionList.push(
+      this.dataService.isInterestsLoaded().subscribe((loaded) => {
+        if (loaded) {
+          this.dataService.getInterests<IInterest[]>().then(
+            (list) => {
+              this.interestList = list;
+            },
+          );
+        }
+      }),
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionList.forEach((s) => s.unsubscribe());
   }
 }

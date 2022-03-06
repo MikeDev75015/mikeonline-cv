@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
+import { Subscription } from 'rxjs';
 import { IProject, ITag } from '../../../core';
-import { DataService } from '../../../shared/services/data/data.service';
-import { UtilsService } from '../../../shared/services/utils/utils.service';
+import { DataService, UtilsService } from '../../../shared';
 
 @Component({
   selector: 'app-portfolio',
@@ -25,11 +25,13 @@ import { UtilsService } from '../../../shared/services/utils/utils.service';
     ])
   ]
 })
-export class PortfolioComponent implements OnInit {
+export class PortfolioComponent implements OnInit, OnDestroy {
   siteDemoList: IProject[] = [];
   showImage = false;
   backgroundImage = '';
   timeOutToLoad: any;
+
+  private subscriptionList: Subscription[] = [];
 
   constructor(
     private readonly dataService: DataService,
@@ -38,10 +40,24 @@ export class PortfolioComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.siteDemoList = (await this.dataService.getProjects<IProject[]>()).map(s => ({
-      ...s,
-      technoList: this.utilsService.initTechnoListWithTagList(s.tagList as ITag[])
-    }));
+    this.subscriptionList.push(
+      this.dataService.isProjectsLoaded().subscribe((loaded) => {
+        if (loaded) {
+          this.dataService.getProjects<IProject[]>().then(
+            (list) => {
+              this.siteDemoList = list.map(s => ({
+                ...s,
+                technoList: this.utilsService.initTechnoListWithTagList(s.tagList as ITag[])
+              }));
+            },
+          );
+        }
+      }),
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionList.forEach((s) => s.unsubscribe());
   }
 
   onLoadBackgroundImage(siteDemo: IProject): void {

@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { map, mergeMap, tap } from 'rxjs/operators';
-import { ApiV0Service } from '../../../shared/services/api-v0/api-v0.service';
+import { ApiV0Service } from '../../../shared';
 import * as CvInfosActions from '../actions/cv-infos.actions';
 import * as TagsActions from '../actions/tags.actions';
 import { CvInfosState } from '../reducers/cv-infos.reducers';

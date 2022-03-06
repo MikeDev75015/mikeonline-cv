@@ -7,7 +7,7 @@ import * as ExperiencesActions from '../actions/experiences.actions';
  * Experiences State
  */
 export interface ExperiencesState extends EntityState<IExperience> {
-  selectedExperienceId?: number;
+  loaded: boolean;
 }
 
 /**
@@ -19,7 +19,7 @@ export const adapter: EntityAdapter<IExperience> = createEntityAdapter<IExperien
  * Experiences Initial State
  */
 export const initialState: ExperiencesState = adapter.getInitialState({
-  selectedExperienceId: undefined,
+  loaded: false,
 });
 
 /**
@@ -27,7 +27,10 @@ export const initialState: ExperiencesState = adapter.getInitialState({
  */
 const experiencesReducer = createReducer(
   initialState,
-  on(ExperiencesActions.fetchExperiencesSuccess, (state: ExperiencesState, { experienceList }) => adapter.addMany(experienceList, state)),
+  on(ExperiencesActions.fetchExperiencesSuccess, (state: ExperiencesState, { experienceList }) => ({
+    ...adapter.addMany(experienceList, state),
+    loaded: true,
+  })),
 );
 
 /**

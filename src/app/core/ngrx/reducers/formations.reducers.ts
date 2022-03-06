@@ -7,7 +7,7 @@ import * as FormationsActions from '../actions/formations.actions';
  * Formations State
  */
 export interface FormationsState extends EntityState<IFormation> {
-  selectedFormationId?: number;
+  loaded: boolean;
 }
 
 /**
@@ -19,7 +19,7 @@ export const adapter: EntityAdapter<IFormation> = createEntityAdapter<IFormation
  * Formations Initial State
  */
 export const initialState: FormationsState = adapter.getInitialState({
-  selectedFormationId: undefined,
+  loaded: false,
 });
 
 /**
@@ -27,7 +27,10 @@ export const initialState: FormationsState = adapter.getInitialState({
  */
 const formationsReducer = createReducer(
   initialState,
-  on(FormationsActions.fetchFormationsSuccess, (state: FormationsState, { formationList }) => adapter.addMany(formationList, state)),
+  on(FormationsActions.fetchFormationsSuccess, (state: FormationsState, { formationList }) => ({
+    ...adapter.addMany(formationList, state),
+    loaded: true,
+  })),
 );
 
 /**

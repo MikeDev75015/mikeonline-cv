@@ -13,6 +13,14 @@ export const selectProjectsState = createSelector(
 );
 
 /**
+ * Creates an ngrx selector allowing to get the loaded status
+ */
+export const selectProjectsLoaded = createSelector(
+  projectsState,
+  (state: ProjectsState) => state.loaded,
+);
+
+/**
  * Get the selectors
  */
 const { selectAll } = ProjectsReducers.adapter.getSelectors(selectProjectsState);

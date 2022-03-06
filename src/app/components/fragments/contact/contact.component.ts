@@ -2,13 +2,10 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { Moment } from 'moment/moment';
 import { Subscription } from 'rxjs';
-import { APP_CREDITS, IContact, IWebLink } from '../../../core';
+import { APP_CREDITS, IContact, ICvInfos, IWebLink } from '../../../core';
 import { IShareData } from '../../../core/interfaces/share-data.interface';
 import { ContactOpenCloseService } from '../../../core/services/contact-open-close/contact-open-close.service';
-import { IN_OUT_TEMPLATE_ANIMATION } from '../../../shared';
-import { STAGGER_IN_OUT_TEMPLATE_ANIMATION } from '../../../shared/animations/stagger-in-out-template.animation';
-import { DataService } from '../../../shared/services/data/data.service';
-import { UtilsService } from '../../../shared/services/utils/utils.service';
+import { DataService, UtilsService, IN_OUT_TEMPLATE_ANIMATION, STAGGER_IN_OUT_TEMPLATE_ANIMATION, } from '../../../shared';
 
 @Component({
   selector: 'app-contact',
@@ -79,9 +76,8 @@ export class ContactComponent implements OnInit, OnDestroy {
         }),
     );
 
-    const cvInfos = await this.dataService.getCvInfos();
-    this.contact = cvInfos.contact;
-    this.webLinkList = this.contact.webLinkList;
+    this.contact = await this.dataService.getCvInfos<IContact>(true);
+    this.webLinkList = this.contact?.webLinkList || [];
 
     if (this.contact) {
       this.birthDate = moment(this.contact.personalSituation.birthDate);

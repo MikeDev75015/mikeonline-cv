@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
-import {AlertPopupComponent, DialogData} from './components/alert-popup/alert-popup.component';
-import {MatDialog} from '@angular/material/dialog';
 import {Subscription} from 'rxjs';
+import {MatDialog} from '@angular/material/dialog';
+import {AlertPopupComponent, DialogData} from './components/alert-popup/alert-popup.component';
 
 @Injectable({
   providedIn: 'root'
@@ -13,31 +13,31 @@ export class AlertService {
     public readonly dialog: MatDialog
   ) {}
 
-  displayAlertDialog(data: DialogData) {
+  public displayAlertDialog(data: DialogData): void {
     const msgParam = this.buildMsgParam(data);
     this.dialog.open(AlertPopupComponent, {
       width: window.innerWidth > 840 ? '600px' : '300px',
       data: {
-        title: data.title ? data.title : 'information',
+        title: data.title || 'information',
         msg: data.msg,
         msgParam: msgParam,
         actionsList: [],
-        closeBtnLabel: data.closeBtnLabel? data.closeBtnLabel : "fermer"
+        closeBtnLabel: data.closeBtnLabel || 'fermer',
       }
     });
   }
 
-  displayConfirmDialog(data: DialogData) {
+  public displayConfirmDialog(data: DialogData): Promise<string> {
     return new Promise<string>(resolve => {
       const msgParam = this.buildMsgParam(data);
       const dialogRef = this.dialog.open(AlertPopupComponent, {
         width: window.innerWidth > 840 ? '600px' : '300px',
         data: {
-          title: data.title ? data.title : 'confirmation requise',
+          title: data.title || 'confirmation requise',
           msg: data.msg,
           msgParam: msgParam,
           actionsList: data.actionsList,
-          closeBtnLabel: data.closeBtnLabel? data.closeBtnLabel : "fermer"
+          closeBtnLabel: data.closeBtnLabel || 'fermer',
         }
       });
 
@@ -48,9 +48,8 @@ export class AlertService {
     });
   }
 
-  buildMsgParam(data: any) {
-    switch (data.status) {
-      default: return null;
-    }
+  buildMsgParam(data: DialogData): any {
+    console.warn('AlertService buildMsgParam data:', data);
+    return {};
   }
 }

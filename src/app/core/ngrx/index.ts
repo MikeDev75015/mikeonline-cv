@@ -4,6 +4,7 @@ import {
   MetaReducer,
 } from '@ngrx/store';
 import { environment } from '../../../environments/environment';
+import * as fromApplication from './reducers/application.reducers';
 import * as fromCvInfos from './reducers/cv-infos.reducers';
 import * as fromTags from './reducers/tags.reducers';
 import * as fromCompetences from './reducers/competences.reducers';
@@ -16,6 +17,7 @@ import * as fromInterests from './reducers/interests.reducers';
  * Model of the global state of the application which will contain all the sub-states
  */
 export interface State {
+  application: fromApplication.AppState;
   cvInfos: fromCvInfos.CvInfosState;
   tags: fromTags.TagsState;
   competences: fromCompetences.CompetencesState;
@@ -29,6 +31,7 @@ export interface State {
  * Reference all the reducers of the application
  */
 export const reducers: ActionReducerMap<State> = {
+  application: fromApplication.reducer,
   cvInfos: fromCvInfos.reducer,
   tags: fromTags.reducer,
   competences: fromCompetences.reducer,

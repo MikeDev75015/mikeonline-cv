@@ -1,8 +1,8 @@
-import {AfterViewChecked, Component} from '@angular/core';
+import { AfterViewChecked, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import * as moment from 'moment';
+import { Subscription } from 'rxjs';
 import { EXPERTISE_LEVEL_LABEL, PRIORITY_LABEL, ICompetence, IExperience, IFormation, IProject, ITag } from '../../../core';
-import { DataService } from '../../../shared/services/data/data.service';
-import { UtilsService } from '../../../shared/services/utils/utils.service';
+import { DataService, UtilsService } from '../../../shared';
 
 moment.locale('fr');
 
@@ -18,11 +18,13 @@ window.WordCloud = window.WordCloud || {};
   templateUrl: './competences.component.html',
   styleUrls: ['./competences.component.scss']
 })
-export class CompetencesComponent implements AfterViewChecked {
+export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked {
   expertiseLevelLabel = EXPERTISE_LEVEL_LABEL;
   priorityLabel = PRIORITY_LABEL;
 
   initWordCloud = false;
+  competencesLoaded = false;
+
   competencesList: [string, number][] = [];
   selectedKeyword = '';
   defaultText = 'Cliquez sur un tag pour en savoir +';
@@ -44,20 +46,55 @@ export class CompetencesComponent implements AfterViewChecked {
   portfolioList: IProject[] = [];
   competenceList: ICompetence[] = [];
 
+  private subscriptionList: Subscription[] = [];
+
   constructor(
     private readonly dataService: DataService,
     private readonly utilsService: UtilsService
   ) {}
 
-  async ngAfterViewChecked() {
+  ngOnInit(): void {
+    this.subscriptionList.push(
+      this.dataService.isCompetencesLoaded().subscribe(async (loaded) => {
+        if (!loaded) {
+          return;
+        }
+        this.competencesLoaded = true;
+      }),
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionList.forEach((s) => s.unsubscribe());
+
+    const that = this;
+    // @ts-ignore
+    wcCanvas.removeEventListener('wordcloudstart', () => {
+      that.wordCloudStart();
+    });
+    // @ts-ignore
+    wcCanvas.removeEventListener('wordclouddrawn', () => {
+      that.wordCloudDrawn();
+    });
+    // @ts-ignore
+    wcCanvas.removeEventListener('wordcloudstop', () => {
+      that.addWorldCloudClick();
+    });
+  }
+
+  async ngAfterViewChecked(): Promise<void> {
     if (
       !this.initWordCloud &&
       window.WordCloud.isSupported &&
       document.querySelector('#wc_canvas') &&
-      !document.querySelector('.word-in-cloud')
+      !document.querySelector('.word-in-cloud') &&
+      this.competencesLoaded
     ) {
       this.initWordCloud = true;
-      await this.loadWorldCloud();
+
+      setTimeout(async () => {
+        await this.loadWorldCloud();
+      }, 500);
     }
   }
 
@@ -73,20 +110,9 @@ export class CompetencesComponent implements AfterViewChecked {
   }
 
   private async loadWorldCloud(): Promise<void> {
+
     const that = this;
     const wcCanvas = document.getElementById('wc_canvas');
-    // @ts-ignore
-    wcCanvas.removeEventListener('wordcloudstart', () => {
-      that.wordCloudStart();
-    });
-    // @ts-ignore
-    wcCanvas.removeEventListener('wordclouddrawn', () => {
-      that.wordCloudDrawn();
-    });
-    // @ts-ignore
-    wcCanvas.removeEventListener('wordcloudstop', () => {
-      that.addWorldCloudClick();
-    });
 
     // @ts-ignore
     wcCanvas.addEventListener('wordcloudstart', () => {
@@ -104,8 +130,8 @@ export class CompetencesComponent implements AfterViewChecked {
     this.competencesDrawn = 0;
     this.timeOutToDrawn = 0;
 
-    const competencesList = await this.dataService.getSummary();
-    this.competencesList = competencesList.map(
+    const tagList = await this.dataService.getSummary();
+    this.competencesList = tagList.map(
       tag => ([tag.name, this.policeSize(tag.times as number, tag.weight)])
     );
 
@@ -159,7 +185,6 @@ export class CompetencesComponent implements AfterViewChecked {
     const wcElements = Array.from(document.getElementsByClassName('word-in-cloud'));
     // tslint:disable-next-line:prefer-for-of
     for (let element of wcElements) {
-      console.log('element:', element);
       if (!element.getAttribute('init-onclick')) {
         this.addClickActionOnElement(element as HTMLElement);
       }
@@ -169,10 +194,13 @@ export class CompetencesComponent implements AfterViewChecked {
   private addClickActionOnElement(el: HTMLElement) {
     const that = this;
     // tslint:disable-next-line:only-arrow-functions
-    el.onclick = async function() {
+    el.onclick = function () {
       that.selectedKeyword = el.innerText;
-      await that.buildCompetencesSummary(el.innerText);
+      that.buildCompetencesSummary(el.innerText).then(() => {
+        /**/
+      });
     };
+
     el.setAttribute('init-onclick', 'true');
   }
 

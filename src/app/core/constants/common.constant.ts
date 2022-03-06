@@ -1,5 +1,5 @@
 export const APP_CREDITS = {
-  copyright: 'Copyright © 2018-2021',
+  copyright: 'Copyright © 2018-2022',
   owner: 'MIKEONLINE',
   fullName: 'Mickaël NODANCHE',
   title: 'Développeur FullStack TS CV en ligne',
