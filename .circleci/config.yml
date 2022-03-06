@@ -163,8 +163,8 @@ workflows:
 #                - develop
 #                - /test\/.*/
       - ci-build-job-staging:
-          requires:
-            - ci-test-job
+#          requires:
+#            - ci-test-job
           filters:
             branches:
               ignore:
