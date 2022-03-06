@@ -1,9 +1,9 @@
 import {AfterViewChecked, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import {Subscription} from 'rxjs';
-import { IAnimationServiceResponse } from '../../../../core';
+import { IAnimationServiceResponse } from '../../../../core/core-index';
 import { IExperience } from '../../../../core/interfaces/models/experience.interface';
 import { AnimationsService } from '../../../../core/services/animations/animations.service';
-import { IN_OUT_TEMPLATE_ANIMATION } from '../../../../shared';
+import { IN_OUT_TEMPLATE_ANIMATION } from '../../../../shared/shared-index';
 import { UtilsService } from '../../../../shared/services/utils/utils.service';
 
 @Component({

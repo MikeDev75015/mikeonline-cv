@@ -4,14 +4,11 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { map, mergeMap, tap } from 'rxjs/operators';
-import { ApiV0Service } from '../../../shared/services/api-v0/api-v0.service';
-import { ITag } from '../../interfaces/models/tag.interface';
-import * as CompetencesActions from '../actions/competences.actions';
-import * as ExperiencesActions from '../actions/experiences.actions';
-import * as FormationsActions from '../actions/formations.actions';
-import * as InterestsActions from '../actions/interests.actions';
-import * as ProjectsActions from '../actions/projects.actions';
-import * as TagsActions from '../actions/tags.actions';
+import {
+  CompetencesActions, InterestsActions, TagsActions, ExperiencesActions, FormationsActions, ProjectsActions,
+} from '../ngrx-index';
+import { ITag } from '../../core-index';
+import { ApiV0Service } from '../../../shared/shared-index';
 
 /**
  * Effects for tags actions

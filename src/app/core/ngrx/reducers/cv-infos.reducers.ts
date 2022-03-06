@@ -6,20 +6,20 @@ import * as CvInfosActions from '../actions/cv-infos.actions';
 export interface CvInfosState {
   id: string;
   fileName: string;
-  contact: IContact;
+  contact: IContact | undefined;
   title: string;
   technoList: string[];
-  logo: IImage;
+  logo: IImage | undefined;
   cvType: 'full-cv' | 'partial-cv';
 }
 
 export const initialState: CvInfosState = {
   id: '',
   fileName: '',
-  contact: {} as IContact,
+  contact: undefined,
   title: '',
   technoList: [],
-  logo: {} as IImage,
+  logo: undefined,
   cvType: 'full-cv',
 };
 

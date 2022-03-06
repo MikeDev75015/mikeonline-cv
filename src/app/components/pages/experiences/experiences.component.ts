@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { IExperience } from '../../../core';
-import { DataService } from '../../../shared';
+import { IExperience, IFormation } from '../../../core/core-index';
+import { MomentService } from '../../../core/services/moment/moment.service';
+import { DataService, UtilsService } from '../../../shared/shared-index';
 
 @Component({
   selector: 'app-experiences',
@@ -24,7 +25,19 @@ export class ExperiencesComponent implements OnInit, OnDestroy {
         if (loaded) {
           this.dataService.getExperiences<IExperience[]>().then(
             (list) => {
-              this.experienceList = list;
+              this.experienceList = UtilsService.sortList<IExperience>(
+                list.map((e) => {
+                  if (!e.endDate) {
+                    return {
+                      ...e,
+                      endDate: MomentService.getCurrentDate('YYYY-MM'),
+                    };
+                  }
+
+                  return e;
+                }),
+                'desc', 'endDate', 'date'
+              );
             },
           );
         }

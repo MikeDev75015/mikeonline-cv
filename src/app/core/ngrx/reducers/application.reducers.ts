@@ -1,28 +1,33 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import * as ApplicationActions from '../actions/application.actions';
 
-export interface AppState {
+export interface ApplicationState {
   appLoading?: boolean;
   appLoadingError: boolean;
+  cvInfosLoaded: boolean;
   hideHeader: boolean;
 }
 
-export const initialState: AppState = {
-  appLoadingError: false,
+export const initialState: ApplicationState = {
   appLoading: undefined,
+  cvInfosLoaded: false,
   hideHeader: false,
+  appLoadingError: false,
 };
 
 const applicationReducer = createReducer(
   initialState,
-  on(ApplicationActions.startAppLoading, (state: AppState): AppState => ({ ...state, appLoading: true })),
-  on(ApplicationActions.endAppLoading, (state: AppState): AppState => ({ ...state, appLoading: false })),
-  on(ApplicationActions.appLoadingSuccess, (state: AppState): AppState => ({ ...state, appLoadingError: false })),
-  on(ApplicationActions.appLoadingFailure, (state: AppState): AppState => ({ ...state, appLoadingError: true })),
-  on(ApplicationActions.showHeader, (state: AppState): AppState => ({ ...state, hideHeader: false })),
-  on(ApplicationActions.hideHeader, (state: AppState): AppState => ({ ...state, hideHeader: true })),
+  on(ApplicationActions.startAppLoading, (state: ApplicationState): ApplicationState => ({ ...state, appLoading: true })),
+  on(ApplicationActions.endAppLoading, (state: ApplicationState): ApplicationState => ({ ...state, appLoading: false })),
+  on(ApplicationActions.appLoadingSuccess, (state: ApplicationState): ApplicationState => ({ ...state, appLoadingError: false })),
+  on(ApplicationActions.appLoadingFailure, (state: ApplicationState): ApplicationState => ({ ...state, appLoadingError: true })),
+
+  on(ApplicationActions.cvInfosLoaded, (state: ApplicationState): ApplicationState => ({ ...state, cvInfosLoaded: true })),
+
+  on(ApplicationActions.showHeader, (state: ApplicationState): ApplicationState => ({ ...state, hideHeader: false })),
+  on(ApplicationActions.hideHeader, (state: ApplicationState): ApplicationState => ({ ...state, hideHeader: true })),
 );
 
-export function reducer(state: AppState | undefined, action: Action): AppState {
+export function reducer(state: ApplicationState | undefined, action: Action): ApplicationState {
   return applicationReducer(state, action);
 }

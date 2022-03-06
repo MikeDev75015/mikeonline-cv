@@ -2,7 +2,7 @@ import { IImage } from '../image.interface';
 import { IContact } from '../contact.interface';
 
 export interface ICvInfos {
-  id: string;
+  id?: string;
   fileName: string;
   contact: IContact;
   title: string;

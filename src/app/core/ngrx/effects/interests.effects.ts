@@ -4,9 +4,9 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { map, mergeMap, tap } from 'rxjs/operators';
-import { ApiV0Service } from '../../../shared/services/api-v0/api-v0.service';
-import { IInterest } from '../../interfaces/models/interest.interface';
-import * as InterestsActions from '../actions/interests.actions';
+import { InterestsActions } from '../ngrx-index';
+import { IInterest } from '../../core-index';
+import { ApiV0Service } from '../../../shared/shared-index';
 
 /**
  * Effects for interests actions

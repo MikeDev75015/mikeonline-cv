@@ -1,0 +1,12 @@
+.word-in-cloud {
+  display: block;
+  cursor: pointer;
+  opacity: 0.9;
+}
+.word-in-cloud:hover {
+  animation: blinking 1s linear infinite;
+}
+
+.word-in-cloud:active, .word-in-cloud:focus {
+  animation: paused;
+}

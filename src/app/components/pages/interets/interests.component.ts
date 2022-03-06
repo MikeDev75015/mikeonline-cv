@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { IInterest } from '../../../core';
-import { DataService } from '../../../shared';
+import { IInterest } from '../../../core/core-index';
+import { DataService } from '../../../shared/shared-index';
 
 @Component({
   selector: 'app-interests',
@@ -9,7 +9,7 @@ import { DataService } from '../../../shared';
   styleUrls: ['./interests.component.scss']
 })
 export class InterestsComponent implements OnInit, OnDestroy {
-  interestList: IInterest[] = [];
+  interestList: IInterest[] | undefined;
 
   private subscriptionList: Subscription[] = [];
 

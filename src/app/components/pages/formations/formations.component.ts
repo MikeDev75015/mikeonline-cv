@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { IFormation } from '../../../core';
-import { DataService } from '../../../shared';
+import { IFormation } from '../../../core/core-index';
+import { MomentService } from '../../../core/services/moment/moment.service';
+import { DataService, UtilsService } from '../../../shared/shared-index';
 
 @Component({
   selector: 'app-formations',
@@ -24,7 +25,19 @@ export class FormationsComponent implements OnInit, OnDestroy {
         if (loaded) {
           this.dataService.getFormations<IFormation[]>().then(
             (list) => {
-              this.formationList = list;
+              this.formationList = UtilsService.sortList<IFormation>(
+                list.map((f) => {
+                  if (!f.endDate) {
+                    return {
+                      ...f,
+                      endDate: MomentService.getCurrentDate('YYYY-MM'),
+                    };
+                  }
+
+                  return f;
+                }),
+                'desc', 'endDate', 'date',
+              );
             },
           );
         }

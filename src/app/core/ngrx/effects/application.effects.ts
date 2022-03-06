@@ -4,9 +4,8 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { map, tap } from 'rxjs/operators';
-import { ApiV0Service } from '../../../shared';
-import * as ApplicationActions from '../actions/application.actions';
-import * as CvInfosActions from '../actions/cv-infos.actions';
+import { ApplicationActions, CvInfosActions } from '../ngrx-index';
+import { ApiV0Service } from '../../../shared/shared-index';
 
 /**
  * Effects for cv infos actions
@@ -21,7 +20,6 @@ export class ApplicationEffects {
   appLoadingSuccess$ = createEffect(() => this.actions$.pipe(
     ofType(ApplicationActions.appLoadingSuccess),
     tap(() => {
-      console.log('app Loading Success');
       this.store.dispatch(ApplicationActions.endAppLoading());
       this.store.dispatch(ApplicationActions.hideHeader());
     }),

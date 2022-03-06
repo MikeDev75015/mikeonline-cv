@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import { IDetail } from '../../../../core';
+import { IDetail } from '../../../../core/core-index';
 
 @Component({
   selector: 'app-formation-item-detail',

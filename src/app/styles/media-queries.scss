@@ -1,0 +1,49 @@
+@media screen and (max-width: 840px) {
+  section {
+    padding-top: 40px;
+
+    h3 {
+      font-size: 25px;
+    }
+  }
+
+  .exp-line h3, .form-line h3 {
+    font-size: 14px;
+  }
+
+  .exp-line em, .form-line em {
+    font-size: 13px;
+  }
+
+  p, a, li{
+    font-size: 12px;
+  }
+
+  .badge-element {
+    top: -1px;
+  }
+
+
+  app-vertical-accordion-item.item-not-opened {
+    min-width: 50px;
+  }
+  .vertical-accordion-item p {
+    font-size: 14px !important;
+  }
+  .vertical-accordion-item-header {
+    width: 50px;
+    min-width: 50px;
+  }
+
+  .line-body::-webkit-scrollbar {
+    display: none;
+  }
+
+  .line-body::-webkit-scrollbar-track {
+    display: none;
+  }
+
+  .line-body::-webkit-scrollbar-thumb {
+    display: none;
+  }
+}

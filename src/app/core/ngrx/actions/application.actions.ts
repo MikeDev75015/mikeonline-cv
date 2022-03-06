@@ -26,6 +26,11 @@ export const appLoadingFailure = createAction('[App] App Loading Failure');
 export const showHeader = createAction('[App] Show Header');
 
 /**
+ * Cv Infos Loaded
+ */
+export const cvInfosLoaded = createAction('[App] Cv Infos Loaded');
+
+/**
  * Hide Header
  */
 export const hideHeader = createAction('[App] Hide Header');

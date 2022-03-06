@@ -1,0 +1,106 @@
+.vertical-accordion {
+  width: 80%;
+  min-width: 330px;
+}
+
+app-vertical-accordion-item, app-vertical-accordion-last-item {
+  width: fit-content;
+}
+
+.vertical-accordion-container {
+  border-radius: 15px;
+  margin: 20px auto;
+  display: flex;
+  box-shadow: 0 4px 30px #555555;
+  width: fit-content;
+}
+
+.vertical-accordion-item {
+  display: flex;
+  height: 500px;
+}
+
+.vertical-accordion-item-header {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  cursor: pointer;
+  width: 100px;
+  min-width: 100px;
+  background: linear-gradient(0deg, #555555, #024873, #414141, rgba(2, 72, 115, 0.6));
+  background-size: 100% 300%;
+  animation: gradientV 10s linear infinite;
+  animation-direction: alternate-reverse;
+
+  .vertical-accordion-item-header-title {
+    text-transform: uppercase;
+    color: white;
+    text-align: center;
+    line-height: 16px;
+    // length > 25     line-height: 16px;
+  }
+}
+
+app-vertical-accordion-item:first-of-type .vertical-accordion-item-header {
+  border-radius: 15px 0 0 15px;
+}
+
+app-vertical-accordion-last-item:last-of-type .vertical-accordion-item-header,
+app-vertical-accordion-last-item:last-of-type .vertical-accordion-item-body {
+  border-radius: 0 15px 15px 0;
+}
+
+.right-border .vertical-accordion-item-header {
+  border-right: 1px solid white;
+}
+
+.opened-item .vertical-accordion-item-header {
+  pointer-events: none;
+}
+
+.item-not-opened .vertical-accordion-item-header {
+  background: linear-gradient(0deg, #696969, #555555, #696969) !important;
+  background-size: 100% 300%;
+  animation: gradientV 5s linear infinite;
+  animation-direction: alternate-reverse;
+}
+
+.item-not-opened .vertical-accordion-item-header-title {
+  color: #828282;
+  text-shadow: 1px 1px 2px black;
+  transition: all .4s;
+}
+
+.item-not-opened:hover .vertical-accordion-item-header-title {
+  color: white;
+  text-shadow: 1px 1px 2px black;
+}
+
+.opening-item .vertical-accordion-item-header {
+  /*background: linear-gradient(0deg, #555555, #024873, #414141, rgba(2, 72, 115, 0.6)) !important;
+  background-size: 100% 600%;
+  animation: gradientV 10s linear infinite;
+  animation-direction: alternate-reverse;*/
+}
+
+.vertical-accordion-item-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  overflow: hidden;
+
+  .vertical-accordion-item-body-content {
+    width: 80%;
+    font-style: italic;
+  }
+
+  .vertical-accordion-item-body-link a {
+    width: 80%;
+    color: #555555;
+    font-weight: 600;
+  }
+}

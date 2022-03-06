@@ -1,0 +1,120 @@
+.p_face, .p_dos {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.pf_flip {
+  flex-wrap: wrap;
+  max-width: 1000px;
+  margin: 0 auto 30px;
+}
+
+.animated-background {
+  background: linear-gradient(90deg, #555555, #024873, #414141, rgba(2, 72, 115, 0.6));
+  background-size: 300% 100%;
+  animation: gradient 10s linear infinite;
+  animation-direction: alternate-reverse;
+}
+@keyframes gradient {
+  0% {
+    background-position: 0
+  }
+  100% {
+    background-position: 100%
+  }
+}
+@keyframes gradientV {
+  0% {
+    background-position: 0 0
+  }
+  100% {
+    background-position: 0 100%
+  }
+}
+
+
+.blinking:hover {
+  animation: blinking 1s linear infinite;
+}
+@keyframes blinking {
+  0% {opacity: 1}
+  50% {opacity: 0.8}
+  60% {opacity: 0.4}
+  70% {opacity: 0.3}
+  80% {opacity: 0.2}
+  90% {opacity: 0.1}
+  100% {opacity: 0}
+}
+
+.fx-shake:active {
+  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  20%, 80% {
+    transform: translate3d(1px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-2px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(2px, 0, 0);
+  }
+}
+
+.fx-light-halo {
+  position: relative;
+}
+.fx-light-halo::before {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+  display: block;
+  content: '';
+  width: 0;
+  height: 0;
+  background: rgba(255,255,255,.2);
+  border-radius: 100%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  opacity: 0;
+}
+.fx-light-halo:hover::before, .fx-light-halo:active::before, .fx-light-halo:focus::before {
+  -webkit-animation: circle .75s;
+  animation: circle .75s;
+}
+@-webkit-keyframes circle {
+  0% {
+    opacity: 1;
+  }
+  40% {
+    opacity: 1;
+  }
+  100% {
+    width: 200%;
+    height: 200%;
+    opacity: 0;
+  }
+}
+@keyframes circle {
+  0% {
+    opacity: 1;
+  }
+  40% {
+    opacity: 1;
+  }
+  100% {
+    width: 200%;
+    height: 200%;
+    opacity: 0;
+  }
+}

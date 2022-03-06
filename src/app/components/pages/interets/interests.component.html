@@ -1,8 +1,8 @@
 <section id="INTERETS">
-  <h3 class="animated-background" style="margin-bottom: 20px;">
-    <span>mes centres d'intérêts<span class="badge-element">{{ interestList.length }}</span></span>
+  <h3 style="margin-bottom: 20px !important;" class="animated-background">
+    <span>mes centres d'intérêts<span *ngIf="interestList" class="badge-element">{{ interestList.length }}</span></span>
   </h3>
-  <div class="fcs w100">
+  <div *ngIf="interestList" class="fcs w100">
     <app-vertical-accordion
       class="vertical-accordion"
       [verticalAccordionContainerClass]="'vertical-accordion-container'"

@@ -28,6 +28,52 @@ export class UtilsService {
   ) {
   }
 
+  /**
+   * Sort the array by property in different modes
+   * @param list
+   * @param way
+   * @param key
+   * @param mode
+   */
+  public static sortList<t>(
+    list: t[], way: 'asc' | 'desc', key: string, mode: 'string' | 'number' | 'date' = 'string'
+  ): t[] {
+    return list.sort((a: { [key: string]: any }, b: { [key: string]: any }) => {
+      if (mode === 'number') {
+        return way === 'asc'
+          ? a[key] - b[key]
+          : b[key] - a[key];
+      }
+
+      if (mode === 'date') {
+        return way === 'asc'
+          ? new Date(a[key]).getTime() - new Date(b[key]).getTime()
+          : new Date(b[key]).getTime() - new Date(a[key]).getTime();
+      }
+
+      return way === 'asc' ? a[key].localeCompare(b[key]) : b[key].localeCompare(a[key]);
+    });
+  }
+
+  /**
+   * Merges two array
+   * @param firstList
+   * @param secondList
+   * @param type
+   */
+  public static mergeTwoList<T>(firstList: T[], secondList: T[], type = 'string'): T[] {
+    if (type !== 'string') {
+      throw new Error('Not Implemented');
+    }
+
+    firstList.forEach((s) => {
+      if (!secondList.includes(s)) {
+        secondList.push(s);
+      }
+    });
+    return secondList;
+  }
+
   public pluralize = (length: number) => !length || length <= 1 ? '' : 's';
 
   public dateConverter(dateToConvert: string, method: string, labelMethod: string | undefined = undefined, format = 'format', labelFormat?: boolean): string {

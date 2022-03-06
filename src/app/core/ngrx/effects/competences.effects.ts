@@ -4,10 +4,9 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { mergeMap, tap } from 'rxjs/operators';
-import { ApiV0Service } from '../../../shared/services/api-v0/api-v0.service';
-import { TagsService } from '../../../shared/services/tags/tags.service';
-import { ICompetence } from '../../interfaces/models/competence.interface';
-import * as CompetencesActions from '../actions/competences.actions';
+import { CompetencesActions } from '../ngrx-index';
+import { ICompetence } from '../../core-index';
+import { ApiV0Service, TagsService } from '../../../shared/shared-index';
 
 /**
  * Effects for competences actions

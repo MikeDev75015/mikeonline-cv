@@ -3,42 +3,22 @@
   [mobileView]="mobileView"
   class="app-contact"
 ></app-contact>
+
 <div
   *ngIf="!mobileView"
-  [@hideShowHeader]="{value: hideHeader ? 'hide' : 'show', params: {headerHeight: headerHeight}}"
+  [@hideShowHeader]="{value: isHeaderHidden ? 'hide' : 'show', params: {headerHeight: headerHeight}}"
   (@hideShowHeader.start)="onAnimation($event)"
   (@hideShowHeader.done)="onAnimation($event)"
   class="wrapper-header"
 >
   <app-header class="app-header"></app-header>
 </div>
+
 <app-main class="app-main"></app-main>
+
 <app-footer
   class="app-footer"
   [mobile]="mobileView"
-  [hideHeader]="hideHeader"
-  (showHeader)="showHeader()"
+  [hideHeader]="isHeaderHidden"
+  (showHeader)="isHeaderHidden ? showHeader() : hideHeader()"
 ></app-footer>
-
-<!--<button
-  *ngIf="!mobileView && !headerOnAnimation && enableScroll"
-  class="btns-icon btns-scroll btn-scroll-to-the-top fcc"
-  [ngClass]="{ 'disabled': isScrollToTopLimit()}"
-  (mousedown)="scrollPage('scrollToTheTop')"
-  (mouseup)="scrollPage('stop')"
-  (mouseleave)="scrollPage('stop')"
->
-  <i class="fas fa-angle-double-up"></i>
-</button>
-
-<button
-  *ngIf="!mobileView && !headerOnAnimation && enableScroll"
-  class="btns-icon btns-scroll btn-scroll-to-the-bottom fcc"
-  [ngClass]="{ 'disabled': isScrollToBottomLimit()}"
-  (mouseenter)="scrollPage('stop')"
-  (mousedown)="scrollPage('scrollToTheBottom')"
-  (mouseup)="scrollPage('stop')"
-  (mouseleave)="scrollPage('stop')"
->
-  <i class="fas fa-angle-double-down"></i>
-</button>-->

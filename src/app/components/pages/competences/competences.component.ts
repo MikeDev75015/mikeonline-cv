@@ -1,8 +1,16 @@
-import { AfterViewChecked, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewChecked, Component, OnDestroy, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
-import { EXPERTISE_LEVEL_LABEL, PRIORITY_LABEL, ICompetence, IExperience, IFormation, IProject, ITag } from '../../../core';
-import { DataService, UtilsService } from '../../../shared';
+import {
+  EXPERTISE_LEVEL_LABEL,
+  ICompetence,
+  IExperience,
+  IFormation,
+  IProject,
+  ITag,
+  PRIORITY_LABEL,
+} from '../../../core/core-index';
+import { DataService, UtilsService } from '../../../shared/shared-index';
 
 moment.locale('fr');
 
@@ -16,42 +24,61 @@ window.WordCloud = window.WordCloud || {};
 @Component({
   selector: 'app-competences',
   templateUrl: './competences.component.html',
-  styleUrls: ['./competences.component.scss']
+  styleUrls: ['./competences.component.scss'],
 })
 export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked {
-  expertiseLevelLabel = EXPERTISE_LEVEL_LABEL;
-  priorityLabel = PRIORITY_LABEL;
+  public defaultText = 'Cliquez sur une techno pour en savoir +';
 
-  initWordCloud = false;
-  competencesLoaded = false;
+  public selectedKeyword = '';
 
-  competencesList: [string, number][] = [];
-  selectedKeyword = '';
-  defaultText = 'Cliquez sur un tag pour en savoir +';
-  skillDetails = {
-    expertiseLevel: 4,
-    experienceYears: 2,
-    priority: 2
+  public competencesDrawn = 0;
+
+  public expPanelOpenState = false;
+
+  public formPanelOpenState = false;
+
+  public portPanelOpenState = false;
+
+  public experienceList: IExperience[] = [];
+
+  public formationList: IFormation[] = [];
+
+  public portfolioList: IProject[] = [];
+
+  public competenceList: ICompetence[] = [];
+
+  private expertiseLevelLabel = EXPERTISE_LEVEL_LABEL;
+
+  private priorityLabel = PRIORITY_LABEL;
+
+  private initWordCloud = false;
+
+  private competencesLoaded = false;
+
+  private competencesList: [string, number][] = [];
+
+  private skillDetails = {
+    expertiseLevel: 4, experienceYears: 2, priority: 2,
   };
-  wcDefaultPoliceSize = 15;
-  competencesDrawn = 0;
-  timeOutToDrawn = 0;
 
-  expPanelOpenState = false;
-  formPanelOpenState = false;
-  portPanelOpenState = false;
+  private wcDefaultPoliceSize = 15;
 
-  experienceList: IExperience[] = [];
-  formationList: IFormation[] = [];
-  portfolioList: IProject[] = [];
-  competenceList: ICompetence[] = [];
+  private timeOutToDrawn = 0;
 
   private subscriptionList: Subscription[] = [];
 
   constructor(
     private readonly dataService: DataService,
-    private readonly utilsService: UtilsService
+    private readonly utilsService: UtilsService,
   ) {}
+
+  private static getGridForWidth(): number {
+    let gridValue = 12;
+    if (window.innerWidth < 840) {
+      gridValue = 4;
+    }
+    return gridValue;
+  }
 
   ngOnInit(): void {
     this.subscriptionList.push(
@@ -99,6 +126,7 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
   }
 
   public pluralize = (value: number) => this.utilsService.pluralize(value);
+
   public convertDateToNumber = (value: string) => this.utilsService.convertDateToNumber(value);
 
   public getExpertiseLevelLabel(value: number): string {
@@ -110,7 +138,6 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
   }
 
   private async loadWorldCloud(): Promise<void> {
-
     const that = this;
     const wcCanvas = document.getElementById('wc_canvas');
 
@@ -132,12 +159,12 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
 
     const tagList = await this.dataService.getSummary();
     this.competencesList = tagList.map(
-      tag => ([tag.name, this.policeSize(tag.times as number, tag.weight)])
+      tag => ([tag.name, this.policeSize(tag.times as number, tag.weight)]),
     );
 
     window.WordCloud(wcCanvas, {
       ...this.setWorldCloudOptions(),
-      list: this.competencesList
+      list: this.competencesList,
     });
   }
 
@@ -153,7 +180,7 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
     this.timeOutToDrawn = 0;
   }
 
-  private setWorldCloudOptions(): any {
+  private setWorldCloudOptions(): WorldCloudOptions {
     return {
       gridSize: CompetencesComponent.getGridForWidth(),
       fontFamily: 'Roboto',
@@ -162,16 +189,8 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
       },
       backgroundColor: 'transparent',
       rotateRatio: 0,
-      classes: 'word-in-cloud'
+      classes: 'word-in-cloud',
     };
-  }
-
-  private static getGridForWidth(): number {
-    let gridValue = 12;
-    if (window.innerWidth < 840) {
-      gridValue = 4;
-    }
-    return gridValue;
   }
 
   private policeSize(times: number, weight: number): number {
@@ -224,21 +243,21 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
   private async getRelatedProjects(tagId: number): Promise<void> {
     this.portfolioList = (await this.dataService.getProjects<IProject[]>(tagId, 'tagIdList')).map(s => ({
       ...s,
-      technoList: this.utilsService.initTechnoListWithTagList(s.tagList as ITag[])
+      technoList: this.utilsService.initTechnoListWithTagList(s.tagList as ITag[]),
     }));
   }
 
   private async getRelatedCompetences(tagId: number): Promise<void> {
     this.competenceList = (await this.dataService.getCompetences<ICompetence[]>(tagId, 'tagIdList')).map(c => {
       const experienceYearsText = this.utilsService.dateConverter(
-        c.startDate + '-01', 'startOf', 'year', 'fromNow', true
+        c.startDate + '-01', 'startOf', 'year', 'fromNow', true,
       );
       return {
         ...c,
         experienceYears: {
           text: experienceYearsText,
-          value: this.utilsService.convertDateToNumber(experienceYearsText)
-        }
+          value: this.utilsService.convertDateToNumber(experienceYearsText),
+        },
       };
     });
   }

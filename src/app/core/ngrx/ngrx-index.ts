@@ -17,7 +17,7 @@ import * as fromInterests from './reducers/interests.reducers';
  * Model of the global state of the application which will contain all the sub-states
  */
 export interface State {
-  application: fromApplication.AppState;
+  application: fromApplication.ApplicationState;
   cvInfos: fromCvInfos.CvInfosState;
   tags: fromTags.TagsState;
   competences: fromCompetences.CompetencesState;
@@ -55,3 +55,33 @@ export function debug(reducer: ActionReducer<State>): ActionReducer<State> {
 export const metaReducers: MetaReducer<State>[] = !environment.production
   ? [debug]
   : [];
+
+/* Actions */
+export * as ApplicationActions from './actions/application.actions';
+export * as CvInfosActions from './actions/cv-infos.actions';
+export * as TagsActions from './actions/tags.actions';
+export * as CompetencesActions from './actions/competences.actions';
+export * as ExperiencesActions from './actions/experiences.actions';
+export * as FormationsActions from './actions/formations.actions';
+export * as ProjectsActions from './actions/projects.actions';
+export * as InterestsActions from './actions/interests.actions';
+
+/* Effects */
+export { ApplicationEffects } from './effects/application.effects';
+export { CvInfosEffects } from './effects/cv-infos.effects';
+export { TagsEffects } from './effects/tags.effects';
+export { CompetencesEffects } from './effects/competences.effects';
+export { ExperiencesEffects } from './effects/experiences.effects';
+export { FormationsEffects } from './effects/formations.effects';
+export { ProjectsEffects } from './effects/projects.effects';
+export { InterestsEffects } from './effects/interests.effects';
+
+/* Selectors */
+export * as ApplicationSelectors from'./selectors/application.selectors';
+export * as CvInfosSelectors from './selectors/cv-infos.selectors';
+export * as TagsSelectors from './selectors/tags.selectors';
+export * as CompetencesSelectors from './selectors/competences.selectors';
+export * as ExperiencesSelectors from './selectors/experiences.selectors';
+export * as FormationsSelectors from './selectors/formations.selectors';
+export * as ProjectsSelectors from './selectors/projects.selectors';
+export * as InterestsSelectors from './selectors/interests.selectors';

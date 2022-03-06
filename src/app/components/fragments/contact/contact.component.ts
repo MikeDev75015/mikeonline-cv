@@ -1,11 +1,13 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
 import * as moment from 'moment';
 import { Moment } from 'moment/moment';
 import { Subscription } from 'rxjs';
-import { APP_CREDITS, IContact, ICvInfos, IWebLink } from '../../../core';
+import { APP_CREDITS, IContact, ICvInfos, IWebLink } from '../../../core/core-index';
 import { IShareData } from '../../../core/interfaces/share-data.interface';
+import { selectAppCvInfosLoaded } from '../../../core/ngrx/selectors/application.selectors';
 import { ContactOpenCloseService } from '../../../core/services/contact-open-close/contact-open-close.service';
-import { DataService, UtilsService, IN_OUT_TEMPLATE_ANIMATION, STAGGER_IN_OUT_TEMPLATE_ANIMATION, } from '../../../shared';
+import { DataService, UtilsService, IN_OUT_TEMPLATE_ANIMATION, STAGGER_IN_OUT_TEMPLATE_ANIMATION, } from '../../../shared/shared-index';
 
 @Component({
   selector: 'app-contact',
@@ -34,8 +36,6 @@ export class ContactComponent implements OnInit, OnDestroy {
 
   showContactBtns = false;
 
-  subscriptionList: Subscription[] = [];
-
   contact: IContact = {} as IContact;
 
   webLinkList: IWebLink[] = [];
@@ -50,10 +50,13 @@ export class ContactComponent implements OnInit, OnDestroy {
 
   innerHeight = 100;
 
+  private subscriptionList: Subscription[] = [];
+
   constructor(
     private readonly dataService: DataService,
     private readonly utilsService: UtilsService,
     private readonly contactOpenCloseService: ContactOpenCloseService,
+    private readonly store: Store,
   ) {
   }
 
@@ -76,16 +79,33 @@ export class ContactComponent implements OnInit, OnDestroy {
         }),
     );
 
-    this.contact = await this.dataService.getCvInfos<IContact>(true);
-    this.webLinkList = this.contact?.webLinkList || [];
-
-    if (this.contact) {
-      this.birthDate = moment(this.contact.personalSituation.birthDate);
-      this.today = moment();
-    }
-
     this.innerHeight = window.innerHeight;
     window.addEventListener('resize', () => this.innerHeight = window.innerHeight);
+
+    const cvInfos = await this.dataService.getCvInfos();
+    if (!cvInfos || !cvInfos.contact) {
+      this.subscriptionList.push(
+        this.store.select(selectAppCvInfosLoaded).subscribe((cvInfosLoaded) => {
+          if (!cvInfosLoaded) {
+            return;
+          }
+
+          this.dataService.getCvInfos().then((cvInfosSubscribed) => {
+            this.initializeComponent(cvInfosSubscribed);
+          });
+        }),
+      );
+      return;
+    }
+
+    this.initializeComponent(cvInfos);
+  }
+
+  private initializeComponent(cvInfos: ICvInfos): void {
+    this.contact = cvInfos.contact;
+    this.webLinkList = this.contact?.webLinkList || [];
+    this.birthDate = moment(this.contact?.personalSituation?.birthDate);
+    this.today = moment();
   }
 
   ngOnDestroy() {

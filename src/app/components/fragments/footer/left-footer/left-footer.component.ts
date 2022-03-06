@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import { ICvInfos, IExperience, IFormation, IInterest, IProject, ITag } from '../../../../core';
+import { ICvInfos, IExperience, IFormation, IInterest, IProject, ITag } from '../../../../core/core-index';
 import { PdfCreatorService } from '../../../../core/services/pdf-creator/pdf-creator.service';
 import { DataService } from '../../../../shared/services/data/data.service';
 import { UtilsService } from '../../../../shared/services/utils/utils.service';
@@ -21,7 +21,7 @@ export class LeftFooterComponent {
 
   async downloadCV(): Promise<void> {
     this.downloading = true;
-    const cvInfos = await this.dataService.getCvInfos<ICvInfos>();
+    const cvInfos = await this.dataService.getCvInfos();
     const experiences = await this.dataService.getExperiences<IExperience[]>();
     const formations = await this.dataService.getFormations<IFormation[]>();
     const projects = await this.dataService.getProjects<IProject[]>();

@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import { Subscription } from 'rxjs';
-import { IProject, ITag } from '../../../core';
-import { DataService, UtilsService } from '../../../shared';
+import { IProject, ITag } from '../../../core/core-index';
+import { DataService, UtilsService } from '../../../shared/shared-index';
 
 @Component({
   selector: 'app-portfolio',

@@ -4,10 +4,9 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { mergeMap, tap } from 'rxjs/operators';
-import { ApiV0Service } from '../../../shared/services/api-v0/api-v0.service';
-import { TagsService } from '../../../shared/services/tags/tags.service';
-import { IFormation } from '../../interfaces/models/formation.interface';
-import * as FormationsActions from '../actions/formations.actions';
+import { FormationsActions } from '../ngrx-index';
+import { IFormation } from '../../core-index';
+import { ApiV0Service, TagsService, UtilsService } from '../../../shared/shared-index';
 
 /**
  * Effects for formations actions
@@ -27,11 +26,13 @@ export class FormationsEffects {
       }
 
       this.tagsService.getAllTags().then((allTags) => {
+        const listWithTags = formationList.map((formation) => ({
+          ...formation,
+          tagList: this.tagsService.getTagsByIds(formation.tagIdList, allTags),
+        }));
+
         this.store.dispatch(FormationsActions.fetchFormationsSuccess({
-          formationList: formationList.map((formation) => ({
-            ...formation,
-            tagList: this.tagsService.getTagsByIds(formation.tagIdList, allTags),
-          })),
+          formationList: listWithTags,
         }));
       });
     }),

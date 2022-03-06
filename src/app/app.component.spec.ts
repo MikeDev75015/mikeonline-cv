@@ -8,7 +8,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { MockComponent } from 'ng2-mock-component';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
-import { AlertModule } from './core';
+import { AlertModule } from './core/core-index';
 import { AddComponentsService } from './core/services/add-components/add-components.service';
 
 describe('AppComponent', () => {

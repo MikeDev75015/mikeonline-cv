@@ -1,14 +1,15 @@
-import { AfterViewChecked, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { SwPush, SwUpdate } from '@angular/service-worker';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { IAnimationServiceResponse } from './core';
+import { IAnimationServiceResponse } from './core/core-index';
 import { AlertService } from './core/modules/alert/alert.service';
 import { LoggerService } from './core/modules/logger/logger.service';
 import * as ApplicationActions from './core/ngrx/actions/application.actions';
+import { selectAppHideHeader } from './core/ngrx/selectors/application.selectors';
 import { AnimationsService } from './core/services/animations/animations.service';
 import { ContactOpenCloseService } from './core/services/contact-open-close/contact-open-close.service';
-import { HEADER_ANIMATION, UtilsService } from './shared';
+import { DataService, HEADER_ANIMATION, UtilsService } from './shared/shared-index';
 
 @Component({
   selector: 'app-root',
@@ -16,47 +17,37 @@ import { HEADER_ANIMATION, UtilsService } from './shared';
   styleUrls: ['./app.component.scss'],
   animations: HEADER_ANIMATION,
 })
-export class AppComponent implements OnInit, AfterViewChecked, OnDestroy {
-  subscriptionList: Subscription[] = [];
-
+export class AppComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {
   hideHeaderTimeOut: any;
-
   timeOutTimeToHide = 4000;
-
   pageYOffset = 0;
-
   mobileView = false;
-
-  hideHeader = true;
-
+  isHeaderHidden = false;
   headerHeight = '';
-
   headerOnAnimation = true;
 
-  sectionElement: HTMLElement = {} as HTMLElement;
-
+  sectionElement: HTMLElement | undefined;
   sectionMarginBottom = 0;
-
   matTabHeaderHeight = 0;
-
-  sectionBoundingClientRect: DOMRect = {} as DOMRect;
-
+  sectionBoundingClientRect: DOMRect | undefined;
   scrollInterval: any;
-
   intervalTimeToScroll = 50;
-
   scrollValue = 50;
-
   enableScroll = false;
-
   disableScrollButtons: string[] = [];
 
   minHeightView = 483;
+  heightView: number | undefined;
 
-  heightView = 200;
+  splashScreenDelay = 4000;
+  introductionTime = false;
+  waitingFor: 'hideHeader' | 'showHeader' | undefined;
+
+  subscriptionList: Subscription[] = [];
 
   constructor(
     private readonly store: Store,
+    private readonly dataService: DataService,
     private readonly alertService: AlertService,
     private readonly utilService: UtilsService,
     private readonly animationService: AnimationsService,
@@ -66,15 +57,10 @@ export class AppComponent implements OnInit, AfterViewChecked, OnDestroy {
     private readonly swUpdate: SwUpdate,
     private readonly cdRef: ChangeDetectorRef,
   ) {
+    this.store.dispatch(ApplicationActions.startAppLoading());
   }
 
   public ngOnInit(): void {
-    this.updateView();
-
-    if (!this.mobileView) {
-      this.autoHideHeader();
-    }
-
     this.subscriptionList.push(
       this.animationService.watchResponse().subscribe(
         (animationServiceResponse) => {
@@ -83,51 +69,104 @@ export class AppComponent implements OnInit, AfterViewChecked, OnDestroy {
       )
     );
 
+    this.subscriptionList.push(
+      this.store.select(selectAppHideHeader).subscribe((appHideHeader) => {
+        if (this.mobileView) {
+          return;
+        }
+
+        if (appHideHeader && !this.isHeaderHidden) {
+          if (!this.introductionTime) {
+            this.waitingFor = 'hideHeader';
+            return;
+          }
+          this.hideHeader();
+        } else if (!appHideHeader && this.isHeaderHidden) {
+          if (!this.introductionTime) {
+            this.waitingFor = 'showHeader';
+            return;
+          }
+          this.showHeader();
+        }
+      }),
+    );
+
+    this.subscriptionList.push(
+      this.dataService.isAllDataLoaded().subscribe((isAllDataLoaded) => {
+        if (!isAllDataLoaded) {
+          return;
+        }
+
+        this.store.dispatch(ApplicationActions.appLoadingSuccess());
+      }),
+    );
+
+    this.updateView();
+
     this.initPWA();
 
-    window.addEventListener('scroll', () => {
-      this.scrollEventCallback();
-    });
-    window.addEventListener('resize', () => {
-      this.resizeEventCallback();
-    });
-    window.addEventListener('mousewheel', () => {
-      this.mousewheelEventCallback();
-    });
-
-    this.store.dispatch(ApplicationActions.startAppLoading());
+    this.addEventListenersToWindow();
   }
 
   public ngOnDestroy(): void {
     this.stopAutoHideHeaderTimeout();
-    this.stopScrolling();
-    this.subscriptionList.forEach(s => s.unsubscribe());
 
-    window.removeEventListener('scroll', () => {
-      this.scrollEventCallback();
-    });
-    window.removeEventListener('resize', () => {
-      this.resizeEventCallback();
-    });
-    window.removeEventListener('mousewheel', () => {
-      this.mousewheelEventCallback();
-    });
+    this.subscriptionList.forEach(s => s.unsubscribe());
+    this.removeEventListenerFromWindow();
+  }
+
+  public ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.introductionTime = true;
+
+      if (this.waitingFor) {
+        this[this.waitingFor]();
+      }
+    }, this.splashScreenDelay);
   }
 
   public ngAfterViewChecked(): void {
     if (!this.mobileView) {
       if (!this.headerOnAnimation) {
         this.updateScrollingState();
-        this.cdRef.detectChanges();
       } else {
         this.enableScroll = false;
-        this.cdRef.detectChanges();
       }
+      this.cdRef.detectChanges();
     }
 
   }
 
-  initPWA(): void {
+  public onAnimation = (e: any) => this.animationService.onPhase(e);
+
+  public showHeader(): void {
+    this.stopAutoHideHeaderTimeout();
+    this.pageYOffset = 0;
+    this.updateWrapperHeaderHeight();
+    this.isHeaderHidden = false;
+  }
+
+  public hideHeader(auto = false): void {
+    this.hideHeaderTimeOut = setTimeout(() => {
+      this.updateWrapperHeaderHeight();
+      this.isHeaderHidden = true;
+      this.stopAutoHideHeaderTimeout();
+    }, auto ? this.timeOutTimeToHide : 1);
+  }
+
+  private onAnimationServiceResponse(animationServiceResponse: IAnimationServiceResponse): void {
+    if (!animationServiceResponse.type) {
+      return;
+    }
+
+    if (animationServiceResponse.type.includes('start')) {
+      this.headerOnAnimation = true;
+    } else if (animationServiceResponse.type.includes('done')) {
+      this.headerOnAnimation = false;
+    }
+  }
+
+  private initPWA(): void {
     if (this.swPush.isEnabled) {
       const swPushSubscription = this.swPush.notificationClicks.subscribe(notificationPayload => {
         console.log('notificationPayload:', notificationPayload);
@@ -162,92 +201,43 @@ export class AppComponent implements OnInit, AfterViewChecked, OnDestroy {
     } else console.log('service worker unavailable');
   }
 
-  // Services Methods
-  onAnimation = (e: any) => this.animationService.onPhase(e);
-
-  // Local Methods
-  updateView(): void {
+  private updateView(): void {
     this.pageYOffset = window.pageYOffset;
     this.mobileView = window.innerWidth <= 840;
-    if (this.pageYOffset && !this.hideHeader) {
+    if (this.pageYOffset && !this.isHeaderHidden) {
       this.updateWrapperHeaderHeight();
-      this.hideHeader = true;
+      this.isHeaderHidden = true;
     }
     this.heightView = window.innerHeight;
     this.contactOpenCloseService.setHeightIsTooSmall(this.heightView < this.minHeightView);
   }
 
-  onAnimationServiceResponse(animationServiceResponse: IAnimationServiceResponse): void {
-    if (!animationServiceResponse.type) {
-      return;
-    }
-
-    if (animationServiceResponse.type.includes('start')) {
-      this.headerOnAnimation = true;
-    } else if (animationServiceResponse.type.includes('done')) {
-      this.headerOnAnimation = false;
-    }
-  }
-
-  updateWrapperHeaderHeight(): void {
+  private updateWrapperHeaderHeight(): void {
     const appHeader = document.querySelector('.wrapper-header');
     if (appHeader) {
       const height = this.utilService.convertPixelsToNumber(window.getComputedStyle(appHeader).getPropertyValue('height'), true);
       if (!this.headerHeight.includes('' + height)) {
-        // console.log('headerHeight', this.headerHeight, '\nheight', height);
         this.headerHeight = '-' + height + 'px';
         this.cdRef.detectChanges();
       }
     }
   }
 
-  showHeader(): void {
-    this.stopAutoHideHeaderTimeout();
-    this.pageYOffset = 0;
-    this.updateWrapperHeaderHeight();
-    this.hideHeader = false;
-  }
-
-  autoHideHeader(): void {
-    this.hideHeaderTimeOut = setTimeout(() => {
-      this.updateWrapperHeaderHeight();
-      this.hideHeader = true;
-      this.stopAutoHideHeaderTimeout();
-    }, this.timeOutTimeToHide);
-  }
-
-  stopAutoHideHeaderTimeout(): void {
+  private stopAutoHideHeaderTimeout(): void {
     if (this.hideHeaderTimeOut) {
       clearTimeout(this.hideHeaderTimeOut);
       this.hideHeaderTimeOut = null;
     }
   }
 
-  getSectionHeight(): number {
+  private getSectionHeight(): number {
+    if (!this.sectionBoundingClientRect) {
+      return 0;
+    }
     return this.sectionBoundingClientRect.height + this.sectionMarginBottom + this.matTabHeaderHeight;
   }
 
-  isScrollToTopLimit(valueToTest = false): boolean | number {
-    if (!valueToTest) {
-      return (this.matTabHeaderHeight -
-        this.sectionBoundingClientRect.top) <= 5;
-    }
-    return (this.matTabHeaderHeight -
-      this.sectionBoundingClientRect.top);
-  }
-
-  isScrollToBottomLimit(valueToTest = false): boolean | number {
-    // tslint:disable-next-line:max-line-length
-    if (!valueToTest) {
-      return (this.sectionBoundingClientRect.height +
-        this.sectionMarginBottom - window.innerHeight +
-        this.sectionBoundingClientRect.top) <= 5;
-    }
-    return (this.sectionBoundingClientRect.height +
-      this.sectionMarginBottom - window.innerHeight);
-  }
-
-  updateScrollingState(): void {
+  private updateScrollingState(): void {
     this.sectionElement = document.querySelector('.app-main .mat-tab-body-active section') as HTMLElement;
     if (this.sectionElement) {
       this.sectionMarginBottom = this.utilService.convertPixelsToNumber(window.getComputedStyle(this.sectionElement)
@@ -260,70 +250,28 @@ export class AppComponent implements OnInit, AfterViewChecked, OnDestroy {
     }
   }
 
-  scrollPage(action: string): void {
-    if (action === 'scrollToTheTop') {
-      if (!this.scrollLimit(this.scrollValue)) {
-        this.startScrolling(this.scrollValue);
-      }
-    } else if (action === 'scrollToTheBottom') {
-      const expectedValue = (-1 * this.scrollValue);
-      if (!this.scrollLimit(expectedValue)) {
-        this.startScrolling(expectedValue);
-      }
-    } else if (action === 'stop') {
-      this.stopScrolling();
-    } else {
-      this.stopScrolling();
-    }
+  private addEventListenersToWindow(): void {
+    window.addEventListener('scroll', () => {
+      this.scrollEventCallback();
+    });
+    window.addEventListener('resize', () => {
+      this.resizeEventCallback();
+    });
+    window.addEventListener('mousewheel', () => {
+      this.mousewheelEventCallback();
+    });
   }
 
-  scrollLimit(value: number): boolean {
-    const scrollToTopLimit = this.isScrollToTopLimit(true) as number;
-    const scrollToBottomLimit = (this.isScrollToBottomLimit(true) as number) * -1;
-    const sectionTop = this.utilService.convertPixelsToNumber(this.sectionElement.style.top);
-    console.log(
-      '\nvalue', value,
-      '\nscrollToTopLimit', scrollToTopLimit,
-      '\nscrollToBottomLimit', scrollToBottomLimit,
-      '\nsection top', sectionTop,
-      '\nthis.sectionBoundingClientRect.top', this.sectionBoundingClientRect.top,
-      '\nthis.sectionBoundingClientRect.bottom', this.sectionBoundingClientRect.bottom,
-      '\nscrollToTopLimit + value', scrollToTopLimit + value,
-      '\nscrollToBottomLimit + value', scrollToBottomLimit + value,
-    );
-
-    /*if (value > 0 && (scrollToTopLimit + value >= 0)) {
-     this.stopScrolling();
-     this.sectionElement.style.top = '0';
-     return true;
-     }*/
-
-    /*if (value < 0 && (scrollToBottomLimit + value < 0)) {
-     this.stopScrolling();
-     const diff = scrollToBottomLimit;
-     this.sectionElement.style.top = (this.convertPixelsToNumber(this.sectionElement.style.top) + diff) + 'px';
-     return true;
-     }*/
-    return false;
-  }
-
-  startScrolling(value: number) {
-    this.scrollInterval = setInterval(() => {
-      if (!this.scrollLimit(value)) {
-        this.scrollTopBy(value);
-      }
-    }, this.intervalTimeToScroll);
-  }
-
-  stopScrolling(): void {
-    if (this.scrollInterval) {
-      clearInterval(this.scrollInterval);
-      this.scrollInterval = null;
-    }
-  }
-
-  scrollTopBy(value: number) {
-    this.sectionElement.style.top = (this.utilService.convertPixelsToNumber(this.sectionElement.style.top) + value) + 'px';
+  private removeEventListenerFromWindow(): void {
+    window.removeEventListener('scroll', () => {
+      this.scrollEventCallback();
+    });
+    window.removeEventListener('resize', () => {
+      this.resizeEventCallback();
+    });
+    window.removeEventListener('mousewheel', () => {
+      this.mousewheelEventCallback();
+    });
   }
 
   private mousewheelEventCallback(): void {
@@ -340,10 +288,13 @@ export class AppComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   private resizeEventCallback(): void {
     this.stopAutoHideHeaderTimeout();
+
     this.updateView();
+
     if (!this.mobileView) {
       this.updateWrapperHeaderHeight();
     }
+
     this.cdRef.detectChanges();
   }
 

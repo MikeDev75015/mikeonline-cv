@@ -4,10 +4,9 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { map, mergeMap, tap } from 'rxjs/operators';
-import { ApiV0Service } from '../../../shared';
-import * as CvInfosActions from '../actions/cv-infos.actions';
-import * as TagsActions from '../actions/tags.actions';
-import { CvInfosState } from '../reducers/cv-infos.reducers';
+import { ApplicationActions, CvInfosActions, TagsActions } from '../ngrx-index';
+import { ICvInfos } from '../../core-index';
+import { ApiV0Service } from '../../../shared/shared-index';
 
 /**
  * Effects for cv infos actions
@@ -16,7 +15,7 @@ import { CvInfosState } from '../reducers/cv-infos.reducers';
 export class CvInfosEffects {
   loadCvInfos$ = createEffect(() => this.actions$.pipe(
     ofType(CvInfosActions.loadCvInfos),
-    mergeMap(() => this.apiV0Service.getData<CvInfosState[]>('cv-infos')),
+    mergeMap(() => this.apiV0Service.getData<ICvInfos[]>('cv-infos')),
     map(([cvInfos]) => {
       if (!cvInfos) {
         return CvInfosActions.loadCvInfosFailure();
@@ -28,8 +27,11 @@ export class CvInfosEffects {
 
   loadCvInfosSuccess$ = createEffect(() => this.actions$.pipe(
     ofType(CvInfosActions.loadCvInfosSuccess),
-    tap(() => this.store.dispatch(TagsActions.fetchTags())),
-  ), { dispatch: false });
+    tap(() => {
+      this.store.dispatch(TagsActions.fetchTags());
+    }),
+    map(() => ApplicationActions.cvInfosLoaded()),
+  ));
 
   loadCvInfosFailure$ = createEffect(() => this.actions$.pipe(
     ofType(CvInfosActions.loadCvInfosFailure),

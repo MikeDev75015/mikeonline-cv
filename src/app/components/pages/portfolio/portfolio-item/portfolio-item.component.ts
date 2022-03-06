@@ -1,5 +1,5 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import { IProject } from '../../../../core';
+import { IProject } from '../../../../core/core-index';
 
 @Component({
   selector: 'app-portfolio-item',

@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { lastValueFrom, Observable, take } from 'rxjs';
-import { ICompetence, ITag } from '../../../core';
+import { combineLatest, forkJoin, lastValueFrom, Observable, take, takeUntil } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
+import { ICompetence, ICvInfos, ITag } from '../../../core/core-index';
+import { selectAppCvInfosLoaded } from '../../../core/ngrx/selectors/application.selectors';
 import { selectAllCompetences, selectCompetencesLoaded } from '../../../core/ngrx/selectors/competences.selectors';
-import { selectContact, selectCvInfos } from '../../../core/ngrx/selectors/cv-infos.selectors';
+import { selectCvInfos } from '../../../core/ngrx/selectors/cv-infos.selectors';
 import { selectAllExperiences, selectExperiencesLoaded } from '../../../core/ngrx/selectors/experiences.selectors';
 import { selectAllFormations, selectFormationsLoaded } from '../../../core/ngrx/selectors/formations.selectors';
 import { selectAllInterests, selectInterestsLoaded } from '../../../core/ngrx/selectors/interests.selectors';
@@ -24,9 +26,8 @@ export class DataService {
     return Array.isArray(el[property]) ? el[property].includes(value) : el[property] === value;
   }
 
-  public getCvInfos<T>(onlyContactData = false): Promise<T> {
-    // @ts-ignore
-    return lastValueFrom(this.store.select(onlyContactData ? selectContact : selectCvInfos).pipe(take(1)));
+  public getCvInfos(): Promise<ICvInfos> {
+    return lastValueFrom(this.store.select(selectCvInfos).pipe(take(1)));
   }
 
   public async getTags<T>(value?: string | number, property = 'id'): Promise<T> {
@@ -79,6 +80,21 @@ export class DataService {
 
   public getSummary(): Promise<ITag[]> {
     return this.extractUsedTags();
+  }
+
+  public isAllDataLoaded(): Observable<boolean> {
+    return combineLatest<boolean[]>([
+      this.isCvInfosLoaded(), this.isCompetencesLoaded(), this.isFormationsLoaded(), this.isExperiencesLoaded(),
+      this.isProjectsLoaded(), this.isInterestsLoaded(),
+    ]).pipe(
+      map((allDataLoaded) => {
+        return allDataLoaded.reduce((result, v) => result && v, true);
+      }),
+    );
+  }
+
+  public isCvInfosLoaded(): Observable<boolean> {
+    return this.store.select(selectAppCvInfosLoaded);
   }
 
   public isCompetencesLoaded(): Observable<boolean> {

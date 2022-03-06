@@ -52,7 +52,7 @@ import { CoreModule } from './core/core.module';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { EffectsModule } from '@ngrx/effects';
-import { metaReducers, reducers } from './core/ngrx';
+import { metaReducers, reducers } from './core/ngrx/ngrx-index';
 import { ApplicationEffects } from './core/ngrx/effects/application.effects';
 import { CompetencesEffects } from './core/ngrx/effects/competences.effects';
 import { CvInfosEffects } from './core/ngrx/effects/cv-infos.effects';
@@ -68,7 +68,7 @@ import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform
 import { PdfCreatorService } from './core/services/pdf-creator/pdf-creator.service';
 import { AlertModule } from './core/modules/alert/alert.module';
 import { LoggerModule } from './core/modules/logger/logger.module';
-import { HeaderTitleFormatPipe, IncompressibleSpacePipe, FirstLetterUppercasePipe } from './shared';
+import { HeaderTitleFormatPipe, IncompressibleSpacePipe, FirstLetterUppercasePipe } from './shared/shared-index';
 
 @NgModule({
   declarations: [
@@ -102,7 +102,6 @@ import { HeaderTitleFormatPipe, IncompressibleSpacePipe, FirstLetterUppercasePip
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    NoopAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
     StoreModule.forRoot(reducers, { metaReducers }),

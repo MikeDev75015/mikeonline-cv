@@ -45,34 +45,35 @@ const defaultDelay = { in: 400, out: 400 };
  * @param voidOutPayload, the payload representing the initial exit state, null by default
  * @constructor
  */
+//@ts-ignore
 export function IN_OUT_TEMPLATE_ANIMATION(
   component: string,
   animateVoid = false,
   delay: IDelay = defaultDelay,
   inPayload: IInOutPayload = defaultInPayload,
   outPayload: IInOutPayload = defaultOutPayload,
-  voidDelay: IDelay | null = null,
-  voidInPayload: IInOutPayload | null = null,
-  voidOutPayload: IInOutPayload | null = null
+  voidDelay: IDelay | undefined = undefined,
+  voidInPayload: IInOutPayload | undefined = undefined,
+  voidOutPayload: IInOutPayload  | undefined= undefined
 ) {
   return [
     trigger(component + 'InOut', [
 
       animateVoid
         ? transition('void => in', [
-          style(voidInPayload? voidInPayload.style : inPayload.style),
-          animate(voidDelay ? voidDelay.in : 0)])
+          style(voidInPayload?.style || inPayload.style),
+          animate(voidDelay?.in || 0)])
         : state('voidIn',
-            style(voidInPayload ? voidInPayload.style : inPayload.style),
-        voidInPayload ? voidInPayload.options : inPayload.options),
+            style(voidInPayload?.style || inPayload.style),
+        voidInPayload?.options || inPayload.options),
 
       animateVoid
         ? transition('void => out', [
-          style(voidOutPayload? voidOutPayload.style : outPayload.style),
-          animate(voidDelay ? voidDelay.out : 0)])
+          style(voidOutPayload?.style || outPayload.style),
+          animate(voidDelay?.out || 0)])
         : state('voidOut',
-            style(voidOutPayload ? voidOutPayload.style : outPayload.style),
-        voidOutPayload ? voidOutPayload.options : outPayload.options),
+            style(voidOutPayload?.style || outPayload.style),
+        voidOutPayload?.options || outPayload.options),
 
       state('in', style(inPayload.style), inPayload.options),
       state('out', style(outPayload.style), outPayload.options),

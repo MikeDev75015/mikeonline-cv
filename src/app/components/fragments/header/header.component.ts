@@ -1,29 +1,38 @@
-import {Component, OnInit} from '@angular/core';
-import { APP_CREDITS } from '../../../core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
+import { selectAppCvInfosLoaded } from '../../../core/ngrx/selectors/application.selectors';
+import { ICvInfos } from '../../../core/core-index';
+import { DataService } from '../../../shared/shared-index';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent implements OnInit {
-  mobile = false;
-  title = APP_CREDITS.title;
-  subTitle = APP_CREDITS.subTitle;
+export class HeaderComponent implements OnInit, OnDestroy {
+  public headerImage = 'assets/img/mikeonline1024.jpg';
 
-  headerImage = 'assets/img/mikeonline1024.jpg';
+  public title = '';
 
-  ngOnInit() {
-    this.mobile = window.innerWidth <= 840;
-    this.headerImage = this.autoChargeImg();
+  public subTitle = '';
 
-    window.addEventListener('resize', () => {
-      this.mobile = window.innerWidth <= 840;
-      this.headerImage = this.autoChargeImg();
-    });
+  private mobile = false;
+
+  private subscriptionList: Subscription[] = [];
+
+  /**
+   * @ignore
+   * @param dataService
+   * @param store
+   */
+  constructor(
+    private readonly dataService: DataService,
+    private readonly store: Store,
+  ) {
   }
 
-  autoChargeImg(): string {
+  private static autoChargeImg(): string {
     if (window.innerWidth > 768) {
       return 'assets/img/mikeonline1024.jpg';
     } else if (window.innerWidth > 480) {
@@ -35,4 +44,48 @@ export class HeaderComponent implements OnInit {
     }
   }
 
+  ngOnInit(): void {
+    this.adaptHeaderImage();
+
+    window.addEventListener('resize', () => {
+      this.adaptHeaderImage();
+    });
+
+    this.dataService.getCvInfos().then((cvInfos) => {
+      if (!cvInfos || !cvInfos.title) {
+        this.subscribeToApplicationCvInfosLoaded();
+        return;
+      }
+
+      this.initializeComponent(cvInfos);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionList.forEach((s) => s.unsubscribe());
+  }
+
+  private adaptHeaderImage(): void {
+    this.mobile = window.innerWidth <= 840;
+    this.headerImage = HeaderComponent.autoChargeImg();
+  }
+
+  private initializeComponent(cvInfos: ICvInfos): void {
+    this.title = cvInfos.title;
+    this.subTitle = cvInfos.technoList?.join(' - ') || '';
+  }
+
+  private subscribeToApplicationCvInfosLoaded(): void {
+    this.subscriptionList.push(
+      this.store.select(selectAppCvInfosLoaded).subscribe((cvInfosLoaded) => {
+        if (!cvInfosLoaded) {
+          return;
+        }
+
+        this.dataService.getCvInfos().then((cvInfos) => {
+          this.initializeComponent(cvInfos);
+        });
+      }),
+    );
+  }
 }

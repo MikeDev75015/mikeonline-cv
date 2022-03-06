@@ -1,0 +1,63 @@
+.default-btn {
+  position: relative;
+  cursor: pointer;
+  color: rgba(85, 85, 85, .8);
+  font-weight: 600;
+}
+
+.btns-icon {
+  border-radius: 5px;
+  width: 40px;
+  height: 30px;
+  border: none;
+  box-shadow: 0 2px 14px #b3b3b3;
+  color: #024873;
+  outline: none !important;
+  cursor: pointer;
+  transition: all .4s;
+}
+
+.btns-icon.disabled {
+  opacity: .5 !important;
+  pointer-events: none !important;
+}
+
+.btn-hide {
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 50px !important;
+  line-height: 50px !important;
+  text-align: center !important;
+  background: transparent !important;
+  transition: all .5s !important;
+}
+
+.btn-hide:hover {
+  background: linear-gradient(rgba(2, 72, 115, 0), rgba(2, 72, 115, .1), rgba(2, 72, 115, .15)) !important;
+  color: #024873 !important;
+}
+
+.btns-open-close-items {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  border: none;
+  background: transparent;
+  width: 100%;
+  height: 50px;
+  font-size: 25px;
+  color: rgba(2, 72, 115, 0.4);
+  cursor: pointer;
+}
+
+.btns-open-close-items:hover {
+  color: rgba(2, 72, 115, 0.7);
+  outline: none;
+}
+
+.btns-open-close-items:active, .btns-open-close-items:focus {
+  outline: none;
+}
