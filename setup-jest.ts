@@ -1,4 +1,11 @@
-import 'jest-preset-angular';
+import 'jest-preset-angular/setup-jest';
+
+function fail(reason = 'fail was called in a test.') {
+  console.debug(reason);
+  throw new Error(reason);
+}
+
+console.error = (data) => fail(data);
 
 /* global mocks for jsdom */
 const mock = () => {
@@ -18,13 +25,13 @@ Object.defineProperty(window, 'getComputedStyle', {
 });
 
 Object.defineProperty(document.body.style, 'transform', {
-  value: () => {
-    return {
-      enumerable: true,
-      configurable: true,
-    };
-  },
+  value: () => ({
+    enumerable: true,
+    configurable: true,
+  }),
 });
 
-/* output shorter and more meaningful Zone error stack traces */
-// Error.stackTraceLimit = 2;
+/**
+ * output shorter and more meaningful Zone error stack traces
+ * Error.stackTraceLimit = 2;
+ */

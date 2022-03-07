@@ -1,22 +1,26 @@
-const esModules = ['@agm', 'ngx-bootstrap'].join('|');
+require('jest-preset-angular/ngcc-jest-processor');
 
 module.exports = {
-  preset: 'jest-preset-angular',
-  setupFilesAfterEnv: ['<rootDir>/setup-jest.ts'],
-  moduleFileExtensions: ['ts', 'js', 'json'],
-  transform: {
-    '.+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$':
-      'jest-transform-stub'
-  },
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1'
+    "@core/(.*)": "<rootDir>/src/app/core/$1"
   },
-  testMatch: [
-    '<rootDir>/src/**/*.spec.ts'
-  ],
-  transformIgnorePatterns: ['<rootDir>/node_modules/(?!lodash-es/.*)'],
+  preset: "jest-preset-angular",
+  setupFiles: ["core-js"],
+  setupFilesAfterEnv: ["<rootDir>/setup-jest.ts"],
+  testPathIgnorePatterns: ["<rootDir>/cypress/"],
   reporters: [
     "default",
     "jest-junit"
-  ]
+  ],
+  roots: [
+    "<rootDir>"
+  ],
+  modulePaths: [
+    "<rootDir>"
+  ],
+  moduleDirectories: [
+    "node_modules"
+  ],
+  testRunner: "jest-circus",
+  testResultsProcessor: "jest-sonar-reporter"
 };
