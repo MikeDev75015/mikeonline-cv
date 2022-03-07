@@ -174,20 +174,24 @@ workflows:
 
   ##################################### TEST WORKFLOW - only test/.* #####################################################
   ci-cd-workflow-test:
+    when:
+      equal: [ << pipeline.git.tag >>, test ]
     jobs:
       - ci-build-job-staging:
           filters:
             branches:
-              only:
-                - /test\/.*/
+              ignore: /.*/
+            tags:
+              only: test
       - cd-deploy-job-firebase-staging:
           requires:
             - ci-build-job-staging
           context: FIREBASE
           filters:
             branches:
-              only:
-                - /test\/.*/
+              ignore: /.*/
+            tags:
+              only: test
       - notify-success-job:
           requires:
             - ci-build-job-staging
@@ -195,8 +199,9 @@ workflows:
           context: SLACK
           filters:
             branches:
-              only:
-                - /test\/.*/
+              ignore: /.*/
+            tags:
+              only: test
 
   ##################################### STAGING WORKFLOW - only develop ################################################
   ci-cd-workflow-staging:
@@ -238,40 +243,14 @@ workflows:
   ##################################### PRODUCTION WORKFLOW - only master ##############################################
   ci-cd-workflow-production:
     jobs:
-      - ci-test-job:
-          filters:
-            branches:
-              only:
-                - master
       - ci-build-job-production:
-          requires:
-            - ci-test-job
-          filters:
-            branches:
-              only:
-                - master
-      - notify-waiting-for-approval:
-          requires:
-            - ci-test-job
-            - ci-build-job-production
-          context: SLACK
-          filters:
-            branches:
-              only:
-                - master
-      - approval-cd-deploy-production:
-          type: approval
-          requires:
-            - ci-test-job
-            - ci-build-job-production
-            - notify-waiting-for-approval
           filters:
             branches:
               only:
                 - master
       - cd-deploy-job-firebase-production:
           requires:
-            - approval-cd-deploy-production
+            - ci-build-job-production
           context: FIREBASE
           post-steps:
             - jira/notify:
