@@ -152,27 +152,17 @@ jobs:
                      }'
 
 workflows:
-  ##################################### DEFAULT WORKFLOW - ignore test/.*, master & develop #####################################
+  ##################################### DEFAULT WORKFLOW - ignore master & develop #####################################
   ci-default-workflow:
     jobs:
-#      - ci-test-job:
-#          filters:
-#            branches:
-#              ignore:
-#                - master
-#                - develop
-#                - /test\/.*/
-      - ci-build-job-staging:
-#          requires:
-#            - ci-test-job
+      - ci-test-job:
           filters:
             branches:
               ignore:
                 - master
                 - develop
-                - /test\/.*/
 
-  ##################################### TEST WORKFLOW - only test/.* #####################################################
+  ##################################### TEST WORKFLOW - on test TAG #####################################################
   ci-cd-workflow-test:
     when:
       equal: [ << pipeline.git.tag >>, test ]
@@ -206,21 +196,13 @@ workflows:
   ##################################### STAGING WORKFLOW - only develop ################################################
   ci-cd-workflow-staging:
     jobs:
-      - ci-test-job:
-          filters:
-            branches:
-              only:
-                - develop
       - ci-build-job-staging:
-          requires:
-            - ci-test-job
           filters:
             branches:
               only:
                 - develop
       - cd-deploy-job-firebase-staging:
           requires:
-            - ci-test-job
             - ci-build-job-staging
           context: FIREBASE
           post-steps:
