@@ -204,7 +204,6 @@ export class AppComponent implements OnInit, AfterViewInit, AfterViewChecked, On
     this.alertService.displayConfirmDialog({
       title: 'mise à jour disponible...',
       msg: 'Hey, il existe une version plus récente de cette app ;)',
-      closeBtnLabel: 'fermer',
       actionsList: [
         { name: 'mettre à jour', action: 'update' },
       ],

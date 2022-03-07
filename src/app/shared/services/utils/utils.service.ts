@@ -1,5 +1,5 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import * as moment from 'moment';
 import { lastValueFrom } from 'rxjs';
 import { ITag } from '../../../core/interfaces/models/tag.interface';
@@ -16,7 +16,7 @@ declare global {
 moment.locale('fr');
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UtilsService {
   openingUrl = false;
@@ -24,7 +24,7 @@ export class UtilsService {
   constructor(
     private readonly dataService: DataService,
     private readonly alertService: AlertService,
-    private readonly http: HttpClient
+    private readonly http: HttpClient,
   ) {
   }
 
@@ -36,7 +36,7 @@ export class UtilsService {
    * @param mode
    */
   public static sortList<t>(
-    list: t[], way: 'asc' | 'desc', key: string, mode: 'string' | 'number' | 'date' = 'string'
+    list: t[], way: 'asc' | 'desc', key: string, mode: 'string' | 'number' | 'date' = 'string',
   ): t[] {
     return list.sort((a: { [key: string]: any }, b: { [key: string]: any }) => {
       if (mode === 'number') {
@@ -159,22 +159,19 @@ export class UtilsService {
         msg: 'ouvrir dans ?',
         closeBtnLabel: 'annuler',
         actionsList: [
-          {action: '_blank', name: 'nouvel onglet'},
-          {action: '_self', name: 'onglet actuel'}
-        ]
-      })
-        .then(
-          action => {
-            if (!action) {
-              return;
-            }
+          { action: '_blank', name: 'nouvel onglet' },
+          { action: '_self', name: 'onglet actuel' },
+        ],
+      }).then(action => {
+        if (!action) {
+          return;
+        }
 
-            setTimeout(() => {
-              window.open(url, action);
-              this.openingUrl = false;
-            }, 500);
-          }
-        );
+        setTimeout(() => {
+          window.open(url, action);
+          this.openingUrl = false;
+        }, 500);
+      });
     }
   }
 
@@ -191,10 +188,10 @@ export class UtilsService {
       this.alertService.displayAlertDialog({
         title: 'oups !',
         // @ts-ignore
-        msg: 'Le contenu n\'a pas été partagé correctement :' + '\n' + err.message
+        msg: 'Le contenu n\'a pas été partagé correctement :' + '\n' + err.message,
+        closeBtnLabel: 'fermer',
       });
     }
   }
-
 
 }

@@ -10,15 +10,20 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTreeModule } from '@angular/material/tree';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ServiceWorkerModule } from '@angular/service-worker';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { MomentModule } from 'angular2-moment';
 import { KnobModule } from 'primeng/knob';
+import { environment } from '../environments/environment';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import {
-  BtnMobileContactComponent
+  BtnMobileContactComponent,
 } from './components/fragments/contact/btn-mobile-contact/btn-mobile-contact.component';
 import { ContactComponent } from './components/fragments/contact/contact.component';
 import { BottomFooterComponent } from './components/fragments/footer/bottom-footer/bottom-footer.component';
@@ -28,20 +33,20 @@ import { HeaderComponent } from './components/fragments/header/header.component'
 import { MainComponent } from './components/fragments/main/main.component';
 import { OneLetterByLinePipe } from './components/fragments/vertical-accordion/pipes/one-letter-by-line.pipe';
 import {
-  VerticalAccordionItemComponent
+  VerticalAccordionItemComponent,
 } from './components/fragments/vertical-accordion/vertical-accordion-item/vertical-accordion-item.component';
 import {
-  VerticalAccordionLastItemComponent
+  VerticalAccordionLastItemComponent,
 } from './components/fragments/vertical-accordion/vertical-accordion-last-item/vertical-accordion-last-item.component';
 import { VerticalAccordionComponent } from './components/fragments/vertical-accordion/vertical-accordion.component';
 import { CompetencesComponent } from './components/pages/competences/competences.component';
 import {
-  ExperienceItemDetailComponent
+  ExperienceItemDetailComponent,
 } from './components/pages/experiences/experience-item-detail/experience-item-detail.component';
 import { ExperienceItemComponent } from './components/pages/experiences/experience-item/experience-item.component';
 import { ExperiencesComponent } from './components/pages/experiences/experiences.component';
 import {
-  FormationItemDetailComponent
+  FormationItemDetailComponent,
 } from './components/pages/formations/formation-item-detail/formation-item-detail.component';
 import { FormationItemComponent } from './components/pages/formations/formation-item/formation-item.component';
 import { FormationsComponent } from './components/pages/formations/formations.component';
@@ -49,10 +54,8 @@ import { InterestsComponent } from './components/pages/interets/interests.compon
 import { PortfolioItemComponent } from './components/pages/portfolio/portfolio-item/portfolio-item.component';
 import { PortfolioComponent } from './components/pages/portfolio/portfolio.component';
 import { CoreModule } from './core/core.module';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { environment } from '../environments/environment';
-import { EffectsModule } from '@ngrx/effects';
-import { metaReducers, reducers } from './core/ngrx/ngrx-index';
+import { AlertModule } from './core/modules/alert/alert.module';
+import { LoggerModule } from './core/modules/logger/logger.module';
 import { ApplicationEffects } from './core/ngrx/effects/application.effects';
 import { CompetencesEffects } from './core/ngrx/effects/competences.effects';
 import { CvInfosEffects } from './core/ngrx/effects/cv-infos.effects';
@@ -61,14 +64,11 @@ import { FormationsEffects } from './core/ngrx/effects/formations.effects';
 import { InterestsEffects } from './core/ngrx/effects/interests.effects';
 import { ProjectsEffects } from './core/ngrx/effects/projects.effects';
 import { TagsEffects } from './core/ngrx/effects/tags.effects';
+import { metaReducers, reducers } from './core/ngrx/ngrx-index';
 import { AddComponentsService } from './core/services/add-components/add-components.service';
 import { HttpClientService } from './core/services/http-client/http-client.service';
-import { ServiceWorkerModule } from '@angular/service-worker';
-import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { PdfCreatorService } from './core/services/pdf-creator/pdf-creator.service';
-import { AlertModule } from './core/modules/alert/alert.module';
-import { LoggerModule } from './core/modules/logger/logger.module';
-import { HeaderTitleFormatPipe, IncompressibleSpacePipe, FirstLetterUppercasePipe } from './shared/shared-index';
+import { FirstLetterUppercasePipe, HeaderTitleFormatPipe, IncompressibleSpacePipe } from './shared/shared-index';
 
 @NgModule({
   declarations: [
@@ -104,6 +104,7 @@ import { HeaderTitleFormatPipe, IncompressibleSpacePipe, FirstLetterUppercasePip
     BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
+    CoreModule.forRoot(),
     StoreModule.forRoot(reducers, { metaReducers }),
     EffectsModule.forRoot([
       ApplicationEffects,
@@ -120,12 +121,11 @@ import { HeaderTitleFormatPipe, IncompressibleSpacePipe, FirstLetterUppercasePip
       logOnly: environment.production, // Restrict extension to log-only mode
       autoPause: true, // Pauses recording actions and state changes when the extension window is not open
     }),
-    CoreModule.forRoot(),
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       // Register the ServiceWorker as soon as the app is stable
       // or after 30 seconds (whichever comes first).
-      registrationStrategy: 'registerWhenStable:30000'
+      registrationStrategy: 'registerWhenStable:30000',
     }),
     MatTabsModule,
     MatMenuModule,
@@ -140,7 +140,7 @@ import { HeaderTitleFormatPipe, IncompressibleSpacePipe, FirstLetterUppercasePip
     LoggerModule,
     AlertModule,
     KnobModule,
-    FormsModule
+    FormsModule,
   ],
   providers: [
     HttpClientService,
@@ -153,8 +153,9 @@ import { HeaderTitleFormatPipe, IncompressibleSpacePipe, FirstLetterUppercasePip
     ExperiencesComponent,
     FormationsComponent,
     PortfolioComponent,
-    InterestsComponent
+    InterestsComponent,
   ],
-  schemas: [NO_ERRORS_SCHEMA]
+  schemas: [NO_ERRORS_SCHEMA],
 })
-export class AppModule { }
+export class AppModule {
+}

@@ -14,30 +14,26 @@ export class AlertService {
   ) {}
 
   public displayAlertDialog(data: DialogData): void {
-    const msgParam = this.buildMsgParam(data);
     this.dialog.open(AlertPopupComponent, {
       width: window.innerWidth > 840 ? '600px' : '300px',
       data: {
         title: data.title || 'information',
         msg: data.msg,
-        msgParam: msgParam,
         actionsList: [],
-        closeBtnLabel: data.closeBtnLabel || 'fermer',
+        closeBtnLabel: data.closeBtnLabel || undefined,
       }
     });
   }
 
   public displayConfirmDialog(data: DialogData): Promise<string> {
     return new Promise<string>(resolve => {
-      const msgParam = this.buildMsgParam(data);
       const dialogRef = this.dialog.open(AlertPopupComponent, {
         width: window.innerWidth > 840 ? '600px' : '300px',
         data: {
           title: data.title || 'confirmation requise',
           msg: data.msg,
-          msgParam: msgParam,
           actionsList: data.actionsList,
-          closeBtnLabel: data.closeBtnLabel || 'fermer',
+          closeBtnLabel: data.closeBtnLabel || undefined,
         }
       });
 
@@ -46,10 +42,5 @@ export class AlertService {
         resolve(action);
       });
     });
-  }
-
-  buildMsgParam(data: DialogData): any {
-    console.warn('AlertService buildMsgParam data:', data);
-    return {};
   }
 }
