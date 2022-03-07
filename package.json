@@ -14,7 +14,8 @@
     "deploy": "firebase deploy --project cv-mikeonline",
     "prerelease": "npm run release -- --prerelease alpha",
     "first-release": "npm run release --first-release",
-    "release": "standard-version"
+    "release": "standard-version",
+    "staging-test": "git tag -f test && git push -f origin test"
   },
   "private": true,
   "dependencies": {
