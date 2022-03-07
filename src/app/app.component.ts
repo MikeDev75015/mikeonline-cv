@@ -168,37 +168,58 @@ export class AppComponent implements OnInit, AfterViewInit, AfterViewChecked, On
 
   private initPWA(): void {
     if (this.swPush.isEnabled) {
-      const swPushSubscription = this.swPush.notificationClicks.subscribe(notificationPayload => {
-        console.log('notificationPayload:', notificationPayload);
-      });
-      this.subscriptionList.push(swPushSubscription);
+      this.subscriptionList.push(
+        this.swPush.notificationClicks.subscribe(notificationPayload => {
+          console.log('notificationPayload:', notificationPayload);
+        }),
+      );
 
-      const swUpdateSubscription = this.swUpdate.available.subscribe((event) => {
-        console.log('current version is', event.current);
-        console.log('available version is', event.available);
+      this.subscriptionList.push(
+        this.swUpdate.versionUpdates.subscribe((event) => {
+          console.log('versionUpdates event:', event.type);
 
-        this.alertService.displayConfirmDialog({
-          title: 'mise à jour disponible...',
-          msg: 'Hey, il existe une version plus récente de cette app ;)',
-          closeBtnLabel: 'fermer',
-          actionsList: [
-            { name: 'mettre à jour', action: 'update' },
-          ],
-        }).then(action => {
-          if (action === 'update') {
-            this.swUpdate.activateUpdate().then(() => window.location.reload());
+          if (event.type === 'VERSION_INSTALLATION_FAILED') {
+            this.showUpdateErrorMessage();
+            return;
           }
+
+          this.showUpdateInvitation();
+        }),
+      );
+
+    } else {
+      console.warn('service worker unavailable');
+    }
+  }
+
+  private showUpdateErrorMessage(): void {
+    this.alertService.displayAlertDialog({
+      title: 'Oups',
+      msg: 'Je n\'ai pas réussi à mettre l\'app à jour :(',
+      closeBtnLabel: 'fermer',
+    });
+  }
+
+  private showUpdateInvitation(): void {
+    this.alertService.displayConfirmDialog({
+      title: 'mise à jour disponible...',
+      msg: 'Hey, il existe une version plus récente de cette app ;)',
+      closeBtnLabel: 'fermer',
+      actionsList: [
+        { name: 'mettre à jour', action: 'update' },
+      ],
+    }).then(action => {
+      if (action === 'update') {
+        this.swUpdate.activateUpdate().then((updated) => {
+          if (!updated) {
+            this.showUpdateErrorMessage();
+            return;
+          }
+
+          window.location.reload();
         });
-      });
-      this.subscriptionList.push(swUpdateSubscription);
-
-      const swActivatedSubscription = this.swUpdate.activated.subscribe(event => {
-        console.log('old version was', event.previous);
-        console.log('new version is', event.current);
-      });
-      this.subscriptionList.push(swActivatedSubscription);
-
-    } else console.log('service worker unavailable');
+      }
+    });
   }
 
   private updateView(): void {
