@@ -1,4 +1,5 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import {VerticalAccordionLastItemComponent} from './vertical-accordion-last-item.component';
 import {OneLetterByLinePipe} from '../pipes/one-letter-by-line.pipe';
@@ -9,6 +10,9 @@ describe('VerticalAccordionLastItemComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [
+        NoopAnimationsModule,
+      ],
       declarations: [
         VerticalAccordionLastItemComponent,
         OneLetterByLinePipe

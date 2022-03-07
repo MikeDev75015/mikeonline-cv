@@ -1,11 +1,11 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { AlertModule } from '../../../core/core-index';
+import { DataService } from '../../../shared/shared-index';
 
 import {PortfolioComponent} from './portfolio.component';
-import {MockDataService} from '../../services/mock-data.service';
 import {MockComponent} from 'ng2-mock-component';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {AlertModule} from '../../core';
 
 describe('PortfolioComponent', () => {
   let component: PortfolioComponent;
@@ -20,7 +20,9 @@ describe('PortfolioComponent', () => {
           inputs: ['siteDemo']
         })
       ],
-      providers: [MockDataService],
+      providers: [
+        { provide: DataService, useValue: {} },
+      ],
       imports: [
         HttpClientTestingModule,
         BrowserAnimationsModule,
@@ -31,7 +33,7 @@ describe('PortfolioComponent', () => {
   }));
 
   beforeEach(() => {
-    TestBed.get(MockDataService);
+    TestBed.get(DataService);
     fixture = TestBed.createComponent(PortfolioComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

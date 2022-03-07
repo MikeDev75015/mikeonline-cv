@@ -1,9 +1,8 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { DataService, UtilsService } from '../../../../shared/shared-index';
 
 import {LeftFooterComponent} from './left-footer.component';
 import {MockService} from 'ng-mocks';
-import {UtilsService} from '../../../services/utils.service';
-import {MockDataService} from '../../../services/mock-data.service';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 
 describe('LeftFooterComponent', () => {
@@ -18,8 +17,8 @@ describe('LeftFooterComponent', () => {
       declarations: [ LeftFooterComponent ],
       providers: [
         {
-          provide: MockDataService,
-          useValue: MockService(MockDataService)
+          provide: DataService,
+          useValue: MockService(DataService)
         },
         {
           provide: UtilsService,

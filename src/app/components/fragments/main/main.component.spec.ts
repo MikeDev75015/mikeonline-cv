@@ -1,11 +1,12 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { AddComponentsService } from '../../../core/services/add-components/add-components.service';
+import { DataService } from '../../../shared/services/data/data.service';
 
 import {MainComponent} from './main.component';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MockComponent} from 'ng2-mock-component';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatIconModule} from '@angular/material/icon';
-import {AddComponentsService} from '../../services/add-components.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 describe('MainComponent', () => {
@@ -36,18 +37,17 @@ describe('MainComponent', () => {
           selector: 'app-portfolio'
         }),
         MockComponent({
-          selector: 'app-interets'
+          selector: 'app-interests'
         })
       ],
       providers: [
-        AddComponentsService
-      ]
+        { provide: AddComponentsService, useValue: {} },
+      ],
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    TestBed.get(AddComponentsService);
     fixture = TestBed.createComponent(MainComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -1,7 +1,7 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { DataService } from '../../../shared/services/data/data.service';
 
 import {ExperiencesComponent} from './experiences.component';
-import {MockDataService} from '../../services/mock-data.service';
 import {MockComponent} from 'ng2-mock-component';
 
 describe('ExperiencesComponent', () => {
@@ -18,14 +18,13 @@ describe('ExperiencesComponent', () => {
         })
       ],
       providers: [
-        MockDataService
+        { provide: DataService, useValue: {} },
       ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    TestBed.get(MockDataService);
     fixture = TestBed.createComponent(ExperiencesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -1,7 +1,9 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { Store } from '@ngrx/store';
+import { storeMock } from '../../../__mocks__/services/store.mock';
+import { AlertModule } from '../../../core/core-index';
 
 import {ContactComponent} from './contact.component';
-import {AlertModule} from '../../core';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {MockComponent} from 'ng2-mock-component';
 
@@ -13,7 +15,7 @@ describe('ContactComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
-        AlertModule
+        AlertModule,
       ],
       declarations: [
         ContactComponent,
@@ -26,6 +28,9 @@ describe('ContactComponent', () => {
             'btnText',
           ]
         }),
+      ],
+      providers: [
+        { provide: Store, useValue: storeMock },
       ]
     })
     .compileComponents();

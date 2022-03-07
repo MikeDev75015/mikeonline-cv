@@ -1,8 +1,8 @@
 import {TestBed} from '@angular/core/testing';
+import { UtilsService } from '../../../shared/shared-index';
 
 import {PdfCreatorService} from './pdf-creator.service';
 import {MockService} from 'ng-mocks';
-import {UtilsService} from './utils.service';
 
 describe('PdfCreatorService', () => {
   beforeEach(() => TestBed.configureTestingModule({

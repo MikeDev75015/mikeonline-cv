@@ -6,7 +6,7 @@ import {Pipe, PipeTransform} from '@angular/core';
 export class OneLetterByLinePipe implements PipeTransform {
 
   transform(value: any, ...args: any[]): any {
-    return value.split('').join('<br>');
+    return value ? value.split('').join('<br>') : '';
   }
 
 }

@@ -1,9 +1,10 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { AlertModule } from '../../../core/core-index';
+import { DataService } from '../../../shared/services/data/data.service';
 
 import {VerticalAccordionComponent} from './vertical-accordion.component';
 import {MockComponent} from 'ng2-mock-component';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {AlertModule} from '../../core';
 
 describe('VerticalAccordionComponent', () => {
   let component: VerticalAccordionComponent;
@@ -13,7 +14,7 @@ describe('VerticalAccordionComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
-        AlertModule
+        AlertModule,
       ],
       declarations: [
         VerticalAccordionComponent,
@@ -33,6 +34,9 @@ describe('VerticalAccordionComponent', () => {
             'expanded',
           ]
         })
+      ],
+      providers: [
+        { provide: DataService, useValue: {} },
       ]
     })
     .compileComponents();

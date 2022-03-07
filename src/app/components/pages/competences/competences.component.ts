@@ -1,5 +1,5 @@
 import { AfterViewChecked, Component, OnDestroy, OnInit } from '@angular/core';
-import * as moment from 'moment';
+import moment from 'moment';
 import { Subscription } from 'rxjs';
 import {
   EXPERTISE_LEVEL_LABEL,
@@ -9,6 +9,7 @@ import {
   IProject,
   ITag,
   PRIORITY_LABEL,
+  WorldCloudOptions,
 } from '../../../core/core-index';
 import { DataService, UtilsService } from '../../../shared/shared-index';
 

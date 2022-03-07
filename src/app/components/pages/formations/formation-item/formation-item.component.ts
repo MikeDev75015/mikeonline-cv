@@ -27,7 +27,7 @@ import { UtilsService } from '../../../../shared/services/utils/utils.service';
 export class FormationItemComponent implements OnInit, OnChanges, OnDestroy, AfterViewChecked {
   subscriptionList: Subscription[] = [];
 
-  @Input() form: IFormation = {} as IFormation;
+  @Input() form: IFormation | undefined;
   @Input() index = -1;
   enableOpenCloseButtons = false;
   opened = false;
@@ -64,14 +64,20 @@ export class FormationItemComponent implements OnInit, OnChanges, OnDestroy, Aft
   }
 
   ngOnInit() {
-    this.lineBodyPaddingLeft = window.innerWidth > 840 ? '50px' : '30px';
-    window.addEventListener('resize', () => this.lineBodyPaddingLeft = window.innerWidth > 840 ? '50px' : '30px');
+    this.setLineBodyPaddingLeft();
+    window.addEventListener('resize', () => {
+      this.setLineBodyPaddingLeft();
+    });
 
     const animationServiceSubscription = this.animationService.watchResponse()
       .subscribe(
         animationServiceResponse => this.onAnimationServiceResponse(animationServiceResponse)
       );
     this.subscriptionList.push(animationServiceSubscription);
+  }
+
+  private setLineBodyPaddingLeft(): void {
+    this.lineBodyPaddingLeft = window.innerWidth > 840 ? '50px' : '30px';
   }
 
   ngOnDestroy() {

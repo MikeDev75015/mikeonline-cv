@@ -1,4 +1,4 @@
-interface WorldCloudOptions {
+export interface WorldCloudOptions {
   gridSize: number;
 
   fontFamily: string;

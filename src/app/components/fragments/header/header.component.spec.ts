@@ -1,7 +1,8 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {HeaderComponent} from './header.component';
-import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {HeaderTitleFormatPipe} from '../../core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { Store } from '@ngrx/store';
+import { dataServiceMock } from '../../../__mocks__/services/data-service.mock';
+import { DataService, HeaderTitleFormatPipe } from '../../../shared/shared-index';
+import { HeaderComponent } from './header.component';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -11,11 +12,14 @@ describe('HeaderComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         HeaderComponent,
-        HeaderTitleFormatPipe
+        HeaderTitleFormatPipe,
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      providers: [
+        { provide: DataService, useValue: dataServiceMock },
+        { provide: Store, useValue: {} },
+      ],
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

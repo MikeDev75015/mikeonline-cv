@@ -2,7 +2,7 @@ import 'jest-preset-angular/setup-jest';
 
 function fail(reason = 'fail was called in a test.') {
   console.debug(reason);
-  throw new Error(reason);
+  // throw new Error(reason);
 }
 
 console.error = (data) => fail(data);

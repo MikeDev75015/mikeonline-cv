@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import * as moment from 'moment';
+import moment from 'moment';
 import { Moment } from 'moment/moment';
 import { Subscription } from 'rxjs';
 import { APP_CREDITS, IContact, ICvInfos, IWebLink } from '../../../core/core-index';

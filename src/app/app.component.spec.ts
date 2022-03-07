@@ -5,8 +5,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { Store } from '@ngrx/store';
 import { MockComponent } from 'ng2-mock-component';
 import { environment } from '../environments/environment';
+import { storeMock } from './__mocks__/services/store.mock';
 import { AppComponent } from './app.component';
 import { AlertModule } from './core/core-index';
 import { AddComponentsService } from './core/services/add-components/add-components.service';
@@ -39,14 +41,14 @@ describe('AppComponent', () => {
         }),
       ],
       providers: [
-        AddComponentsService,
+        { provide: AddComponentsService, useValue: {} },
+        { provide: Store, useValue: storeMock },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   }));
 
   it('should create the app', () => {
-    TestBed.get(AddComponentsService);
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();

@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import * as moment from 'moment';
+import moment from 'moment';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import { UtilsService } from '../../../shared/services/utils/utils.service';
 import { PdfDefinition } from '../../classes/pdf-definition.class';

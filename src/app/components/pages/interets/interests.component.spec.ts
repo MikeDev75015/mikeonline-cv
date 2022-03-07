@@ -1,9 +1,10 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { Store } from '@ngrx/store';
+import { DataService } from '../../../shared/shared-index';
 
 import {InterestsComponent} from './interests.component';
 import {MockComponent} from 'ng2-mock-component';
-import {MockDataService} from '../../services/mock-data.service';
-import {MatExpansionModule} from '@angular/material';
+import {MatExpansionModule} from '@angular/material/expansion';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 describe('InteretsComponent', () => {
@@ -25,18 +26,17 @@ describe('InteretsComponent', () => {
         })
       ],
       providers: [
-        MockDataService
+        { provide: DataService, useValue: {} },
       ],
       imports: [
         BrowserAnimationsModule,
-        MatExpansionModule
+        MatExpansionModule,
       ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    TestBed.get(MockDataService);
     fixture = TestBed.createComponent(InterestsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

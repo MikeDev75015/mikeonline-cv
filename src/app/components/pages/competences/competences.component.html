@@ -2,12 +2,10 @@
   <h3 class="animated-background"><span>mes Compétences<span class="badge-element">{{ competencesDrawn }}</span></span>
   </h3>
   <div class="w90 fcc" id="wc_canvas" style="min-height: 200px; height: auto;"></div>
-  <p [innerText]="selectedKeyword || defaultText" style="margin-top: 50px !important;" class="fcc chip"></p><br>
+  <p style="margin-top: 50px !important;" class="fcc chip">{{ selectedKeyword || defaultText }}</p><br>
 
   <ng-container *ngIf="competenceList && competenceList.length">
     <div *ngFor="let comp of competenceList" class="fsc column w100 skill-details">
-      <!--<h4>{{ comp.name }}</h4>
-      <p>{{ comp.description.short }}</p>-->
       <div class="fce w100">
 
         <div class="fcc column" title="Années d'expérience">

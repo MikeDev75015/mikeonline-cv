@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import * as moment from 'moment';
+import moment from 'moment';
 import { lastValueFrom } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { HttpClientService } from '../../services/http-client/http-client.service';

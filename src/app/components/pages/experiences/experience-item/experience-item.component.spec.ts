@@ -1,10 +1,11 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { AlertModule } from '../../../../core/core-index';
+import { DataService, IncompressibleSpacePipe } from '../../../../shared/shared-index';
 
 import {ExperienceItemComponent} from './experience-item.component';
 import {MockComponent} from 'ng2-mock-component';
 import {MomentModule} from 'angular2-moment';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {AlertModule, IncompressibleSpacePipe} from '../../../core';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 
 describe('ExperienceItemComponent', () => {
@@ -26,6 +27,9 @@ describe('ExperienceItemComponent', () => {
         BrowserAnimationsModule,
         HttpClientTestingModule,
         AlertModule
+      ],
+      providers: [
+        { provide: DataService, useValue: {} },
       ]
     })
     .compileComponents();

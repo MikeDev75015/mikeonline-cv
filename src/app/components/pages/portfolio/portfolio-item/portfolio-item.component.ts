@@ -8,7 +8,7 @@ import { IProject } from '../../../../core/core-index';
 })
 export class PortfolioItemComponent implements OnInit, OnDestroy {
   mobileView = false;
-  @Input() siteDemo: IProject = {} as IProject;
+  @Input() siteDemo: IProject | undefined;
 
   ngOnInit() {
     this.mobileView = window.innerWidth <= 840;
