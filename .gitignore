@@ -1,7 +1,9 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # Compiled output
+/local
 /dist
+/public
 /tmp
 /out-tsc
 /bazel-out

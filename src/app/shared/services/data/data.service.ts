@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { combineLatest, forkJoin, lastValueFrom, Observable, take, takeUntil } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { combineLatest, lastValueFrom, Observable, take } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ICompetence, ICvInfos, ITag } from '../../../core/core-index';
 import { selectAppCvInfosLoaded } from '../../../core/ngrx/selectors/application.selectors';
 import { selectAllCompetences, selectCompetencesLoaded } from '../../../core/ngrx/selectors/competences.selectors';
