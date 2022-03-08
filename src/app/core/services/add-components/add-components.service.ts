@@ -2,7 +2,7 @@ import {ComponentFactoryResolver, Inject, Injectable, ViewContainerRef} from '@a
 import { CompetencesComponent } from '../../../components/pages/competences/competences.component';
 import { ExperiencesComponent } from '../../../components/pages/experiences/experiences.component';
 import { FormationsComponent } from '../../../components/pages/formations/formations.component';
-import { InterestsComponent } from '../../../components/pages/interets/interests.component';
+import { InterestsComponent } from '../../../components/pages/interests/interests.component';
 import { PortfolioComponent } from '../../../components/pages/portfolio/portfolio.component';
 
 @Injectable()

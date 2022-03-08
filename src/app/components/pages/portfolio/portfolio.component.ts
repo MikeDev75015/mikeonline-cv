@@ -26,29 +26,35 @@ import { DataService, UtilsService } from '../../../shared/shared-index';
   ]
 })
 export class PortfolioComponent implements OnInit, OnDestroy {
-  siteDemoList: IProject[] = [];
-  showImage = false;
-  backgroundImage = '';
-  timeOutToLoad: any;
+  public siteDemoList: IProject[] = [];
+  public showImage = false;
+  public backgroundImage = '';
+
+  private timeOutToLoad: any;
 
   private subscriptionList: Subscription[] = [];
 
+  /**
+   * @ignore
+   * @param dataService
+   * @param utilsService
+   */
   constructor(
     private readonly dataService: DataService,
     private readonly utilsService: UtilsService
-  ) {
-  }
+  ) {}
 
-  async ngOnInit() {
+  async ngOnInit(): Promise<void> {
     this.subscriptionList.push(
       this.dataService.isProjectsLoaded().subscribe((loaded) => {
         if (loaded) {
           this.dataService.getProjects<IProject[]>().then(
             (list) => {
-              this.siteDemoList = list.map(s => ({
+              const listWithTechnoName: IProject[] = list.map(s => ({
                 ...s,
                 technoList: this.utilsService.initTechnoListWithTagList(s.tagList as ITag[])
               }));
+              this.siteDemoList = UtilsService.sortList<IProject>(listWithTechnoName, 'asc', 'position', 'number');
             },
           );
         }
@@ -60,7 +66,7 @@ export class PortfolioComponent implements OnInit, OnDestroy {
     this.subscriptionList.forEach((s) => s.unsubscribe());
   }
 
-  onLoadBackgroundImage(siteDemo: IProject): void {
+  public onLoadBackgroundImage(siteDemo: IProject): void {
     this.onRemoveBackgroundImage();
 
     this.timeOutToLoad = setTimeout(() => {
@@ -70,7 +76,7 @@ export class PortfolioComponent implements OnInit, OnDestroy {
     }, 400);
   }
 
-  onRemoveBackgroundImage(): void {
+  public onRemoveBackgroundImage(): void {
     if (this.timeOutToLoad) { clearTimeout(this.timeOutToLoad); this.timeOutToLoad = null; }
     if (this.showImage || this.backgroundImage) { this.showImage = false; this.backgroundImage = ''; }
   }

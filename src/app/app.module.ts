@@ -50,7 +50,7 @@ import {
 } from './components/pages/formations/formation-item-detail/formation-item-detail.component';
 import { FormationItemComponent } from './components/pages/formations/formation-item/formation-item.component';
 import { FormationsComponent } from './components/pages/formations/formations.component';
-import { InterestsComponent } from './components/pages/interets/interests.component';
+import { InterestsComponent } from './components/pages/interests/interests.component';
 import { PortfolioItemComponent } from './components/pages/portfolio/portfolio-item/portfolio-item.component';
 import { PortfolioComponent } from './components/pages/portfolio/portfolio.component';
 import { CoreModule } from './core/core.module';
