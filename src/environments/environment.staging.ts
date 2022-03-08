@@ -2,5 +2,5 @@ export const environment = {
   production: true,
   BACKEND_URL: 'https://ocv-backend-staging.herokuapp.com',
   ACTIVATED_LOGS: true,
-  APP_NAME: 'online-cv'
+  APP_NAME: 'online-cv-staging'
 };
