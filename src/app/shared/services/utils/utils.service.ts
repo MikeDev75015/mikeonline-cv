@@ -74,6 +74,23 @@ export class UtilsService {
     return secondList;
   }
 
+  private static getParentElementId(parentElement: any, depth = 0): any {
+    if (depth > 4) {
+      return;
+    }
+    depth++;
+
+    return parentElement.id
+      ? parentElement.id
+      : UtilsService.getParentElementId(parentElement.parentElement, depth);
+  }
+
+  public getElementId(element: any): any {
+    return element.id
+      ? element.id
+      : UtilsService.getParentElementId(element.parentElement);
+  }
+
   public pluralize = (length: number) => !length || length <= 1 ? '' : 's';
 
   public dateConverter(dateToConvert: string, method: string, labelMethod: string | undefined = undefined, format = 'format', labelFormat?: boolean): string {
@@ -111,18 +128,6 @@ export class UtilsService {
       }
     }
     return technoList;
-  }
-
-  public async convertImageToBase64(url: string): Promise<string> {
-    const loadedFile = await lastValueFrom(this.http.get(url, { responseType: 'blob' }));
-    return new Promise(resolve => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        resolve(reader.result as string);
-      };
-
-      reader.readAsDataURL(loadedFile);
-    });
   }
 
   public formatPhoneNumber(phoneNumber: string): string {
@@ -175,6 +180,18 @@ export class UtilsService {
     }
   }
 
+  public async convertImageToBase64(url: string): Promise<string> {
+    const loadedFile = await lastValueFrom(this.http.get(url, { responseType: 'blob' }));
+    return new Promise(resolve => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        resolve(reader.result as string);
+      };
+
+      reader.readAsDataURL(loadedFile);
+    });
+  }
+
   public async share(shareData: IShareData): Promise<void> {
     try {
       // @ts-ignore
@@ -193,5 +210,4 @@ export class UtilsService {
       });
     }
   }
-
 }

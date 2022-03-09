@@ -96,19 +96,22 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
   ngOnDestroy(): void {
     this.subscriptionList.forEach((s) => s.unsubscribe());
 
-    const that = this;
-    // @ts-ignore
-    wcCanvas.removeEventListener('wordcloudstart', () => {
-      that.wordCloudStart();
-    });
-    // @ts-ignore
-    wcCanvas.removeEventListener('wordclouddrawn', () => {
-      that.wordCloudDrawn();
-    });
-    // @ts-ignore
-    wcCanvas.removeEventListener('wordcloudstop', () => {
-      that.addWorldCloudClick();
-    });
+    const wcCanvas = document.getElementById('wc_canvas');
+    if (wcCanvas) {
+      const that = this;
+      // @ts-ignore
+      wcCanvas.removeEventListener('wordcloudstart', () => {
+        that.wordCloudStart();
+      });
+      // @ts-ignore
+      wcCanvas.removeEventListener('wordclouddrawn', () => {
+        that.wordCloudDrawn();
+      });
+      // @ts-ignore
+      wcCanvas.removeEventListener('wordcloudstop', () => {
+        that.addWorldCloudClick();
+      });
+    }
   }
 
   async ngAfterViewChecked(): Promise<void> {

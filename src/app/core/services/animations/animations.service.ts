@@ -7,81 +7,93 @@ import { IAnimationServiceResponse } from '../../interfaces/animation-response.i
   providedIn: 'root'
 })
 export class AnimationsService {
-  onAnimationAction: Subject<IAnimationServiceResponse> = new BehaviorSubject<IAnimationServiceResponse>({type: '', params: {}});
+  onAnimationAction: BehaviorSubject<IAnimationServiceResponse> = new BehaviorSubject<IAnimationServiceResponse>({ type: '', params: {} });
 
   public watchResponse(): Subject<IAnimationServiceResponse> {
     return this.onAnimationAction;
   }
 
   public onPhase(e: any, id = ''): void {
-
     const type = e.triggerName + '-' + e.toState + '-' + e.phaseName;
-    switch (e.triggerName) {
-      case 'hideShowHeader': {
-        if (e.toState === 'hide' && e.phaseName === 'start') {
-          this.onAnimationAction.next({
-            type: type
-          });
-        }
-        if (e.toState === 'hide' && e.phaseName === 'done') {
-          const actionList: IAnimationAction[] = [{
-            style: {
-              selector: '.app-main .mat-tab-group',
-              classList: [{name: 'full-screen', method: 'add'}]
-            }
-          }];
-          actionList.forEach(action => this.processAction(action));
-          this.onAnimationAction.next({
-            type: type,
-            params: {
-              actionList
-            }
-          });
-        }
-        if (e.toState === 'show' && e.phaseName === 'start') {
-          const actionList: IAnimationAction[] = [{
-            style: {
-              selector: '.app-main .mat-tab-group',
-              classList: [{name: 'full-screen', method: 'remove'}]
-            }
-          }];
-          actionList.forEach(action => this.processAction(action));
-          this.onAnimationAction.next({
-            type: type,
-            params: {
-              actionList
-            }
-          });
-        }
-        break;
+    if (e.triggerName === 'hideShowHeader') {
+      if (e.toState === 'hide' && e.phaseName === 'start') {
+
+        this.onAnimationAction.next({
+          type: type
+        });
       }
-      default: {
-        if (!id) id = e.element.id;
-        if (e.fromState === 'void' || !id) return;
-        this.onAnimationAction.next({ type: id + '_' + type});
+
+      if (e.toState === 'hide' && e.phaseName === 'done') {
+        const actionList: IAnimationAction[] = [{
+          style: {
+            selector: '.app-main .mat-tab-group',
+            classList: [{name: 'full-screen', method: 'add'}]
+          }
+        }];
+
+        actionList.forEach(action => this.processAction(action));
+
+        this.onAnimationAction.next({
+          type: type,
+          params: {
+            actionList
+          }
+        });
       }
+
+      if (e.toState === 'show' && e.phaseName === 'start') {
+        const actionList: IAnimationAction[] = [{
+          style: {
+            selector: '.app-main .mat-tab-group',
+            classList: [{name: 'full-screen', method: 'remove'}]
+          }
+        }];
+
+        actionList.forEach(action => this.processAction(action));
+
+        this.onAnimationAction.next({
+          type: type,
+          params: {
+            actionList
+          }
+        });
+      }
+      return;
     }
+
+    if (!id) {
+      id = e.element.id;
+    }
+
+    if (e.fromState === 'void' || !id) {
+      return;
+    }
+    this.onAnimationAction.next({ type: id + '_' + type});
   }
 
-  private processAction(action: IAnimationAction) {
-    const actionType = Object.keys(action)[0];
+  private processAction(action: IAnimationAction): void {
+    const actionType = action ? Object.keys(action)[0] : '';
+    if (actionType !== 'style') {
+      console.warn('No switch case for ' + actionType + ' action!');
+      return;
+    }
 
-    switch (actionType) {
-      case 'style': {
-        const element = document.querySelector(action!.style!.selector) as HTMLElement;
-        if (!element) { return; }
+    const element = action.style ? document.querySelector(action.style.selector) as HTMLElement : undefined;
+    if (!element) {
+      return;
+    }
 
-        if (action!.style!.classList) {
-          // @ts-ignore
-          action!.style!.classList.forEach((c: { name: string; method: string; }) => element.classList[c.method](c.name));
-        }
-        if (action!.style!.propertyList) {
-          // @ts-ignore
-          action!.style!.propertyList.forEach(p => element.style[p.name] = p.value);
-        }
-        break;
-      }
-      default: console.log('No switch case for ' + actionType + ' action!');
+    if (action.style!.classList) {
+      action.style!.classList.forEach((c) => {
+        // @ts-ignore
+        element.classList[c.method](c.name);
+      });
+    }
+    if (action.style!.propertyList) {
+      action.style!.propertyList.forEach((p) => {
+        // @ts-ignore
+        element.style[p.name] = p.value;
+      });
     }
   }
 }

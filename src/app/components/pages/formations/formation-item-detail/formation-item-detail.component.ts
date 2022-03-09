@@ -7,7 +7,7 @@ import { IDetail } from '../../../../core/core-index';
   styleUrls: ['./formation-item-detail.component.scss']
 })
 export class FormationItemDetailComponent {
-  @Input() detail: IDetail = {} as IDetail;
+  @Input() detail: IDetail | undefined;
 
   openUrl(url: string): void {
     window.open(url, '_blank');
