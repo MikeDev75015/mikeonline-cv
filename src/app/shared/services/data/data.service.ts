@@ -14,7 +14,10 @@ import { selectAllProjects, selectProjectsLoaded } from '../../../core/ngrx/sele
   providedIn: 'root',
 })
 export class DataService {
-
+  /**
+   * @ignore
+   * @param store
+   */
   constructor(
     private readonly store: Store,
   ) {}

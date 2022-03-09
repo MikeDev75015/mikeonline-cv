@@ -4,10 +4,10 @@ import { IAnimationAction } from '../../interfaces/animation-action.interface';
 import { IAnimationServiceResponse } from '../../interfaces/animation-response.interface';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AnimationsService {
-  onAnimationAction: BehaviorSubject<IAnimationServiceResponse> = new BehaviorSubject<IAnimationServiceResponse>({ type: '', params: {} });
+  private onAnimationAction: BehaviorSubject<IAnimationServiceResponse> = new BehaviorSubject<IAnimationServiceResponse>({ type: '', params: {} });
 
   public watchResponse(): Subject<IAnimationServiceResponse> {
     return this.onAnimationAction;

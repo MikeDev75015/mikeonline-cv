@@ -1,25 +1,47 @@
-import { AfterViewInit, Component, Input, OnInit, ViewContainerRef } from '@angular/core';
-import { AddComponentsService } from '../../../core/services/add-components/add-components.service';
+import { AfterViewInit, Component, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { ContactOpenCloseService } from '../../../core/services/contact-open-close/contact-open-close.service';
+import { CompetencesComponent } from '../../pages/competences/competences.component';
+import { ExperiencesComponent } from '../../pages/experiences/experiences.component';
+import { FormationsComponent } from '../../pages/formations/formations.component';
+import { InterestsComponent } from '../../pages/interests/interests.component';
+import { PortfolioComponent } from '../../pages/portfolio/portfolio.component';
+import { DynamicComponentLoaderDirective } from './directives/dynamic-component-loader.directive';
 
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
-  styleUrls: ['./main.component.scss']
+  styleUrls: ['./main.component.scss'],
 })
 export class MainComponent implements OnInit, AfterViewInit {
   @Input() hideHeader = false;
+
+  @ViewChild(DynamicComponentLoaderDirective, { static: false }) dynamicComponentLoader!: DynamicComponentLoaderDirective;
+
   selectedMenu = '';
+
   openedMenu = false;
+
   menuTab = false;
+
   that: any;
 
   moduleToShowList = [
-    { hash: 'competences', name: 'Compétences'},
-    { hash: 'experiences', name: 'Expériences'},
-    { hash: 'formations', name: 'Formations'},
-    { hash: 'portfolio', name: 'Portfolio'},
-    { hash: 'interests', name: 'Intérêts'}
+    { hash: 'competences', name: 'Compétences' },
+    { hash: 'experiences', name: 'Expériences' },
+    { hash: 'formations', name: 'Formations' },
+    { hash: 'portfolio', name: 'Portfolio' },
+    { hash: 'interests', name: 'Intérêts' },
+  ];
+
+  components: (
+    typeof CompetencesComponent | typeof ExperiencesComponent | typeof FormationsComponent |
+    typeof PortfolioComponent | typeof InterestsComponent
+    )[] = [
+    CompetencesComponent,
+    ExperiencesComponent,
+    FormationsComponent,
+    PortfolioComponent,
+    InterestsComponent,
   ];
 
   urlHash = MainComponent.getActualHashOrSetDefault();
@@ -35,10 +57,10 @@ export class MainComponent implements OnInit, AfterViewInit {
   ];
 
   constructor(
-    private addComponents: AddComponentsService,
     private viewContainerRef: ViewContainerRef,
-    private readonly contactOpenCloseService: ContactOpenCloseService
-  ) {}
+    private readonly contactOpenCloseService: ContactOpenCloseService,
+  ) {
+  }
 
   private static isMissingLabelsIcons(): boolean {
     return !document.querySelector('#icon-comp') ||
@@ -51,19 +73,23 @@ export class MainComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     if (window.innerWidth > 840 && !this.menuTab) {
       this.menuTab = true;
-    } else { this.initModules(this); }
+    }
+
+    window.location.hash = `#${this.urlHash}`;
+    this.selectedMenu = this.urlHash;
 
     window.addEventListener('resize', () => {
       this.refreshView(this);
     });
-
-    window.location.hash = `#${this.urlHash}`;
-    this.selectedMenu = this.urlHash;
   }
 
   ngAfterViewInit(): void {
     if (this.menuTab && MainComponent.isMissingLabelsIcons()) {
       this.addIconsToLabels();
+    }
+
+    if (!this.menuTab) {
+      this.loadModules();
     }
   }
 
@@ -101,7 +127,9 @@ export class MainComponent implements OnInit, AfterViewInit {
           icon.id = this.iconsToAdd[i].id;
           icon.style.pointerEvents = 'none';
           icon.innerHTML = this.iconsToAdd[i].icon;
-          if (el) { el.insertBefore(icon, el.firstChild); }
+          if (el) {
+            el.insertBefore(icon, el.firstChild);
+          }
         }
         ref++;
       }, 500);
@@ -113,7 +141,9 @@ export class MainComponent implements OnInit, AfterViewInit {
       !select.target.className ||
       (select.target.className === 'mat-tab-labels') ||
       !select.target.className.includes('mat-tab-label')
-    ) { return; }
+    ) {
+      return;
+    }
 
     const moduleToShow = this.moduleToShowList.find(mod => select.target.innerText.includes(mod.name));
 
@@ -125,25 +155,20 @@ export class MainComponent implements OnInit, AfterViewInit {
 
   selectMenu(e: any, hash: string) {
     e.preventDefault();
-    window.location.hash = `#${hash}`;
-    this.selectedMenu = hash;
-
-    // @ts-ignore
-    const elToClear = document.querySelector('app-main').nextElementSibling;
-
-    this.indexTab = this.moduleToShowList.findIndex(mod => mod.hash === hash);
-    this.addComponents.addDynamicComponent(this.viewContainerRef, this.indexTab);
-    if (elToClear && elToClear.nodeName !== 'APP-FOOTER') { // @ts-ignore
-      elToClear.parentElement.removeChild(elToClear); }
+    this.loadModules(hash);
   }
 
-  initModules(that: any) {
-    const urlHash = MainComponent.getActualHashOrSetDefault();
-    this.indexTab = urlHash ? that.moduleToShowList.findIndex((mod: any) => mod.hash === urlHash) : 0;
-    this.selectedMenu = urlHash;
+  loadModules(hash?: string) {
+    if (this.selectedMenu) {
+      this.dynamicComponentLoader.viewContainerRef.clear();
+    }
 
-    that.viewContainerRef.clear();
-    that.addComponents.addDynamicComponent(that.viewContainerRef, this.indexTab);
+    this.selectedMenu = hash || MainComponent.getActualHashOrSetDefault();
+    window.location.hash = `#${this.selectedMenu}`;
+    this.indexTab = this.moduleToShowList.findIndex((module) => module.hash === this.selectedMenu) || 0;
+
+    // @ts-ignore
+    this.dynamicComponentLoader.viewContainerRef.createComponent(this.components[this.indexTab]);
   }
 
   toggleMenu(opened: boolean) {

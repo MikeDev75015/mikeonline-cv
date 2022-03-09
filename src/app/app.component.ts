@@ -16,17 +16,37 @@ import { DataService, HEADER_ANIMATION, UtilsService } from './shared/shared-ind
   animations: HEADER_ANIMATION,
 })
 export class AppComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {
+  /**
+   * A boolean to know if it's the mobile view or not
+   */
   public mobileView = false;
 
+  /**
+   * A boolean to know if the header is hidden or not
+   */
   public isHeaderHidden = false;
 
+  /**
+   * A boolean to know if the header is being animated or not
+   */
+  public headerOnAnimation = true;
+
+  /**
+   * Header height retrieved once the view is displayed
+   */
   public headerHeight = '';
 
-  public headerOnAnimation = true;
+  private scrollEnabled = false;
+
+  private introductionTime = false;
+
+  private waitingFor: 'hideHeader' | 'showHeader' | undefined;
 
   private sectionElement: HTMLElement | undefined;
 
   private sectionBoundingClientRect: DOMRect | undefined;
+
+  private heightView: number | undefined;
 
   private hideHeaderTimeOut: any;
 
@@ -38,20 +58,22 @@ export class AppComponent implements OnInit, AfterViewInit, AfterViewChecked, On
 
   private matTabHeaderHeight = 0;
 
-  private enableScroll = false;
-
   private minHeightView = 483;
-
-  private heightView: number | undefined;
 
   private splashScreenDelay = 4000;
 
-  private introductionTime = false;
-
-  private waitingFor: 'hideHeader' | 'showHeader' | undefined;
-
   private subscriptionList: Subscription[] = [];
 
+  /**
+   * Dispatches the startAppLoading action
+   * @param store
+   * @param dataService
+   * @param pwaService
+   * @param utilService
+   * @param animationService
+   * @param contactOpenCloseService
+   * @param cdRef
+   */
   constructor(
     private readonly store: Store,
     private readonly dataService: DataService,
@@ -66,11 +88,9 @@ export class AppComponent implements OnInit, AfterViewInit, AfterViewChecked, On
 
   public ngOnInit(): void {
     this.subscriptionList.push(
-      this.animationService.watchResponse().subscribe(
-        (animationServiceResponse) => {
-          this.onAnimationServiceResponse(animationServiceResponse);
-        },
-      ),
+      this.animationService.watchResponse().subscribe((animationServiceResponse) => {
+        this.onAnimationServiceResponse(animationServiceResponse);
+      }),
     );
 
     this.subscriptionList.push(
@@ -134,14 +154,14 @@ export class AppComponent implements OnInit, AfterViewInit, AfterViewChecked, On
       if (!this.headerOnAnimation) {
         this.updateScrollingState();
       } else {
-        this.enableScroll = false;
+        this.scrollEnabled = false;
       }
       this.cdRef.detectChanges();
     }
 
   }
 
-  public onAnimation = (e: any) => this.animationService.onPhase(e);
+  public onAnimation = (e: any): void => this.animationService.onPhase(e);
 
   public showHeader(): void {
     this.stopAutoHideHeaderTimeout();
@@ -215,7 +235,7 @@ export class AppComponent implements OnInit, AfterViewInit, AfterViewChecked, On
         .getPropertyValue('height'), true) + 1;
       this.sectionBoundingClientRect = this.sectionElement.getBoundingClientRect();
 
-      this.enableScroll = this.getSectionHeight() - window.innerHeight > 0;
+      this.scrollEnabled = this.getSectionHeight() - window.innerHeight > 0;
     }
   }
 

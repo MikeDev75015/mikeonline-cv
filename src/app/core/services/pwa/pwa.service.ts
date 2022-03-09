@@ -9,6 +9,12 @@ import { AlertService } from '../../modules/alert/alert.service';
 export class PwaService implements OnDestroy {
   private subscriptionList: Subscription[] = [];
 
+  /**
+   * @ignore
+   * @param swPush
+   * @param swUpdate
+   * @param alertService
+   */
   constructor(
     private readonly swPush: SwPush,
     private readonly swUpdate: SwUpdate,
