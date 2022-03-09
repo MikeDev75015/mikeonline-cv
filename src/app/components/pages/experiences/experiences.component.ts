@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { IExperience } from '../../../core/core-index';
-import { selectAllExperiences } from '../../../core/ngrx/selectors/experiences.selectors';
+import { selectAllExperiences, selectExperiencesLoaded } from '../../../core/ngrx/selectors/experiences.selectors';
 import { MomentService } from '../../../core/services/moment/moment.service';
 import { DataService, UtilsService } from '../../../shared/shared-index';
 
@@ -22,7 +22,7 @@ export class ExperiencesComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.subscriptionList.push(
-      this.dataService.isExperiencesLoaded().subscribe((loaded) => {
+      this.dataService.isDataLoaded(selectExperiencesLoaded).subscribe((loaded) => {
         if (loaded) {
           this.dataService.getStoreData<IExperience[]>({
             selector: selectAllExperiences, defaultValue: [],

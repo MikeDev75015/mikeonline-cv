@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { APP_CREDITS, IContact, ICvInfos, IWebLink } from '../../../core/core-index';
 import { IShareData } from '../../../core/interfaces/share-data.interface';
 import { selectAppCvInfosLoaded } from '../../../core/ngrx/selectors/application.selectors';
+import { selectCvInfos } from '../../../core/ngrx/selectors/cv-infos.selectors';
 import { ContactOpenCloseService } from '../../../core/services/contact-open-close/contact-open-close.service';
 import { DataService, UtilsService, IN_OUT_TEMPLATE_ANIMATION, STAGGER_IN_OUT_TEMPLATE_ANIMATION, } from '../../../shared/shared-index';
 
@@ -82,7 +83,10 @@ export class ContactComponent implements OnInit, OnDestroy {
     this.innerHeight = window.innerHeight;
     window.addEventListener('resize', () => this.innerHeight = window.innerHeight);
 
-    const cvInfos = await this.dataService.getCvInfos();
+    const cvInfos = await this.dataService.getStoreData({
+      selector: selectCvInfos,
+      defaultValue: undefined,
+    });
     if (!cvInfos || !cvInfos.contact) {
       this.subscriptionList.push(
         this.store.select(selectAppCvInfosLoaded).subscribe((cvInfosLoaded) => {
@@ -90,8 +94,11 @@ export class ContactComponent implements OnInit, OnDestroy {
             return;
           }
 
-          this.dataService.getCvInfos().then((cvInfosSubscribed) => {
-            this.initializeComponent(cvInfosSubscribed);
+          this.dataService.getStoreData({
+            selector: selectCvInfos,
+            defaultValue: undefined,
+          }).then((cvInfosSubscribed) => {
+            this.initializeComponent(cvInfosSubscribed as ICvInfos);
           });
         }),
       );

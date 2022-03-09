@@ -11,8 +11,9 @@ import {
   PRIORITY_LABEL,
   WorldCloudOptions,
 } from '../../../core/core-index';
+import { selectAllTags } from '../../../core/ngrx/selectors/tags.selectors';
 import { DataService, UtilsService } from '../../../shared/shared-index';
-import { selectAllCompetences } from '../../../core/ngrx/selectors/competences.selectors';
+import { selectAllCompetences, selectCompetencesLoaded } from '../../../core/ngrx/selectors/competences.selectors';
 import { selectAllExperiences } from '../../../core/ngrx/selectors/experiences.selectors';
 import { selectAllFormations } from '../../../core/ngrx/selectors/formations.selectors';
 import { selectAllProjects } from '../../../core/ngrx/selectors/projects.selectors';
@@ -83,7 +84,7 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
 
   ngOnInit(): void {
     this.subscriptionList.push(
-      this.dataService.isCompetencesLoaded().subscribe(async (loaded) => {
+      this.dataService.isDataLoaded(selectCompetencesLoaded).subscribe(async (loaded) => {
         if (!loaded) {
           return;
         }
@@ -225,7 +226,12 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
   }
 
   private async buildCompetencesSummary(competence: string): Promise<void> {
-    const [tag] = await this.dataService.getTags<ITag[]>(competence, 'name');
+    const [tag] = await this.dataService.getStoreData<ITag[]>({
+      selector: selectAllTags,
+      defaultValue: [],
+      value: competence,
+      property: 'name',
+    });
 
     const allRelatedList = await Promise.all([
       { list: this.experienceList, selector: selectAllExperiences },

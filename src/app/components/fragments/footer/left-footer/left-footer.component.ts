@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { IExperience, IFormation, IInterest, IProject, ITag } from '../../../../core/core-index';
+import { ICvInfos, IExperience, IFormation, IInterest, IProject, ITag } from '../../../../core/core-index';
+import { selectCvInfos } from '../../../../core/ngrx/selectors/cv-infos.selectors';
 import { selectAllExperiences } from '../../../../core/ngrx/selectors/experiences.selectors';
 import { selectAllFormations } from '../../../../core/ngrx/selectors/formations.selectors';
 import { selectAllInterests } from '../../../../core/ngrx/selectors/interests.selectors';
@@ -26,7 +27,10 @@ export class LeftFooterComponent {
 
   public async downloadCV(): Promise<void> {
     this.downloading = true;
-    const cvInfos = await this.dataService.getCvInfos();
+    const cvInfos = await this.dataService.getStoreData({
+      selector: selectCvInfos,
+      defaultValue: undefined,
+    }) as ICvInfos;
 
     let
       experiences: IExperience[] = [],

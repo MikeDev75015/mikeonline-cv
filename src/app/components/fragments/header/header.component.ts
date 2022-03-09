@@ -3,6 +3,7 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { selectAppCvInfosLoaded } from '../../../core/ngrx/selectors/application.selectors';
 import { ICvInfos } from '../../../core/core-index';
+import { selectCvInfos } from '../../../core/ngrx/selectors/cv-infos.selectors';
 import { DataService } from '../../../shared/shared-index';
 
 @Component({
@@ -51,7 +52,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.adaptHeaderImage();
     });
 
-    this.dataService.getCvInfos().then((cvInfos) => {
+    this.dataService.getStoreData({
+      selector: selectCvInfos,
+      defaultValue: undefined,
+    }).then((cvInfos) => {
       if (!cvInfos || !cvInfos.title) {
         this.subscribeToApplicationCvInfosLoaded();
         return;
@@ -82,8 +86,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
           return;
         }
 
-        this.dataService.getCvInfos().then((cvInfos) => {
-          this.initializeComponent(cvInfos);
+        this.dataService.getStoreData({
+          selector: selectCvInfos,
+          defaultValue: undefined,
+        }).then((cvInfos) => {
+          this.initializeComponent(cvInfos as ICvInfos);
         });
       }),
     );

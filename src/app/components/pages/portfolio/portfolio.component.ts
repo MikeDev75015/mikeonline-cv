@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import { Subscription } from 'rxjs';
 import { IProject, ITag } from '../../../core/core-index';
+import { selectAllProjects, selectProjectsLoaded } from '../../../core/ngrx/selectors/projects.selectors';
 import { DataService, UtilsService } from '../../../shared/shared-index';
 
 @Component({
@@ -46,9 +47,12 @@ export class PortfolioComponent implements OnInit, OnDestroy {
 
   async ngOnInit(): Promise<void> {
     this.subscriptionList.push(
-      this.dataService.isProjectsLoaded().subscribe((loaded) => {
+      this.dataService.isDataLoaded(selectProjectsLoaded).subscribe((loaded) => {
         if (loaded) {
-          this.dataService.getProjects<IProject[]>().then(
+          this.dataService.getStoreData<IProject[]>({
+            selector: selectAllProjects,
+            defaultValue: [],
+          }).then(
             (list) => {
               const listWithTechnoName: IProject[] = list.map(s => ({
                 ...s,
