@@ -38,6 +38,23 @@ export class DataService {
     return list as unknown as T;
   }
 
+  public async getStoreData<T>({ selector, defaultValue, value, property }: {
+    selector: (state: object) => T, defaultValue: T, value?: string | number, property?: string,
+  }): Promise<T> {
+    const data: T = await lastValueFrom(this.store.select(selector).pipe(take(1)), { defaultValue });
+
+    if (value !== undefined) {
+      if (!property) {
+        property = 'id';
+      }
+      return Array.isArray(data)
+        ? data.filter((el: { [key: string]: any }) => DataService.listFilterPredicate(el, property as string, value)) as unknown as T
+        : data;
+    }
+
+    return data;
+  }
+
   public async getCompetences<T>(value?: string | number, property = 'id'): Promise<T> {
     const list = await lastValueFrom(this.store.select(selectAllCompetences).pipe(take(1)), { defaultValue: [] });
     if (value !== undefined) {

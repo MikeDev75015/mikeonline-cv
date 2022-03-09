@@ -357,12 +357,12 @@ export class PdfCreatorService {
       if (form.detailList && form.detailList.length) {
         form.detailList.forEach(detail => {
           if (detail.title && !detail.title.includes('Voir le certificat')) {
-            detail.title = detail.title.includes('Stage ')
+            const title: string = detail.title.includes('Stage ')
               ? 'Stage (' + detail.title.split('(')[1]
               : detail.title;
 
             formBody.push([{
-              text: detail.title
+              text: title
                 .replace('Détail du cours (', 'Durée du cours : ')
                 .replace('Cours (', 'Durée des cours : ')
                 .replace('Stage (', 'Durée du stage : ')

@@ -1,31 +1,56 @@
-import {Component, Input} from '@angular/core';
-import { ICvInfos, IExperience, IFormation, IInterest, IProject, ITag } from '../../../../core/core-index';
+import { Component, Input } from '@angular/core';
+import { IExperience, IFormation, IInterest, IProject, ITag } from '../../../../core/core-index';
+import { selectAllExperiences } from '../../../../core/ngrx/selectors/experiences.selectors';
+import { selectAllFormations } from '../../../../core/ngrx/selectors/formations.selectors';
+import { selectAllInterests } from '../../../../core/ngrx/selectors/interests.selectors';
+import { selectAllProjects } from '../../../../core/ngrx/selectors/projects.selectors';
 import { PdfCreatorService } from '../../../../core/services/pdf-creator/pdf-creator.service';
-import { DataService } from '../../../../shared/services/data/data.service';
-import { UtilsService } from '../../../../shared/services/utils/utils.service';
+import { DataService, UtilsService } from '../../../../shared/shared-index';
 
 @Component({
   selector: 'app-left-footer',
   templateUrl: './left-footer.component.html',
-  styleUrls: ['./left-footer.component.scss']
+  styleUrls: ['./left-footer.component.scss'],
 })
 export class LeftFooterComponent {
   @Input() mobile = false;
-  downloading = false;
+
+  public downloading = false;
 
   constructor(
     private readonly dataService: DataService,
     private readonly pdfMakeService: PdfCreatorService,
     private readonly utilsService: UtilsService,
-  ) {}
+  ) {
+  }
 
-  async downloadCV(): Promise<void> {
+  public async downloadCV(): Promise<void> {
     this.downloading = true;
     const cvInfos = await this.dataService.getCvInfos();
-    const experiences = await this.dataService.getExperiences<IExperience[]>();
-    const formations = await this.dataService.getFormations<IFormation[]>();
-    const projects = await this.dataService.getProjects<IProject[]>();
-    const interests = await this.dataService.getInterests<IInterest[]>();
+
+    let
+      experiences: IExperience[] = [],
+      formations: IFormation[] = [],
+      projects: IProject[] = [],
+      interests: IInterest[] = [];
+
+    const allList = await Promise.all([
+      { list: experiences, selector: selectAllExperiences },
+      { list: formations, selector: selectAllFormations },
+      { list: projects, selector: selectAllProjects },
+      { list: interests, selector: selectAllInterests },
+    ].map((v) => {
+      return this.dataService.getStoreData<typeof v.list>({
+        // @ts-ignore
+        selector: v.selector, defaultValue: [],
+      });
+    }));
+
+    experiences = allList[0] as IExperience[];
+    formations = allList[1] as IFormation[];
+    projects = UtilsService.sortList<IProject>(allList[2] as IProject[], 'asc', 'position', 'number');
+    interests = allList[3] as IInterest[];
+
     const summary = await this.dataService.getSummary();
 
     console.log('downloading Cv:', { cvInfos, experiences, formations, projects, interests, summary });
@@ -34,7 +59,7 @@ export class LeftFooterComponent {
 
     await this.pdfMakeService.createDownloadablePdf({
       ...cvInfos,
-      logo: {...cvInfos.logo, src: loadedImage},
+      logo: { ...cvInfos.logo, src: loadedImage },
       cvType: 'full-cv',
       data: {
         experienceList: experiences,
@@ -47,7 +72,7 @@ export class LeftFooterComponent {
         ),
         interestList: interests,
         competenceList: summary,
-      }
+      },
     }).then(() => this.downloading = false);
   }
 
