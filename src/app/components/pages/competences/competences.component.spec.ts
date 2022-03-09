@@ -14,7 +14,7 @@ describe('CompetencesComponent', () => {
   let component: CompetencesComponent;
   let fixture: ComponentFixture<CompetencesComponent>;
 
-  /* beforeEach(async(() => {
+  beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
         MatExpansionModule,
@@ -54,9 +54,5 @@ describe('CompetencesComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  }); */
-  
-  it('should ', () => {
-    
   });
 });
