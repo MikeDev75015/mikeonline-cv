@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SwPush, SwUpdate } from '@angular/service-worker';
-import { AlertService } from '../../modules/alert/alert.service';
+import { AlertService } from '../../modules/alert/services/alert.service';
 
 @Injectable({
   providedIn: 'root',

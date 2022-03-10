@@ -1,5 +1,4 @@
 import { AfterViewChecked, Component, OnDestroy, OnInit } from '@angular/core';
-import moment from 'moment';
 import { Subscription } from 'rxjs';
 import {
   EXPERTISE_LEVEL_LABEL,
@@ -11,14 +10,12 @@ import {
   PRIORITY_LABEL,
   WorldCloudOptions,
 } from '../../../core/core-index';
-import { selectAllTags } from '../../../core/ngrx/selectors/tags.selectors';
 import { DataService, UtilsService } from '../../../shared/shared-index';
+import { selectAllTags } from '../../../core/ngrx/selectors/tags.selectors';
 import { selectAllCompetences, selectCompetencesLoaded } from '../../../core/ngrx/selectors/competences.selectors';
 import { selectAllExperiences } from '../../../core/ngrx/selectors/experiences.selectors';
 import { selectAllFormations } from '../../../core/ngrx/selectors/formations.selectors';
 import { selectAllProjects } from '../../../core/ngrx/selectors/projects.selectors';
-
-moment.locale('fr');
 
 declare global {
   interface Window {
@@ -33,7 +30,7 @@ window.WordCloud = window.WordCloud || {};
   styleUrls: ['./competences.component.scss'],
 })
 export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked {
-  public defaultText = 'Cliquez sur une techno pour en savoir +';
+  public defaultText = '';
 
   public selectedKeyword = '';
 
@@ -114,7 +111,7 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
     }
   }
 
-  async ngAfterViewChecked(): Promise<void> {
+  ngAfterViewChecked(): void {
     if (
       !this.initWordCloud &&
       window.WordCloud.isSupported &&
@@ -123,6 +120,7 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
       this.competencesLoaded
     ) {
       this.initWordCloud = true;
+      this.defaultText = 'Chargement des technos en cours...';
 
       setTimeout(async () => {
         await this.loadWorldCloud();
@@ -130,9 +128,9 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
     }
   }
 
-  public pluralize = (value: number) => this.utilsService.pluralize(value);
+  public pluralize = (value: number): string => this.utilsService.pluralize(value);
 
-  public convertDateToNumber = (value: string) => this.utilsService.convertDateToNumber(value);
+  public convertDateToNumber = (value: string): number => this.utilsService.convertDateToNumber(value);
 
   public getExpertiseLevelLabel(value: number): string {
     return this.expertiseLevelLabel[value];
@@ -140,37 +138,6 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
 
   public getPriorityLabel(value: number): string {
     return this.priorityLabel[value];
-  }
-
-  private async loadWorldCloud(): Promise<void> {
-    const that = this;
-    const wcCanvas = document.getElementById('wc_canvas');
-
-    // @ts-ignore
-    wcCanvas.addEventListener('wordcloudstart', () => {
-      that.wordCloudStart();
-    });
-    // @ts-ignore
-    wcCanvas.addEventListener('wordclouddrawn', () => {
-      that.wordCloudDrawn();
-    });
-    // @ts-ignore
-    wcCanvas.addEventListener('wordcloudstop', () => {
-      that.addWorldCloudClick();
-    });
-
-    this.competencesDrawn = 0;
-    this.timeOutToDrawn = 0;
-
-    const tagList = await this.dataService.getSummary();
-    this.wordList = tagList.map(
-      tag => ([tag.name, this.policeSize(tag.times as number, tag.weight)]),
-    );
-
-    window.WordCloud(wcCanvas, {
-      ...this.setWorldCloudOptions(),
-      list: this.wordList,
-    });
   }
 
   private wordCloudDrawn() {
@@ -207,12 +174,17 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
 
   private addWorldCloudClick(): void {
     const wcElements = Array.from(document.getElementsByClassName('word-in-cloud'));
-    // tslint:disable-next-line:prefer-for-of
+    if (!wcElements || !wcElements.length) {
+      return;
+    }
+
     for (let element of wcElements) {
       if (!element.getAttribute('init-onclick')) {
         this.addClickActionOnElement(element as HTMLElement);
       }
     }
+
+    this.defaultText = 'Cliquez sur une techno pour en savoir +';
   }
 
   private addClickActionOnElement(el: HTMLElement) {
@@ -226,6 +198,41 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
     };
 
     el.setAttribute('init-onclick', 'true');
+  }
+
+  private async loadWorldCloud(): Promise<void> {
+    const that = this;
+    const wcCanvas = document.getElementById('wc_canvas');
+    if (!wcCanvas) {
+      console.error('Cannot draw the word cloud, the canvas is missing or invalid!');
+      return;
+    }
+
+    // @ts-ignore
+    wcCanvas.addEventListener('wordcloudstart', () => {
+      that.wordCloudStart();
+    });
+    // @ts-ignore
+    wcCanvas.addEventListener('wordclouddrawn', () => {
+      that.wordCloudDrawn();
+    });
+    // @ts-ignore
+    wcCanvas.addEventListener('wordcloudstop', () => {
+      that.addWorldCloudClick();
+    });
+
+    this.competencesDrawn = 0;
+    this.timeOutToDrawn = 0;
+
+    const tagList = await this.dataService.getSummary();
+    this.wordList = tagList.map(
+      tag => ([tag.name, this.policeSize(tag.times as number, tag.weight)]),
+    );
+
+    window.WordCloud(wcCanvas, {
+      ...this.setWorldCloudOptions(),
+      list: this.wordList,
+    });
   }
 
   private async buildCompetencesSummary(competence: string): Promise<void> {

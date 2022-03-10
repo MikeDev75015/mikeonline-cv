@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import moment from 'moment';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import { UtilsService } from '../../../shared/services/utils/utils.service';
 import { PdfDefinition } from '../../classes/pdf-definition.class';
@@ -9,6 +8,7 @@ import { IExperience } from '../../interfaces/models/experience.interface';
 import { IFormation } from '../../interfaces/models/formation.interface';
 import { IInterest } from '../../interfaces/models/interest.interface';
 import { IProject } from '../../interfaces/models/project.interface';
+import { MomentService } from '../moment/moment.service';
 
 export interface IPdfColumn {
   width: string | number; // '*', 'auto', '%' or numeric value
@@ -48,7 +48,7 @@ export interface IPdfImageOptions {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PdfCreatorService {
 
@@ -99,7 +99,7 @@ export class PdfCreatorService {
   };
 
   constructor(
-    private readonly utilsService: UtilsService
+    private readonly utilsService: UtilsService,
   ) {}
 
   private static getDefaultStyle() {
@@ -180,6 +180,49 @@ export class PdfCreatorService {
     return newPdf;
   }
 
+  private static addTitle(body: any[], exp: IExperience | IFormation, date: string): void {
+    body.push([
+      {
+        layout: 'noBorders',
+        margin: [0, 20, 0, 0],
+        table: {
+          widths: ['*', 'auto'],
+          body: [
+            [
+              { text: exp.title + (exp.society ? ' - ' + exp.society : ''), style: 'bold' },
+              { text: date, style: 'right', bold: true, color: '#555555' },
+            ],
+          ],
+        },
+      },
+    ]);
+  }
+
+  private static addPlace(expBody: any[], exp: IExperience | IFormation): void {
+    if (exp.place) {
+      expBody.push([{ text: exp.place, italics: true, color: '#555555' }]);
+    }
+  }
+
+  private static getDateToPrint(beginDate: string, endDate?: string): string {
+    if (!beginDate && endDate) {
+      return UtilsService.uppercaseFirstLetter(MomentService.getFormattedDate(endDate, 'MMMM YYYY'));
+    }
+
+    if (!endDate && beginDate) {
+      return `Depuis ${MomentService.getFormattedDate(beginDate, 'MMMM YYYY')}`;
+    }
+
+    return `De ${MomentService.getFormattedDate(beginDate, 'MMMM YYYY')} à ${MomentService.getFormattedDate(endDate!, 'MMMM YYYY')}`;
+  }
+
+  private static checkLineBreakMode(currentNode: { headlineLevel: number; }, followingNodesOnPage: any[]): string {
+    if (currentNode.headlineLevel === 1 && followingNodesOnPage.length === 0) {
+      return 'before';
+    }
+    return '';
+  }
+
   public async createDownloadablePdf(pdfInfos: ICvInfos): Promise<void> {
     return new Promise(async resolve => {
 
@@ -197,7 +240,7 @@ export class PdfCreatorService {
             [
               // @ts-ignore
               {image: logo.src, width: logo.width, height: logo.height},
-              {text: 'Le ' + moment().format('L'), style: 'right'},
+              {text: 'Le ' + MomentService.getCurrentDate('L'), style: 'right'},
             ],
             [
               {text: '\n' + contact.fullName, style: 'contact'},
@@ -243,26 +286,33 @@ export class PdfCreatorService {
     });
   }
 
-  private async addAdditionalFields(type: string, data: any): Promise<void> {
-    switch (type) {
-      case 'full-cv': {
-        if (data.experienceList) {
-          this.buildPdfExperiences(data.experienceList);
-        }
-        if (data.formationList) {
-          this.buildPdfFormations(data.formationList);
-        }
-        if (data.projectList) {
-          await this.buildPdfProjects(data.projectList);
-        }
-        if (data.interestList) {
-          this.buildPdfInterests(data.interestList);
-        }
-        break;
-      }
+  private async addAdditionalFields(type: string, data: {
+    experienceList?: IExperience[]; formationList?: IFormation[]; projectList?: IProject[]; interestList?: IInterest[];
+  }): Promise<void> {
+    if (type !== 'full-cv') {
+      return;
+    }
 
-      default:
-        break;
+    if (data.experienceList) {
+      this.buildPdfExperiences(UtilsService.sortList(data.experienceList, 'desc', 'beginDate', 'date'));
+    }
+    if (data.formationList) {
+      this.buildPdfFormations(UtilsService.sortList(data.formationList.map((f) => {
+        if (!f.endDate) {
+          return {
+            ...f,
+            endDate: MomentService.getCurrentDate('YYYY-MM'),
+          };
+        }
+
+        return f;
+      }), 'desc', 'endDate', 'date'));
+    }
+    if (data.projectList) {
+      await this.buildPdfProjects(UtilsService.sortList(data.projectList, 'asc', 'position', 'number'));
+    }
+    if (data.interestList) {
+      this.buildPdfInterests(data.interestList);
     }
   }
 
@@ -271,41 +321,20 @@ export class PdfCreatorService {
     const expBody: any[] = [];
 
     experienceList.forEach((exp) => {
-      const expDate = !exp.actualJob
-        ? 'De ' + moment(exp.beginDate).format('MMMM YYYY') +
-        ' à ' + moment(exp.endDate).format('MMMM YYYY')
-        : 'Depuis ' + moment(exp.beginDate).format('MMMM YYYY');
-
-      expBody.push([
-        {
-          layout: 'noBorders',
-          margin: [0, 20, 0, 0],
-          table: {
-            widths: ['*', 'auto'],
-            body: [
-              [
-                {text: exp.title + (exp.society ? ' - ' + exp.society : ''), style: 'bold'},
-                {text: expDate, style: 'right', bold: true, color: '#555555'}
-              ]
-            ]
-          }
-        }
-      ]);
-
-      if (exp.place) {
-        expBody.push([{text: exp.place, italics: true, color: '#555555'}]);
-      }
+      const expDate = PdfCreatorService.getDateToPrint(exp.beginDate, exp.endDate);
+      PdfCreatorService.addTitle(expBody, exp, expDate);
+      PdfCreatorService.addPlace(expBody, exp);
 
       if (exp.detailList && exp.detailList.length) {
         exp.detailList.forEach(detail => {
           if (detail.title) {
-            expBody.push([{text: detail.title.toUpperCase(), bold: true, margin: [0, 8, 0, -2], fontSize: 10}]);
+            expBody.push([{ text: detail.title.toUpperCase(), bold: true, margin: [0, 8, 0, -2], fontSize: 10 }]);
           }
           if (detail.lineList && detail.lineList.length) {
             detail.lineList.forEach(line => {
               expBody.push(line.charAt(0) !== '*'
-                ? [{text: ' - ' + line, style: 'lineDetail', margin: [5, 0, 10, 0]}]
-                : [{text: line, style: 'lineDetail'}]
+                ? [{ text: ' - ' + line, style: 'lineDetail', margin: [5, 0, 10, 0] }]
+                : [{ text: line, style: 'lineDetail' }],
               );
             });
           }
@@ -328,31 +357,10 @@ export class PdfCreatorService {
     this.updatePdfContent.addSectionTitle('Mes formations', 'sectionTitle', '#024873', 'before');
     const formBody: any[] = [];
 
-    formationList.forEach(form => {
-      const formDate = form.beginDate
-        ? 'De ' + moment(form.beginDate).format('MMMM YYYY') +
-        ' à ' + moment(form.endDate).format('MMMM YYYY')
-        : this.utilsService.uppercaseFirstLetter(moment(form.endDate).format('MMMM YYYY'));
-
-      formBody.push([
-        {
-          layout: 'noBorders',
-          margin: [0, 20, 0, 0],
-          table: {
-            widths: ['*', 'auto'],
-            body: [
-              [
-                {text: form.title + (form.society ? ' - ' + form.society : ''), style: 'bold'},
-                {text: formDate, style: 'right', bold: true, color: '#555555'}
-              ]
-            ]
-          }
-        }
-      ]);
-
-      if (form.place) {
-        formBody.push([{text: form.place, italics: true, color: '#555555'}]);
-      }
+    formationList.forEach((form) => {
+      const formDate = PdfCreatorService.getDateToPrint(form.beginDate, form.endDate);
+      PdfCreatorService.addTitle(formBody, form, formDate);
+      PdfCreatorService.addPlace(formBody, form);
 
       if (form.detailList && form.detailList.length) {
         form.detailList.forEach(detail => {
@@ -406,14 +414,10 @@ export class PdfCreatorService {
             widths: ['auto', '*'],
             body: [
               [
-                {image: await this.utilsService.convertImageToBase64(p.pictureList[0].src), margin: [0, 0, 20, 10],
+                {
+                  image: await this.utilsService.convertImageToBase64(p.pictureList[0].src), margin: [0, 0, 20, 10],
                   // @ts-ignore
-                  pageBreak: (currentNode, followingNodesOnPage) => {
-                    if (currentNode.headlineLevel === 1 && followingNodesOnPage.length === 0) {
-                      return 'before';
-                    }
-                    return '';
-                  }
+                  pageBreak: (currentNode, followingNodesOnPage) => PdfCreatorService.checkLineBreakMode(currentNode, followingNodesOnPage),
                 },
                 {
                   layout: 'noBorders',
@@ -421,14 +425,10 @@ export class PdfCreatorService {
                     widths: ['*'],
                     body: [
                       [
-                        {text: p.title, link: p.link && p.link.url ? p.link.url : null, bold: true,
+                        {
+                          text: p.title, link: p.link && p.link.url ? p.link.url : null, bold: true,
                           // @ts-ignore
-                          pageBreak: (currentNode, followingNodesOnPage) => {
-                            if (currentNode.headlineLevel === 1 && followingNodesOnPage.length === 0) {
-                              return 'before';
-                            }
-                            return '';
-                          }
+                          pageBreak: (currentNode, followingNodesOnPage) => PdfCreatorService.checkLineBreakMode(currentNode, followingNodesOnPage),
                         }
                       ]
                     ]
@@ -444,6 +444,7 @@ export class PdfCreatorService {
         // @ts-ignore
         projBody[index][0].table.body[0][1].table.body.push([{text: p.subTitle}]);
       }
+
       if (p.technoList && p.technoList.length) {
         // @ts-ignore
         projBody[index][0].table.body[0][1].table.body.push([

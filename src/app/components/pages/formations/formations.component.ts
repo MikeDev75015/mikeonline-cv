@@ -11,16 +11,15 @@ import { DataService, UtilsService } from '../../../shared/shared-index';
   styleUrls: ['./formations.component.scss'],
 })
 export class FormationsComponent implements OnInit, OnDestroy {
-  formationList: any[] = [];
+  public formationList: any[] = [];
 
   private subscriptionList: Subscription[] = [];
 
   constructor(
     private readonly dataService: DataService,
-  ) {
-  }
+  ) {}
 
-  async ngOnInit() {
+  async ngOnInit(): Promise<void> {
     this.subscriptionList.push(
       this.dataService.isDataLoaded(selectFormationsLoaded).subscribe((loaded) => {
         if (loaded) {

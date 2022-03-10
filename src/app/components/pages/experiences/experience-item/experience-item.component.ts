@@ -25,25 +25,25 @@ import { IN_OUT_TEMPLATE_ANIMATION } from '../../../../shared/shared-index';
   ],
 })
 export class ExperienceItemComponent implements OnInit, OnChanges, OnDestroy, AfterViewChecked {
-  subscriptionList: Subscription[] = [];
-
-  @Input() exp: IExperience = {} as IExperience;
+  @Input() exp: IExperience | undefined;
 
   @Input() index = -1;
 
-  enableOpenCloseButtons = false;
+  public enableOpenCloseButtons = false;
 
-  opened = false;
+  public opened = false;
 
-  masked = true;
+  public masked = true;
 
-  elementId = '';
+  public btnOpen = true;
 
-  btnOpen = true;
+  public overflow = '';
 
-  overflow = '';
+  public lineBodyPaddingLeft = '30px';
 
-  lineBodyPaddingLeft = '30px';
+  private elementId = '';
+
+  private subscriptionList: Subscription[] = [];
 
   constructor(
     private readonly animationService: AnimationsService,
@@ -51,7 +51,7 @@ export class ExperienceItemComponent implements OnInit, OnChanges, OnDestroy, Af
   ) {
   }
 
-  private static showOpenCloseButtons(exp: IExperience) {
+  private static showOpenCloseButtons(exp: IExperience): boolean {
     if (!exp || !exp.detailList || !exp.detailList.length) {
       return false;
     }
@@ -87,11 +87,11 @@ export class ExperienceItemComponent implements OnInit, OnChanges, OnDestroy, Af
     });
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subscriptionList.forEach(s => s.unsubscribe());
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges(changes: SimpleChanges): void {
     if (changes && changes['exp'] && changes['exp'].currentValue) {
       this.enableOpenCloseButtons = ExperienceItemComponent.showOpenCloseButtons(changes['exp'].currentValue);
     }
@@ -117,10 +117,6 @@ export class ExperienceItemComponent implements OnInit, OnChanges, OnDestroy, Af
     }
   }
 
-  private setLineBodyPaddingLeft(): void {
-    this.lineBodyPaddingLeft = window.innerWidth > 840 ? '50px' : '30px';
-  }
-
   public onAnimation(e: any): void {
     this.elementId = this.utilsService.getElementId(e.element);
     this.animationService.onPhase(e, this.elementId);
@@ -133,6 +129,10 @@ export class ExperienceItemComponent implements OnInit, OnChanges, OnDestroy, Af
     }
 
     this.opened = !this.opened;
+  }
+
+  private setLineBodyPaddingLeft(): void {
+    this.lineBodyPaddingLeft = window.innerWidth > 840 ? '50px' : '30px';
   }
 
   private onAnimationServiceResponse(animationServiceResponse: IAnimationServiceResponse): void {

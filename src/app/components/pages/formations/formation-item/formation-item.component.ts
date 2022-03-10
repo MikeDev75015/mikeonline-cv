@@ -25,33 +25,37 @@ import { IN_OUT_TEMPLATE_ANIMATION } from '../../../../shared/shared-index';
   ],
 })
 export class FormationItemComponent implements OnInit, OnChanges, OnDestroy, AfterViewChecked {
-  subscriptionList: Subscription[] = [];
-
   @Input() form: IFormation | undefined;
 
   @Input() index = -1;
 
-  elementId = '';
+  public overflow = '';
 
-  overflow = '';
+  public enableOpenCloseButtons = false;
 
-  enableOpenCloseButtons = false;
+  public opened = false;
 
-  opened = false;
+  public masked = true;
 
-  masked = true;
+  public btnOpen = true;
 
-  btnOpen = true;
+  public lineBodyPaddingLeft = '30px';
 
-  lineBodyPaddingLeft = '30px';
+  private elementId = '';
 
+  private subscriptionList: Subscription[] = [];
+
+  /**
+   * @ignore
+   * @param animationService
+   * @param utilsService
+   */
   constructor(
     private readonly animationService: AnimationsService,
     private readonly utilsService: UtilsService,
-  ) {
-  }
+  ) {}
 
-  private static showOpenCloseButtons(form: IFormation) {
+  private static showOpenCloseButtons(form: IFormation): boolean {
     if (!form || !form.detailList || !form.detailList.length) {
       return false;
     }
@@ -71,7 +75,7 @@ export class FormationItemComponent implements OnInit, OnChanges, OnDestroy, Aft
     return totalDetailListLines > 4;
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.subscriptionList.push(this.animationService.watchResponse().subscribe(
       (animationServiceResponse) => this.onAnimationServiceResponse(animationServiceResponse),
     ));
@@ -87,21 +91,17 @@ export class FormationItemComponent implements OnInit, OnChanges, OnDestroy, Aft
     });
   }
 
-  private setLineBodyPaddingLeft(): void {
-    this.lineBodyPaddingLeft = window.innerWidth > 840 ? '50px' : '30px';
-  }
-
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subscriptionList.forEach(s => s.unsubscribe());
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges(changes: SimpleChanges): void {
     if (changes && changes['form'] && changes['form'].currentValue) {
       this.enableOpenCloseButtons = FormationItemComponent.showOpenCloseButtons(changes['form'].currentValue);
     }
   }
 
-  ngAfterViewChecked() {
+  ngAfterViewChecked(): void {
     const compSection = document.querySelector('#COMPETENCES');
     const formSection = document.querySelector('#FORMATIONS');
     if (
@@ -133,6 +133,10 @@ export class FormationItemComponent implements OnInit, OnChanges, OnDestroy, Aft
     }
 
     this.opened = !this.opened;
+  }
+
+  private setLineBodyPaddingLeft(): void {
+    this.lineBodyPaddingLeft = window.innerWidth > 840 ? '50px' : '30px';
   }
 
   private onAnimationServiceResponse(animationServiceResponse: IAnimationServiceResponse): void {

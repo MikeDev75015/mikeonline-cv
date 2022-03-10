@@ -1,5 +1,5 @@
-import {AfterViewChecked, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Subscription} from 'rxjs';
+import { AfterViewChecked, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { IAnimationServiceResponse } from '../../../../core/core-index';
 import { IInterest } from '../../../../core/interfaces/models/interest.interface';
 import { AnimationsService } from '../../../../core/services/animations/animations.service';
@@ -14,36 +14,53 @@ import { IN_OUT_TEMPLATE_ANIMATION } from '../../../../shared/shared-index';
       'VerticalAccordionItemComponentBody',
       false,
       { in: 500, out: 250 },
-      { style: { opacity: 1 }},
-      { style: { opacity: 0 }}
-    )
-  ]
+      { style: { opacity: 1 } },
+      { style: { opacity: 0 } },
+    ),
+  ],
 })
 export class VerticalAccordionItemComponent implements OnInit, AfterViewChecked {
-  subscriptionList: Subscription[] = [];
-  elementId = '';
+  @Input() itemData: IInterest | undefined;
 
   @Input() itemClass = '';
-  @Input() itemData: IInterest = {} as IInterest;
+
   @Input() expanded = false;
 
   @Output() open = new EventEmitter<boolean>();
 
+  private elementId = '';
+
+  private subscriptionList: Subscription[] = [];
+
   constructor(
     private readonly cdRef: ChangeDetectorRef,
-    private readonly animationService: AnimationsService
-  ) {}
+    private readonly animationService: AnimationsService,
+  ) {
+  }
 
-  ngOnInit() {
+  ngOnInit(): void {
     const animationServiceSubscription = this.animationService.watchResponse()
       .subscribe(
-        animationServiceResponse => this.onAnimationServiceResponse(animationServiceResponse)
+        animationServiceResponse => this.onAnimationServiceResponse(animationServiceResponse),
       );
     this.subscriptionList.push(animationServiceSubscription);
   }
 
-  ngOnDestroy() {
+  ngAfterViewChecked(): void {
+    this.cdRef.detectChanges();
+  }
+
+  ngOnDestroy(): void {
     this.subscriptionList.forEach(s => s.unsubscribe());
+  }
+
+  public onAnimation(e: any): void {
+    if (!this.elementId) this.elementId = e.element.parentElement.parentElement.id;
+    this.animationService.onPhase(e, this.elementId);
+  }
+
+  public onOpenItem(): void {
+    this.open.emit(true);
   }
 
   private onAnimationServiceResponse(animationServiceResponse: IAnimationServiceResponse): void {
@@ -53,22 +70,4 @@ export class VerticalAccordionItemComponent implements OnInit, AfterViewChecked 
       !animationServiceResponse.type.includes(this.elementId)
     ) return;
   }
-
-  public onAnimation(e: any): void {
-    if (!this.elementId) this.elementId = e.element.parentElement.parentElement.id;
-    this.animationService.onPhase(e, this.elementId);
-  }
-
-  openLink(): void {
-    window.open(this.itemData.link.url, '_blank');
-  }
-
-  onOpenItem() {
-    this.open.emit(true);
-  }
-
-  ngAfterViewChecked(): void {
-    this.cdRef.detectChanges();
-  }
-
 }

@@ -11,7 +11,7 @@ import { DataService, UtilsService } from '../../../shared/shared-index';
   styleUrls: ['./experiences.component.scss'],
 })
 export class ExperiencesComponent implements OnInit, OnDestroy {
-  experienceList: IExperience[] = [];
+  public experienceList: IExperience[] = [];
 
   private subscriptionList: Subscription[] = [];
 
@@ -20,7 +20,7 @@ export class ExperiencesComponent implements OnInit, OnDestroy {
   ) {
   }
 
-  async ngOnInit() {
+  async ngOnInit(): Promise<void> {
     this.subscriptionList.push(
       this.dataService.isDataLoaded(selectExperiencesLoaded).subscribe((loaded) => {
         if (loaded) {
@@ -39,7 +39,7 @@ export class ExperiencesComponent implements OnInit, OnDestroy {
 
                   return e;
                 }),
-                'desc', 'endDate', 'date'
+                'desc', 'endDate', 'date',
               );
             },
           );

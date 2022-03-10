@@ -4,7 +4,7 @@ import moment from 'moment';
 import { lastValueFrom } from 'rxjs';
 import { ITag } from '../../../core/interfaces/models/tag.interface';
 import { IShareData } from '../../../core/interfaces/share-data.interface';
-import { AlertService } from '../../../core/modules/alert/alert.service';
+import { AlertService } from '../../../core/modules/alert/services/alert.service';
 import { DataService } from '../data/data.service';
 
 moment.locale('fr');
@@ -83,6 +83,8 @@ export class UtilsService {
       ? parentElement.id
       : UtilsService.getParentElementId(parentElement.parentElement, depth);
   }
+
+  public static uppercaseFirstLetter = (s: string): string => s.charAt(0).toUpperCase() + s.substring(1);
 
   public getElementId(element: any): string {
     return element.id

@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { SwPush, SwUpdate } from '@angular/service-worker';
-import { AlertService } from '../../modules/alert/alert.service';
+import { AlertService } from '../../modules/alert/services/alert.service';
 
 import { PwaService } from './pwa.service';
 

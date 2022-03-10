@@ -10,16 +10,15 @@ import { DataService } from '../../../shared/shared-index';
   styleUrls: ['./interests.component.scss']
 })
 export class InterestsComponent implements OnInit, OnDestroy {
-  interestList: IInterest[] | undefined;
+  public interestList: IInterest[] | undefined;
 
   private subscriptionList: Subscription[] = [];
 
   constructor(
     private readonly dataService: DataService,
-  ) {
-  }
+  ) {}
 
-  async ngOnInit() {
+  async ngOnInit(): Promise<void> {
     this.subscriptionList.push(
       this.dataService.isDataLoaded(selectInterestsLoaded).subscribe((loaded) => {
         if (loaded) {
