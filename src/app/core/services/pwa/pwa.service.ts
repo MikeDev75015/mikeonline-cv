@@ -35,7 +35,9 @@ export class PwaService implements OnDestroy {
 
       this.subscriptionList.push(
         this.swUpdate.versionUpdates.subscribe((event) => {
-          console.log('versionUpdates event:', event.type);
+          if (event.type === 'VERSION_DETECTED') {
+            return;
+          }
 
           if (event.type === 'VERSION_INSTALLATION_FAILED') {
             this.showUpdateErrorMessage();
