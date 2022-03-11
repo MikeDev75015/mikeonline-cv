@@ -8,7 +8,12 @@ import { IShareData } from '../../../core/interfaces/share-data.interface';
 import { selectAppCvInfosLoaded } from '../../../core/ngrx/selectors/application.selectors';
 import { selectCvInfos } from '../../../core/ngrx/selectors/cv-infos.selectors';
 import { ContactOpenCloseService } from '../../../core/services/contact-open-close/contact-open-close.service';
-import { DataService, UtilsService, IN_OUT_TEMPLATE_ANIMATION, STAGGER_IN_OUT_TEMPLATE_ANIMATION, } from '../../../shared/shared-index';
+import {
+  DataService,
+  IN_OUT_TEMPLATE_ANIMATION,
+  STAGGER_IN_OUT_TEMPLATE_ANIMATION,
+  UtilsService,
+} from '../../../shared/shared-index';
 
 @Component({
   selector: 'app-contact',
@@ -33,23 +38,23 @@ import { DataService, UtilsService, IN_OUT_TEMPLATE_ANIMATION, STAGGER_IN_OUT_TE
 export class ContactComponent implements OnInit, OnDestroy {
   @Input() mobileView = false;
 
-  contactMobileOpened = false;
+  public contact: IContact = {} as IContact;
 
-  showContactBtns = false;
+  public webLinkList: IWebLink[] = [];
 
-  contact: IContact = {} as IContact;
+  public contactMobileOpened = false;
 
-  webLinkList: IWebLink[] = [];
+  public showContactButtons = false;
 
-  loading = false;
+  public heightIsTooSmall = false;
 
-  birthDate: Moment = {} as Moment;
+  public innerHeight = 100;
 
-  today: Moment = {} as Moment;
+  private birthDate: Moment = {} as Moment;
 
-  heightIsTooSmall = false;
+  private today: Moment = {} as Moment;
 
-  innerHeight = 100;
+  private loading = false;
 
   private subscriptionList: Subscription[] = [];
 
@@ -108,26 +113,19 @@ export class ContactComponent implements OnInit, OnDestroy {
     this.initializeComponent(cvInfos);
   }
 
-  private initializeComponent(cvInfos: ICvInfos): void {
-    this.contact = cvInfos.contact;
-    this.webLinkList = this.contact?.webLinkList || [];
-    this.birthDate = moment(this.contact?.personalSituation?.birthDate);
-    this.today = moment();
-  }
-
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subscriptionList.forEach(s => s.unsubscribe());
     window.removeEventListener('resize', () => this.innerHeight = window.innerHeight);
   }
 
-  public onAnimation(event: any) {
+  public onAnimation(event: any): void {
     if (
       event.triggerName === 'ContactComponentMobileViewInOut' &&
       event.phaseName === 'done' &&
       event.toState === 'in' &&
       event.fromState === 'out'
     ) {
-      this.showContactBtns = true;
+      this.showContactButtons = true;
     }
 
     if (
@@ -142,7 +140,7 @@ export class ContactComponent implements OnInit, OnDestroy {
 
   public toggleContactMobileOpenClose(): void {
     if (this.contactMobileOpened) {
-      this.showContactBtns = false;
+      this.showContactButtons = false;
     }
   }
 
@@ -177,5 +175,12 @@ export class ContactComponent implements OnInit, OnDestroy {
       url: APP_CREDITS.webAppUrl,
     };
     await this.utilsService.share(shareData);
+  }
+
+  private initializeComponent(cvInfos: ICvInfos): void {
+    this.contact = cvInfos.contact;
+    this.webLinkList = this.contact?.webLinkList || [];
+    this.birthDate = moment(this.contact?.personalSituation?.birthDate);
+    this.today = moment();
   }
 }

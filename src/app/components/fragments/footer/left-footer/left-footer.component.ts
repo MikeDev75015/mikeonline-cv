@@ -79,5 +79,4 @@ export class LeftFooterComponent {
       },
     }).then(() => this.downloading = false);
   }
-
 }
