@@ -1,32 +1,31 @@
-import { AfterViewInit, Component, Input, OnInit, ViewContainerRef } from '@angular/core';
-import { AddComponentsService } from '../../../core/services/add-components/add-components.service';
+import { AfterViewInit, Component, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { ContactOpenCloseService } from '../../../core/services/contact-open-close/contact-open-close.service';
+import { CompetencesComponent } from '../../pages/competences/competences.component';
+import { ExperiencesComponent } from '../../pages/experiences/experiences.component';
+import { FormationsComponent } from '../../pages/formations/formations.component';
+import { InterestsComponent } from '../../pages/interests/interests.component';
+import { PortfolioComponent } from '../../pages/portfolio/portfolio.component';
+import { DynamicComponentLoaderDirective } from './directives/dynamic-component-loader.directive';
 
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
-  styleUrls: ['./main.component.scss']
+  styleUrls: ['./main.component.scss'],
 })
 export class MainComponent implements OnInit, AfterViewInit {
   @Input() hideHeader = false;
-  selectedMenu = '';
-  openedMenu = false;
-  menuTab = false;
-  that: any;
 
-  moduleToShowList = [
-    { hash: 'competences', name: 'Compétences'},
-    { hash: 'experiences', name: 'Expériences'},
-    { hash: 'formations', name: 'Formations'},
-    { hash: 'portfolio', name: 'Portfolio'},
-    { hash: 'interests', name: 'Intérêts'}
-  ];
+  @ViewChild(DynamicComponentLoaderDirective, { static: false }) dynamicComponentLoader!: DynamicComponentLoaderDirective;
 
-  urlHash = MainComponent.getActualHashOrSetDefault();
+  public selectedMenu = '';
 
-  indexTab = this.urlHash ? this.moduleToShowList.findIndex((module) => module.hash === this.urlHash) : 0;
+  public openedMenu = false;
 
-  iconsToAdd: { id: string, icon: string }[] = [
+  public menuTab = false;
+
+  public indexTab: number | undefined;
+
+  private iconsToAdd: { id: string, icon: string }[] = [
     { id: '#icon-comp', icon: '<i class="material-icons">playlist_add_check</i>' },
     { id: '#icon-exp', icon: '<i class="material-icons">business_center</i>' },
     { id: '#icon-form', icon: '<i class="material-icons">school</i>' },
@@ -34,11 +33,39 @@ export class MainComponent implements OnInit, AfterViewInit {
     { id: '#icon-int', icon: '<i class="material-icons">whatshot</i>' },
   ];
 
+  private moduleToShowList = [
+    { hash: 'competences', name: 'Compétences' },
+    { hash: 'experiences', name: 'Expériences' },
+    { hash: 'formations', name: 'Formations' },
+    { hash: 'portfolio', name: 'Portfolio' },
+    { hash: 'interests', name: 'Intérêts' },
+  ];
+
+  private components: (
+    typeof CompetencesComponent | typeof ExperiencesComponent | typeof FormationsComponent |
+    typeof PortfolioComponent | typeof InterestsComponent
+  )[] = [
+    CompetencesComponent,
+    ExperiencesComponent,
+    FormationsComponent,
+    PortfolioComponent,
+    InterestsComponent,
+  ];
+
+  private urlHash: string | undefined;
+
   constructor(
-    private addComponents: AddComponentsService,
     private viewContainerRef: ViewContainerRef,
-    private readonly contactOpenCloseService: ContactOpenCloseService
-  ) {}
+    private readonly contactOpenCloseService: ContactOpenCloseService,
+  ) {
+  }
+
+  private static getActualHashOrSetDefault(): string {
+    return decodeURI(window.location.hash.replace('#', '')) &&
+    decodeURI(window.location.hash.replace('#', '')) !== 'undefined'
+      ? decodeURI(window.location.hash.replace('#', ''))
+      : 'competences';
+  }
 
   private static isMissingLabelsIcons(): boolean {
     return !document.querySelector('#icon-comp') ||
@@ -49,40 +76,62 @@ export class MainComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    if (window.innerWidth > 840 && !this.menuTab) {
-      this.menuTab = true;
-    } else { this.initModules(this); }
+    this.menuTab = window.innerWidth > 840 && !this.menuTab;
 
-    window.addEventListener('resize', () => {
-      this.refreshView(this);
-    });
-
+    this.urlHash = MainComponent.getActualHashOrSetDefault();
+    this.indexTab = this.urlHash ? this.moduleToShowList.findIndex((module) => module.hash === this.urlHash) : 0;
     window.location.hash = `#${this.urlHash}`;
     this.selectedMenu = this.urlHash;
+
+    window.addEventListener('resize', () => {
+      this.refreshView();
+    });
   }
 
   ngAfterViewInit(): void {
     if (this.menuTab && MainComponent.isMissingLabelsIcons()) {
       this.addIconsToLabels();
     }
+
+    if (!this.menuTab) {
+      this.loadModules();
+    }
   }
 
-  refreshView(that: any, forceRefresh = false) {
-    if (window.innerWidth > 840 && (!that.menuTab || forceRefresh)) {
-      that.menuTab = true;
-      // @ts-ignore
-      const moduleToRemove = document.querySelector('app-main').nextElementSibling;
-      if (moduleToRemove && moduleToRemove.nodeName !== 'APP-FOOTER') {
-        // @ts-ignore
-        moduleToRemove.parentElement.removeChild(moduleToRemove);
-      }
-    } else if (window.innerWidth < 841 && (that.menuTab || forceRefresh)) {
-      that.menuTab = false;
-      // @ts-ignore
-      const moduleToRemove = document.querySelector('app-main').nextElementSibling;
-      if (!moduleToRemove || (moduleToRemove && moduleToRemove.nodeName === 'APP-FOOTER')) {
-        that.initModules(that);
-      }
+  public updateHash(select: { target: { className: string | string[]; innerText: string; } }): void {
+    if (
+      !select.target.className ||
+      (select.target.className === 'mat-tab-labels') ||
+      !select.target.className.includes('mat-tab-label')
+    ) {
+      return;
+    }
+
+    const moduleToShow = this.moduleToShowList.find(mod => select.target.innerText.includes(mod.name));
+
+    if (moduleToShow) {
+      window.location.hash = `#${moduleToShow.hash}`;
+      this.selectedMenu = moduleToShow.hash;
+    }
+  }
+
+  public selectMenu(e: MouseEvent, hash: string): void {
+    e.preventDefault();
+    this.loadModules(hash);
+  }
+
+  public toggleMenu(opened: boolean): void {
+    this.contactOpenCloseService.setOpenCloseContactStatus(false);
+    this.openedMenu = opened;
+  }
+
+  private refreshView(): void {
+    if (window.innerWidth > 840 && !this.menuTab) {
+      this.clearViewContainerRef();
+      this.menuTab = true;
+    } else if (window.innerWidth < 841 && this.menuTab) {
+      this.menuTab = false;
+      this.loadModules()
     }
 
     if (this.menuTab && MainComponent.isMissingLabelsIcons()) {
@@ -90,7 +139,7 @@ export class MainComponent implements OnInit, AfterViewInit {
     }
   }
 
-  addIconsToLabels() {
+  private addIconsToLabels(): void {
     let ref = 0;
 
     for (let i = 0; i < this.iconsToAdd.length; i++) {
@@ -101,61 +150,27 @@ export class MainComponent implements OnInit, AfterViewInit {
           icon.id = this.iconsToAdd[i].id;
           icon.style.pointerEvents = 'none';
           icon.innerHTML = this.iconsToAdd[i].icon;
-          if (el) { el.insertBefore(icon, el.firstChild); }
+          if (el) {
+            el.insertBefore(icon, el.firstChild);
+          }
         }
         ref++;
       }, 500);
     }
   }
 
-  updateHash(select: any) {
-    if (
-      !select.target.className ||
-      (select.target.className === 'mat-tab-labels') ||
-      !select.target.className.includes('mat-tab-label')
-    ) { return; }
+  private loadModules(hash?: string): void {
+    this.clearViewContainerRef();
 
-    const moduleToShow = this.moduleToShowList.find(mod => select.target.innerText.includes(mod.name));
-
-    if (moduleToShow) {
-      window.location.hash = `#${moduleToShow.hash}`;
-      this.selectedMenu = moduleToShow.hash;
-    }
-  }
-
-  selectMenu(e: any, hash: string) {
-    e.preventDefault();
-    window.location.hash = `#${hash}`;
-    this.selectedMenu = hash;
+    this.selectedMenu = hash || MainComponent.getActualHashOrSetDefault();
+    window.location.hash = `#${this.selectedMenu}`;
+    this.indexTab = this.moduleToShowList.findIndex((module) => module.hash === this.selectedMenu) || 0;
 
     // @ts-ignore
-    const elToClear = document.querySelector('app-main').nextElementSibling;
-
-    this.indexTab = this.moduleToShowList.findIndex(mod => mod.hash === hash);
-    this.addComponents.addDynamicComponent(this.viewContainerRef, this.indexTab);
-    if (elToClear && elToClear.nodeName !== 'APP-FOOTER') { // @ts-ignore
-      elToClear.parentElement.removeChild(elToClear); }
+    this.dynamicComponentLoader.viewContainerRef.createComponent(this.components[this.indexTab]);
   }
 
-  initModules(that: any) {
-    const urlHash = MainComponent.getActualHashOrSetDefault();
-    this.indexTab = urlHash ? that.moduleToShowList.findIndex((mod: any) => mod.hash === urlHash) : 0;
-    this.selectedMenu = urlHash;
-
-    that.viewContainerRef.clear();
-    that.addComponents.addDynamicComponent(that.viewContainerRef, this.indexTab);
+  private clearViewContainerRef(): void {
+    this.dynamicComponentLoader.viewContainerRef.clear();
   }
-
-  toggleMenu(opened: boolean) {
-    this.contactOpenCloseService.setOpenCloseContactStatus(false);
-    this.openedMenu = opened;
-  }
-
-  private static getActualHashOrSetDefault(): string {
-    return decodeURI(window.location.hash.replace('#', '')) &&
-    decodeURI(window.location.hash.replace('#', '')) !== 'undefined'
-      ? decodeURI(window.location.hash.replace('#', ''))
-      : 'competences';
-  }
-
 }

@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 import moment from 'moment';
 import { lastValueFrom } from 'rxjs';
 import { environment } from '../../../../environments/environment';
@@ -9,7 +9,9 @@ const jsonDateFormat = 'L[ ]LTS';
 
 interface ILogsPayload {
   appName: string;
+
   fileName: string;
+
   toWrite: {
     jsonDate: string;
     toWrite: any;
@@ -17,19 +19,22 @@ interface ILogsPayload {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LoggerService {
-  logsEnabled = environment.ACTIVATED_LOGS;
-  urlBackend = environment.BACKEND_URL;
-  appName = environment.APP_NAME;
+  private logsEnabled = environment.ACTIVATED_LOGS;
+
+  private appName = environment.APP_NAME;
 
   constructor(
     private readonly httpClientService: HttpClientService,
-  ) {}
+  ) {
+  }
 
   public log = this.logsEnabled ? console.log : this.writeLog;
+
   public err = this.logsEnabled ? console.error : this.writeErr;
+
   public warn = this.logsEnabled ? console.warn : this.writeWarn;
 
   private writeLog(log: any, ...optionalParams: any[]): void {
@@ -48,7 +53,9 @@ export class LoggerService {
   }
 
   private buildMsg(msg: any, optionalParams: any[]): any {
-    if (!optionalParams.length) { return msg; }
+    if (!optionalParams.length) {
+      return msg;
+    }
     const builtMsg: { [key: string]: any } = {};
     [msg, ...optionalParams].forEach((v, i) => {
       builtMsg[i] = v;
@@ -63,8 +70,8 @@ export class LoggerService {
       fileName: date.format(fileDateFormat) + type + '.json',
       toWrite: {
         jsonDate: date.format(jsonDateFormat),
-        toWrite
-      }
+        toWrite,
+      },
     };
   }
 
@@ -74,33 +81,33 @@ export class LoggerService {
 }
 
 /*
-environment.ACTIVATED_LOGS
-You must specify the boolean environment variable <<ACTIVATED_LOGS>>
+ environment.ACTIVATED_LOGS
+ You must specify the boolean environment variable <<ACTIVATED_LOGS>>
 
-environment.URL_BACKEND
-You must specify the environment variable <<URL_BACKEND>>
-Example:
+ environment.URL_BACKEND
+ You must specify the environment variable <<URL_BACKEND>>
+ Example:
  - http: // localhost: 5000
  - https://mon-serveur.com
 
-environment.APP_NAME
-You must specify the environment variable <<APP_NAME>>
-*/
+ environment.APP_NAME
+ You must specify the environment variable <<APP_NAME>>
+ */
 
 /* SERVER ROUTE TO WRITE LOGS
-server.post('/write-json-logs', (req, res) => {
-    const {appName, fileName, toWrite} = req.body;
-    console.log({appName, fileName, toWrite});
-    const partList = fileName.split('-');
-    const path = './logs/' + appName + '/' + partList[0] + '/' + partList[1] + '/' + partList[2].split('_')[0];
-        fs.mkdir(path, { recursive: true }, (errM) => {
-        if (errM) res.status(503).send({...errM, status: 'error'});
+ server.post('/write-json-logs', (req, res) => {
+ const {appName, fileName, toWrite} = req.body;
+ console.log({appName, fileName, toWrite});
+ const partList = fileName.split('-');
+ const path = './logs/' + appName + '/' + partList[0] + '/' + partList[1] + '/' + partList[2].split('_')[0];
+ fs.mkdir(path, { recursive: true }, (errM) => {
+ if (errM) res.status(503).send({...errM, status: 'error'});
 
-        fs.writeFile(path + '/' + fileName, jsonFormat(toWrite, jsonFileConfig), 'utf8', function (errW) {
-            if (errW) res.status(503).send({...errW, status: 'error'});
+ fs.writeFile(path + '/' + fileName, jsonFormat(toWrite, jsonFileConfig), 'utf8', function (errW) {
+ if (errW) res.status(503).send({...errW, status: 'error'});
 
-            res.status(200).send({status: 'success'});
-        });
-    });
-});
+ res.status(200).send({status: 'success'});
+ });
+ });
+ });
  */

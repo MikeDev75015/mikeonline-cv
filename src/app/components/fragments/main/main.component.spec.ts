@@ -1,6 +1,4 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import { AddComponentsService } from '../../../core/services/add-components/add-components.service';
-import { DataService } from '../../../shared/services/data/data.service';
 
 import {MainComponent} from './main.component';
 import {MatTabsModule} from '@angular/material/tabs';
@@ -30,8 +28,10 @@ describe('MainComponent', () => {
           selector: 'app-competences'
         }),
         MockComponent({
-          selector: 'app-experiences'}),
-        MockComponent({selector: 'app-formations'
+          selector: 'app-experiences'
+        }),
+        MockComponent({
+          selector: 'app-formations'
         }),
         MockComponent({
           selector: 'app-portfolio'
@@ -41,7 +41,7 @@ describe('MainComponent', () => {
         })
       ],
       providers: [
-        { provide: AddComponentsService, useValue: {} },
+        // { provide: AddComponentsService, useValue: {} },
       ],
     })
     .compileComponents();

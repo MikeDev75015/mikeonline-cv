@@ -1,5 +1,4 @@
 import { AfterViewChecked, Component, OnDestroy, OnInit } from '@angular/core';
-import moment from 'moment';
 import { Subscription } from 'rxjs';
 import {
   EXPERTISE_LEVEL_LABEL,
@@ -12,8 +11,11 @@ import {
   WorldCloudOptions,
 } from '../../../core/core-index';
 import { DataService, UtilsService } from '../../../shared/shared-index';
-
-moment.locale('fr');
+import { selectAllTags } from '../../../core/ngrx/selectors/tags.selectors';
+import { selectAllCompetences, selectCompetencesLoaded } from '../../../core/ngrx/selectors/competences.selectors';
+import { selectAllExperiences } from '../../../core/ngrx/selectors/experiences.selectors';
+import { selectAllFormations } from '../../../core/ngrx/selectors/formations.selectors';
+import { selectAllProjects } from '../../../core/ngrx/selectors/projects.selectors';
 
 declare global {
   interface Window {
@@ -28,7 +30,7 @@ window.WordCloud = window.WordCloud || {};
   styleUrls: ['./competences.component.scss'],
 })
 export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked {
-  public defaultText = 'Cliquez sur une techno pour en savoir +';
+  public defaultText = '';
 
   public selectedKeyword = '';
 
@@ -56,11 +58,7 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
 
   private competencesLoaded = false;
 
-  private competencesList: [string, number][] = [];
-
-  private skillDetails = {
-    expertiseLevel: 4, experienceYears: 2, priority: 2,
-  };
+  private wordList: [string, number][] = [];
 
   private wcDefaultPoliceSize = 15;
 
@@ -83,7 +81,7 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
 
   ngOnInit(): void {
     this.subscriptionList.push(
-      this.dataService.isCompetencesLoaded().subscribe(async (loaded) => {
+      this.dataService.isDataLoaded(selectCompetencesLoaded).subscribe(async (loaded) => {
         if (!loaded) {
           return;
         }
@@ -95,22 +93,25 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
   ngOnDestroy(): void {
     this.subscriptionList.forEach((s) => s.unsubscribe());
 
-    const that = this;
-    // @ts-ignore
-    wcCanvas.removeEventListener('wordcloudstart', () => {
-      that.wordCloudStart();
-    });
-    // @ts-ignore
-    wcCanvas.removeEventListener('wordclouddrawn', () => {
-      that.wordCloudDrawn();
-    });
-    // @ts-ignore
-    wcCanvas.removeEventListener('wordcloudstop', () => {
-      that.addWorldCloudClick();
-    });
+    const wcCanvas = document.getElementById('wc_canvas');
+    if (wcCanvas) {
+      const that = this;
+      // @ts-ignore
+      wcCanvas.removeEventListener('wordcloudstart', () => {
+        that.wordCloudStart();
+      });
+      // @ts-ignore
+      wcCanvas.removeEventListener('wordclouddrawn', () => {
+        that.wordCloudDrawn();
+      });
+      // @ts-ignore
+      wcCanvas.removeEventListener('wordcloudstop', () => {
+        that.addWorldCloudClick();
+      });
+    }
   }
 
-  async ngAfterViewChecked(): Promise<void> {
+  ngAfterViewChecked(): void {
     if (
       !this.initWordCloud &&
       window.WordCloud.isSupported &&
@@ -119,6 +120,7 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
       this.competencesLoaded
     ) {
       this.initWordCloud = true;
+      this.defaultText = 'Chargement des technos en cours...';
 
       setTimeout(async () => {
         await this.loadWorldCloud();
@@ -126,9 +128,9 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
     }
   }
 
-  public pluralize = (value: number) => this.utilsService.pluralize(value);
+  public pluralize = (value: number): string => this.utilsService.pluralize(value);
 
-  public convertDateToNumber = (value: string) => this.utilsService.convertDateToNumber(value);
+  public convertDateToNumber = (value: string): number => this.utilsService.convertDateToNumber(value);
 
   public getExpertiseLevelLabel(value: number): string {
     return this.expertiseLevelLabel[value];
@@ -136,37 +138,6 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
 
   public getPriorityLabel(value: number): string {
     return this.priorityLabel[value];
-  }
-
-  private async loadWorldCloud(): Promise<void> {
-    const that = this;
-    const wcCanvas = document.getElementById('wc_canvas');
-
-    // @ts-ignore
-    wcCanvas.addEventListener('wordcloudstart', () => {
-      that.wordCloudStart();
-    });
-    // @ts-ignore
-    wcCanvas.addEventListener('wordclouddrawn', () => {
-      that.wordCloudDrawn();
-    });
-    // @ts-ignore
-    wcCanvas.addEventListener('wordcloudstop', () => {
-      that.addWorldCloudClick();
-    });
-
-    this.competencesDrawn = 0;
-    this.timeOutToDrawn = 0;
-
-    const tagList = await this.dataService.getSummary();
-    this.competencesList = tagList.map(
-      tag => ([tag.name, this.policeSize(tag.times as number, tag.weight)]),
-    );
-
-    window.WordCloud(wcCanvas, {
-      ...this.setWorldCloudOptions(),
-      list: this.competencesList,
-    });
   }
 
   private wordCloudDrawn() {
@@ -203,12 +174,17 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
 
   private addWorldCloudClick(): void {
     const wcElements = Array.from(document.getElementsByClassName('word-in-cloud'));
-    // tslint:disable-next-line:prefer-for-of
+    if (!wcElements || !wcElements.length) {
+      return;
+    }
+
     for (let element of wcElements) {
       if (!element.getAttribute('init-onclick')) {
         this.addClickActionOnElement(element as HTMLElement);
       }
     }
+
+    this.defaultText = 'Cliquez sur une techno pour en savoir +';
   }
 
   private addClickActionOnElement(el: HTMLElement) {
@@ -224,42 +200,78 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
     el.setAttribute('init-onclick', 'true');
   }
 
+  private async loadWorldCloud(): Promise<void> {
+    const that = this;
+    const wcCanvas = document.getElementById('wc_canvas');
+    if (!wcCanvas) {
+      console.error('Cannot draw the word cloud, the canvas is missing or invalid!');
+      return;
+    }
+
+    // @ts-ignore
+    wcCanvas.addEventListener('wordcloudstart', () => {
+      that.wordCloudStart();
+    });
+    // @ts-ignore
+    wcCanvas.addEventListener('wordclouddrawn', () => {
+      that.wordCloudDrawn();
+    });
+    // @ts-ignore
+    wcCanvas.addEventListener('wordcloudstop', () => {
+      that.addWorldCloudClick();
+    });
+
+    this.competencesDrawn = 0;
+    this.timeOutToDrawn = 0;
+
+    const tagList = await this.dataService.getSummary();
+    this.wordList = tagList.map(
+      tag => ([tag.name, this.policeSize(tag.times as number, tag.weight)]),
+    );
+
+    window.WordCloud(wcCanvas, {
+      ...this.setWorldCloudOptions(),
+      list: this.wordList,
+    });
+  }
+
   private async buildCompetencesSummary(competence: string): Promise<void> {
-    const [tag] = await this.dataService.getTags<ITag[]>(competence, 'name');
+    const [tag] = await this.dataService.getStoreData<ITag[]>({
+      selector: selectAllTags,
+      defaultValue: [],
+      value: competence,
+      property: 'name',
+    });
 
-    await this.getRelatedExperiences(tag.id);
-    await this.getRelatedFormations(tag.id);
-    await this.getRelatedProjects(tag.id);
-    await this.getRelatedCompetences(tag.id);
-  }
+    const allRelatedList = await Promise.all([
+      { list: this.experienceList, selector: selectAllExperiences },
+      { list: this.formationList, selector: selectAllFormations },
+      { list: this.portfolioList, selector: selectAllProjects },
+      { list: this.competenceList, selector: selectAllCompetences },
+    ].map((v) => {
+      return this.dataService.getStoreData<typeof v.list>({
+        selector: v.selector, defaultValue: [], value: tag.id, property: 'tagIdList',
+      });
+    }));
 
-  private async getRelatedExperiences(tagId: number): Promise<void> {
-    this.experienceList = await this.dataService.getExperiences<IExperience[]>(tagId, 'tagIdList');
-  }
-
-  private async getRelatedFormations(tagId: number): Promise<void> {
-    this.formationList = await this.dataService.getFormations<IFormation[]>(tagId, 'tagIdList');
-  }
-
-  private async getRelatedProjects(tagId: number): Promise<void> {
-    this.portfolioList = (await this.dataService.getProjects<IProject[]>(tagId, 'tagIdList')).map(s => ({
+    this.experienceList = allRelatedList[0] as IExperience[];
+    this.formationList = allRelatedList[1] as IFormation[];
+    this.portfolioList = allRelatedList[2].map(s => ({
       ...s,
       technoList: this.utilsService.initTechnoListWithTagList(s.tagList as ITag[]),
-    }));
-  }
-
-  private async getRelatedCompetences(tagId: number): Promise<void> {
-    this.competenceList = (await this.dataService.getCompetences<ICompetence[]>(tagId, 'tagIdList')).map(c => {
+    })) as IProject[];
+    this.competenceList = allRelatedList[3].map((c) => {
+      const comp = c as ICompetence;
       const experienceYearsText = this.utilsService.dateConverter(
-        c.startDate + '-01', 'startOf', 'year', 'fromNow', true,
+        comp.startDate + '-01', 'startOf', 'year', 'fromNow', true,
       );
       return {
-        ...c,
+        ...comp,
         experienceYears: {
           text: experienceYearsText,
           value: this.utilsService.convertDateToNumber(experienceYearsText),
         },
       };
-    });
+    }) as ICompetence[];
   }
 }

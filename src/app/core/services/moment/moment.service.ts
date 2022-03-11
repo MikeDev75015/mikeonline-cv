@@ -26,6 +26,18 @@ export class MomentService {
   }
 
   /**
+   * Gets the formatted date
+   * @param date
+   * @param format The expected format
+   * @returns an ISO date by default
+   */
+  public static getFormattedDate(date: string, format?: string): string {
+    return moment(date)
+      .locale('fr')
+      .format(format);
+  }
+
+  /**
    * Gets the calculated date
    * @param type
    * @param delay
@@ -35,18 +47,6 @@ export class MomentService {
    */
   public static getDateWithDelay(type: 'add' | 'subtract', delay: number, unit: MomentUnit, format?: string): string {
     return moment()[type](delay, unit)
-    .locale('fr')
-    .format(format);
-  }
-
-  /**
-   * Gets the formatted date
-   * @param date
-   * @param format The expected format
-   * @returns an ISO date by default
-   */
-  public static getFormattedDate(date: string, format?: string): string {
-    return moment(date)
     .locale('fr')
     .format(format);
   }

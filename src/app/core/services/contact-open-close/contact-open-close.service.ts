@@ -2,25 +2,26 @@ import {Injectable} from '@angular/core';
 import {BehaviorSubject, Subject} from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ContactOpenCloseService {
-  openContactMobile$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  heightIsTooSmall$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private openContactMobile$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-  onOpenCloseContactStatusChange(): Subject<boolean> {
+  private isHeightTooSmall$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
+  public onOpenCloseContactStatusChange(): Subject<boolean> {
     return this.openContactMobile$;
   }
 
-  setOpenCloseContactStatus(requestedStatus: boolean): void {
+  public setOpenCloseContactStatus(requestedStatus: boolean): void {
     this.openContactMobile$.next(requestedStatus);
   }
 
-  onHeightIsTooSmallChange(): Subject<boolean> {
-    return this.heightIsTooSmall$;
+  public onHeightIsTooSmallChange(): Subject<boolean> {
+    return this.isHeightTooSmall$;
   }
 
-  setHeightIsTooSmall(updatedStatus: boolean): void {
-    this.heightIsTooSmall$.next(updatedStatus);
+  public setHeightIsTooSmall(updatedStatus: boolean): void {
+    this.isHeightTooSmall$.next(updatedStatus);
   }
 }

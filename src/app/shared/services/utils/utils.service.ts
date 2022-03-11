@@ -4,8 +4,10 @@ import moment from 'moment';
 import { lastValueFrom } from 'rxjs';
 import { ITag } from '../../../core/interfaces/models/tag.interface';
 import { IShareData } from '../../../core/interfaces/share-data.interface';
-import { AlertService } from '../../../core/modules/alert/alert.service';
+import { AlertService } from '../../../core/modules/alert/services/alert.service';
 import { DataService } from '../data/data.service';
+
+moment.locale('fr');
 
 declare global {
   interface window {
@@ -13,20 +15,17 @@ declare global {
   }
 }
 
-moment.locale('fr');
-
 @Injectable({
   providedIn: 'root',
 })
 export class UtilsService {
-  openingUrl = false;
+  private openingUrl = false;
 
   constructor(
     private readonly dataService: DataService,
     private readonly alertService: AlertService,
     private readonly http: HttpClient,
-  ) {
-  }
+  ) {}
 
   /**
    * Sort the array by property in different modes
@@ -74,7 +73,26 @@ export class UtilsService {
     return secondList;
   }
 
-  public pluralize = (length: number) => !length || length <= 1 ? '' : 's';
+  private static getParentElementId(parentElement: any, depth = 0): string {
+    if (depth > 4) {
+      return '';
+    }
+    depth++;
+
+    return parentElement.id
+      ? parentElement.id
+      : UtilsService.getParentElementId(parentElement.parentElement, depth);
+  }
+
+  public static uppercaseFirstLetter = (s: string): string => s.charAt(0).toUpperCase() + s.substring(1);
+
+  public getElementId(element: any): string {
+    return element.id
+      ? element.id
+      : UtilsService.getParentElementId(element.parentElement);
+  }
+
+  public pluralize = (length: number): string => !length || length <= 1 ? '' : 's';
 
   public dateConverter(dateToConvert: string, method: string, labelMethod: string | undefined = undefined, format = 'format', labelFormat?: boolean): string {
     // @ts-ignore
@@ -92,9 +110,9 @@ export class UtilsService {
     return num ? +num[0] : 1;
   }
 
-  public getComputedProperty = (element: Element, property: string) => window.getComputedStyle(element).getPropertyValue(property);
+  public getComputedProperty = (element: Element, property: string): string => window.getComputedStyle(element).getPropertyValue(property);
 
-  public convertPixelsToNumber = (pixels: string, round = false) => round
+  public convertPixelsToNumber = (pixels: string, round = false): number => round
     ? Math.round(+pixels.replace('px', ''))
     : +pixels.replace('px', '');
 
@@ -111,18 +129,6 @@ export class UtilsService {
       }
     }
     return technoList;
-  }
-
-  public async convertImageToBase64(url: string): Promise<string> {
-    const loadedFile = await lastValueFrom(this.http.get(url, { responseType: 'blob' }));
-    return new Promise(resolve => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        resolve(reader.result as string);
-      };
-
-      reader.readAsDataURL(loadedFile);
-    });
   }
 
   public formatPhoneNumber(phoneNumber: string): string {
@@ -150,7 +156,7 @@ export class UtilsService {
     return phoneNumber;
   }
 
-  public uppercaseFirstLetter = (s: string) => s.charAt(0).toUpperCase() + s.substr(1);
+  public uppercaseFirstLetter = (s: string): string => s.charAt(0).toUpperCase() + s.substr(1);
 
   public openURL(url: string): void {
     if (!this.openingUrl) {
@@ -175,6 +181,18 @@ export class UtilsService {
     }
   }
 
+  public async convertImageToBase64(url: string): Promise<string> {
+    const loadedFile = await lastValueFrom(this.http.get(url, { responseType: 'blob' }));
+    return new Promise(resolve => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        resolve(reader.result as string);
+      };
+
+      reader.readAsDataURL(loadedFile);
+    });
+  }
+
   public async share(shareData: IShareData): Promise<void> {
     try {
       // @ts-ignore
@@ -193,5 +211,4 @@ export class UtilsService {
       });
     }
   }
-
 }

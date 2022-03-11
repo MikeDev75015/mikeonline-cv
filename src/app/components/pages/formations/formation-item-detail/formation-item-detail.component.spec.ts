@@ -1,4 +1,6 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { utilsServiceMock } from '../../../../__mocks__/services/utils-service.mock';
+import { UtilsService } from '../../../../shared/services/utils/utils.service';
 
 import {FormationItemDetailComponent} from './formation-item-detail.component';
 import {MomentModule} from 'angular2-moment';
@@ -10,7 +12,10 @@ describe('FormationItemDetailComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ FormationItemDetailComponent ],
-      imports: [MomentModule]
+      imports: [MomentModule],
+      providers: [
+        { provide: UtilsService, useValue: utilsServiceMock },
+      ]
     })
     .compileComponents();
   }));

@@ -1,16 +1,17 @@
 import {Injectable} from '@angular/core';
 import {Subscription} from 'rxjs';
 import {MatDialog} from '@angular/material/dialog';
-import {AlertPopupComponent, DialogData} from './components/alert-popup/alert-popup.component';
+import {AlertPopupComponent} from '../components/alert-popup/alert-popup.component';
+import { DialogData } from '../interfaces/dialog-data.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AlertService {
-  dialogSubscription: Subscription | undefined;
+  private dialogSubscription: Subscription | undefined;
 
   constructor(
-    public readonly dialog: MatDialog
+    public readonly dialog: MatDialog,
   ) {}
 
   public displayAlertDialog(data: DialogData): void {

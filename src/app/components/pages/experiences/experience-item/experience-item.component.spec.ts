@@ -1,12 +1,15 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MomentModule } from 'angular2-moment';
+import { MockComponent } from 'ng2-mock-component';
+import { animationServiceMock } from '../../../../__mocks__/services/animation-service.mock';
+import { utilsServiceMock } from '../../../../__mocks__/services/utils-service.mock';
 import { AlertModule } from '../../../../core/core-index';
-import { DataService, IncompressibleSpacePipe } from '../../../../shared/shared-index';
+import { AnimationsService } from '../../../../core/services/animations/animations.service';
+import { IncompressibleSpacePipe, UtilsService } from '../../../../shared/shared-index';
 
-import {ExperienceItemComponent} from './experience-item.component';
-import {MockComponent} from 'ng2-mock-component';
-import {MomentModule} from 'angular2-moment';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { ExperienceItemComponent } from './experience-item.component';
 
 describe('ExperienceItemComponent', () => {
   let component: ExperienceItemComponent;
@@ -19,20 +22,21 @@ describe('ExperienceItemComponent', () => {
         IncompressibleSpacePipe,
         MockComponent({
           selector: 'app-experience-item-detail',
-          inputs: ['detail']
-        })
+          inputs: ['detail'],
+        }),
       ],
       imports: [
         MomentModule,
-        BrowserAnimationsModule,
+        NoopAnimationsModule,
         HttpClientTestingModule,
-        AlertModule
+        AlertModule,
       ],
       providers: [
-        { provide: DataService, useValue: {} },
-      ]
+        { provide: AnimationsService, useValue: animationServiceMock },
+        { provide: UtilsService, useValue: utilsServiceMock },
+      ],
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

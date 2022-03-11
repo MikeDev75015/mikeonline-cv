@@ -1,10 +1,10 @@
-import {AfterViewChecked, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
-import {Subscription} from 'rxjs';
+import { AfterViewChecked, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { IAnimationServiceResponse } from '../../../../core/core-index';
 import { IExperience } from '../../../../core/interfaces/models/experience.interface';
 import { AnimationsService } from '../../../../core/services/animations/animations.service';
-import { IN_OUT_TEMPLATE_ANIMATION } from '../../../../shared/shared-index';
 import { UtilsService } from '../../../../shared/services/utils/utils.service';
+import { IN_OUT_TEMPLATE_ANIMATION } from '../../../../shared/shared-index';
 
 @Component({
   selector: 'app-experience-item',
@@ -14,36 +14,44 @@ import { UtilsService } from '../../../../shared/services/utils/utils.service';
     ...IN_OUT_TEMPLATE_ANIMATION(
       'ExperienceItemComponent',
       false,
-      {in: 800, out: 700},
-      {style: {maxHeight: '600px'}},
-      {style: {maxHeight: '100px'}}
+      { in: 800, out: 700 },
+      { style: { maxHeight: '600px' } },
+      { style: { maxHeight: '100px' } },
     ),
     ...IN_OUT_TEMPLATE_ANIMATION(
       'ClosedLayer',
-      false
-    )
-  ]
+      false,
+    ),
+  ],
 })
 export class ExperienceItemComponent implements OnInit, OnChanges, OnDestroy, AfterViewChecked {
-  subscriptionList: Subscription[] = [];
+  @Input() exp: IExperience | undefined;
 
-  @Input() exp: IExperience = {} as IExperience;
   @Input() index = -1;
-  enableOpenCloseButtons = false;
-  opened = false;
-  masked = true;
-  elementId = '';
-  btnOpen = true;
-  overflow = '';
-  lineBodyPaddingLeft = '30px';
+
+  public enableOpenCloseButtons = false;
+
+  public opened = false;
+
+  public masked = true;
+
+  public btnOpen = true;
+
+  public overflow = '';
+
+  public lineBodyPaddingLeft = '30px';
+
+  private elementId = '';
+
+  private subscriptionList: Subscription[] = [];
 
   constructor(
     private readonly animationService: AnimationsService,
-    private readonly utilsService: UtilsService
+    private readonly utilsService: UtilsService,
   ) {
   }
 
-  private static showOpenCloseButtons(exp: IExperience) {
+  private static showOpenCloseButtons(exp: IExperience): boolean {
     if (!exp || !exp.detailList || !exp.detailList.length) {
       return false;
     }
@@ -64,21 +72,26 @@ export class ExperienceItemComponent implements OnInit, OnChanges, OnDestroy, Af
   }
 
   ngOnInit(): void {
-    this.lineBodyPaddingLeft = window.innerWidth > 840 ? '50px' : '30px';
-    window.addEventListener('resize', () => this.lineBodyPaddingLeft = window.innerWidth > 840 ? '50px' : '30px');
+    this.subscriptionList.push(this.animationService.watchResponse().subscribe(
+      animationServiceResponse => this.onAnimationServiceResponse(animationServiceResponse),
+    ));
 
-    const animationServiceSubscription = this.animationService.watchResponse()
-      .subscribe(
-        animationServiceResponse => this.onAnimationServiceResponse(animationServiceResponse)
-      );
-    this.subscriptionList.push(animationServiceSubscription);
+    if (!window || !window.innerWidth) {
+      return;
+    }
+
+    this.setLineBodyPaddingLeft();
+
+    window.addEventListener('resize', () => {
+      this.setLineBodyPaddingLeft();
+    });
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subscriptionList.forEach(s => s.unsubscribe());
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges(changes: SimpleChanges): void {
     if (changes && changes['exp'] && changes['exp'].currentValue) {
       this.enableOpenCloseButtons = ExperienceItemComponent.showOpenCloseButtons(changes['exp'].currentValue);
     }
@@ -98,22 +111,14 @@ export class ExperienceItemComponent implements OnInit, OnChanges, OnDestroy, Af
 
       this.overflow = 'init';
       const detailListHeight = this.utilsService.convertPixelsToNumber(
-        this.utilsService.getComputedProperty(detailListDiv, 'height')
+        this.utilsService.getComputedProperty(detailListDiv, 'height'),
       );
       this.overflow = detailListHeight > 570 ? 'auto' : 'hidden';
-      // console.log('detailListDiv ' + this.index + ' height:', detailListHeight, '\noverflow:', this.overflow);
     }
   }
 
   public onAnimation(e: any): void {
-    this.elementId = e.element.id
-      ? e.element.id
-      : e.element.parentElement.id
-        ? e.element.parentElement.id
-        : e.element.parentElement.parentElement.id
-          ? e.element.parentElement.parentElement.id
-          : e.element.parentElement.parentElement.parentElement.id;
-
+    this.elementId = this.utilsService.getElementId(e.element);
     this.animationService.onPhase(e, this.elementId);
   }
 
@@ -124,6 +129,10 @@ export class ExperienceItemComponent implements OnInit, OnChanges, OnDestroy, Af
     }
 
     this.opened = !this.opened;
+  }
+
+  private setLineBodyPaddingLeft(): void {
+    this.lineBodyPaddingLeft = window.innerWidth > 840 ? '50px' : '30px';
   }
 
   private onAnimationServiceResponse(animationServiceResponse: IAnimationServiceResponse): void {

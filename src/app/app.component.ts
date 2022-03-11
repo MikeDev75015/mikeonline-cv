@@ -1,14 +1,12 @@
 import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { SwPush, SwUpdate } from '@angular/service-worker';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { IAnimationServiceResponse } from './core/core-index';
-import { AlertService } from './core/modules/alert/alert.service';
-import { LoggerService } from './core/modules/logger/logger.service';
 import * as ApplicationActions from './core/ngrx/actions/application.actions';
 import { selectAppHideHeader } from './core/ngrx/selectors/application.selectors';
 import { AnimationsService } from './core/services/animations/animations.service';
 import { ContactOpenCloseService } from './core/services/contact-open-close/contact-open-close.service';
+import { PwaService } from './core/services/pwa/pwa.service';
 import { DataService, HEADER_ANIMATION, UtilsService } from './shared/shared-index';
 
 @Component({
@@ -18,43 +16,71 @@ import { DataService, HEADER_ANIMATION, UtilsService } from './shared/shared-ind
   animations: HEADER_ANIMATION,
 })
 export class AppComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {
-  hideHeaderTimeOut: any;
-  timeOutTimeToHide = 4000;
-  pageYOffset = 0;
-  mobileView = false;
-  isHeaderHidden = false;
-  headerHeight = '';
-  headerOnAnimation = true;
+  /**
+   * A boolean to know if it's the mobile view or not
+   */
+  public mobileView = false;
 
-  sectionElement: HTMLElement | undefined;
-  sectionMarginBottom = 0;
-  matTabHeaderHeight = 0;
-  sectionBoundingClientRect: DOMRect | undefined;
-  scrollInterval: any;
-  intervalTimeToScroll = 50;
-  scrollValue = 50;
-  enableScroll = false;
-  disableScrollButtons: string[] = [];
+  /**
+   * A boolean to know if the header is hidden or not
+   */
+  public isHeaderHidden = false;
 
-  minHeightView = 483;
-  heightView: number | undefined;
+  /**
+   * A boolean to know if the header is being animated or not
+   */
+  public headerOnAnimation = true;
 
-  splashScreenDelay = 4000;
-  introductionTime = false;
-  waitingFor: 'hideHeader' | 'showHeader' | undefined;
+  /**
+   * Header height retrieved once the view is displayed
+   */
+  public headerHeight = '';
 
-  subscriptionList: Subscription[] = [];
+  private scrollEnabled = false;
 
+  private introductionTime = false;
+
+  private waitingFor: 'hideHeader' | 'showHeader' | undefined;
+
+  private sectionElement: HTMLElement | undefined;
+
+  private sectionBoundingClientRect: DOMRect | undefined;
+
+  private heightView: number | undefined;
+
+  private hideHeaderTimeOut: any;
+
+  private timeOutTimeToHide = 4000;
+
+  private pageYOffset = 0;
+
+  private sectionMarginBottom = 0;
+
+  private matTabHeaderHeight = 0;
+
+  private minHeightView = 483;
+
+  private splashScreenDelay = 4000;
+
+  private subscriptionList: Subscription[] = [];
+
+  /**
+   * Dispatches the startAppLoading action
+   * @param store
+   * @param dataService
+   * @param pwaService
+   * @param utilService
+   * @param animationService
+   * @param contactOpenCloseService
+   * @param cdRef
+   */
   constructor(
     private readonly store: Store,
     private readonly dataService: DataService,
-    private readonly alertService: AlertService,
+    private readonly pwaService: PwaService,
     private readonly utilService: UtilsService,
     private readonly animationService: AnimationsService,
     private readonly contactOpenCloseService: ContactOpenCloseService,
-    private readonly logger: LoggerService,
-    private readonly swPush: SwPush,
-    private readonly swUpdate: SwUpdate,
     private readonly cdRef: ChangeDetectorRef,
   ) {
     this.store.dispatch(ApplicationActions.startAppLoading());
@@ -62,11 +88,9 @@ export class AppComponent implements OnInit, AfterViewInit, AfterViewChecked, On
 
   public ngOnInit(): void {
     this.subscriptionList.push(
-      this.animationService.watchResponse().subscribe(
-        (animationServiceResponse) => {
-          this.onAnimationServiceResponse(animationServiceResponse)
-        },
-      )
+      this.animationService.watchResponse().subscribe((animationServiceResponse) => {
+        this.onAnimationServiceResponse(animationServiceResponse);
+      }),
     );
 
     this.subscriptionList.push(
@@ -103,9 +127,9 @@ export class AppComponent implements OnInit, AfterViewInit, AfterViewChecked, On
 
     this.updateView();
 
-    this.initPWA();
-
     this.addEventListenersToWindow();
+
+    this.pwaService.initializeServiceWorker();
   }
 
   public ngOnDestroy(): void {
@@ -130,14 +154,14 @@ export class AppComponent implements OnInit, AfterViewInit, AfterViewChecked, On
       if (!this.headerOnAnimation) {
         this.updateScrollingState();
       } else {
-        this.enableScroll = false;
+        this.scrollEnabled = false;
       }
       this.cdRef.detectChanges();
     }
 
   }
 
-  public onAnimation = (e: any) => this.animationService.onPhase(e);
+  public onAnimation = (e: any): void => this.animationService.onPhase(e);
 
   public showHeader(): void {
     this.stopAutoHideHeaderTimeout();
@@ -166,63 +190,8 @@ export class AppComponent implements OnInit, AfterViewInit, AfterViewChecked, On
     }
   }
 
-  private initPWA(): void {
-    if (this.swPush.isEnabled) {
-      this.subscriptionList.push(
-        this.swPush.notificationClicks.subscribe(notificationPayload => {
-          console.log('notificationPayload:', notificationPayload);
-        }),
-      );
-
-      this.subscriptionList.push(
-        this.swUpdate.versionUpdates.subscribe((event) => {
-          console.log('versionUpdates event:', event.type);
-
-          if (event.type === 'VERSION_INSTALLATION_FAILED') {
-            this.showUpdateErrorMessage();
-            return;
-          }
-
-          this.showUpdateInvitation();
-        }),
-      );
-
-    } else {
-      console.warn('service worker unavailable');
-    }
-  }
-
-  private showUpdateErrorMessage(): void {
-    this.alertService.displayAlertDialog({
-      title: 'Oups',
-      msg: 'Je n\'ai pas réussi à mettre l\'app à jour :(',
-      closeBtnLabel: 'fermer',
-    });
-  }
-
-  private showUpdateInvitation(): void {
-    this.alertService.displayConfirmDialog({
-      title: 'mise à jour disponible...',
-      msg: 'Hey, il existe une version plus récente de cette app ;)',
-      actionsList: [
-        { name: 'mettre à jour', action: 'update' },
-      ],
-    }).then(action => {
-      if (action === 'update') {
-        this.swUpdate.activateUpdate().then((updated) => {
-          if (!updated) {
-            this.showUpdateErrorMessage();
-            return;
-          }
-
-          window.location.reload();
-        });
-      }
-    });
-  }
-
   private updateView(): void {
-    this.pageYOffset = window.pageYOffset;
+    this.pageYOffset = window.scrollY;
     this.mobileView = window.innerWidth <= 840;
     if (this.pageYOffset && !this.isHeaderHidden) {
       this.updateWrapperHeaderHeight();
@@ -266,7 +235,7 @@ export class AppComponent implements OnInit, AfterViewInit, AfterViewChecked, On
         .getPropertyValue('height'), true) + 1;
       this.sectionBoundingClientRect = this.sectionElement.getBoundingClientRect();
 
-      this.enableScroll = this.getSectionHeight() - window.innerHeight > 0;
+      this.scrollEnabled = this.getSectionHeight() - window.innerHeight > 0;
     }
   }
 
