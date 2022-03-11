@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { IInterest } from '../../../core/core-index';
+import { selectAllInterests, selectInterestsLoaded } from '../../../core/ngrx/selectors/interests.selectors';
 import { DataService } from '../../../shared/shared-index';
 
 @Component({
@@ -9,20 +10,22 @@ import { DataService } from '../../../shared/shared-index';
   styleUrls: ['./interests.component.scss']
 })
 export class InterestsComponent implements OnInit, OnDestroy {
-  interestList: IInterest[] | undefined;
+  public interestList: IInterest[] | undefined;
 
   private subscriptionList: Subscription[] = [];
 
   constructor(
     private readonly dataService: DataService,
-  ) {
-  }
+  ) {}
 
-  async ngOnInit() {
+  async ngOnInit(): Promise<void> {
     this.subscriptionList.push(
-      this.dataService.isInterestsLoaded().subscribe((loaded) => {
+      this.dataService.isDataLoaded(selectInterestsLoaded).subscribe((loaded) => {
         if (loaded) {
-          this.dataService.getInterests<IInterest[]>().then(
+          this.dataService.getStoreData<IInterest[]>({
+            selector: selectAllInterests,
+            defaultValue: [],
+          }).then(
             (list) => {
               this.interestList = list;
             },

@@ -1,9 +1,29 @@
-import {AfterViewChecked, ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {Subscription} from 'rxjs';
+import { AfterViewChecked, ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { IAnimationServiceResponse } from '../../../core/core-index';
 import { AnimationsService } from '../../../core/services/animations/animations.service';
-import { IN_OUT_TEMPLATE_ANIMATION } from '../../../shared/shared-index';
 import { UtilsService } from '../../../shared/services/utils/utils.service';
+import { IN_OUT_TEMPLATE_ANIMATION } from '../../../shared/shared-index';
+
+const getMinWidthByWindowInnerWidth = (): '100px' | '50px' => {
+  return window.innerWidth > 840 ? '100px' : '50px';
+};
+
+const getMinWidthByDocumentClientWidth = (): '100px' | '50px' => {
+  return document.body.clientWidth > 840 ? '100px' : '50px';
+};
+
+const adaptMinWidth = (): '100px' | '50px' => {
+  return window.innerWidth
+    ? getMinWidthByWindowInnerWidth()
+    : getMinWidthByDocumentClientWidth();
+};
+
+const calculateWidth = (): string => {
+  return window.innerWidth
+    ? (window.innerWidth * 80 / 100) + 'px'
+    : (document.body.clientWidth * 80 / 100) + 'px';
+};
 
 @Component({
   selector: 'app-vertical-accordion',
@@ -14,46 +34,58 @@ import { UtilsService } from '../../../shared/services/utils/utils.service';
       'VerticalAccordionItem',
       true,
       { in: 500, out: 600 },
-      { style: { minWidth: '{{minWidthOpened}}', maxWidth: window.innerWidth
-            ? (window.innerWidth * 80 / 100) + 'px'
-            : (document.body.clientWidth * 80 / 100) + 'px'},
-        options: { params: { minWidthOpened: window.innerWidth
-              ? (window.innerWidth * 80 / 100) + 'px'
-              : (document.body.clientWidth * 80 / 100) + 'px' }} },
-      { style: { minWidth: window.innerWidth
-            ? (window.innerWidth > 840 ? '100px' : '50px')
-            : (document.body.clientWidth > 840 ? '100px' : '50px'), maxWidth: '{{minWidthClosed}}' },
-        options: { params: { minWidthClosed: window.innerWidth
-              ? (window.innerWidth > 840 ? '100px' : '50px')
-              : (document.body.clientWidth > 840 ? '100px' : '50px') }} },
+      {
+        style: { minWidth: '{{minWidthOpened}}', maxWidth: calculateWidth() },
+        options: { params: { minWidthOpened: calculateWidth() } },
+      },
+      {
+        style: { minWidth: adaptMinWidth(), maxWidth: '{{minWidthClosed}}' },
+        options: { params: { minWidthClosed: adaptMinWidth() } },
+      },
       { in: 0, out: 0 },
       { style: { minWidth: '250px' } },
-      { style: { minWidth: window.innerWidth
-            ? (window.innerWidth > 840 ? '100px' : '50px')
-            : (document.body.clientWidth > 840 ? '100px' : '50px') } }
+      { style: { minWidth: adaptMinWidth() } },
     ),
-  ]
+  ],
 })
 export class VerticalAccordionComponent implements OnInit, OnDestroy, AfterViewChecked {
-  subscriptionList: Subscription[] = [];
-  elementId = '';
-
   @Input() itemList: any[] = [];
+
   @Input() verticalAccordionContainerClass = '';
+
   @Input() verticalAccordionItemClass = '';
+
   @Input() options = {};
 
-  verticalAccordionItemStateDictionary: { [key: string]: any } = {};
-  minWidthOpened = '300px';
-  minWidthClosed = '50px';
-  itemToOpen = '';
-  itemToClose = '';
+  public minWidthOpened = '300px';
+
+  public minWidthClosed = '50px';
+
+  private verticalAccordionItemStateDictionary: { [key: string]: any } = {};
+
+  private itemToOpen = '';
+
+  private itemToClose = '';
+
+  private elementId = '';
+
+  private subscriptionList: Subscription[] = [];
 
   constructor(
     private readonly utilService: UtilsService,
     private readonly animationService: AnimationsService,
-    private readonly cdRef: ChangeDetectorRef
-  ) {}
+    private readonly cdRef: ChangeDetectorRef,
+  ) {
+  }
+
+  private static calculateItemMaxWidth(percent: number): string {
+    if (window.innerWidth) return (window.innerWidth * percent / 100) + 'px';
+    else return (document.body.clientWidth * percent / 100) + 'px';
+  }
+
+  private static returnExpectedItemMinWidth(): '100px' | '50px' {
+    return window.innerWidth ? getMinWidthByWindowInnerWidth() : getMinWidthByDocumentClientWidth();
+  }
 
   ngOnInit(): void {
     if (
@@ -63,7 +95,7 @@ export class VerticalAccordionComponent implements OnInit, OnDestroy, AfterViewC
 
     const animationServiceSubscription = this.animationService.watchResponse()
       .subscribe(
-        animationServiceResponse => this.onAnimationServiceResponse(animationServiceResponse)
+        animationServiceResponse => this.onAnimationServiceResponse(animationServiceResponse),
       );
     this.subscriptionList.push(animationServiceSubscription);
 
@@ -72,7 +104,7 @@ export class VerticalAccordionComponent implements OnInit, OnDestroy, AfterViewC
     });
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subscriptionList.forEach(s => s.unsubscribe());
   }
 
@@ -81,22 +113,61 @@ export class VerticalAccordionComponent implements OnInit, OnDestroy, AfterViewC
     this.cdRef.detectChanges();
   }
 
-  calculateItemMaxWidth(percent: number): string {
-    if (window.innerWidth) return (window.innerWidth * percent / 100) + 'px';
-    else return (document.body.clientWidth * percent / 100) + 'px';
+  public onAnimation(e: any, i: number): void {
+    this.elementId = 'vertical-accordion-item' + i;
+    this.animationService.onPhase(e, this.elementId);
   }
 
-  returnExpectedItemMinWidth(): '100px' | '50px' {
-    if (window.innerWidth) return (window.innerWidth > 840 ? '100px' : '50px');
-    else return (document.body.clientWidth > 840 ? '100px' : '50px');
+  public updateVerticalAccordionItemState(index: number, state: boolean): void {
+    if (state) {
+      const keyList = Object.keys(this.verticalAccordionItemStateDictionary);
+      this.itemToOpen = keyList[index];
+      this.itemToClose = keyList.find((key) => this.verticalAccordionItemStateDictionary[key]) as string;
+
+      if (!this.itemToClose) {
+        this.itemToClose = '';
+        this.setItemState(this.itemToOpen, true);
+        setTimeout(() => this.itemToOpen = '', 550);
+        return;
+      }
+
+      this.setItemState(this.itemToClose, false);
+    }
+  }
+
+  public getItemState(index: number): boolean {
+    return this.verticalAccordionItemStateDictionary['vertical-accordion-item' + index];
+  }
+
+  public isItemToClose(index: number): boolean {
+    return this.itemToClose
+      ? (+this.itemToClose.replace('vertical-accordion-item', '')) === index
+      : false;
+  }
+
+  public isItemToOpen(index: number): boolean {
+    return this.itemToOpen
+      ? (+this.itemToOpen.replace('vertical-accordion-item', '')) === index
+      : false;
+  }
+
+  private setItemState(item: string, state: boolean): void {
+    this.verticalAccordionItemStateDictionary[item] = state;
   }
 
   private updateVerticalAccordionItemMinWidth(): void {
-    this.minWidthOpened = this.calculateItemMaxWidth(50);
-    const minWidthExpected = this.returnExpectedItemMinWidth();
+    this.minWidthOpened = VerticalAccordionComponent.calculateItemMaxWidth(50);
+    const minWidthExpected = VerticalAccordionComponent.returnExpectedItemMinWidth();
     if (this.minWidthClosed !== minWidthExpected) {
       this.minWidthClosed = minWidthExpected;
     }
+  }
+
+  private createVerticalAccordionItemStateDictionary(itemList: any[]): void {
+    itemList.forEach(
+      (item, i) =>
+        this.verticalAccordionItemStateDictionary['vertical-accordion-item' + i] = false, // (i === 0)
+    );
   }
 
   private onAnimationServiceResponse(animationServiceResponse: IAnimationServiceResponse): void {
@@ -120,53 +191,5 @@ export class VerticalAccordionComponent implements OnInit, OnDestroy, AfterViewC
         }, 200);
       }
     }
-  }
-
-  public onAnimation(e: any, i: number): void {
-    this.elementId = 'vertical-accordion-item' + i;
-    this.animationService.onPhase(e, this.elementId);
-  }
-
-  public getItemState(index: number): boolean {
-    return this.verticalAccordionItemStateDictionary['vertical-accordion-item' + index];
-  }
-  private setItemState(item: string, state: boolean): void {
-    this.verticalAccordionItemStateDictionary[item] = state;
-  }
-
-  public isItemToClose(index: number): boolean {
-    return this.itemToClose
-      ? (+this.itemToClose.replace('vertical-accordion-item', '')) === index
-      : false;
-  }
-  public isItemToOpen(index: number): boolean {
-    return this.itemToOpen
-      ? (+this.itemToOpen.replace('vertical-accordion-item', '')) === index
-      : false;
-  }
-
-  public updateVerticalAccordionItemState(index: number, state: boolean) {
-    if (state) {
-      const keyList = Object.keys(this.verticalAccordionItemStateDictionary);
-      this.itemToOpen = keyList[index];
-      this.itemToClose = keyList.find((key) => this.verticalAccordionItemStateDictionary[key]) as string;
-
-      if (!this.itemToClose) {
-        this.itemToClose = '';
-        this.setItemState(this.itemToOpen, true);
-        setTimeout(() => this.itemToOpen = '', 550);
-        return;
-      }
-
-      this.setItemState(this.itemToClose, false);
-
-    }
-  }
-
-  private createVerticalAccordionItemStateDictionary(itemList: any[]) {
-    itemList.forEach(
-      (item, i) =>
-        this.verticalAccordionItemStateDictionary['vertical-accordion-item' + i] = false // (i === 0)
-    );
   }
 }

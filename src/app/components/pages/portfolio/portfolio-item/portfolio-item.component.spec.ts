@@ -1,4 +1,6 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { utilsServiceMock } from '../../../../__mocks__/services/utils-service.mock';
+import { UtilsService } from '../../../../shared/shared-index';
 
 import {PortfolioItemComponent} from './portfolio-item.component';
 
@@ -8,7 +10,10 @@ describe('PortfolioItemComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PortfolioItemComponent ]
+      declarations: [ PortfolioItemComponent ],
+      providers: [
+        { provide: UtilsService, useValue: utilsServiceMock },
+      ]
     })
     .compileComponents();
   }));

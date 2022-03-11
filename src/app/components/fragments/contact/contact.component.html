@@ -60,10 +60,10 @@
     <div
       (@MobileContactBtnsInOut.done)="onAnimation($event)"
       (@MobileContactBtnsInOut.start)="onAnimation($event)"
-      [@MobileContactBtnsInOut]="showContactBtns"
+      [@MobileContactBtnsInOut]="showContactButtons"
       class="fcc wrap"
     >
-      <ng-container *ngIf="showContactBtns">
+      <ng-container *ngIf="showContactButtons">
         <app-btn-mobile-contact
           [btnClass]="'lieu'"
           [btnIcon]="'fas fa-map-marker-alt'"
@@ -73,7 +73,7 @@
         ></app-btn-mobile-contact>
       </ng-container>
 
-      <ng-container *ngIf="showContactBtns">
+      <ng-container *ngIf="showContactButtons">
         <app-btn-mobile-contact
           (click)="call()"
           [btnIcon]="'fas fa-phone-alt'"
@@ -84,7 +84,7 @@
         ></app-btn-mobile-contact>
       </ng-container>
 
-      <ng-container *ngIf="showContactBtns">
+      <ng-container *ngIf="showContactButtons">
         <app-btn-mobile-contact
           (click)="sendMail()"
           [btnIcon]="'fas fa-envelope'"
@@ -95,7 +95,7 @@
         ></app-btn-mobile-contact>
       </ng-container>
 
-      <ng-container *ngIf="showContactBtns">
+      <ng-container *ngIf="showContactButtons">
         <app-btn-mobile-contact
           (click)="share()"
           [btnIcon]="'fas fa-share-alt'"
@@ -107,7 +107,7 @@
       </ng-container>
 
       <ng-container *ngFor="let webLink of webLinkList">
-        <ng-container *ngIf="showContactBtns">
+        <ng-container *ngIf="showContactButtons">
           <app-btn-mobile-contact
             (click)="openURL(webLink.url)"
 

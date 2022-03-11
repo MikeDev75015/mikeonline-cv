@@ -1,7 +1,8 @@
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import {animate, state, style, transition, trigger} from '@angular/animations';
 import { Subscription } from 'rxjs';
 import { IProject, ITag } from '../../../core/core-index';
+import { selectAllProjects, selectProjectsLoaded } from '../../../core/ngrx/selectors/projects.selectors';
 import { DataService, UtilsService } from '../../../shared/shared-index';
 
 @Component({
@@ -11,23 +12,25 @@ import { DataService, UtilsService } from '../../../shared/shared-index';
   animations: [
     trigger('showHideBackgroundImage', [
       state('show', style({
-        opacity: 0.3
+        opacity: 0.3,
       })),
       state('hide', style({
-        opacity: 0
+        opacity: 0,
       })),
       transition('hide => show', [
-        animate(500)
+        animate(500),
       ]),
       transition('show => hide', [
-        animate(0)
+        animate(0),
       ]),
-    ])
-  ]
+    ]),
+  ],
 })
 export class PortfolioComponent implements OnInit, OnDestroy {
   public siteDemoList: IProject[] = [];
+
   public showImage = false;
+
   public backgroundImage = '';
 
   private timeOutToLoad: any;
@@ -41,18 +44,22 @@ export class PortfolioComponent implements OnInit, OnDestroy {
    */
   constructor(
     private readonly dataService: DataService,
-    private readonly utilsService: UtilsService
-  ) {}
+    private readonly utilsService: UtilsService,
+  ) {
+  }
 
   async ngOnInit(): Promise<void> {
     this.subscriptionList.push(
-      this.dataService.isProjectsLoaded().subscribe((loaded) => {
+      this.dataService.isDataLoaded(selectProjectsLoaded).subscribe((loaded) => {
         if (loaded) {
-          this.dataService.getProjects<IProject[]>().then(
+          this.dataService.getStoreData<IProject[]>({
+            selector: selectAllProjects,
+            defaultValue: [],
+          }).then(
             (list) => {
               const listWithTechnoName: IProject[] = list.map(s => ({
                 ...s,
-                technoList: this.utilsService.initTechnoListWithTagList(s.tagList as ITag[])
+                technoList: this.utilsService.initTechnoListWithTagList(s.tagList as ITag[]),
               }));
               this.siteDemoList = UtilsService.sortList<IProject>(listWithTechnoName, 'asc', 'position', 'number');
             },
@@ -77,7 +84,13 @@ export class PortfolioComponent implements OnInit, OnDestroy {
   }
 
   public onRemoveBackgroundImage(): void {
-    if (this.timeOutToLoad) { clearTimeout(this.timeOutToLoad); this.timeOutToLoad = null; }
-    if (this.showImage || this.backgroundImage) { this.showImage = false; this.backgroundImage = ''; }
+    if (this.timeOutToLoad) {
+      clearTimeout(this.timeOutToLoad);
+      this.timeOutToLoad = null;
+    }
+    if (this.showImage || this.backgroundImage) {
+      this.showImage = false;
+      this.backgroundImage = '';
+    }
   }
 }

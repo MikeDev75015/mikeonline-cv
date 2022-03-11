@@ -7,5 +7,5 @@ import { IDetail } from '../../../../core/core-index';
   styleUrls: ['./experience-item-detail.component.scss']
 })
 export class ExperienceItemDetailComponent {
-  @Input() detail: IDetail = {} as IDetail;
+  @Input() detail: IDetail | undefined;
 }

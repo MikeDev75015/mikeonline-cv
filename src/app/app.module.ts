@@ -65,10 +65,10 @@ import { InterestsEffects } from './core/ngrx/effects/interests.effects';
 import { ProjectsEffects } from './core/ngrx/effects/projects.effects';
 import { TagsEffects } from './core/ngrx/effects/tags.effects';
 import { metaReducers, reducers } from './core/ngrx/ngrx-index';
-import { AddComponentsService } from './core/services/add-components/add-components.service';
 import { HttpClientService } from './core/services/http-client/http-client.service';
 import { PdfCreatorService } from './core/services/pdf-creator/pdf-creator.service';
 import { FirstLetterUppercasePipe, HeaderTitleFormatPipe, IncompressibleSpacePipe } from './shared/shared-index';
+import { DynamicComponentLoaderDirective } from './components/fragments/main/directives/dynamic-component-loader.directive';
 
 @NgModule({
   declarations: [
@@ -98,6 +98,7 @@ import { FirstLetterUppercasePipe, HeaderTitleFormatPipe, IncompressibleSpacePip
     HeaderTitleFormatPipe,
     IncompressibleSpacePipe,
     FirstLetterUppercasePipe,
+    DynamicComponentLoaderDirective,
   ],
   imports: [
     BrowserModule,
@@ -144,7 +145,6 @@ import { FirstLetterUppercasePipe, HeaderTitleFormatPipe, IncompressibleSpacePip
   ],
   providers: [
     HttpClientService,
-    AddComponentsService,
     PdfCreatorService,
   ],
   bootstrap: [AppComponent],

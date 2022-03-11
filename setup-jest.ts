@@ -1,11 +1,11 @@
 import 'jest-preset-angular/setup-jest';
 
-function fail(reason = 'fail was called in a test.') {
-  console.debug(reason);
-  // throw new Error(reason);
+function fail(message: any, optionalParams: any[]) {
+  console.debug(message, ...optionalParams);
+  throw new Error(message);
 }
 
-console.error = (data) => fail(data);
+console.error = (message: any, ...optionalParams: any[]) => fail(message, optionalParams);
 
 /* global mocks for jsdom */
 const mock = () => {

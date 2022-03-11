@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { IExperience, IFormation } from '../../../core/core-index';
+import { IExperience } from '../../../core/core-index';
+import { selectAllExperiences, selectExperiencesLoaded } from '../../../core/ngrx/selectors/experiences.selectors';
 import { MomentService } from '../../../core/services/moment/moment.service';
 import { DataService, UtilsService } from '../../../shared/shared-index';
 
@@ -10,7 +11,7 @@ import { DataService, UtilsService } from '../../../shared/shared-index';
   styleUrls: ['./experiences.component.scss'],
 })
 export class ExperiencesComponent implements OnInit, OnDestroy {
-  experienceList: IExperience[] = [];
+  public experienceList: IExperience[] = [];
 
   private subscriptionList: Subscription[] = [];
 
@@ -19,11 +20,13 @@ export class ExperiencesComponent implements OnInit, OnDestroy {
   ) {
   }
 
-  async ngOnInit() {
+  async ngOnInit(): Promise<void> {
     this.subscriptionList.push(
-      this.dataService.isExperiencesLoaded().subscribe((loaded) => {
+      this.dataService.isDataLoaded(selectExperiencesLoaded).subscribe((loaded) => {
         if (loaded) {
-          this.dataService.getExperiences<IExperience[]>().then(
+          this.dataService.getStoreData<IExperience[]>({
+            selector: selectAllExperiences, defaultValue: [],
+          }).then(
             (list) => {
               this.experienceList = UtilsService.sortList<IExperience>(
                 list.map((e) => {
@@ -36,7 +39,7 @@ export class ExperiencesComponent implements OnInit, OnDestroy {
 
                   return e;
                 }),
-                'desc', 'endDate', 'date'
+                'desc', 'endDate', 'date',
               );
             },
           );

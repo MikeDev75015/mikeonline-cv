@@ -1,5 +1,6 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import { IProject } from '../../../../core/core-index';
+import { UtilsService } from '../../../../shared/shared-index';
 
 @Component({
   selector: 'app-portfolio-item',
@@ -9,6 +10,10 @@ import { IProject } from '../../../../core/core-index';
 export class PortfolioItemComponent implements OnInit, OnDestroy {
   mobileView = false;
   @Input() siteDemo: IProject | undefined;
+
+  constructor(
+    private readonly utilsService: UtilsService,
+  ) {}
 
   ngOnInit() {
     this.mobileView = window.innerWidth <= 840;
@@ -20,6 +25,6 @@ export class PortfolioItemComponent implements OnInit, OnDestroy {
   }
 
   openLinkInTab(link: string): void {
-    window.open(link, '_blank');
+    this.utilsService.openURL(link);
   }
 }

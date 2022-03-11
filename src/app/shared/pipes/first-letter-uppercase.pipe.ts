@@ -9,7 +9,7 @@ export class FirstLetterUppercasePipe implements PipeTransform {
     if (!value) {
       return '';
     }
-    return value.charAt(0).toUpperCase() + value.substr(1);
+    return value.charAt(0).toUpperCase() + value.substring(1);
   }
 
 }

@@ -1,11 +1,11 @@
 import {Pipe, PipeTransform} from '@angular/core';
 
 @Pipe({
-  name: 'headerTitleFormat'
+  name: 'headerTitleFormat',
 })
 export class HeaderTitleFormatPipe implements PipeTransform {
 
-  transform(value: any, ...args: any[]): any {
+  transform(value: any, ...args: any[]): string {
     return value ? value.replace('TS CV', 'TS<br>CV').replace(/ /g, '&nbsp;') : '';
   }
 
