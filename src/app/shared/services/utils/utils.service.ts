@@ -1,13 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import moment from 'moment';
 import { lastValueFrom } from 'rxjs';
 import { ITag } from '../../../core/interfaces/models/tag.interface';
 import { IShareData } from '../../../core/interfaces/share-data.interface';
 import { AlertService } from '../../../core/modules/alert/services/alert.service';
 import { DataService } from '../data/data.service';
-
-moment.locale('fr');
 
 declare global {
   interface window {

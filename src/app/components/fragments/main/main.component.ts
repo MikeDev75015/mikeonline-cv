@@ -131,7 +131,7 @@ export class MainComponent implements OnInit, AfterViewInit {
       this.menuTab = true;
     } else if (window.innerWidth < 841 && this.menuTab) {
       this.menuTab = false;
-      this.loadModules()
+      this.loadModules();
     }
 
     if (this.menuTab && MainComponent.isMissingLabelsIcons()) {
@@ -163,8 +163,8 @@ export class MainComponent implements OnInit, AfterViewInit {
     this.clearViewContainerRef();
 
     this.selectedMenu = hash || MainComponent.getActualHashOrSetDefault();
-    window.location.hash = `#${this.selectedMenu}`;
     this.indexTab = this.moduleToShowList.findIndex((module) => module.hash === this.selectedMenu) || 0;
+    window.location.hash = `#${this.selectedMenu}`;
 
     // @ts-ignore
     this.dynamicComponentLoader.viewContainerRef.createComponent(this.components[this.indexTab]);

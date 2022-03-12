@@ -9,10 +9,10 @@
   <h3 class="fes" style="text-align: right;">
     <span *ngIf="exp.actualJob && !exp.beginDate">En cours</span>
     <span
-      *ngIf="exp.actualJob && exp.beginDate">Depuis {{ exp.beginDate | amLocale:'fr' | amDateFormat:'MMMM YYYY' }}</span>
+      *ngIf="exp.actualJob && exp.beginDate">Depuis {{ exp.beginDate | dateFormat:'MMMM YYYY' }}</span>
     <span *ngIf="!exp.actualJob && exp.beginDate && exp.endDate">
-        De&nbsp;{{ exp.beginDate | amLocale:'fr' | amDateFormat:'MMMM[&nbsp;]YYYY' }}
-      à&nbsp;{{ exp.endDate | amLocale:'fr' | amDateFormat:'MMMM[&nbsp;]YYYY' }}
+        De&nbsp;{{ exp.beginDate | dateFormat:'MMMM[&nbsp;]YYYY' }}
+      à&nbsp;{{ exp.endDate | dateFormat:'MMMM[&nbsp;]YYYY' }}
       </span>
   </h3>
 </div>
