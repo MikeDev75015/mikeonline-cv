@@ -16,7 +16,6 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { MomentModule } from 'angular2-moment';
 import { KnobModule } from 'primeng/knob';
 import { environment } from '../environments/environment';
 
@@ -69,6 +68,7 @@ import { HttpClientService } from './core/services/http-client/http-client.servi
 import { PdfCreatorService } from './core/services/pdf-creator/pdf-creator.service';
 import { FirstLetterUppercasePipe, HeaderTitleFormatPipe, IncompressibleSpacePipe } from './shared/shared-index';
 import { DynamicComponentLoaderDirective } from './components/fragments/main/directives/dynamic-component-loader.directive';
+import { DateFormatPipe } from './shared/pipes/date-format.pipe';
 
 @NgModule({
   declarations: [
@@ -99,6 +99,7 @@ import { DynamicComponentLoaderDirective } from './components/fragments/main/dir
     IncompressibleSpacePipe,
     FirstLetterUppercasePipe,
     DynamicComponentLoaderDirective,
+    DateFormatPipe,
   ],
   imports: [
     BrowserModule,
@@ -136,7 +137,6 @@ import { DynamicComponentLoaderDirective } from './components/fragments/main/dir
     MatTreeModule,
     MatExpansionModule,
     MatBadgeModule,
-    MomentModule,
     FontAwesomeModule,
     LoggerModule,
     AlertModule,

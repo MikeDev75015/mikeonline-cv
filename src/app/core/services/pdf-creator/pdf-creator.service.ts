@@ -8,7 +8,7 @@ import { IExperience } from '../../interfaces/models/experience.interface';
 import { IFormation } from '../../interfaces/models/formation.interface';
 import { IInterest } from '../../interfaces/models/interest.interface';
 import { IProject } from '../../interfaces/models/project.interface';
-import { MomentService } from '../moment/moment.service';
+import { DayJsService } from '../dayjs/dayjs.service';
 
 export interface IPdfColumn {
   width: string | number; // '*', 'auto', '%' or numeric value
@@ -206,14 +206,14 @@ export class PdfCreatorService {
 
   private static getDateToPrint(beginDate: string, endDate?: string): string {
     if (!beginDate && endDate) {
-      return UtilsService.uppercaseFirstLetter(MomentService.getFormattedDate(endDate, 'MMMM YYYY'));
+      return UtilsService.uppercaseFirstLetter(DayJsService.getDate(endDate, 'MMMM YYYY'));
     }
 
     if (!endDate && beginDate) {
-      return `Depuis ${MomentService.getFormattedDate(beginDate, 'MMMM YYYY')}`;
+      return `Depuis ${DayJsService.getDate(beginDate, 'MMMM YYYY')}`;
     }
 
-    return `De ${MomentService.getFormattedDate(beginDate, 'MMMM YYYY')} à ${MomentService.getFormattedDate(endDate!, 'MMMM YYYY')}`;
+    return `De ${DayJsService.getDate(beginDate, 'MMMM YYYY')} à ${DayJsService.getDate(endDate, 'MMMM YYYY')}`;
   }
 
   private static checkLineBreakMode(currentNode: { headlineLevel: number; }, followingNodesOnPage: any[]): string {
@@ -240,7 +240,7 @@ export class PdfCreatorService {
             [
               // @ts-ignore
               {image: logo.src, width: logo.width, height: logo.height},
-              {text: 'Le ' + MomentService.getCurrentDate('L'), style: 'right'},
+              {text: 'Le ' + DayJsService.getDate('L'), style: 'right'},
             ],
             [
               {text: '\n' + contact.fullName, style: 'contact'},
@@ -301,7 +301,7 @@ export class PdfCreatorService {
         if (!f.endDate) {
           return {
             ...f,
-            endDate: MomentService.getCurrentDate('YYYY-MM'),
+            endDate: DayJsService.getDate('YYYY-MM'),
           };
         }
 

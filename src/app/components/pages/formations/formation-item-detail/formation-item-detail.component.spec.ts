@@ -3,7 +3,6 @@ import { utilsServiceMock } from '../../../../__mocks__/services/utils-service.m
 import { UtilsService } from '../../../../shared/services/utils/utils.service';
 
 import {FormationItemDetailComponent} from './formation-item-detail.component';
-import {MomentModule} from 'angular2-moment';
 
 describe('FormationItemDetailComponent', () => {
   let component: FormationItemDetailComponent;
@@ -12,7 +11,7 @@ describe('FormationItemDetailComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ FormationItemDetailComponent ],
-      imports: [MomentModule],
+      imports: [],
       providers: [
         { provide: UtilsService, useValue: utilsServiceMock },
       ]

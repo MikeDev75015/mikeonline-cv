@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import moment from 'moment';
 import { lastValueFrom } from 'rxjs';
 import { environment } from '../../../../environments/environment';
+import { DayJsService } from '../../services/dayjs/dayjs.service';
 import { HttpClientService } from '../../services/http-client/http-client.service';
 
 const fileDateFormat = 'YYYY-MM-DD[_]HH-mm-ss[_]';
@@ -64,12 +64,11 @@ export class LoggerService {
   }
 
   private fileFormat(type: 'log' | 'error' | 'warning', toWrite: any): ILogsPayload {
-    const date = moment();
     return {
       appName: this.appName,
-      fileName: date.format(fileDateFormat) + type + '.json',
+      fileName: DayJsService.getDate(undefined, fileDateFormat) + type + '.json',
       toWrite: {
-        jsonDate: date.format(jsonDateFormat),
+        jsonDate: DayJsService.getDate(undefined, jsonDateFormat),
         toWrite,
       },
     };

@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { IExperience } from '../../../core/core-index';
 import { selectAllExperiences, selectExperiencesLoaded } from '../../../core/ngrx/selectors/experiences.selectors';
-import { MomentService } from '../../../core/services/moment/moment.service';
+import { DayJsService } from '../../../core/services/dayjs/dayjs.service';
 import { DataService, UtilsService } from '../../../shared/shared-index';
 
 @Component({
@@ -33,7 +33,7 @@ export class ExperiencesComponent implements OnInit, OnDestroy {
                   if (!e.endDate) {
                     return {
                       ...e,
-                      endDate: MomentService.getCurrentDate('YYYY-MM'),
+                      endDate: DayJsService.getDate(undefined, 'YYYY-MM'),
                     };
                   }
 
