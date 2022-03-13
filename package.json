@@ -10,12 +10,14 @@
     "jcc": "jest --clearCache",
     "test": "jest",
     "test-coverage": "jest --coverage",
+    "test:ci": "CI=true npm test -- --coverage --testResultsProcessor=jest-sonar-reporter --runInBand",
     "lint": "ng lint",
     "deploy": "firebase deploy --project cv-mikeonline",
     "prerelease": "npm run release -- --prerelease alpha",
     "first-release": "npm run release --first-release",
     "release": "standard-version",
-    "staging-test": "git tag -f test && git push -f origin test"
+    "deploy-test": "git tag -f deploy && git push -f origin deploy",
+    "sonar-test": "git tag -f sonar && git push -f origin sonar"
   },
   "private": true,
   "dependencies": {
