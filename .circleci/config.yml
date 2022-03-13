@@ -57,7 +57,7 @@ jobs:
 
   ci-test-job:
     docker:
-      - image: cimg/node:12
+      - image: circleci/node:12
     resource_class: small
     parameters:
       sonarcloud:
@@ -225,8 +225,6 @@ workflows:
   ci-cd-workflow-staging:
     jobs:
       - ci-test-job:
-          context: OCV_SONARCLOUD
-          sonarcloud: true
           filters:
             branches:
               only:
@@ -238,6 +236,7 @@ workflows:
                 - develop
       - cd-deploy-job-firebase-staging:
           requires:
+            - ci-test-job
             - ci-build-job-staging
           context: FIREBASE
           post-steps:
