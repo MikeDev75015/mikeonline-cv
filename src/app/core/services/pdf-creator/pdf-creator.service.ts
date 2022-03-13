@@ -240,7 +240,7 @@ export class PdfCreatorService {
             [
               // @ts-ignore
               {image: logo.src, width: logo.width, height: logo.height},
-              {text: 'Le ' + DayJsService.getDate('L'), style: 'right'},
+              {text: 'Le ' + DayJsService.getDate(undefined, 'DD MMMM YYYY'), style: 'right'},
             ],
             [
               {text: '\n' + contact.fullName, style: 'contact'},
@@ -301,7 +301,7 @@ export class PdfCreatorService {
         if (!f.endDate) {
           return {
             ...f,
-            endDate: DayJsService.getDate('YYYY-MM'),
+            endDate: DayJsService.getDate(undefined, 'YYYY-MM'),
           };
         }
 

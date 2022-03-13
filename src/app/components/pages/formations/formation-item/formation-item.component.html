@@ -8,13 +8,13 @@
   </div>
   <h3 class="fes" style="text-align: right;">
     <span
-      *ngIf="form.beginDate && !form.endDate">Depuis {{ form.beginDate | dateFormat:'MMMM YYYY' }}</span>
+      *ngIf="form.beginDate && !form.endDate">Depuis {{ form.beginDate | dateFormat:'MMMM[&nbsp;]YYYY' }}</span>
     <span *ngIf="form.beginDate && form.endDate">
         De&nbsp;{{ form.beginDate | dateFormat:'MMMM[&nbsp;]YYYY' }}
       à&nbsp;{{ form.endDate | dateFormat:'MMMM[&nbsp;]YYYY' }}
     </span>
     <span
-      *ngIf="!form.beginDate && form.endDate">{{ form.endDate | dateFormat:'MMMM YYYY' | firstLetterUppercase }}</span>
+      *ngIf="!form.beginDate && form.endDate">{{ form.endDate | dateFormat:'MMMM[&nbsp;]YYYY' | firstLetterUppercase }}</span>
   </h3>
 </div>
 <ng-container *ngIf="form && form.tagList">
