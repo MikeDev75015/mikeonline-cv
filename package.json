@@ -17,7 +17,7 @@
     "first-release": "npm run release --first-release",
     "release": "standard-version",
     "deploy-test": "git tag -f deploy && git push -f origin deploy",
-    "sonar-test": "git tag -f sonar && git push -f origin sonar"
+    "sonar-test": "git tag -f sonar && git push -f upstream sonar"
   },
   "private": true,
   "dependencies": {
