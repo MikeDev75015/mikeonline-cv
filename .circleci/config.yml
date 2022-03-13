@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  sonarcloud: sonarsource/sonarcloud@1.0.3
+  sonarcloud: sonarsource/sonarcloud@1.0.2
   slack: circleci/slack@4.3.0
   jira: circleci/jira@1.3.1
 
@@ -57,7 +57,7 @@ jobs:
 
   ci-test-job:
     docker:
-      - image: circleci/node:12.20
+      - image: circleci/node:12
     resource_class: small
     parameters:
       sonarcloud:
@@ -224,6 +224,13 @@ workflows:
   ##################################### STAGING WORKFLOW - only develop ################################################
   ci-cd-workflow-staging:
     jobs:
+      - ci-test-job:
+          context: OCV_SONARCLOUD
+          sonarcloud: true
+          filters:
+            branches:
+              only:
+                - develop
       - ci-build-job-staging:
           filters:
             branches:
