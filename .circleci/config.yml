@@ -23,8 +23,7 @@ commands:
 jobs:
   ci-build-job-staging:
     docker:
-      - image: circleci/node:12.20
-    resource_class: small
+      - image: circleci/node:lts
     steps:
       - checkout
       - dependencies-in-cache
@@ -40,8 +39,7 @@ jobs:
 
   ci-build-job-production:
     docker:
-      - image: circleci/node:12.20
-    resource_class: small
+      - image: circleci/node:lts
     steps:
       - checkout
       - dependencies-in-cache
@@ -57,9 +55,8 @@ jobs:
 
   ci-test-job:
     docker:
-      - image: circleci/node:12
-#    resource_class: small
-    parallelism: 4
+      - image: circleci/node:lts
+    parallelism: 16
     parameters:
       sonarcloud:
         type: boolean
@@ -84,7 +81,6 @@ jobs:
   cd-deploy-job-firebase-staging:
     docker:
       - image: circleci/node:lts
-    resource_class: small
     steps:
       - checkout
       - dependencies-in-cache
@@ -97,7 +93,6 @@ jobs:
   cd-deploy-job-firebase-production:
     docker:
       - image: circleci/node:lts
-    resource_class: small
     steps:
       - checkout
       - dependencies-in-cache
@@ -110,7 +105,6 @@ jobs:
   notify-success-job:
     docker:
       - image: cimg/base:2020.01
-    resource_class: small
     steps:
       - slack/notify:
           event: always
@@ -119,7 +113,6 @@ jobs:
   notify-waiting-for-approval:
     docker:
       - image: cimg/base:2020.01
-    resource_class: small
     steps:
       - slack/notify:
           event: always
