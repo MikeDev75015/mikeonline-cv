@@ -10,18 +10,16 @@
 
         <!--  subtitle line  -->
         <span *ngIf="line.charAt(0) === '*'" class="fss" style="margin: 5px 0 2px; font-weight: 600;">
-          <!--<span>*&nbsp;</span>-->
           <span>
             {{ line.replace('* ', '') }}
-            {{ detail.date ? ' (' + (detail.date | amLocale:'fr' | amDateFormat:'MMM YYYY') + ')' : '' }}
+            {{ detail.date ? ' (' + (detail.date | dateFormat:'MMM YYYY') + ')' : '' }}
           </span>
         </span>
         <!--  subtitle line  -->
         <span *ngIf="line.charAt(0) === '#'" class="fss" style="margin: 5px 0 2px;">
-          <!--<span>*&nbsp;</span>-->
           <span>
             {{ line.replace('# ', '') }}
-            {{ detail.date ? ' (' + (detail.date | amLocale:'fr' | amDateFormat:'MMM YYYY') + ')' : '' }}
+            {{ detail.date ? ' (' + (detail.date | dateFormat:'MMM YYYY') + ')' : '' }}
           </span>
         </span>
 
@@ -30,12 +28,11 @@
           <span>&nbsp;-&nbsp;</span>
           <span>
             {{ line }}
-            {{ detail.date ? ' (' + (detail.date | amLocale:'fr' | amDateFormat:'MMM YYYY') + ')' : '' }}
+            {{ detail.date ? ' (' + (detail.date | dateFormat:'MMM YYYY') + ')' : '' }}
           </span>
         </span>
 
       </p>
     </div>
-    <!--<p *ngIf="detail.date">&nbsp;({{ detail.date | amLocale:'fr' | amDateFormat:'MMM YYYY' }})</p>-->
   </div>
 </div>

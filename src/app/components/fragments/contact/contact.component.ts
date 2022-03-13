@@ -1,7 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import moment from 'moment';
-import { Moment } from 'moment/moment';
 import { Subscription } from 'rxjs';
 import { APP_CREDITS, IContact, ICvInfos, IWebLink } from '../../../core/core-index';
 import { IShareData } from '../../../core/interfaces/share-data.interface';
@@ -49,10 +47,6 @@ export class ContactComponent implements OnInit, OnDestroy {
   public heightIsTooSmall = false;
 
   public innerHeight = 100;
-
-  private birthDate: Moment = {} as Moment;
-
-  private today: Moment = {} as Moment;
 
   private loading = false;
 
@@ -180,7 +174,5 @@ export class ContactComponent implements OnInit, OnDestroy {
   private initializeComponent(cvInfos: ICvInfos): void {
     this.contact = cvInfos.contact;
     this.webLinkList = this.contact?.webLinkList || [];
-    this.birthDate = moment(this.contact?.personalSituation?.birthDate);
-    this.today = moment();
   }
 }

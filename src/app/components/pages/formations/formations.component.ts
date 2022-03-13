@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { IFormation } from '../../../core/core-index';
 import { selectAllFormations, selectFormationsLoaded } from '../../../core/ngrx/selectors/formations.selectors';
-import { MomentService } from '../../../core/services/moment/moment.service';
+import { DayJsService } from '../../../core/services/dayjs/dayjs.service';
 import { DataService, UtilsService } from '../../../shared/shared-index';
 
 @Component({
@@ -33,7 +33,7 @@ export class FormationsComponent implements OnInit, OnDestroy {
                   if (!f.endDate) {
                     return {
                       ...f,
-                      endDate: MomentService.getCurrentDate('YYYY-MM'),
+                      endDate: DayJsService.getDate(undefined, 'YYYY-MM'),
                     };
                   }
 
