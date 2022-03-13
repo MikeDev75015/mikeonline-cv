@@ -57,7 +57,7 @@ jobs:
 
   ci-test-job:
     docker:
-      - image: cimg/node
+      - image: cimg/node:12
     resource_class: small
     parameters:
       sonarcloud:
