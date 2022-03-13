@@ -183,8 +183,7 @@ workflows:
     jobs:
       - ci-test-job:
           context: OCV_SONARCLOUD
-          parameters:
-            sonarcloud: true
+          sonarcloud: true
           filters:
             branches:
               ignore: /.*/
