@@ -78,9 +78,7 @@ jobs:
       - when:
           condition: << parameters.sonarcloud >>
           steps:
-            - run:
-                name: Run the SonarCloud scan
-                command: sonarcloud/scan
+            - sonarcloud/scan
             - slack/notify:
                 event: fail
                 template: basic_fail_1
