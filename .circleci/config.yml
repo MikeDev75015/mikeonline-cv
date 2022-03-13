@@ -58,7 +58,8 @@ jobs:
   ci-test-job:
     docker:
       - image: circleci/node:12
-    resource_class: small
+#    resource_class: small
+    parallelism: 4
     parameters:
       sonarcloud:
         type: boolean
@@ -79,9 +80,6 @@ jobs:
           condition: << parameters.sonarcloud >>
           steps:
             - sonarcloud/scan
-            - slack/notify:
-                event: fail
-                template: basic_fail_1
 
   cd-deploy-job-firebase-staging:
     docker:
