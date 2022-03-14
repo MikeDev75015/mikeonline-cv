@@ -8,7 +8,6 @@ import { DataService, UtilsService } from '../../../shared/shared-index';
 @Component({
   selector: 'app-formations',
   templateUrl: './formations.component.html',
-  styleUrls: ['./formations.component.scss'],
 })
 export class FormationsComponent implements OnInit, OnDestroy {
   public formationList: any[] = [];

@@ -8,7 +8,6 @@ import { IN_OUT_TEMPLATE_ANIMATION } from '../../../../shared/shared-index';
 @Component({
   selector: 'app-vertical-accordion-last-item',
   templateUrl: './vertical-accordion-last-item.component.html',
-  styleUrls: ['./vertical-accordion-last-item.component.scss'],
   animations: [
     ...IN_OUT_TEMPLATE_ANIMATION(
       'VerticalAccordionItemComponentBody',

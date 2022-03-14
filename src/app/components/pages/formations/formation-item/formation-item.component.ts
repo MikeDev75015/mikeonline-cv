@@ -9,7 +9,6 @@ import { IN_OUT_TEMPLATE_ANIMATION } from '../../../../shared/shared-index';
 @Component({
   selector: 'app-formation-item',
   templateUrl: './formation-item.component.html',
-  styleUrls: ['./formation-item.component.scss'],
   animations: [
     ...IN_OUT_TEMPLATE_ANIMATION(
       'FormationItemComponent',

@@ -9,7 +9,6 @@ import { IN_OUT_TEMPLATE_ANIMATION } from '../../../../shared/shared-index';
 @Component({
   selector: 'app-experience-item',
   templateUrl: './experience-item.component.html',
-  styleUrls: ['./experience-item.component.scss'],
   animations: [
     ...IN_OUT_TEMPLATE_ANIMATION(
       'ExperienceItemComponent',

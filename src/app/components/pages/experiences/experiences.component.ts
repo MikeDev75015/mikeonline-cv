@@ -8,7 +8,6 @@ import { DataService, UtilsService } from '../../../shared/shared-index';
 @Component({
   selector: 'app-experiences',
   templateUrl: './experiences.component.html',
-  styleUrls: ['./experiences.component.scss'],
 })
 export class ExperiencesComponent implements OnInit, OnDestroy {
   public experienceList: IExperience[] = [];

@@ -14,8 +14,6 @@ export class PdfDefinition {
     // Custom properties:
     // You can add custom properties. Key of property not contain spaces.
   };
-  userPassword?: string;
-  ownerPassword?: string;
   permissions?: {
     printing?: 'highResolution' | 'lowResolution', // whether printing is allowed. Specify "lowResolution" to allow degraded printing,
     // or "highResolution" to allow printing with high resolution
@@ -60,7 +58,4 @@ export class PdfDefinition {
   content = [];
   header?: any;
   footer?: any;
-
-  constructor() {
-  }
 }

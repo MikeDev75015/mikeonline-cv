@@ -1,22 +1,25 @@
-import {animate, state, style, transition, trigger} from '@angular/animations';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 /**
  * Payload interface to pass to define a state
  */
 interface IInOutPayload {
   style: any;
+
   options?: {
     params: any;
-  }
-};
+  };
+}
 
 /**
  * Payload interface to pass to specify the transition times
  */
 interface IDelay {
   in: number;
+
   out: number;
-};
+}
+
 /**
  * Default payload representing input state
  */
@@ -40,9 +43,9 @@ const defaultDelay = { in: 400, out: 400 };
  * @param delay, the payload to specify the incoming and outgoing delays, 500ms by default
  * @param inPayload, the payload representing input state, opacity at 1 by default
  * @param outPayload, the payload representing the exit state, opacity at 0 by default
- * @param voidDelay, the payload to specify the incoming and outgoing delays for the initial transitions, null by default
- * @param voidInPayload, the payload representing the initial input state, null by default
- * @param voidOutPayload, the payload representing the initial exit state, null by default
+ * @param voidOptions Optional. Contains voidDelay, the payload to specify the incoming and outgoing delays for the
+ * initial transitions, undefined by default. voidInPayload, the payload representing the initial input state, undefined by
+ * default. voidOutPayload, the payload representing the initial exit state, undefined by default.
  * @constructor
  */
 //@ts-ignore
@@ -52,10 +55,16 @@ export function IN_OUT_TEMPLATE_ANIMATION(
   delay: IDelay = defaultDelay,
   inPayload: IInOutPayload = defaultInPayload,
   outPayload: IInOutPayload = defaultOutPayload,
-  voidDelay: IDelay | undefined = undefined,
-  voidInPayload: IInOutPayload | undefined = undefined,
-  voidOutPayload: IInOutPayload  | undefined= undefined
+  voidOptions?: {
+    voidDelay?: IDelay;
+    voidInPayload?: IInOutPayload;
+    voidOutPayload?: IInOutPayload;
+  },
 ) {
+  const { voidDelay, voidInPayload, voidOutPayload } = voidOptions ? voidOptions : {
+    voidDelay: undefined, voidInPayload: undefined, voidOutPayload: undefined,
+  };
+
   return [
     trigger(component + 'InOut', [
 
@@ -64,30 +73,30 @@ export function IN_OUT_TEMPLATE_ANIMATION(
           style(voidInPayload?.style || inPayload.style),
           animate(voidDelay?.in || 0)])
         : state('voidIn',
-            style(voidInPayload?.style || inPayload.style),
-        voidInPayload?.options || inPayload.options),
+          style(voidInPayload?.style || inPayload.style),
+          voidInPayload?.options || inPayload.options),
 
       animateVoid
         ? transition('void => out', [
           style(voidOutPayload?.style || outPayload.style),
           animate(voidDelay?.out || 0)])
         : state('voidOut',
-            style(voidOutPayload?.style || outPayload.style),
-        voidOutPayload?.options || outPayload.options),
+          style(voidOutPayload?.style || outPayload.style),
+          voidOutPayload?.options || outPayload.options),
 
       state('in', style(inPayload.style), inPayload.options),
       state('out', style(outPayload.style), outPayload.options),
 
       transition('out => in', [
         outPayload.style.display && outPayload.style.display === 'none'
-          ? style({...outPayload.style, display: inPayload.style.display})
+          ? style({ ...outPayload.style, display: inPayload.style.display })
           : style(outPayload.style),
-        animate(delay.in)
+        animate(delay.in),
       ]),
       transition('in => out', [
-        animate(delay.out)
+        animate(delay.out),
       ]),
-    ])
+    ]),
   ];
 
 }
