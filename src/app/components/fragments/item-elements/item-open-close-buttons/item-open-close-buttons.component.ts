@@ -6,7 +6,6 @@ import { UtilsService } from '../../../../shared/services/utils/utils.service';
 @Component({
   selector: 'app-item-open-close-buttons',
   templateUrl: './item-open-close-buttons.component.html',
-  styleUrls: ['./item-open-close-buttons.component.scss'],
   animations: [
     ...IN_OUT_TEMPLATE_ANIMATION(
       'ClosedLayer',
