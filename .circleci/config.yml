@@ -34,8 +34,8 @@ commands:
           name: Set user name
           command: git config user.name ${GIT_USER_NAME}
 
-  sonar-scan:
-    description: Run the sonarcloud scan
+  push-sonar-tag:
+    description: Push tag to run sonarcloud scan
     steps:
       - run: git tag -f sonar && git push -f https://${SONAR_REPO_USER}:${SONAR_REPO_PASS}@bitbucket.org/${SONAR_REPO_TEAM}/${SONAR_REPO_NAME}.git sonar
 
@@ -80,8 +80,11 @@ jobs:
   ci-test-job:
     docker:
       - image: cimg/node:12.22
-    parallelism: 16
+    parallelism: 8
     parameters:
+      sonartag:
+        type: boolean
+        default: false
       sonarcloud:
         type: boolean
         default: false
@@ -98,9 +101,14 @@ jobs:
       - store_artifacts:
           path: ./reports/junit
       - when:
+          condition: << parameters.sonartag >>
+          steps:
+            - push-sonar-tag
+      - when:
           condition: << parameters.sonarcloud >>
           steps:
-            - sonar-scan
+            - sonarcloud/scan
+
 
   cd-release-job:
     docker:
@@ -169,14 +177,14 @@ workflows:
     jobs:
       - ci-test-job:
           context: OCV_SONARCLOUD
-          sonarcloud: true
+          sonartag: true
           filters:
             branches:
               ignore:
                 - master
                 - develop
 
-  ##################################### SONAR TEST WORKFLOW - on sonar TAG #####################################
+  ##################################### SONAR CLOUD WORKFLOW - on sonar TAG #####################################
   ci-sonar-workflow:
     when:
       equal: [ << pipeline.git.tag >>, sonar ]
