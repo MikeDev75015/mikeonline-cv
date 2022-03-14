@@ -1,0 +1,5 @@
+<ng-container *ngIf="tagList">
+  <div class="line-tags fss wrap w100">
+    <p class="chip fcc" *ngFor="let tag of tagList" [title]="tag.name" [innerHTML]="tag.name"></p>
+  </div>
+</ng-container>

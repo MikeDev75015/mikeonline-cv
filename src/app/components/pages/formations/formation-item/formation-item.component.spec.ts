@@ -24,6 +24,18 @@ describe('FormationItemComponent', () => {
           selector: 'app-formation-item-detail',
           inputs: ['detail'],
         }),
+        MockComponent({
+          selector: 'app-item-dates',
+          inputs: [],
+        }),
+        MockComponent({
+          selector: 'app-item-tag-list',
+          inputs: ['tagList'],
+        }),
+        MockComponent({
+          selector: 'app-item-open-close-buttons',
+          inputs: ['enableOpenCloseButtons', 'masked', 'opened', 'btnOpen'],
+        }),
       ],
       imports: [
         BrowserAnimationsModule,

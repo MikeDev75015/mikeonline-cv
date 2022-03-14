@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { IAnimationServiceResponse } from '../../../../core/core-index';
 import { IExperience } from '../../../../core/interfaces/models/experience.interface';
 import { AnimationsService } from '../../../../core/services/animations/animations.service';
+import { TemplatesService } from '../../../../shared/services/templates/templates.service';
 import { UtilsService } from '../../../../shared/services/utils/utils.service';
 import { IN_OUT_TEMPLATE_ANIMATION } from '../../../../shared/shared-index';
 
@@ -24,7 +25,7 @@ import { IN_OUT_TEMPLATE_ANIMATION } from '../../../../shared/shared-index';
   ],
 })
 export class ExperienceItemComponent implements OnInit, OnChanges, OnDestroy, AfterViewChecked {
-  @Input() exp: IExperience | undefined;
+  @Input() experience: IExperience | undefined;
 
   @Input() index = -1;
 
@@ -50,49 +51,29 @@ export class ExperienceItemComponent implements OnInit, OnChanges, OnDestroy, Af
   ) {
   }
 
-  private static showOpenCloseButtons(exp: IExperience): boolean {
-    if (!exp || !exp.detailList || !exp.detailList.length) {
-      return false;
-    }
-
-    const totalDetailListLines = exp.detailList.reduce((totalLine, detail) => {
-      let lines = 0;
-      if (detail.title) {
-        lines++;
-      }
-      if (detail.lineList) {
-        lines += detail.lineList.length;
-      }
-      totalLine += lines;
-      return totalLine;
-    }, 0);
-
-    return totalDetailListLines > 4;
-  }
-
   ngOnInit(): void {
     this.subscriptionList.push(this.animationService.watchResponse().subscribe(
       animationServiceResponse => this.onAnimationServiceResponse(animationServiceResponse),
     ));
 
-    if (!window || !window.innerWidth) {
-      return;
-    }
-
-    this.setLineBodyPaddingLeft();
+    this.lineBodyPaddingLeft = TemplatesService.setLineBodyPaddingLeft();
 
     window.addEventListener('resize', () => {
-      this.setLineBodyPaddingLeft();
+      this.lineBodyPaddingLeft = TemplatesService.setLineBodyPaddingLeft();
     });
   }
 
   ngOnDestroy(): void {
     this.subscriptionList.forEach(s => s.unsubscribe());
+
+    window.removeEventListener('resize', () => {
+      this.lineBodyPaddingLeft = TemplatesService.setLineBodyPaddingLeft();
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes && changes['exp'] && changes['exp'].currentValue) {
-      this.enableOpenCloseButtons = ExperienceItemComponent.showOpenCloseButtons(changes['exp'].currentValue);
+      this.enableOpenCloseButtons = TemplatesService.showOpenCloseButtons(changes['exp'].currentValue);
     }
   }
 
@@ -128,10 +109,6 @@ export class ExperienceItemComponent implements OnInit, OnChanges, OnDestroy, Af
     }
 
     this.opened = !this.opened;
-  }
-
-  private setLineBodyPaddingLeft(): void {
-    this.lineBodyPaddingLeft = window.innerWidth > 840 ? '50px' : '30px';
   }
 
   private onAnimationServiceResponse(animationServiceResponse: IAnimationServiceResponse): void {

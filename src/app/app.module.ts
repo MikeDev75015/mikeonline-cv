@@ -34,9 +34,6 @@ import { OneLetterByLinePipe } from './components/fragments/vertical-accordion/p
 import {
   VerticalAccordionItemComponent,
 } from './components/fragments/vertical-accordion/vertical-accordion-item/vertical-accordion-item.component';
-import {
-  VerticalAccordionLastItemComponent,
-} from './components/fragments/vertical-accordion/vertical-accordion-last-item/vertical-accordion-last-item.component';
 import { VerticalAccordionComponent } from './components/fragments/vertical-accordion/vertical-accordion.component';
 import { CompetencesComponent } from './components/pages/competences/competences.component';
 import {
@@ -69,6 +66,9 @@ import { PdfCreatorService } from './core/services/pdf-creator/pdf-creator.servi
 import { FirstLetterUppercasePipe, HeaderTitleFormatPipe, IncompressibleSpacePipe } from './shared/shared-index';
 import { DynamicComponentLoaderDirective } from './components/fragments/main/directives/dynamic-component-loader.directive';
 import { DateFormatPipe } from './shared/pipes/date-format.pipe';
+import { ItemTagListComponent } from './components/fragments/item-elements/item-tag-list/item-tag-list.component';
+import { ItemOpenCloseButtonsComponent } from './components/fragments/item-elements/item-open-close-buttons/item-open-close-buttons.component';
+import { ItemDatesComponent } from './components/fragments/item-elements/item-dates/item-dates.component';
 
 @NgModule({
   declarations: [
@@ -92,7 +92,6 @@ import { DateFormatPipe } from './shared/pipes/date-format.pipe';
     LeftFooterComponent,
     VerticalAccordionComponent,
     VerticalAccordionItemComponent,
-    VerticalAccordionLastItemComponent,
     BtnMobileContactComponent,
     OneLetterByLinePipe,
     HeaderTitleFormatPipe,
@@ -100,6 +99,9 @@ import { DateFormatPipe } from './shared/pipes/date-format.pipe';
     FirstLetterUppercasePipe,
     DynamicComponentLoaderDirective,
     DateFormatPipe,
+    ItemTagListComponent,
+    ItemOpenCloseButtonsComponent,
+    ItemDatesComponent,
   ],
   imports: [
     BrowserModule,

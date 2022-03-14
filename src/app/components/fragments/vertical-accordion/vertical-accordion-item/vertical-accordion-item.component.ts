@@ -19,7 +19,9 @@ import { IN_OUT_TEMPLATE_ANIMATION } from '../../../../shared/shared-index';
   ],
 })
 export class VerticalAccordionItemComponent implements OnInit, AfterViewChecked {
-  @Input() itemData: IInterest | undefined;
+  @Input() lastItem = false;
+
+  @Input() itemData!: IInterest;
 
   @Input() itemClass = '';
 

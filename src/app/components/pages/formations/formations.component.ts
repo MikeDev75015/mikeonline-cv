@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { IFormation } from '../../../core/core-index';
 import { selectAllFormations, selectFormationsLoaded } from '../../../core/ngrx/selectors/formations.selectors';
-import { DayJsService } from '../../../core/services/dayjs/dayjs.service';
 import { DataService, UtilsService } from '../../../shared/shared-index';
 
 @Component({
@@ -28,16 +27,7 @@ export class FormationsComponent implements OnInit, OnDestroy {
           }).then(
             (list) => {
               this.formationList = UtilsService.sortList<IFormation>(
-                list.map((f) => {
-                  if (!f.endDate) {
-                    return {
-                      ...f,
-                      endDate: DayJsService.getDate(undefined, 'YYYY-MM'),
-                    };
-                  }
-
-                  return f;
-                }),
+                UtilsService.addMissingEndDate<IFormation>(list),
                 'desc', 'endDate', 'date',
               );
             },

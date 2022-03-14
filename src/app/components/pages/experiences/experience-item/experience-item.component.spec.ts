@@ -23,6 +23,18 @@ describe('ExperienceItemComponent', () => {
           selector: 'app-experience-item-detail',
           inputs: ['detail'],
         }),
+        MockComponent({
+          selector: 'app-item-dates',
+          inputs: ['item'],
+        }),
+        MockComponent({
+          selector: 'app-item-tag-list',
+          inputs: ['tagList'],
+        }),
+        MockComponent({
+          selector: 'app-item-open-close-buttons',
+          inputs: ['enableOpenCloseButtons', 'masked', 'opened', 'btnOpen'],
+        }),
       ],
       imports: [
         NoopAnimationsModule,

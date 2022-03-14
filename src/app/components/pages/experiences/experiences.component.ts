@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { IExperience } from '../../../core/core-index';
 import { selectAllExperiences, selectExperiencesLoaded } from '../../../core/ngrx/selectors/experiences.selectors';
-import { DayJsService } from '../../../core/services/dayjs/dayjs.service';
 import { DataService, UtilsService } from '../../../shared/shared-index';
 
 @Component({
@@ -28,16 +27,7 @@ export class ExperiencesComponent implements OnInit, OnDestroy {
           }).then(
             (list) => {
               this.experienceList = UtilsService.sortList<IExperience>(
-                list.map((e) => {
-                  if (!e.endDate) {
-                    return {
-                      ...e,
-                      endDate: DayJsService.getDate(undefined, 'YYYY-MM'),
-                    };
-                  }
-
-                  return e;
-                }),
+                UtilsService.addMissingEndDate<IExperience>(list),
                 'desc', 'endDate', 'date',
               );
             },
