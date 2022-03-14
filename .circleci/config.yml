@@ -42,7 +42,7 @@ commands:
 jobs:
   ci-build-job:
     docker:
-      - image: cimg/node:12.22.1-buster
+      - image: cimg/node:12.22
     parameters:
       production:
         type: boolean
@@ -79,7 +79,7 @@ jobs:
 
   ci-test-job:
     docker:
-      - image: cimg/node:12.22.1-buster
+      - image: cimg/node:12.22
     parallelism: 16
     parameters:
       sonarcloud:
@@ -104,7 +104,7 @@ jobs:
 
   cd-release-job:
     docker:
-      - image: cimg/node:12.22.1-buster
+      - image: cimg/node:12.22
     steps:
       - checkout
       - dependencies-in-cache
@@ -141,7 +141,7 @@ jobs:
 
   cd-deploy-job-firebase:
     docker:
-      - image: cimg/node:12.22.1-buster
+      - image: cimg/node:12.22
     parameters:
       hosting:
         type: string
