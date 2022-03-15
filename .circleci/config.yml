@@ -134,7 +134,7 @@ jobs:
           command: git checkout master
       - run:
           name: Merge develop
-          command: git merge develop --ff-only
+          command: git merge develop --no-ff
       - run:
           name: Push master
           command: git push https://${REPO_USER}:${REPO_PASS}@bitbucket.org/${REPO_TEAM}/${REPO_NAME}.git master
