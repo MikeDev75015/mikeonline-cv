@@ -133,14 +133,11 @@ jobs:
           name: Checkout to master
           command: git checkout master
       - run:
-          name: Get the package.json version number
-          command: |
-            VERSION_NUMBER=v$(jq -r '.version' package.json)
-            echo ${VERSION_NUMBER}
+          name: Pull master
+          command: git pull https://${REPO_USER}:${REPO_PASS}@bitbucket.org/${REPO_TEAM}/${REPO_NAME}.git master
       - run:
           name: Merge develop in master
-          command: |
-            git pull --no-commit https://${REPO_USER}:${REPO_PASS}@bitbucket.org/${REPO_TEAM}/${REPO_NAME}.git develop && git commit -m "chore: set release ${VERSION_NUMBER}"
+          command: git merge develop --ff-only
       - run:
           name: Push master
           command: git push https://${REPO_USER}:${REPO_PASS}@bitbucket.org/${REPO_TEAM}/${REPO_NAME}.git master
