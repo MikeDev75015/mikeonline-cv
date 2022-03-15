@@ -137,7 +137,7 @@ jobs:
           command: git pull https://${REPO_USER}:${REPO_PASS}@bitbucket.org/${REPO_TEAM}/${REPO_NAME}.git master
       - run:
           name: Merge develop in master
-          command: git merge develop --no-ff
+          command: git merge develop --ff-only
       - run:
           name: Push master
           command: git push https://${REPO_USER}:${REPO_PASS}@bitbucket.org/${REPO_TEAM}/${REPO_NAME}.git master
