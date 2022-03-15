@@ -82,9 +82,6 @@ jobs:
       - image: cimg/node:12.22
     parallelism: 8
     parameters:
-      sonartag:
-        type: boolean
-        default: false
       sonarcloud:
         type: boolean
         default: false
@@ -92,23 +89,26 @@ jobs:
       - checkout
       - dependencies-in-cache
       - run:
-          name: Run tests with JUnit as reporter
+          name: Run tests with JUnit as reporterartag >>
           command: npm run test:ci
           environment:
             JEST_JUNIT_OUTPUT_DIR: ./reports/junit/
       - store_test_results:
-          path: ./reports/junit/
+          path: ./reports/junit/g >>
       - store_artifacts:
           path: ./reports/junit
-      - when:
-          condition: << parameters.sonartag >>
-          steps:
-            - push-sonar-tag
       - when:
           condition: << parameters.sonarcloud >>
           steps:
             - sonarcloud/scan
 
+  ci-sonar-job:
+    docker:
+      - image: cimg/node:12.22
+    steps:
+      - checkout
+      - dependencies-in-cache
+      - push-sonar-tag
 
   cd-release-job:
     docker:
@@ -124,7 +124,7 @@ jobs:
           name: Pull develop
           command: git pull https://${REPO_USER}:${REPO_PASS}@bitbucket.org/${REPO_TEAM}/${REPO_NAME}.git develop
       - run:
-          name: Run standard-version script without generate tag
+          name: Run standard-version without generate tag
           command: npm run release -- --skip.tag
       - run:
           name: Push develop with the new version commit
@@ -176,15 +176,13 @@ workflows:
   ci-default-workflow:
     jobs:
       - ci-test-job:
-          context: OCV_SONARCLOUD
-          sonartag: true
           filters:
             branches:
               ignore:
                 - master
                 - develop
 
-  ##################################### SONAR CLOUD WORKFLOW - on sonar TAG #####################################
+  ######################################## SONAR CLOUD WORKFLOW - on sonar TAG #########################################
   ci-sonar-workflow:
     when:
       equal: [ << pipeline.git.tag >>, sonar ]
@@ -198,11 +196,18 @@ workflows:
             tags:
               only: sonar
 
-  ##################################### DEPLOY TEST WORKFLOW - on deploy TAG #############################################
+  ##################################### DEPLOY TEST WORKFLOW - on deploy TAG ###########################################
   ci-cd-workflow-test:
     when:
       equal: [ << pipeline.git.tag >>, deploy ]
     jobs:
+      - ci-sonar-job:
+          context: OCV_SONARCLOUD
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: deploy
       - ci-build-job:
           filters:
             branches:
@@ -218,21 +223,27 @@ workflows:
               ignore: /.*/
             tags:
               only: deploy
-      - notify-success-job:
-          requires:
-            - ci-build-job
-            - cd-deploy-job-firebase
-          context: SLACK
+
+  ##################################### RELEASE WORKFLOW - on release TAG ##############################################
+  cd-release-workflow:
+    when:
+      equal: [ << pipeline.git.tag >>, release ]
+    jobs:
+      - cd-release-job:
+          context:
+            - GIT
+            - REPOS
           filters:
             branches:
               ignore: /.*/
             tags:
-              only: deploy
+              only: release
 
   ##################################### STAGING WORKFLOW - only develop ################################################
   ci-cd-workflow-staging:
     jobs:
-      - ci-test-job:
+      - ci-sonar-job:
+          context: OCV_SONARCLOUD
           filters:
             branches:
               only:
@@ -244,31 +255,25 @@ workflows:
                 - develop
       - cd-deploy-job-firebase:
           requires:
-            - ci-test-job
             - ci-build-job
           context: FIREBASE
-          filters:
-            branches:
-              only:
-                - develop
-      - notify-success-job:
-          requires:
-            - cd-deploy-job-firebase
-          context: SLACK
+          hosting: cv-mikeonline-staging
           filters:
             branches:
               only:
                 - develop
 
-  ##################################### PRODUCTION WORKFLOW - only master ##############################################
+  ################################## PRODUCTION WORKFLOW - only [version] TAG ##########################################
   ci-cd-workflow-production:
+    when: << pipeline.git.tag >>
     jobs:
       - ci-build-job:
           production: true
           filters:
             branches:
-              only:
-                - master
+              ignore: /.*/
+            tags:
+              only: /^v\d+\.\d+\.\d+$/
       - cd-deploy-job-firebase:
           requires:
             - ci-build-job
@@ -276,13 +281,6 @@ workflows:
           hosting: cv-mikeonline
           filters:
             branches:
-              only:
-                - master
-      - notify-success-job:
-          requires:
-            - cd-deploy-job-firebase
-          context: SLACK
-          filters:
-            branches:
-              only:
-                - master
+              ignore: /.*/
+            tags:
+              only: /^v\d+\.\d+\.\d+$/
