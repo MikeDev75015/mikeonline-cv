@@ -140,7 +140,7 @@ jobs:
       - run:
           name: Merge develop in master
           command: |
-            git pull --no-commit develop && git commit -m "chore: set release ${VERSION_NUMBER}"
+            git pull --no-commit https://${REPO_USER}:${REPO_PASS}@bitbucket.org/${REPO_TEAM}/${REPO_NAME}.git develop && git commit -m "chore: set release ${VERSION_NUMBER}"
       - run:
           name: Push master
           command: git push https://${REPO_USER}:${REPO_PASS}@bitbucket.org/${REPO_TEAM}/${REPO_NAME}.git master
