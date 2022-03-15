@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.5.1](https://bitbucket.org/mikeonline75/ocv-frontend/compare/v1.1.0...v1.5.1) (2022-03-15)
+
 ## 1.5.0 (2022-03-15)
 
 
