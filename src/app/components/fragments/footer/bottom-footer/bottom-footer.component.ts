@@ -4,7 +4,6 @@ import { APP_CREDITS } from '../../../../core/core-index';
 @Component({
   selector: 'app-bottom-footer',
   templateUrl: './bottom-footer.component.html',
-  styleUrls: ['./bottom-footer.component.scss'],
 })
 export class BottomFooterComponent {
   @Input() mobile = false;

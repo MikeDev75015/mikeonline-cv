@@ -1,6 +1,6 @@
 {
   "name": "ocv-front",
-  "version": "0.0.0",
+  "version": "1.2.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -10,12 +10,12 @@
     "jcc": "jest --clearCache",
     "test": "jest",
     "test-coverage": "jest --coverage",
+    "test:ci": "CI=true npm test -- --coverage --testResultsProcessor=jest-sonar-reporter --runInBand",
     "lint": "ng lint",
     "deploy": "firebase deploy --project cv-mikeonline",
-    "prerelease": "npm run release -- --prerelease alpha",
-    "first-release": "npm run release --first-release",
     "release": "standard-version",
-    "staging-test": "git tag -f test && git push -f origin test"
+    "deploy-test": "git tag -f deploy && git push -f origin deploy",
+    "sonar-test": "git tag -f sonar && git push -f upstream sonar"
   },
   "private": true,
   "dependencies": {
@@ -68,7 +68,7 @@
     "ng-mocks": "^11.4.0",
     "ng2-mock-component": "^0.2.0",
     "protractor": "~5.4.0",
-    "standard-version": "^9.1.1",
+    "standard-version": "^9.3.2",
     "ts-jest": "^27.1.3",
     "ts-node": "~7.0.0",
     "typescript": "~4.5.2"

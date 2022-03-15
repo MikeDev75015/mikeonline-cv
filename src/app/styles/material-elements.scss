@@ -42,6 +42,9 @@
 
 .mat-expansion-panel {
   border-radius: 5px !important;
+  background: #EBF2F2 !important;
+  box-shadow: unset !important;
+  color: #024873 !important;
 }
 
 .mat-expansion-panel-header.closed-panel:hover {
@@ -59,12 +62,6 @@
 
 .mat-expansion-panel-header-title {
   font-weight: 600 !important;
-}
-
-.mat-expansion-panel {
-  background: #EBF2F2 !important;
-  box-shadow: unset !important;
-  color: #024873 !important;
 }
 
 .mat-expansion-panel-header, .mat-expansion-panel-body {

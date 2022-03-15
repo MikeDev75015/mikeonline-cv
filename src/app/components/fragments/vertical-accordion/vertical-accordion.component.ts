@@ -28,7 +28,6 @@ const calculateWidth = (): string => {
 @Component({
   selector: 'app-vertical-accordion',
   templateUrl: './vertical-accordion.component.html',
-  styleUrls: ['./vertical-accordion.component.scss'],
   animations: [
     ...IN_OUT_TEMPLATE_ANIMATION(
       'VerticalAccordionItem',
@@ -42,9 +41,11 @@ const calculateWidth = (): string => {
         style: { minWidth: adaptMinWidth(), maxWidth: '{{minWidthClosed}}' },
         options: { params: { minWidthClosed: adaptMinWidth() } },
       },
-      { in: 0, out: 0 },
-      { style: { minWidth: '250px' } },
-      { style: { minWidth: adaptMinWidth() } },
+      {
+        voidDelay: { in: 0, out: 0 },
+        voidInPayload: { style: { minWidth: '250px' } },
+        voidOutPayload: { style: { minWidth: adaptMinWidth() } },
+      },
     ),
   ],
 })

@@ -3,13 +3,13 @@ import { Subscription } from 'rxjs';
 import { IAnimationServiceResponse } from '../../../../core/core-index';
 import { IFormation } from '../../../../core/interfaces/models/formation.interface';
 import { AnimationsService } from '../../../../core/services/animations/animations.service';
+import { TemplatesService } from '../../../../shared/services/templates/templates.service';
 import { UtilsService } from '../../../../shared/services/utils/utils.service';
 import { IN_OUT_TEMPLATE_ANIMATION } from '../../../../shared/shared-index';
 
 @Component({
   selector: 'app-formation-item',
   templateUrl: './formation-item.component.html',
-  styleUrls: ['./formation-item.component.scss'],
   animations: [
     ...IN_OUT_TEMPLATE_ANIMATION(
       'FormationItemComponent',
@@ -25,7 +25,7 @@ import { IN_OUT_TEMPLATE_ANIMATION } from '../../../../shared/shared-index';
   ],
 })
 export class FormationItemComponent implements OnInit, OnChanges, OnDestroy, AfterViewChecked {
-  @Input() form: IFormation | undefined;
+  @Input() formation: IFormation | undefined;
 
   @Input() index = -1;
 
@@ -55,49 +55,29 @@ export class FormationItemComponent implements OnInit, OnChanges, OnDestroy, Aft
     private readonly utilsService: UtilsService,
   ) {}
 
-  private static showOpenCloseButtons(form: IFormation): boolean {
-    if (!form || !form.detailList || !form.detailList.length) {
-      return false;
-    }
-
-    const totalDetailListLines = form.detailList.reduce((totalLine, detail) => {
-      let lines = 0;
-      if (detail.title) {
-        lines++;
-      }
-      if (detail.lineList) {
-        lines += detail.lineList.length;
-      }
-      totalLine += lines;
-      return totalLine;
-    }, 0);
-
-    return totalDetailListLines > 4;
-  }
-
   ngOnInit(): void {
     this.subscriptionList.push(this.animationService.watchResponse().subscribe(
       (animationServiceResponse) => this.onAnimationServiceResponse(animationServiceResponse),
     ));
 
-    if (!window || !window.innerWidth) {
-      return;
-    }
-
-    this.setLineBodyPaddingLeft();
+    this.lineBodyPaddingLeft = TemplatesService.setLineBodyPaddingLeft();
 
     window.addEventListener('resize', () => {
-      this.setLineBodyPaddingLeft();
+      this.lineBodyPaddingLeft = TemplatesService.setLineBodyPaddingLeft();
     });
   }
 
   ngOnDestroy(): void {
     this.subscriptionList.forEach(s => s.unsubscribe());
+
+    window.removeEventListener('resize', () => {
+      this.lineBodyPaddingLeft = TemplatesService.setLineBodyPaddingLeft();
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes && changes['form'] && changes['form'].currentValue) {
-      this.enableOpenCloseButtons = FormationItemComponent.showOpenCloseButtons(changes['form'].currentValue);
+      this.enableOpenCloseButtons = TemplatesService.showOpenCloseButtons(changes['form'].currentValue);
     }
   }
 
@@ -133,10 +113,6 @@ export class FormationItemComponent implements OnInit, OnChanges, OnDestroy, Aft
     }
 
     this.opened = !this.opened;
-  }
-
-  private setLineBodyPaddingLeft(): void {
-    this.lineBodyPaddingLeft = window.innerWidth > 840 ? '50px' : '30px';
   }
 
   private onAnimationServiceResponse(animationServiceResponse: IAnimationServiceResponse): void {

@@ -3,7 +3,7 @@
   min-width: 330px;
 }
 
-app-vertical-accordion-item, app-vertical-accordion-last-item {
+app-vertical-accordion-item {
   width: fit-content;
 }
 
@@ -39,7 +39,6 @@ app-vertical-accordion-item, app-vertical-accordion-last-item {
     color: white;
     text-align: center;
     line-height: 16px;
-    // length > 25     line-height: 16px;
   }
 }
 
@@ -47,13 +46,14 @@ app-vertical-accordion-item:first-of-type .vertical-accordion-item-header {
   border-radius: 15px 0 0 15px;
 }
 
-app-vertical-accordion-last-item:last-of-type .vertical-accordion-item-header,
-app-vertical-accordion-last-item:last-of-type .vertical-accordion-item-body {
-  border-radius: 0 15px 15px 0;
-}
-
 .right-border .vertical-accordion-item-header {
   border-right: 1px solid white;
+}
+
+app-vertical-accordion-item:last-of-type .vertical-accordion-item-header,
+app-vertical-accordion-item:last-of-type .vertical-accordion-item-body {
+  border-radius: 0 15px 15px 0;
+  border-right: none;
 }
 
 .opened-item .vertical-accordion-item-header {

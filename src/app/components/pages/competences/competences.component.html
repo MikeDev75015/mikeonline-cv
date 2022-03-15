@@ -72,7 +72,7 @@
       <app-experience-item
         class="fss w100 column exp-line"
         *ngFor="let exp of experienceList; let i = index"
-        [exp]="exp"
+        [experience]="exp"
         [id]="'comp-experience-item' + i"
         [index]="i"
       ></app-experience-item>
@@ -91,7 +91,7 @@
       <app-formation-item
         class="fss w100 column form-line"
         *ngFor="let form of formationList; let i = index"
-        [form]="form"
+        [formation]="form"
         [id]="'comp-formation-item' + i"
         [index]="i"
       ></app-formation-item>

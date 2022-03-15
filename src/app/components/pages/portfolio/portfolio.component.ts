@@ -8,7 +8,6 @@ import { DataService, UtilsService } from '../../../shared/shared-index';
 @Component({
   selector: 'app-portfolio',
   templateUrl: './portfolio.component.html',
-  styleUrls: ['./portfolio.component.scss'],
   animations: [
     trigger('showHideBackgroundImage', [
       state('show', style({

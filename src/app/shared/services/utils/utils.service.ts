@@ -4,6 +4,7 @@ import { lastValueFrom } from 'rxjs';
 import { ITag } from '../../../core/interfaces/models/tag.interface';
 import { IShareData } from '../../../core/interfaces/share-data.interface';
 import { AlertService } from '../../../core/modules/alert/services/alert.service';
+import { DayJsService } from '../../../core/services/dayjs/dayjs.service';
 import { DataService } from '../data/data.service';
 
 declare global {
@@ -22,7 +23,8 @@ export class UtilsService {
     private readonly dataService: DataService,
     private readonly alertService: AlertService,
     private readonly http: HttpClient,
-  ) {}
+  ) {
+  }
 
   /**
    * Sort the array by property in different modes
@@ -70,15 +72,17 @@ export class UtilsService {
     return secondList;
   }
 
-  private static getParentElementId(parentElement: any, depth = 0): string {
-    if (depth > 4) {
-      return '';
-    }
-    depth++;
+  public static addMissingEndDate<T>(list: T[]): T[] {
+    return list.map((element: any) => {
+      if (!element.endDate) {
+        return {
+          ...element,
+          endDate: DayJsService.getDate(undefined, 'YYYY-MM'),
+        };
+      }
 
-    return parentElement.id
-      ? parentElement.id
-      : UtilsService.getParentElementId(parentElement.parentElement, depth);
+      return element;
+    });
   }
 
   public static uppercaseFirstLetter = (s: string): string => s.charAt(0).toUpperCase() + s.substring(1);
@@ -207,5 +211,16 @@ export class UtilsService {
         closeBtnLabel: 'fermer',
       });
     }
+  }
+
+  private static getParentElementId(parentElement: any, depth = 0): string {
+    if (depth > 4) {
+      return '';
+    }
+    depth++;
+
+    return parentElement.id
+      ? parentElement.id
+      : UtilsService.getParentElementId(parentElement.parentElement, depth);
   }
 }

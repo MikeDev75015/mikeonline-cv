@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { mergeMap, tap } from 'rxjs/operators';
 import { FormationsActions } from '../ngrx-index';
 import { IFormation } from '../../core-index';
-import { ApiV0Service, TagsService, UtilsService } from '../../../shared/shared-index';
+import { ApiV0Service, TagsService } from '../../../shared/shared-index';
 
 /**
  * Effects for formations actions

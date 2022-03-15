@@ -8,7 +8,6 @@ import { IN_OUT_TEMPLATE_ANIMATION } from '../../../../shared/shared-index';
 @Component({
   selector: 'app-vertical-accordion-item',
   templateUrl: './vertical-accordion-item.component.html',
-  styleUrls: ['./vertical-accordion-item.component.scss'],
   animations: [
     ...IN_OUT_TEMPLATE_ANIMATION(
       'VerticalAccordionItemComponentBody',
@@ -20,7 +19,9 @@ import { IN_OUT_TEMPLATE_ANIMATION } from '../../../../shared/shared-index';
   ],
 })
 export class VerticalAccordionItemComponent implements OnInit, AfterViewChecked {
-  @Input() itemData: IInterest | undefined;
+  @Input() lastItem = false;
+
+  @Input() itemData!: IInterest;
 
   @Input() itemClass = '';
 

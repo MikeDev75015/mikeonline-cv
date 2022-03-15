@@ -1,0 +1,18 @@
+<ng-container *ngIf="item">
+  <h3 class="fes" style="text-align: right;">
+
+    <span *ngIf="item.startDate && !item.endDate">
+      Depuis {{ item.startDate | dateFormat:'MMMM[&nbsp;]YYYY' }}
+    </span>
+
+    <span *ngIf="item.startDate && item.endDate">
+        De&nbsp;{{ item.startDate | dateFormat:'MMMM[&nbsp;]YYYY' }}
+      à&nbsp;{{ item.endDate | dateFormat:'MMMM[&nbsp;]YYYY' }}
+    </span>
+
+    <span *ngIf="!item.startDate && item.endDate">
+      {{ item.endDate | dateFormat:'MMMM[&nbsp;]YYYY' | firstLetterUppercase }}
+    </span>
+
+  </h3>
+</ng-container>
