@@ -148,7 +148,7 @@ jobs:
             echo ${VERSION_NUMBER}
             git tag ${VERSION_NUMBER}
             git push https://${REPO_USER}:${REPO_PASS}@bitbucket.org/${REPO_TEAM}/${REPO_NAME}.git ${VERSION_NUMBER}
-      - run: echo 'end'
+      - run: echo 'success'
 
   cd-deploy-job-firebase:
     docker:
