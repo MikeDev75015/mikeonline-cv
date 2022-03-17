@@ -1,19 +1,24 @@
 <section id="EXPERIENCES" class="w100 fcc column">
+
   <h3 class="animated-background">
     <span>
       mes expériences
-      <span *ngIf="experienceList && experienceList.length" class="badge-element">{{ experienceList.length }}</span>
+      <span *ngIf="experienceList?.length" class="badge-element">{{ experienceList.length }}</span>
     </span>
   </h3>
-  <ng-container *ngIf="experienceList">
-    <div *ngIf="experienceList.length" class="exp w100 column fsc">
-      <app-experience-item
-        *ngFor="let exp of experienceList; let i = index"
-        [id]="'experience-item-' + i"
-        class="fss w70 column exp-line"
-        [experience]="exp"
-        [index]="i"
-      ></app-experience-item>
+
+  <ng-container *ngIf="experienceList?.length">
+    <div class="exp w100 column fsc">
+      <ng-container *ngFor="let exp of experienceList; let i = index">
+        <app-item
+          [id]="'experience-item-' + i"
+          [itemData]="exp"
+          [index]="i"
+          itemType="experienceItem"
+          class="fss w70 column exp-line"
+        ></app-item>
+      </ng-container>
     </div>
   </ng-container>
+
 </section>

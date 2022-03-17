@@ -39,12 +39,11 @@ import { CompetencesComponent } from './components/pages/competences/competences
 import {
   ExperienceItemDetailComponent,
 } from './components/pages/experiences/experience-item-detail/experience-item-detail.component';
-import { ExperienceItemComponent } from './components/pages/experiences/experience-item/experience-item.component';
+import { ItemComponent } from './components/fragments/item/item.component';
 import { ExperiencesComponent } from './components/pages/experiences/experiences.component';
 import {
   FormationItemDetailComponent,
 } from './components/pages/formations/formation-item-detail/formation-item-detail.component';
-import { FormationItemComponent } from './components/pages/formations/formation-item/formation-item.component';
 import { FormationsComponent } from './components/pages/formations/formations.component';
 import { InterestsComponent } from './components/pages/interests/interests.component';
 import { PortfolioItemComponent } from './components/pages/portfolio/portfolio-item/portfolio-item.component';
@@ -83,9 +82,8 @@ import { ItemDatesComponent } from './components/fragments/item-elements/item-da
     PortfolioComponent,
     InterestsComponent,
     ContactComponent,
-    ExperienceItemComponent,
+    ItemComponent,
     ExperienceItemDetailComponent,
-    FormationItemComponent,
     FormationItemDetailComponent,
     PortfolioItemComponent,
     BottomFooterComponent,

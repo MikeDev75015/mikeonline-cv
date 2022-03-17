@@ -1,0 +1,50 @@
+<ng-container *ngIf="itemData && itemType">
+  <div class="line-header fbs w100" style="position: relative;">
+    <div class="w100 fss column">
+      <h3 class="fss wrap" [innerHTML]="itemData.title"></h3>
+      <em [innerHTML]="(itemData.society ? itemData.society + ' - ' : '') + itemData.place | incompressibleSpace"></em>
+    </div>
+
+    <app-item-dates [item]="{ startDate: itemData.beginDate, endDate: itemData.endDate! }"></app-item-dates>
+
+  </div>
+
+  <app-item-tag-list *ngIf="itemData.tagList" [tagList]="itemData.tagList"></app-item-tag-list>
+
+  <ng-container *ngIf="itemData.detailList">
+    <div
+      class="line-body w100"
+      [ngStyle]="{
+        'margin-bottom': enableOpenCloseButtons && opened ? '30px' : '0',
+        'overflow': opened && !masked ? overflow : 'hidden',
+        'padding-left': overflow === 'hidden' || (overflow === 'auto' && (!opened || masked)) ? lineBodyPaddingLeft : '30px'
+      }"
+      [@ItemComponentInOut]="opened ? 'in' : 'out'"
+      (@ItemComponentInOut.start)="onAnimation($event)"
+      (@ItemComponentInOut.done)="onAnimation($event)"
+    >
+      <div
+        [id]="'detail-list-' + index"
+        class="fss w100 column"
+      >
+        <ng-container
+          [ngTemplateOutlet]="itemType === 'experienceItem' ? experienceItemDetails : formationItemDetails"
+          [ngTemplateOutletContext]="{ detailList: itemData.detailList }"
+        ></ng-container>
+      </div>
+    </div>
+
+    <app-item-open-close-buttons
+      [enableOpenCloseButtons]="enableOpenCloseButtons" [masked]="masked" [opened]="opened" [btnOpen]="btnOpen"
+      (onToggleView)="toggleView($event)"
+    ></app-item-open-close-buttons>
+  </ng-container>
+</ng-container>
+
+<ng-template #experienceItemDetails let-detailList="detailList">
+  <app-experience-item-detail *ngFor="let detail of detailList" [detail]="detail"></app-experience-item-detail>
+</ng-template>
+
+<ng-template #formationItemDetails let-detailList="detailList">
+  <app-formation-item-detail *ngFor="let detail of detailList" [detail]="detail"></app-formation-item-detail>
+</ng-template>

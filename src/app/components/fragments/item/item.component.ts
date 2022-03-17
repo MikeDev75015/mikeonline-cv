@@ -1,18 +1,18 @@
 import { AfterViewChecked, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { IAnimationServiceResponse } from '../../../../core/core-index';
-import { IExperience } from '../../../../core/interfaces/models/experience.interface';
-import { AnimationsService } from '../../../../core/services/animations/animations.service';
-import { TemplatesService } from '../../../../shared/services/templates/templates.service';
-import { UtilsService } from '../../../../shared/services/utils/utils.service';
-import { IN_OUT_TEMPLATE_ANIMATION } from '../../../../shared/shared-index';
+import { IAnimationServiceResponse, IFormation } from '../../../core/core-index';
+import { IExperience } from '../../../core/interfaces/models/experience.interface';
+import { AnimationsService } from '../../../core/services/animations/animations.service';
+import { TemplatesService } from '../../../shared/services/templates/templates.service';
+import { UtilsService } from '../../../shared/services/utils/utils.service';
+import { IN_OUT_TEMPLATE_ANIMATION } from '../../../shared/shared-index';
 
 @Component({
-  selector: 'app-experience-item',
-  templateUrl: './experience-item.component.html',
+  selector: 'app-item',
+  templateUrl: './item.component.html',
   animations: [
     ...IN_OUT_TEMPLATE_ANIMATION(
-      'ExperienceItemComponent',
+      'ItemComponent',
       false,
       { in: 800, out: 700 },
       { style: { maxHeight: '600px' } },
@@ -24,10 +24,12 @@ import { IN_OUT_TEMPLATE_ANIMATION } from '../../../../shared/shared-index';
     ),
   ],
 })
-export class ExperienceItemComponent implements OnInit, OnChanges, OnDestroy, AfterViewChecked {
-  @Input() experience: IExperience | undefined;
+export class ItemComponent implements OnInit, OnChanges, OnDestroy, AfterViewChecked {
+  @Input() itemData: IExperience | IFormation | undefined;
 
   @Input() index = -1;
+
+  @Input() itemType: 'experienceItem' | 'formationItem' | undefined;
 
   public enableOpenCloseButtons = false;
 
@@ -72,19 +74,20 @@ export class ExperienceItemComponent implements OnInit, OnChanges, OnDestroy, Af
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes && changes['exp'] && changes['exp'].currentValue) {
-      this.enableOpenCloseButtons = TemplatesService.showOpenCloseButtons(changes['exp'].currentValue);
+    if (changes && changes['itemData'] && changes['itemData'].currentValue) {
+      this.enableOpenCloseButtons = TemplatesService.showOpenCloseButtons(changes['itemData'].currentValue);
     }
   }
 
   ngAfterViewChecked(): void {
     const compSection = document.querySelector('#COMPETENCES');
     const expSection = document.querySelector('#EXPERIENCES');
+    const formSection = document.querySelector('#FORMATIONS');
     if (
-      (expSection || compSection) &&
+      (compSection || expSection || formSection) &&
       !this.overflow
     ) {
-      const detailListDiv = document.querySelector('#experience-detail-list-' + this.index);
+      const detailListDiv = document.querySelector('#detail-list-' + this.index);
       if (!detailListDiv) {
         return;
       }
@@ -121,10 +124,10 @@ export class ExperienceItemComponent implements OnInit, OnChanges, OnDestroy, Af
     }
 
     if (animationServiceResponse.type.includes('done')) {
-      if (animationServiceResponse.type.includes('ExperienceItemComponentInOut-in')) {
+      if (animationServiceResponse.type.includes('ItemComponentInOut-in')) {
         this.masked = false;
       }
-      if (animationServiceResponse.type.includes('ExperienceItemComponentInOut-out')) {
+      if (animationServiceResponse.type.includes('ItemComponentInOut-out')) {
         this.btnOpen = true;
       }
       if (
