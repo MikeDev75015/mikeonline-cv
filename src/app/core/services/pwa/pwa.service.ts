@@ -21,7 +21,7 @@ export class PwaService implements OnDestroy {
     private readonly alertService: AlertService,
   ) {}
 
-  public ngOnDestroy(): void {
+  ngOnDestroy(): void {
     this.subscriptionList.forEach(s => s.unsubscribe());
   }
 

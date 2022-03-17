@@ -86,7 +86,7 @@ export class AppComponent implements OnInit, AfterViewInit, AfterViewChecked, On
     this.store.dispatch(ApplicationActions.startAppLoading());
   }
 
-  public ngOnInit(): void {
+  ngOnInit(): void {
     this.subscriptionList.push(
       this.animationService.watchResponse().subscribe((animationServiceResponse) => {
         this.onAnimationServiceResponse(animationServiceResponse);
@@ -132,14 +132,14 @@ export class AppComponent implements OnInit, AfterViewInit, AfterViewChecked, On
     this.pwaService.initializeServiceWorker();
   }
 
-  public ngOnDestroy(): void {
+  ngOnDestroy(): void {
     this.stopAutoHideHeaderTimeout();
 
     this.subscriptionList.forEach(s => s.unsubscribe());
     this.removeEventListenerFromWindow();
   }
 
-  public ngAfterViewInit(): void {
+  ngAfterViewInit(): void {
     setTimeout(() => {
       this.introductionTime = true;
 
@@ -149,7 +149,7 @@ export class AppComponent implements OnInit, AfterViewInit, AfterViewChecked, On
     }, this.splashScreenDelay);
   }
 
-  public ngAfterViewChecked(): void {
+  ngAfterViewChecked(): void {
     if (!this.mobileView) {
       if (!this.headerOnAnimation) {
         this.updateScrollingState();
