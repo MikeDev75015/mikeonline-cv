@@ -12,8 +12,8 @@
     "test-coverage": "jest --coverage",
     "test:ci": "CI=true npm test -- --coverage --testResultsProcessor=jest-sonar-reporter --runInBand",
     "lint": "ng lint",
-    "deploy": "firebase deploy --project cv-mikeonline",
     "release": "standard-version",
+    "deploy": "firebase deploy --project cv-mikeonline",
     "deploy-test": "git tag -f deploy && git push -f origin deploy",
     "sonar-test": "git tag -f sonar && git push -f upstream sonar"
   },
