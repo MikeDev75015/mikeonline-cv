@@ -1,7 +1,8 @@
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Store } from '@ngrx/store';
 import { MockComponent } from 'ng2-mock-component';
+import { of } from 'rxjs';
 import { animationServiceMock } from './__mocks__/services/animation-service.mock';
 import { contactOpenCloseServiceMock } from './__mocks__/services/contact-open-close-service.mock';
 import { dataServiceMock } from './__mocks__/services/data-service.mock';
@@ -13,9 +14,12 @@ import { AnimationsService } from './core/services/animations/animations.service
 import { ContactOpenCloseService } from './core/services/contact-open-close/contact-open-close.service';
 import { PwaService } from './core/services/pwa/pwa.service';
 import { DataService, UtilsService } from './shared/shared-index';
+import * as ApplicationActions from './core/ngrx/actions/application.actions';
 
 describe('AppComponent', () => {
-  let component: AppComponent;
+  let
+    component: AppComponent,
+    fixture: ComponentFixture<AppComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -39,9 +43,8 @@ describe('AppComponent', () => {
       ]
     }).compileComponents();
 
-    const fixture = TestBed.createComponent(AppComponent);
+    fixture = TestBed.createComponent(AppComponent);
     component = fixture.debugElement.componentInstance;
-    fixture.detectChanges();
   });
 
   beforeEach(() => {
@@ -54,12 +57,28 @@ describe('AppComponent', () => {
   });
 
   it('should create the app', () => {
+    fixture.detectChanges();
     expect(component).toBeTruthy();
-    expect(animationServiceMock.onPhase).toHaveBeenCalledTimes(2);
+  });
+
+  describe('ngOnInit', () => {
+    let dispatchSpy: any;
+
+    beforeEach(() => {
+      jest.spyOn(dataServiceMock, 'isAllDataLoaded').mockImplementationOnce(() => of(true));
+      dispatchSpy = jest.spyOn(storeMock, 'dispatch');
+      fixture.detectChanges();
+    });
+
+    it('should dispatch ApplicationActions.appLoadingSuccess if all data is loaded', () => {
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledWith(ApplicationActions.appLoadingSuccess());
+    });
   });
 
   describe('showHeader', () => {
     it('should set isHeaderHidden to false', () => {
+      fixture.detectChanges();
       component.showHeader();
       expect(component.isHeaderHidden).toBeFalsy();
     });
@@ -67,6 +86,7 @@ describe('AppComponent', () => {
 
   describe('hideHeader', () => {
     it('should set isHeaderHidden to true', () => {
+      fixture.detectChanges();
       component.hideHeader();
       setTimeout(() => {
         expect(component.isHeaderHidden).toBeTruthy();
