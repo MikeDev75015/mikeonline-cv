@@ -88,7 +88,7 @@ jobs:
       - checkout
       - dependencies-in-cache
       - run:
-          name: Run tests with JUnit as reporterartag >>
+          name: Run tests with JUnit as reporter
           command: npm run test:ci
           environment:
             JEST_JUNIT_OUTPUT_DIR: ./reports/junit/
