@@ -52,7 +52,7 @@ export class LeftFooterComponent {
 
     experiences = allList[0] as IExperience[];
     formations = allList[1] as IFormation[];
-    projects = UtilsService.sortList<IProject>(allList[2] as IProject[], 'asc', 'position', 'number');
+    projects = UtilsService.sortObjectList<IProject>(allList[2] as IProject[], 'asc', 'position', 'number');
     interests = allList[3] as IInterest[];
 
     const summary = await this.dataService.getSummary();

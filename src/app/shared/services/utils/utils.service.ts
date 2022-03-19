@@ -33,7 +33,7 @@ export class UtilsService {
    * @param key
    * @param mode
    */
-  public static sortList<t>(
+  public static sortObjectList<t>(
     list: t[], way: 'asc' | 'desc', key: string, mode: 'string' | 'number' | 'date' = 'string',
   ): t[] {
     return list.sort((a: { [key: string]: any }, b: { [key: string]: any }) => {
@@ -59,17 +59,17 @@ export class UtilsService {
    * @param secondList
    * @param type
    */
-  public static mergeTwoList<T>(firstList: T[], secondList: T[], type = 'string'): T[] {
+  public static mergeTwoListWithoutDuplications<T>(firstList: T[], secondList: T[], type = 'string'): T[] {
     if (type !== 'string') {
       throw new Error('Not Implemented');
     }
 
-    firstList.forEach((s) => {
-      if (!secondList.includes(s)) {
-        secondList.push(s);
+    secondList.forEach((s) => {
+      if (!firstList.includes(s)) {
+        firstList.push(s);
       }
     });
-    return secondList;
+    return firstList;
   }
 
   public static addMissingEndDate<T>(list: T[]): T[] {
@@ -88,9 +88,9 @@ export class UtilsService {
   public static uppercaseFirstLetter = (s: string): string => s.charAt(0).toUpperCase() + s.substring(1);
 
   public getElementId(element: any): string {
-    return element.id
+    return element?.id
       ? element.id
-      : UtilsService.getParentElementId(element.parentElement);
+      : UtilsService.getParentElementId(element?.parentElement);
   }
 
   public pluralize = (length: number): string => !length || length <= 1 ? '' : 's';
@@ -213,8 +213,8 @@ export class UtilsService {
     }
   }
 
-  private static getParentElementId(parentElement: any, depth = 0): string {
-    if (depth > 4) {
+  private static getParentElementId(parentElement: any, depth = 1): string {
+    if (!parentElement || depth > 4) {
       return '';
     }
     depth++;

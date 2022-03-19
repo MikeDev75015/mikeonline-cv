@@ -294,10 +294,10 @@ export class PdfCreatorService {
     }
 
     if (data.experienceList) {
-      this.buildPdfExperiences(UtilsService.sortList(data.experienceList, 'desc', 'beginDate', 'date'));
+      this.buildPdfExperiences(UtilsService.sortObjectList(data.experienceList, 'desc', 'beginDate', 'date'));
     }
     if (data.formationList) {
-      this.buildPdfFormations(UtilsService.sortList(data.formationList.map((f) => {
+      this.buildPdfFormations(UtilsService.sortObjectList(data.formationList.map((f) => {
         if (!f.endDate) {
           return {
             ...f,
@@ -309,7 +309,7 @@ export class PdfCreatorService {
       }), 'desc', 'endDate', 'date'));
     }
     if (data.projectList) {
-      await this.buildPdfProjects(UtilsService.sortList(data.projectList, 'asc', 'position', 'number'));
+      await this.buildPdfProjects(UtilsService.sortObjectList(data.projectList, 'asc', 'position', 'number'));
     }
     if (data.interestList) {
       this.buildPdfInterests(data.interestList);

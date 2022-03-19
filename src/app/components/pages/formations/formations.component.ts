@@ -26,7 +26,7 @@ export class FormationsComponent implements OnInit, OnDestroy {
             defaultValue: [],
           }).then(
             (list) => {
-              this.formationList = UtilsService.sortList<IFormation>(
+              this.formationList = UtilsService.sortObjectList<IFormation>(
                 UtilsService.addMissingEndDate<IFormation>(list),
                 'desc', 'endDate', 'date',
               );

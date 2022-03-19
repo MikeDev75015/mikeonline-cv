@@ -60,7 +60,7 @@ export class PortfolioComponent implements OnInit, OnDestroy {
                 ...s,
                 technoList: this.utilsService.initTechnoListWithTagList(s.tagList as ITag[]),
               }));
-              this.siteDemoList = UtilsService.sortList<IProject>(listWithTechnoName, 'asc', 'position', 'number');
+              this.siteDemoList = UtilsService.sortObjectList<IProject>(listWithTechnoName, 'asc', 'position', 'number');
             },
           );
         }

@@ -26,7 +26,7 @@ export class ExperiencesComponent implements OnInit, OnDestroy {
             selector: selectAllExperiences, defaultValue: [],
           }).then(
             (list) => {
-              this.experienceList = UtilsService.sortList<IExperience>(
+              this.experienceList = UtilsService.sortObjectList<IExperience>(
                 UtilsService.addMissingEndDate<IExperience>(list),
                 'desc', 'endDate', 'date',
               );
