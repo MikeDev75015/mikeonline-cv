@@ -1,7 +1,6 @@
 require('jest-preset-angular/ngcc-jest-processor');
 
 module.exports = {
-  globalSetup: 'jest-preset-angular/global-setup',
   moduleNameMapper: {
     "@core/(.*)": "<rootDir>/src/app/core/$1"
   },
