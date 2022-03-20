@@ -20,3 +20,5 @@ export const PRIORITY_LABEL: { [key: string]: string } = {
   '2': 'normal',
   '3': 'maximum',
 };
+
+export const isLoadingDisplayTimeout = 1500;

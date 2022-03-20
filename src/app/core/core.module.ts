@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule, Optional, Provider, SkipSelf } from '@angular/core';
+import { LoadingComponent } from './components/loading/loading.component';
+import { LoadingDirective } from './directives/loading.directive';
 
 const importList = [
   CommonModule,
@@ -8,8 +10,14 @@ const importList = [
 const providerList: Provider[] = [];
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    LoadingComponent,
+    LoadingDirective,
+  ],
   imports: importList,
+  exports: [
+    LoadingDirective,
+  ],
 })
 export class CoreModule {
   /**

@@ -1,6 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { isLoadingDisplayTimeout } from '../../../core/constants/common.constant';
 import { IProject, ITag } from '../../../core/core-index';
 import { selectAllProjects, selectProjectsLoaded } from '../../../core/ngrx/selectors/projects.selectors';
 import { DataService, UtilsService } from '../../../shared/shared-index';
@@ -26,6 +27,8 @@ import { DataService, UtilsService } from '../../../shared/shared-index';
   ],
 })
 export class PortfolioComponent implements OnInit, OnDestroy {
+  public isLoadingData: boolean | undefined;
+
   public siteDemoList: IProject[] = [];
 
   public showImage = false;
@@ -61,8 +64,13 @@ export class PortfolioComponent implements OnInit, OnDestroy {
                 technoList: this.utilsService.initTechnoListWithTagList(s.tagList as ITag[]),
               }));
               this.siteDemoList = UtilsService.sortObjectList<IProject>(listWithTechnoName, 'asc', 'position', 'number');
+              setTimeout(() => {
+                this.isLoadingData = false;
+              }, isLoadingDisplayTimeout);
             },
           );
+        } else {
+          this.isLoadingData = true;
         }
       }),
     );

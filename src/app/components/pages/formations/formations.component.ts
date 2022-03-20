@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { isLoadingDisplayTimeout } from '../../../core/constants/common.constant';
 import { IFormation } from '../../../core/core-index';
 import { selectAllFormations, selectFormationsLoaded } from '../../../core/ngrx/selectors/formations.selectors';
 import { DataService, UtilsService } from '../../../shared/shared-index';
@@ -9,7 +10,9 @@ import { DataService, UtilsService } from '../../../shared/shared-index';
   templateUrl: './formations.component.html',
 })
 export class FormationsComponent implements OnInit, OnDestroy {
-  public formationList: any[] = [];
+  public isLoadingData: boolean | undefined;
+
+  public formationList: any[] | undefined;
 
   private subscriptionList: Subscription[] = [];
 
@@ -30,8 +33,13 @@ export class FormationsComponent implements OnInit, OnDestroy {
                 UtilsService.addMissingEndDate<IFormation>(list),
                 'desc', 'endDate', 'date',
               );
+              setTimeout(() => {
+                this.isLoadingData = false;
+              }, isLoadingDisplayTimeout);
             },
           );
+        } else {
+          this.isLoadingData = true;
         }
       }),
     );

@@ -1,11 +1,8 @@
-.no-pointer-events {
-  pointer-events: none !important;
-}
-
 .selected-menu {
   background: #024873 !important;
   color: white !important;
   opacity: .5 !important;
+  font-weight: 500 !important;
   pointer-events: none !important;
 
   .matIcon {

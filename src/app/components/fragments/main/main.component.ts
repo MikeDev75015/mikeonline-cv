@@ -1,5 +1,7 @@
-import { AfterViewInit, Component, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { ContactOpenCloseService } from '../../../core/services/contact-open-close/contact-open-close.service';
+import { DataService } from '../../../shared/services/data/data.service';
 import { CompetencesComponent } from '../../pages/competences/competences.component';
 import { ExperiencesComponent } from '../../pages/experiences/experiences.component';
 import { FormationsComponent } from '../../pages/formations/formations.component';
@@ -12,10 +14,12 @@ import { DynamicComponentLoaderDirective } from './directives/dynamic-component-
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss'],
 })
-export class MainComponent implements OnInit, AfterViewInit {
+export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() hideHeader = false;
 
   @ViewChild(DynamicComponentLoaderDirective, { static: false }) dynamicComponentLoader!: DynamicComponentLoaderDirective;
+
+  public isLoadingData: boolean | undefined;
 
   public selectedMenu = '';
 
@@ -54,9 +58,12 @@ export class MainComponent implements OnInit, AfterViewInit {
 
   private urlHash: string | undefined;
 
+  private subscriptionList: Subscription[] = [];
+
   constructor(
     private viewContainerRef: ViewContainerRef,
     private readonly contactOpenCloseService: ContactOpenCloseService,
+    private readonly dataService: DataService,
   ) {
   }
 
@@ -76,6 +83,18 @@ export class MainComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.isLoadingData = true;
+
+    this.subscriptionList.push(
+      this.dataService.isAllDataLoaded().subscribe((isLoaded) => {
+        if (!isLoaded) {
+          return;
+        }
+
+        this.isLoadingData = false;
+      })
+    );
+
     this.menuTab = window.innerWidth > 840 && !this.menuTab;
 
     this.urlHash = MainComponent.getActualHashOrSetDefault();
@@ -86,6 +105,10 @@ export class MainComponent implements OnInit, AfterViewInit {
     window.addEventListener('resize', () => {
       this.refreshView();
     });
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionList.forEach((s) => s.unsubscribe());
   }
 
   ngAfterViewInit(): void {

@@ -18,6 +18,7 @@
     <mat-grid-tile
       (click)="onOpenContact()"
       *ngIf="mobile || heightIsTooSmall"
+      [ngClass]="{'no-pointer-events': isLoadingData}"
       [colspan]="mobileTiles[1].cols"
       [rowspan]="mobileTiles[1].rows"
       [style.background]="mobileTiles[1].background"

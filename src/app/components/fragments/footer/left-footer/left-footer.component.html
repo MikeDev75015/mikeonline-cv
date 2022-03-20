@@ -1,4 +1,9 @@
-<figure id="pdf-icon" title="Mon CV au format PDF" (click)="!downloading ? downloadCV() : null">
+<figure
+  id="pdf-icon" class="fcc" title="Mon CV au format PDF"
+  [ngStyle]="{opacity: isLoadingData ? 0.5 : 1}"
+  [ngClass]="{'no-pointer-events': isLoadingData}"
+  (click)="!downloading && !isLoadingData ? downloadCV() : null"
+>
   <img
     class="fx-shake"
     src="assets/img/pdf-web.png"

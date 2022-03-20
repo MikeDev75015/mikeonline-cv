@@ -10,6 +10,10 @@
   font-weight: 600;
 }
 
+.no-pointer-events {
+  pointer-events: none !important;
+}
+
 .fcc { display: flex !important; justify-content: center !important; align-items: center !important; }
 .fcs { display: flex !important; justify-content: center !important; align-items: flex-start !important; }
 .fce { display: flex !important; justify-content: center !important; align-items: flex-end !important; }

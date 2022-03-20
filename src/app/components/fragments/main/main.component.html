@@ -22,7 +22,7 @@
     <app-header></app-header>
 
     <button mat-menu-item
-            [ngClass]="{'selected-menu': selectedMenu === 'competences'}"
+            [ngClass]="{'selected-menu': selectedMenu === 'competences', 'no-pointer-events': isLoadingData}"
             (click)="selectMenu($event, 'competences')"
             [disabled]="selectedMenu === 'Compétences'"
             aria-label="Display the Skill Menu">
@@ -31,36 +31,36 @@
     </button>
 
     <button mat-menu-item
-            [ngClass]="{'selected-menu': selectedMenu === 'experiences'}"
+            [ngClass]="{'selected-menu': selectedMenu === 'experiences', 'no-pointer-events': isLoadingData}"
             (click)="selectMenu($event, 'experiences')"
-            [disabled]="selectedMenu === 'Expériences'"
+            [disabled]="selectedMenu === 'Expériences' || isLoadingData"
             aria-label="Display the Experience Menu">
       <mat-icon class="no-pointer-events matIcon">business_center</mat-icon>
       <span class="no-pointer-events btn-title">Expériences</span>
     </button>
 
     <button mat-menu-item
-            [ngClass]="{'selected-menu': selectedMenu === 'formations'}"
+            [ngClass]="{'selected-menu': selectedMenu === 'formations', 'no-pointer-events': isLoadingData}"
             (click)="selectMenu($event, 'formations')"
-            [disabled]="selectedMenu === 'Formations'"
+            [disabled]="selectedMenu === 'Formations' || isLoadingData"
             aria-label="Display the Formation Menu">
       <mat-icon class="no-pointer-events matIcon">school</mat-icon>
       <span class="no-pointer-events btn-title">Formations</span>
     </button>
 
     <button mat-menu-item
-            [ngClass]="{'selected-menu': selectedMenu === 'portfolio'}"
+            [ngClass]="{'selected-menu': selectedMenu === 'portfolio', 'no-pointer-events': isLoadingData}"
             (click)="selectMenu($event, 'portfolio')"
-            [disabled]="selectedMenu === 'Portfolio'"
+            [disabled]="selectedMenu === 'Portfolio' || isLoadingData"
             aria-label="Display the Portfolio Menu">
       <mat-icon class="no-pointer-events matIcon">code</mat-icon>
       <span class="no-pointer-events btn-title">Portfolio</span>
     </button>
 
     <button mat-menu-item
-            [ngClass]="{'selected-menu': selectedMenu === 'interests'}"
+            [ngClass]="{'selected-menu': selectedMenu === 'interests', 'no-pointer-events': isLoadingData}"
             (click)="selectMenu($event, 'interests')"
-            [disabled]="selectedMenu === 'Intérêts'"
+            [disabled]="selectedMenu === 'Intérêts' || isLoadingData"
             aria-label="Display the Interest Menu">
       <mat-icon class="no-pointer-events matIcon">whatshot</mat-icon>
       <span class="no-pointer-events btn-title">Intérêts</span>

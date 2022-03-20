@@ -2,7 +2,7 @@
   section {
     padding-top: 40px;
 
-    h3 {
+    > h3 {
       font-size: 25px;
     }
   }
@@ -13,6 +13,18 @@
 
   .exp-line em, .form-line em {
     font-size: 13px;
+  }
+
+  .line-header {
+    > div {
+      > h3 {
+        line-height: 18px;
+      }
+
+      > * {
+        margin-bottom: 5px !important;
+      }
+    }
   }
 
   p, a, li{

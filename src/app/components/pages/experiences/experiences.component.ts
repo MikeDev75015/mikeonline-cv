@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { isLoadingDisplayTimeout } from '../../../core/constants/common.constant';
 import { IExperience } from '../../../core/core-index';
 import { selectAllExperiences, selectExperiencesLoaded } from '../../../core/ngrx/selectors/experiences.selectors';
 import { DataService, UtilsService } from '../../../shared/shared-index';
@@ -9,7 +10,9 @@ import { DataService, UtilsService } from '../../../shared/shared-index';
   templateUrl: './experiences.component.html',
 })
 export class ExperiencesComponent implements OnInit, OnDestroy {
-  public experienceList: IExperience[] = [];
+  public isLoadingData: boolean | undefined;
+
+  public experienceList: IExperience[] | undefined;
 
   private subscriptionList: Subscription[] = [];
 
@@ -27,11 +30,15 @@ export class ExperiencesComponent implements OnInit, OnDestroy {
           }).then(
             (list) => {
               this.experienceList = UtilsService.sortObjectList<IExperience>(
-                UtilsService.addMissingEndDate<IExperience>(list),
-                'desc', 'endDate', 'date',
+                list, 'desc', 'beginDate', 'date',
               );
+              setTimeout(() => {
+                this.isLoadingData = false;
+              }, isLoadingDisplayTimeout);
             },
           );
+        } else {
+          this.isLoadingData = true;
         }
       }),
     );

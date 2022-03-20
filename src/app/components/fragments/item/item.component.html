@@ -1,8 +1,9 @@
 <ng-container *ngIf="itemData && itemType">
   <div class="line-header fbs w100" style="position: relative;">
-    <div class="w100 fss column">
-      <h3 class="fss wrap" [innerHTML]="itemData.title"></h3>
-      <em [innerHTML]="(itemData.society ? itemData.society + ' - ' : '') + itemData.place | incompressibleSpace"></em>
+    <div class="fss column">
+      <h3 class="fss wrap">{{ itemData.title }}</h3>
+      <p *ngIf="itemData.society">{{ itemData.society }}</p>
+      <em [innerHTML]="itemData.place | incompressibleSpace"></em>
     </div>
 
     <app-item-dates [item]="{ startDate: itemData.beginDate, endDate: itemData.endDate! }"></app-item-dates>

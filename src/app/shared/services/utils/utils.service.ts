@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { lastValueFrom } from 'rxjs';
+import { partialIsoDatePattern } from '../../../core/constants/patterns.constant';
 import { ITag } from '../../../core/interfaces/models/tag.interface';
 import { IShareData } from '../../../core/interfaces/share-data.interface';
 import { AlertService } from '../../../core/modules/alert/services/alert.service';
@@ -37,6 +38,10 @@ export class UtilsService {
     list: t[], way: 'asc' | 'desc', key: string, mode: 'string' | 'number' | 'date' = 'string',
   ): t[] {
     return list.sort((a: { [key: string]: any }, b: { [key: string]: any }) => {
+      if (a[key] === undefined || b[key] === undefined) {
+        throw new Error('One of values to compare is undefined, cannot sort object list!');
+      }
+
       if (mode === 'number') {
         return way === 'asc'
           ? a[key] - b[key]
@@ -44,9 +49,12 @@ export class UtilsService {
       }
 
       if (mode === 'date') {
+        const date1: string = a[key].match(partialIsoDatePattern) ? `${a[key]}-01` : a[key];
+        const date2: string = b[key].match(partialIsoDatePattern) ? `${b[key]}-01` : b[key];
+
         return way === 'asc'
-          ? new Date(a[key]).getTime() - new Date(b[key]).getTime()
-          : new Date(b[key]).getTime() - new Date(a[key]).getTime();
+          ? new Date(date1).getTime() - new Date(date2).getTime()
+          : new Date(date2).getTime() - new Date(date1).getTime();
       }
 
       return way === 'asc' ? a[key].localeCompare(b[key]) : b[key].localeCompare(a[key]);
@@ -94,12 +102,6 @@ export class UtilsService {
   }
 
   public pluralize = (length: number): string => !length || length <= 1 ? '' : 's';
-
-  public dateConverter(dateToConvert: string, method: string, labelMethod: string | undefined = undefined, format = 'format', labelFormat?: boolean): string {
-    // @ts-ignore
-    const convertedDate = moment(dateToConvert)[method](labelMethod)[format](labelFormat);
-    return convertedDate !== 'un an' ? convertedDate : '1 an';
-  }
 
   public convertDateToNumber(value: string): number {
     const num = value.match(/\d+/g);

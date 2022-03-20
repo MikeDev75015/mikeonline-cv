@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { ICvInfos, IExperience, IFormation, IInterest, IProject, ITag } from '../../../../core/core-index';
 import { selectCvInfos } from '../../../../core/ngrx/selectors/cv-infos.selectors';
 import { selectAllExperiences } from '../../../../core/ngrx/selectors/experiences.selectors';
@@ -13,10 +14,14 @@ import { DataService, UtilsService } from '../../../../shared/shared-index';
   templateUrl: './left-footer.component.html',
   styleUrls: ['./left-footer.component.scss'],
 })
-export class LeftFooterComponent {
+export class LeftFooterComponent implements OnInit, OnDestroy {
   @Input() mobile = false;
 
+  public isLoadingData: boolean | undefined;
+
   public downloading = false;
+
+  private subscriptionList: Subscription[] = [];
 
   constructor(
     private readonly dataService: DataService,
@@ -57,8 +62,6 @@ export class LeftFooterComponent {
 
     const summary = await this.dataService.getSummary();
 
-    console.log('downloading Cv:', { cvInfos, experiences, formations, projects, interests, summary });
-
     const loadedImage = await this.utilsService.convertImageToBase64(cvInfos.logo!.src);
 
     await this.pdfMakeService.createDownloadablePdf({
@@ -78,5 +81,23 @@ export class LeftFooterComponent {
         competenceList: summary,
       },
     }).then(() => this.downloading = false);
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionList.forEach((s) => s.unsubscribe());
+  }
+
+  ngOnInit(): void {
+    this.isLoadingData = true;
+
+    this.subscriptionList.push(
+      this.dataService.isAllDataLoaded().subscribe((isLoaded) => {
+        if (!isLoaded) {
+          return;
+        }
+
+        this.isLoadingData = false;
+      })
+    );
   }
 }

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ContactOpenCloseService } from '../../../core/services/contact-open-close/contact-open-close.service';
+import { DataService } from '../../../shared/services/data/data.service';
 
 interface ITile {
   cols: number;
@@ -22,6 +23,8 @@ export class FooterComponent implements OnInit, OnDestroy {
 
   @Output() showHeader = new EventEmitter<boolean>();
 
+  public isLoadingData: boolean | undefined;
+
   public heightIsTooSmall = false;
 
   public readonly classicTiles: ITile[] = [
@@ -38,26 +41,46 @@ export class FooterComponent implements OnInit, OnDestroy {
       cols: 2, rows: 1, background: 'transparent',
     },
     { // right => Contact
-      cols: 1, rows: 1, background: 'rgba(2, 72, 115, 0.6)',
+      cols: 1, rows: 1, background: '#024873',
     },
   ];
+
+  private isContactOpen: boolean | undefined;
 
   private subscriptionList: Subscription[] = [];
 
   constructor(
     private readonly contactOpenCloseService: ContactOpenCloseService,
+    private readonly dataService: DataService,
   ) {
   }
 
   ngOnInit(): void {
-    const heightIsTooSmallSubscription = this.contactOpenCloseService
-      .onHeightIsTooSmallChange()
-      .subscribe(status => {
+    this.isLoadingData = true;
+
+    this.subscriptionList.push(
+      this.contactOpenCloseService.onOpenCloseContactStatusChange().subscribe(status => {
+        this.isContactOpen = status;
+      }),
+    );
+
+    this.subscriptionList.push(
+      this.contactOpenCloseService.onHeightIsTooSmallChange().subscribe(status => {
         if (this.heightIsTooSmall !== status) {
           this.heightIsTooSmall = status;
         }
-      });
-    this.subscriptionList.push(heightIsTooSmallSubscription);
+      }),
+    );
+
+    this.subscriptionList.push(
+      this.dataService.isAllDataLoaded().subscribe((isLoaded) => {
+        if (!isLoaded) {
+          return;
+        }
+
+        this.isLoadingData = false;
+      })
+    );
   }
 
   ngOnDestroy(): void {
@@ -69,6 +92,6 @@ export class FooterComponent implements OnInit, OnDestroy {
   }
 
   public onOpenContact(): void {
-    this.contactOpenCloseService.setOpenCloseContactStatus(true);
+    this.contactOpenCloseService.setOpenCloseContactStatus(!this.isContactOpen);
   }
 }

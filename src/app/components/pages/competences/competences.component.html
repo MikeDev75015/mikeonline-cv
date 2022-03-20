@@ -1,119 +1,127 @@
-<section class="fsc column" id="COMPETENCES" style="padding-bottom: 100px;">
-  <h3 class="animated-background"><span>mes Compétences<span class="badge-element">{{ competencesDrawn }}</span></span>
-  </h3>
-  <div class="w90 fcc" id="wc_canvas" style="min-height: 200px; height: auto;"></div>
-  <p *ngIf="selectedKeyword || defaultText" style="margin-top: 50px !important;" class="fcc chip">{{ selectedKeyword || defaultText }}</p><br>
+<section id="COMPETENCES" class="fsc column w100" style="padding-bottom: 100px;">
+  <ng-container *appLoading="isLoadingData">
+    <h3 class="animated-background">
+    <span>
+      mes Compétences
+      <span *ngIf="competencesDrawn" class="badge-element">{{ competencesDrawn }}</span>
+    </span>
+    </h3>
+    <div class="w90 fcc" id="wc_canvas" style="min-height: 200px; height: auto;"></div>
+    <p *ngIf="selectedKeyword || defaultText" style="margin-top: 50px !important;" class="fcc chip">{{ selectedKeyword || defaultText }}</p><br>
 
-  <ng-container *ngIf="competenceList && competenceList.length">
-    <div *ngFor="let comp of competenceList" class="fsc column w100 skill-details">
-      <div class="fce w100">
+    <ng-container *ngIf="competenceList">
+      <div *ngFor="let comp of competenceList" class="fsc column w100 skill-details">
+        <div class="fce w100">
 
-        <div class="fcc column" title="Années d'expérience">
-          <p-knob
-            [(ngModel)]="comp.experienceYears.value <= 0 ? 0.5 : comp.experienceYears.value"
-            [max]="comp.experienceYears.value <= 5 ? 5 : comp.experienceYears.value"
-            [min]="0" [size]="125" [valueTemplate]="comp.experienceYears.text"
-            rangeColor="#DDDDDD"
-            [strokeWidth]="15"
-            textColor="rgba(2, 72, 115, 0.7)"
-            valueColor="#4E7F9D"
-          ></p-knob>
-          <p class="fcc wrap">Années d'expérience</p>
+          <div class="fcc column" title="Années d'expérience">
+            <p-knob
+              [(ngModel)]="comp.experienceYears.value <= 0 ? 0.5 : comp.experienceYears.value"
+              [max]="comp.experienceYears.value <= 5 ? 5 : comp.experienceYears.value"
+              [min]="0" [size]="125" [valueTemplate]="comp.experienceYears.text"
+              rangeColor="#DDDDDD"
+              [strokeWidth]="15"
+              textColor="rgba(2, 72, 115, 0.7)"
+              valueColor="#4E7F9D"
+            ></p-knob>
+            <p class="fcc wrap">Années d'expérience</p>
+          </div>
+
+          <div class="fcc column" title="Niveau d'expertise">
+            <p-knob
+              [(ngModel)]="comp.expertiseLevel"
+              [max]="5"
+              [min]="0" [size]="150" [valueTemplate]="getExpertiseLevelLabel(comp.expertiseLevel)"
+              rangeColor="#DDDDDD"
+              [strokeWidth]="15"
+              textColor="rgba(2, 72, 115, 0.7)"
+              valueColor="rgba(2, 72, 115, 0.7)"
+            ></p-knob>
+            <p class="fcc wrap">Niveau d'expertise</p>
+          </div>
+
+          <div class="fcc column" title="Intérêt">
+            <p-knob
+              [(ngModel)]="comp.priority"
+              [max]="3"
+              [min]="0" [size]="125" [valueTemplate]="getPriorityLabel(comp.priority)"
+              rangeColor="#DDDDDD"
+              [strokeWidth]="15"
+              textColor="rgba(2, 72, 115, 0.7)"
+              valueColor="#4E7F9D"
+            ></p-knob>
+            <p class="fcc wrap">Intérêt</p>
+          </div>
+
         </div>
-
-        <div class="fcc column" title="Niveau d'expertise">
-          <p-knob
-            [(ngModel)]="comp.expertiseLevel"
-            [max]="5"
-            [min]="0" [size]="150" [valueTemplate]="getExpertiseLevelLabel(comp.expertiseLevel)"
-            rangeColor="#DDDDDD"
-            [strokeWidth]="15"
-            textColor="rgba(2, 72, 115, 0.7)"
-            valueColor="rgba(2, 72, 115, 0.7)"
-          ></p-knob>
-          <p class="fcc wrap">Niveau d'expertise</p>
-        </div>
-
-        <div class="fcc column" title="Intérêt">
-          <p-knob
-            [(ngModel)]="comp.priority"
-            [max]="3"
-            [min]="0" [size]="125" [valueTemplate]="getPriorityLabel(comp.priority)"
-            rangeColor="#DDDDDD"
-            [strokeWidth]="15"
-            textColor="rgba(2, 72, 115, 0.7)"
-            valueColor="#4E7F9D"
-          ></p-knob>
-          <p class="fcc wrap">Intérêt</p>
-        </div>
-
       </div>
-    </div>
-  </ng-container>
+    </ng-container>
 
-  <mat-accordion
-    class="w70 accordion"
-    *ngIf="
+    <mat-accordion
+      class="w70 accordion"
+      *ngIf="
     (experienceList && experienceList.length) ||
     (formationList && formationList.length) ||
     (portfolioList && portfolioList.length)
   ">
 
-    <mat-expansion-panel
-      *ngIf="experienceList && experienceList.length"
-      (opened)="expPanelOpenState = true"
-      (closed)="expPanelOpenState = false">
-      <mat-expansion-panel-header [ngClass]="{'closed-panel': !expPanelOpenState}">
-        <mat-panel-title [ngStyle]="{'color': expPanelOpenState ? '#024873' : '#555'}">
-          {{ experienceList.length + ' expérience' + pluralize(experienceList.length) +
-        ' professionnelle' + pluralize(experienceList.length) }}
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <app-experience-item
-        class="fss w100 column exp-line"
-        *ngFor="let exp of experienceList; let i = index"
-        [experience]="exp"
-        [id]="'comp-experience-item' + i"
-        [index]="i"
-      ></app-experience-item>
-    </mat-expansion-panel>
+      <mat-expansion-panel
+        *ngIf="experienceList && experienceList.length"
+        (opened)="expPanelOpenState = true"
+        (closed)="expPanelOpenState = false">
+        <mat-expansion-panel-header [ngClass]="{'closed-panel': !expPanelOpenState}">
+          <mat-panel-title [ngStyle]="{'color': expPanelOpenState ? '#024873' : '#555'}">
+            {{ experienceList.length + ' expérience' + pluralize(experienceList.length) +
+          ' professionnelle' + pluralize(experienceList.length) }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-item
+          class="fss w100 column exp-line"
+          *ngFor="let exp of experienceList; let i = index"
+          [itemData]="exp"
+          itemType="experienceItem"
+          [id]="'comp-experience-item' + i"
+          [index]="i"
+        ></app-item>
+      </mat-expansion-panel>
 
-    <mat-expansion-panel
-      *ngIf="formationList && formationList.length"
-      (opened)="formPanelOpenState = true"
-      (closed)="formPanelOpenState = false">
-      <mat-expansion-panel-header [ngClass]="{'closed-panel': !formPanelOpenState}">
-        <mat-panel-title [ngStyle]="{'color': formPanelOpenState ? '#024873' : '#555'}">
-          {{ formationList.length + ' formation' + pluralize(formationList.length) +
-        ' suivie' + pluralize(formationList.length) }}
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <app-formation-item
-        class="fss w100 column form-line"
-        *ngFor="let form of formationList; let i = index"
-        [formation]="form"
-        [id]="'comp-formation-item' + i"
-        [index]="i"
-      ></app-formation-item>
-    </mat-expansion-panel>
+      <mat-expansion-panel
+        *ngIf="formationList && formationList.length"
+        (opened)="formPanelOpenState = true"
+        (closed)="formPanelOpenState = false">
+        <mat-expansion-panel-header [ngClass]="{'closed-panel': !formPanelOpenState}">
+          <mat-panel-title [ngStyle]="{'color': formPanelOpenState ? '#024873' : '#555'}">
+            {{ formationList.length + ' formation' + pluralize(formationList.length) +
+          ' suivie' + pluralize(formationList.length) }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-item
+          class="fss w100 column form-line"
+          *ngFor="let form of formationList; let i = index"
+          [itemData]="form"
+          itemType="formationItem"
+          [id]="'comp-formation-item' + i"
+          [index]="i"
+        ></app-item>
+      </mat-expansion-panel>
 
-    <mat-expansion-panel
-      *ngIf="portfolioList && portfolioList.length"
-      (opened)="portPanelOpenState = true"
-      (closed)="portPanelOpenState = false">
-      <mat-expansion-panel-header [ngClass]="{'closed-panel': !portPanelOpenState}">
-        <mat-panel-title [ngStyle]="{'color': portPanelOpenState ? '#024873' : '#555'}">
-          {{ portfolioList.length + ' projet' + pluralize(portfolioList.length) +
-        ' réalisé' + pluralize(portfolioList.length) }}
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <div class="pf_flip w100 fcc">
-        <app-portfolio-item
-          *ngFor="let siteDemo of portfolioList"
-          class="app-portfolio-item"
-          [siteDemo]="siteDemo"
-        ></app-portfolio-item>
-      </div>
-    </mat-expansion-panel>
-  </mat-accordion>
+      <mat-expansion-panel
+        *ngIf="portfolioList && portfolioList.length"
+        (opened)="portPanelOpenState = true"
+        (closed)="portPanelOpenState = false">
+        <mat-expansion-panel-header [ngClass]="{'closed-panel': !portPanelOpenState}">
+          <mat-panel-title [ngStyle]="{'color': portPanelOpenState ? '#024873' : '#555'}">
+            {{ portfolioList.length + ' projet' + pluralize(portfolioList.length) +
+          ' réalisé' + pluralize(portfolioList.length) }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="pf_flip w100 fcc">
+          <app-portfolio-item
+            *ngFor="let siteDemo of portfolioList"
+            class="app-portfolio-item"
+            [siteDemo]="siteDemo"
+          ></app-portfolio-item>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </ng-container>
 </section>

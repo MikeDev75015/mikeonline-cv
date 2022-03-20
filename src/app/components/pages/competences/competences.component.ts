@@ -1,5 +1,7 @@
-import { AfterViewChecked, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { isLoadingDisplayTimeout } from '../../../core/constants/common.constant';
+import { partialIsoDatePattern } from '../../../core/constants/patterns.constant';
 import {
   EXPERTISE_LEVEL_LABEL,
   ICompetence,
@@ -10,6 +12,7 @@ import {
   PRIORITY_LABEL,
   WorldCloudOptions,
 } from '../../../core/core-index';
+import { DayJsService } from '../../../core/services/dayjs/dayjs.service';
 import { DataService, UtilsService } from '../../../shared/shared-index';
 import { selectAllTags } from '../../../core/ngrx/selectors/tags.selectors';
 import { selectAllCompetences, selectCompetencesLoaded } from '../../../core/ngrx/selectors/competences.selectors';
@@ -30,11 +33,15 @@ window.WordCloud = window.WordCloud || {};
   styleUrls: ['./competences.component.scss'],
 })
 export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked {
-  public defaultText = '';
+  public isLoadingData: boolean | undefined;
 
-  public selectedKeyword = '';
+  public competenceList?: ICompetence[];
 
-  public competencesDrawn = 0;
+  public defaultText?: string;
+
+  public selectedKeyword?: string;
+
+  public competencesDrawn?: number;
 
   public expPanelOpenState = false;
 
@@ -42,21 +49,19 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
 
   public portPanelOpenState = false;
 
-  public experienceList: IExperience[] = [];
+  public experienceList?: IExperience[];
 
-  public formationList: IFormation[] = [];
+  public formationList?: IFormation[];
 
-  public portfolioList: IProject[] = [];
+  public portfolioList?: IProject[];
 
-  public competenceList: ICompetence[] = [];
+  public competencesLoaded = false;
 
   private expertiseLevelLabel = EXPERTISE_LEVEL_LABEL;
 
   private priorityLabel = PRIORITY_LABEL;
 
   private initWordCloud = false;
-
-  private competencesLoaded = false;
 
   private wordList: [string, number][] = [];
 
@@ -69,6 +74,7 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
   constructor(
     private readonly dataService: DataService,
     private readonly utilsService: UtilsService,
+    private readonly cdRef: ChangeDetectorRef,
   ) {}
 
   private static getGridForWidth(): number {
@@ -80,12 +86,18 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
   }
 
   ngOnInit(): void {
+    this.isLoadingData = true;
+
     this.subscriptionList.push(
       this.dataService.isDataLoaded(selectCompetencesLoaded).subscribe(async (loaded) => {
         if (!loaded) {
           return;
         }
+
         this.competencesLoaded = true;
+        setTimeout(() => {
+          this.isLoadingData = false;
+        }, isLoadingDisplayTimeout);
       }),
     );
   }
@@ -126,6 +138,8 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
         await this.loadWorldCloud();
       }, 500);
     }
+
+    this.cdRef.detectChanges();
   }
 
   public pluralize = (value: number): string => this.utilsService.pluralize(value);
@@ -143,7 +157,7 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
   private wordCloudDrawn() {
     this.timeOutToDrawn += 25;
     setTimeout(() => {
-      this.competencesDrawn++;
+      this.competencesDrawn = this.competencesDrawn !== undefined ? this.competencesDrawn + 1 : 0;
     }, this.timeOutToDrawn);
   }
 
@@ -244,10 +258,10 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
     });
 
     const allRelatedList = await Promise.all([
-      { list: this.experienceList, selector: selectAllExperiences },
-      { list: this.formationList, selector: selectAllFormations },
-      { list: this.portfolioList, selector: selectAllProjects },
-      { list: this.competenceList, selector: selectAllCompetences },
+      { list: [] as IExperience[], selector: selectAllExperiences },
+      { list: [] as IFormation[], selector: selectAllFormations },
+      { list: [] as IProject[], selector: selectAllProjects },
+      { list: [] as ICompetence[], selector: selectAllCompetences },
     ].map((v) => {
       return this.dataService.getStoreData<typeof v.list>({
         selector: v.selector, defaultValue: [], value: tag.id, property: 'tagIdList',
@@ -262,9 +276,8 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
     })) as IProject[];
     this.competenceList = allRelatedList[3].map((c) => {
       const comp = c as ICompetence;
-      const experienceYearsText = this.utilsService.dateConverter(
-        comp.startDate + '-01', 'startOf', 'year', 'fromNow', true,
-      );
+      const compStartDate = comp.startDate.match(partialIsoDatePattern) ? comp.startDate + '-01' : comp.startDate;
+      const experienceYearsText = DayJsService.getTimeToNow(compStartDate, true);
       return {
         ...comp,
         experienceYears: {
