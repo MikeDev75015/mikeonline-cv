@@ -1,11 +1,12 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MockComponent } from 'ng2-mock-component';
 import { AlertModule } from '../../../core/core-index';
+import { LoadingDirective } from '../../../core/directives/loading.directive';
 import { DataService } from '../../../shared/shared-index';
 
-import {PortfolioComponent} from './portfolio.component';
-import {MockComponent} from 'ng2-mock-component';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { PortfolioComponent } from './portfolio.component';
 
 describe('PortfolioComponent', () => {
   let component: PortfolioComponent;
@@ -17,8 +18,12 @@ describe('PortfolioComponent', () => {
         PortfolioComponent,
         MockComponent({
           selector: 'app-portfolio-item',
-          inputs: ['siteDemo']
-        })
+          inputs: ['siteDemo'],
+        }),
+        MockComponent({
+          selector: 'app-loading',
+        }),
+        LoadingDirective,
       ],
       providers: [
         { provide: DataService, useValue: {} },
@@ -26,10 +31,10 @@ describe('PortfolioComponent', () => {
       imports: [
         HttpClientTestingModule,
         BrowserAnimationsModule,
-        AlertModule
-      ]
+        AlertModule,
+      ],
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

@@ -1,8 +1,10 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MockComponent } from 'ng2-mock-component';
+import { dataServiceMock } from '../../../__mocks__/services/data-service.mock';
+import { LoadingDirective } from '../../../core/directives/loading.directive';
 import { DataService } from '../../../shared/services/data/data.service';
 
-import {ExperiencesComponent} from './experiences.component';
-import {MockComponent} from 'ng2-mock-component';
+import { ExperiencesComponent } from './experiences.component';
 
 describe('ExperiencesComponent', () => {
   let component: ExperiencesComponent;
@@ -14,14 +16,18 @@ describe('ExperiencesComponent', () => {
         ExperiencesComponent,
         MockComponent({
           selector: 'app-experience-item',
-          inputs: ['exp', 'index']
-        })
+          inputs: ['exp', 'index'],
+        }),
+        MockComponent({
+          selector: 'app-loading',
+        }),
+        LoadingDirective,
       ],
       providers: [
-        { provide: DataService, useValue: {} },
-      ]
+        { provide: DataService, useValue: dataServiceMock },
+      ],
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

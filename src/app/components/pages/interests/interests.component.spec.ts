@@ -1,10 +1,12 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MockComponent } from 'ng2-mock-component';
+import { dataServiceMock } from '../../../__mocks__/services/data-service.mock';
+import { LoadingDirective } from '../../../core/directives/loading.directive';
 import { DataService } from '../../../shared/shared-index';
 
-import {InterestsComponent} from './interests.component';
-import {MockComponent} from 'ng2-mock-component';
-import {MatExpansionModule} from '@angular/material/expansion';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { InterestsComponent } from './interests.component';
 
 describe('InterestsComponent', () => {
   let component: InterestsComponent;
@@ -20,19 +22,23 @@ describe('InterestsComponent', () => {
             'verticalAccordionContainerClass',
             'verticalAccordionItemClass',
             'itemList',
-            'options'
-          ]
-        })
+            'options',
+          ],
+        }),
+        MockComponent({
+          selector: 'app-loading',
+        }),
+        LoadingDirective,
       ],
       providers: [
-        { provide: DataService, useValue: {} },
+        { provide: DataService, useValue: dataServiceMock },
       ],
       imports: [
         BrowserAnimationsModule,
         MatExpansionModule,
-      ]
+      ],
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

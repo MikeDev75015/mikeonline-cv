@@ -1,9 +1,10 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { dataServiceMock } from '../../../../__mocks__/services/data-service.mock';
+import { utilsServiceMock } from '../../../../__mocks__/services/utils-service.mock';
 import { DataService, UtilsService } from '../../../../shared/shared-index';
 
-import {LeftFooterComponent} from './left-footer.component';
-import {MockService} from 'ng-mocks';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { LeftFooterComponent } from './left-footer.component';
 
 describe('LeftFooterComponent', () => {
   let component: LeftFooterComponent;
@@ -12,21 +13,21 @@ describe('LeftFooterComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule
+        HttpClientTestingModule,
       ],
-      declarations: [ LeftFooterComponent ],
+      declarations: [LeftFooterComponent],
       providers: [
         {
           provide: DataService,
-          useValue: MockService(DataService)
+          useValue: dataServiceMock,
         },
         {
           provide: UtilsService,
-          useValue: MockService(UtilsService)
-        }
-      ]
+          useValue: utilsServiceMock,
+        },
+      ],
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

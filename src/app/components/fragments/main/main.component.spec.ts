@@ -1,4 +1,6 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { dataServiceMock } from '../../../__mocks__/services/data-service.mock';
+import { DataService } from '../../../shared/shared-index';
 
 import {MainComponent} from './main.component';
 import {MatTabsModule} from '@angular/material/tabs';
@@ -41,7 +43,7 @@ describe('MainComponent', () => {
         })
       ],
       providers: [
-        // { provide: AddComponentsService, useValue: {} },
+        { provide: DataService, useValue: dataServiceMock },
       ],
     })
     .compileComponents();

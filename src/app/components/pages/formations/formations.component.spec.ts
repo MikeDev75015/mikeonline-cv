@@ -1,8 +1,9 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MockComponent } from 'ng2-mock-component';
+import { LoadingDirective } from '../../../core/directives/loading.directive';
 import { DataService } from '../../../shared/services/data/data.service';
 
-import {FormationsComponent} from './formations.component';
-import {MockComponent} from 'ng2-mock-component';
+import { FormationsComponent } from './formations.component';
 
 describe('FormationsComponent', () => {
   let component: FormationsComponent;
@@ -14,14 +15,18 @@ describe('FormationsComponent', () => {
         FormationsComponent,
         MockComponent({
           selector: 'app-formation-item',
-          inputs: ['form', 'index']
-        })
+          inputs: ['form', 'index'],
+        }),
+        MockComponent({
+          selector: 'app-loading',
+        }),
+        LoadingDirective,
       ],
       providers: [
         { provide: DataService, useValue: {} },
       ],
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

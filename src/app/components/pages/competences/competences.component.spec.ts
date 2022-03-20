@@ -1,14 +1,15 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {MockComponent} from 'ng2-mock-component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MockComponent } from 'ng2-mock-component';
+import { KnobModule } from 'primeng/knob';
 import { dataServiceMock } from '../../../__mocks__/services/data-service.mock';
 import { AlertModule } from '../../../core/core-index';
+import { LoadingDirective } from '../../../core/directives/loading.directive';
 import { DataService } from '../../../shared/services/data/data.service';
 import { UtilsService } from '../../../shared/shared-index';
-import {CompetencesComponent} from './competences.component';
-import {MatExpansionModule} from '@angular/material/expansion';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {FormsModule} from '@angular/forms';
-import {KnobModule} from 'primeng/knob';
+import { CompetencesComponent } from './competences.component';
 
 describe('CompetencesComponent', () => {
   let component: CompetencesComponent;
@@ -25,24 +26,28 @@ describe('CompetencesComponent', () => {
       ],
       declarations: [
         CompetencesComponent,
-        MockComponent({selector: 'app-categorie'}),
+        MockComponent({ selector: 'app-categorie' }),
         MockComponent({
           selector: 'app-experience-item',
-          inputs: ['exp', 'index']
+          inputs: ['exp', 'index'],
         }),
         MockComponent({
           selector: 'app-formation-item',
-          inputs: ['form', 'index']
+          inputs: ['form', 'index'],
         }),
         MockComponent({
           selector: 'app-portfolio-item',
-          inputs: ['siteDemo']
-        })
+          inputs: ['siteDemo'],
+        }),
+        MockComponent({
+          selector: 'app-loading',
+        }),
+        LoadingDirective,
       ],
       providers: [
         { provide: DataService, useValue: dataServiceMock },
         { provide: UtilsService, useValue: {} },
-      ]
+      ],
     }).compileComponents();
   }));
 
