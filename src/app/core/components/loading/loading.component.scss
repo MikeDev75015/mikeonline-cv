@@ -1,0 +1,11 @@
+.loading-background {
+  background: linear-gradient(90deg, rgba(255,255,255,.9), #b9b9b9, rgba(255, 255, 255, 0.81), #9a9a9a);
+  background-size: 300% 100%;
+  animation: gradient 10s linear infinite;
+  animation-direction: alternate-reverse;
+
+  h4 {
+    text-shadow: 1px 5px 12px #414141;
+    animation: blinking 1s linear infinite;
+  }
+}
