@@ -103,7 +103,7 @@ export class UtilsService {
 
   public pluralize = (length: number): string => !length || length <= 1 ? '' : 's';
 
-  public convertDateToNumber(value: string): number {
+  public convertDateToKnobYearsValue(value: string): number {
     const num = value.match(/\d+/g);
 
     if (num && value.includes('mois')) {
@@ -135,12 +135,12 @@ export class UtilsService {
   }
 
   public formatPhoneNumber(phoneNumber: string): string {
-    let phoneToWork = (phoneNumber.includes('+33')
-      ? phoneNumber.replace('+33', '')
-      : phoneNumber).trim();
+    let phoneToWork = phoneNumber.includes('+33')
+      ? phoneNumber.replace('+33', '').replace(/ /g, '')
+      : phoneNumber.replace(/ /g, '');
 
     if (phoneToWork.length === 10 && phoneToWork.charAt(0) === '0') {
-      phoneToWork = phoneToWork.substr(1);
+      phoneToWork = phoneToWork.substring(1);
     }
 
     if (phoneToWork.length === 9) {
@@ -159,10 +159,12 @@ export class UtilsService {
     return phoneNumber;
   }
 
-  public uppercaseFirstLetter = (s: string): string => s.charAt(0).toUpperCase() + s.substr(1);
+  public uppercaseFirstLetter = (s: string): string => s.charAt(0).toUpperCase() + s.substring(1);
 
   public openURL(url: string): void {
     if (!this.openingUrl) {
+      this.openingUrl = true;
+
       this.alertService.displayConfirmDialog({
         title: 'attention, ouverture d\'une page externe...',
         msg: 'ouvrir dans ?',
@@ -178,8 +180,10 @@ export class UtilsService {
 
         setTimeout(() => {
           window.open(url, action);
-          this.openingUrl = false;
         }, 500);
+
+      }).finally(() => {
+        this.openingUrl = false;
       });
     }
   }

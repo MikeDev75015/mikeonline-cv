@@ -144,8 +144,6 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
 
   public pluralize = (value: number): string => this.utilsService.pluralize(value);
 
-  public convertDateToNumber = (value: string): number => this.utilsService.convertDateToNumber(value);
-
   public getExpertiseLevelLabel(value: number): string {
     return this.expertiseLevelLabel[value];
   }
@@ -282,7 +280,7 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
         ...comp,
         experienceYears: {
           text: experienceYearsText,
-          value: this.utilsService.convertDateToNumber(experienceYearsText),
+          value: this.utilsService.convertDateToKnobYearsValue(experienceYearsText),
         },
       };
     }) as ICompetence[];
