@@ -58,7 +58,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private urlHash: string | undefined;
 
-  private subscriptionList: Subscription[] = [];
+  private readonly subscriptionList: Subscription[] = [];
 
   constructor(
     private viewContainerRef: ViewContainerRef,

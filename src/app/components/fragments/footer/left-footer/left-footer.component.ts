@@ -21,7 +21,7 @@ export class LeftFooterComponent implements OnInit, OnDestroy {
 
   public downloading = false;
 
-  private subscriptionList: Subscription[] = [];
+  private readonly subscriptionList: Subscription[] = [];
 
   constructor(
     private readonly dataService: DataService,

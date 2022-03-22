@@ -26,7 +26,7 @@ export class DayJsService {
    * @param dateToConvert
    * @param suffix
    */
-  public static getTimeToNow(dateToConvert: string, suffix?: boolean): string {
+  public static getTimeToNow(dateToConvert: string, suffix = false): string {
     const convertedDate = dayJS(dateToConvert).toNow(suffix);
     return convertedDate !== 'un an' ? convertedDate : '1 an';
   }
