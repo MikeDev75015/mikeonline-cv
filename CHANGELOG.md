@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.8.0](https://bitbucket.org/mikeonline75/ocv-frontend/compare/v1.7.0...v1.8.0) (2022-03-22)
+
+
+### Features
+
+* add clipboard service to copy the shared link if share failed ([0a42dd9](https://bitbucket.org/mikeonline75/ocv-frontend/commit/0a42dd9e891b1719cdee66d41b176dd2e11f3afd))
+
+
+### Bug Fixes
+
+* correct the missing icon identifier ([1672151](https://bitbucket.org/mikeonline75/ocv-frontend/commit/1672151bdaf89245d65c66eb2c9cb188ddb8a85f))
+
 ## [1.7.0](https://bitbucket.org/mikeonline75/ocv-frontend/compare/v1.6.0...v1.7.0) (2022-03-20)
 
 
