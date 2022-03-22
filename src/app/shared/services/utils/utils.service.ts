@@ -6,7 +6,7 @@ import { ITag } from '../../../core/interfaces/models/tag.interface';
 import { IShareData } from '../../../core/interfaces/share-data.interface';
 import { AlertService } from '../../../core/modules/alert/services/alert.service';
 import { DayJsService } from '../../../core/services/dayjs/dayjs.service';
-import { DataService } from '../data/data.service';
+import { ClipboardService } from '../clipboard/clipboard.service';
 
 declare global {
   interface window {
@@ -21,7 +21,6 @@ export class UtilsService {
   private openingUrl = false;
 
   constructor(
-    private readonly dataService: DataService,
     private readonly alertService: AlertService,
     private readonly http: HttpClient,
   ) {
@@ -202,20 +201,34 @@ export class UtilsService {
 
   public async share(shareData: IShareData): Promise<void> {
     try {
-      // @ts-ignore
-      await navigator.share(shareData);
-    } catch (err) {
-      // @ts-ignore
-      if (err.message === 'Share canceled') {
-        return;
-      }
+      await window.navigator.share(shareData);
+    } catch (shareErr) {
+      if (shareErr !== 'Share canceled') {
+        const warnMessage: { title: string; msg: string; } = {
+          title: 'Oups !',
+          msg: `Le contenu n'a pas été partagé correctement.`
+        };
 
-      this.alertService.displayAlertDialog({
-        title: 'oups !',
-        // @ts-ignore
-        msg: 'Le contenu n\'a pas été partagé correctement :' + '\n' + err.message,
-        closeBtnLabel: 'fermer',
-      });
+        // ios
+        if (shareErr === 'window.navigator.share is not a function') {
+          warnMessage.msg = 'Fonction indisponible sur cet appareil.';
+
+          try {
+            await ClipboardService.onClipboardCopy(shareData.url);
+
+            warnMessage.title = 'Info !';
+            warnMessage.msg = 'Lien copié dans le presse-papier.';
+          } catch (clipboardErr) {
+            const clipboardError = clipboardErr as { message: string };
+            console.warn(clipboardError);
+          }
+        }
+
+        this.alertService.displayAlertDialog({
+          ...warnMessage,
+          closeBtnLabel: 'fermer',
+        });
+      }
     }
   }
 

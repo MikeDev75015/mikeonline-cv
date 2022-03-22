@@ -1,12 +1,16 @@
+import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { Store } from '@ngrx/store';
+import { of } from 'rxjs';
 import { alertServiceMock } from '../../../__mocks__/services/alert-service.mock';
+import { httpClientMock } from '../../../__mocks__/services/http-client.mock';
 import { waitTimeout } from '../../../__mocks__/timeout.mock';
 import { ITag } from '../../../core/interfaces/models/tag.interface';
+import { IShareData } from '../../../core/interfaces/share-data.interface';
 import { AlertModule } from '../../../core/modules/alert/alert.module';
 import { AlertService } from '../../../core/modules/alert/services/alert.service';
 import { DayJsService } from '../../../core/services/dayjs/dayjs.service';
+import { ClipboardService } from '../clipboard/clipboard.service';
 
 import { UtilsService } from './utils.service';
 
@@ -20,8 +24,8 @@ describe('UtilsService', () => {
         AlertModule,
       ],
       providers: [
-        { provide: Store, useValue: {} },
         { provide: AlertService, useValue: alertServiceMock },
+        { provide: HttpClient, useValue: httpClientMock },
       ],
     });
 
@@ -38,47 +42,53 @@ describe('UtilsService', () => {
 
   describe('sortList', () => {
     const unsortedList = [
-      { stringType: 'b', numberType: 3, dateType: '2021-12-19'},
-      { stringType: 'c', numberType: 1, dateType: '2022-01-09'},
-      { stringType: 'a', numberType: 2, dateType: '2022-03-19'},
+      { stringType: 'b', numberType: 3, dateType: '2021-12-19' },
+      { stringType: 'c', numberType: 1, dateType: '2022-01-09' },
+      { stringType: 'a', numberType: 2, dateType: '2022-03' },
     ];
 
     const sortedLists = {
       ascendingWay: {
         byStringProperty: [
-          { stringType: 'a', numberType: 2, dateType: '2022-03-19'},
-          { stringType: 'b', numberType: 3, dateType: '2021-12-19'},
-          { stringType: 'c', numberType: 1, dateType: '2022-01-09'},
+          { stringType: 'a', numberType: 2, dateType: '2022-03' },
+          { stringType: 'b', numberType: 3, dateType: '2021-12-19' },
+          { stringType: 'c', numberType: 1, dateType: '2022-01-09' },
         ],
         byNumberProperty: [
-          { stringType: 'c', numberType: 1, dateType: '2022-01-09'},
-          { stringType: 'a', numberType: 2, dateType: '2022-03-19'},
-          { stringType: 'b', numberType: 3, dateType: '2021-12-19'},
+          { stringType: 'c', numberType: 1, dateType: '2022-01-09' },
+          { stringType: 'a', numberType: 2, dateType: '2022-03' },
+          { stringType: 'b', numberType: 3, dateType: '2021-12-19' },
         ],
         byDateProperty: [
-          { stringType: 'b', numberType: 3, dateType: '2021-12-19'},
-          { stringType: 'c', numberType: 1, dateType: '2022-01-09'},
-          { stringType: 'a', numberType: 2, dateType: '2022-03-19'},
+          { stringType: 'b', numberType: 3, dateType: '2021-12-19' },
+          { stringType: 'c', numberType: 1, dateType: '2022-01-09' },
+          { stringType: 'a', numberType: 2, dateType: '2022-03' },
         ],
       },
       descendingWay: {
         byStringProperty: [
-        { stringType: 'c', numberType: 1, dateType: '2022-01-09'},
-        { stringType: 'b', numberType: 3, dateType: '2021-12-19'},
-        { stringType: 'a', numberType: 2, dateType: '2022-03-19'},
-      ],
+          { stringType: 'c', numberType: 1, dateType: '2022-01-09' },
+          { stringType: 'b', numberType: 3, dateType: '2021-12-19' },
+          { stringType: 'a', numberType: 2, dateType: '2022-03' },
+        ],
         byNumberProperty: [
-        { stringType: 'b', numberType: 3, dateType: '2021-12-19'},
-        { stringType: 'a', numberType: 2, dateType: '2022-03-19'},
-        { stringType: 'c', numberType: 1, dateType: '2022-01-09'},
-      ],
+          { stringType: 'b', numberType: 3, dateType: '2021-12-19' },
+          { stringType: 'a', numberType: 2, dateType: '2022-03' },
+          { stringType: 'c', numberType: 1, dateType: '2022-01-09' },
+        ],
         byDateProperty: [
-        { stringType: 'a', numberType: 2, dateType: '2022-03-19'},
-        { stringType: 'c', numberType: 1, dateType: '2022-01-09'},
-        { stringType: 'b', numberType: 3, dateType: '2021-12-19'},
-      ],
-      }
+          { stringType: 'a', numberType: 2, dateType: '2022-03' },
+          { stringType: 'c', numberType: 1, dateType: '2022-01-09' },
+          { stringType: 'b', numberType: 3, dateType: '2021-12-19' },
+        ],
+      },
     };
+
+    it('should throw', () => {
+      expect(
+        () => UtilsService.sortObjectList(unsortedList, 'asc', 'key'),
+      ).toThrow(new Error('One of values to compare is undefined, cannot sort object list!'));
+    });
 
     test.each([
       ['string', 'stringType', sortedLists.ascendingWay.byStringProperty],
@@ -113,13 +123,13 @@ describe('UtilsService', () => {
 
     it('should throw an error if the type is not a string list', () => {
       expect(
-        () => UtilsService.mergeTwoListWithoutDuplications<number>([0, 2], [1, 2, 3], 'number')
+        () => UtilsService.mergeTwoListWithoutDuplications<number>([0, 2], [1, 2, 3], 'number'),
       ).toThrow(new Error('Not Implemented'));
     });
 
     it('should merge lists without duplicates', () => {
       expect(
-        UtilsService.mergeTwoListWithoutDuplications<string>(list1, list2, 'string')
+        UtilsService.mergeTwoListWithoutDuplications<string>(list1, list2),
       ).toStrictEqual(['a', 'c', 'e', 'f', 't', 'b', 'd', 'z']);
     });
   });
@@ -134,13 +144,13 @@ describe('UtilsService', () => {
 
     it('should do nothing if endDate is present', () => {
       expect(
-        UtilsService.addMissingEndDate<{ startDate: string; endDate?: string; }>(withEndDate)
+        UtilsService.addMissingEndDate<{ startDate: string; endDate?: string; }>(withEndDate),
       ).toStrictEqual(withEndDate);
     });
 
     it('should add missing endDate', () => {
       expect(
-        UtilsService.addMissingEndDate<{ startDate: string; endDate?: string; }>(withoutEndDate)
+        UtilsService.addMissingEndDate<{ startDate: string; endDate?: string; }>(withoutEndDate),
       ).toStrictEqual([{ startDate: 'toto', endDate: 'tata' }]);
     });
   });
@@ -151,7 +161,7 @@ describe('UtilsService', () => {
 
   describe('getElementId', () => {
     function createElement(depth: number): any {
-      const stringElement: string = '{' + '"parentElement":{'.repeat(depth) + '"id": "toto"'+ '}'.repeat(depth) + '}';
+      const stringElement: string = '{' + '"parentElement":{'.repeat(depth) + '"id": "toto"' + '}'.repeat(depth) + '}';
       return JSON.parse(stringElement);
     }
 
@@ -201,14 +211,34 @@ describe('UtilsService', () => {
       ['3 ans', 3],
       ['5 mois', 0.42],
       ['12 mois', 1],
+      ['un an', 1],
     ])('should return %s as knob value in year', (name: string, expected: number) => {
       expect(service.convertDateToKnobYearsValue(name)).toBe(expected);
+    });
+  });
+
+  describe('getComputedProperty', () => {
+    let getComputedStyleSpy: any;
+    const divElement = document.createElement('div');
+
+    beforeEach(() => {
+      getComputedStyleSpy = jest.spyOn(window, 'getComputedStyle').mockImplementation(() => ({ getPropertyValue: jest.fn() } as unknown as CSSStyleDeclaration));
+    });
+
+    it('should call window getComputedStyle method', () => {
+      service.getComputedProperty(divElement, 'height');
+      expect(getComputedStyleSpy).toHaveBeenCalledTimes(1);
+      expect(getComputedStyleSpy).toHaveBeenCalledWith(divElement);
     });
   });
 
   describe('convertPixelsToNumber', () => {
     it('should convert a css value to its corresponding number', () => {
       expect(service.convertPixelsToNumber('200px')).toStrictEqual(200);
+    });
+
+    it('should convert a css value to its corresponding number', () => {
+      expect(service.convertPixelsToNumber('10.5px', true)).toStrictEqual(11);
     });
   });
 
@@ -228,6 +258,12 @@ describe('UtilsService', () => {
       { id: 24, name: 'tag24', times: 4, weight: 4 },
     ];
 
+    it('should return a techno list', () => {
+      expect(service.initTechnoListWithTagList(tagList.slice(0, 6))).toStrictEqual([
+        'tag1', 'tag2', 'tag3', 'tag4', 'tag11', 'tag12', ' ',
+      ]);
+    });
+
     it('should return a limited techno list', () => {
       expect(service.initTechnoListWithTagList(tagList, false)).toStrictEqual([
         'tag1', 'tag2', 'tag3', 'tag4', 'tag11', 'tag12', 'et 6 autres...',
@@ -243,11 +279,12 @@ describe('UtilsService', () => {
 
   describe('formatPhoneNumber', () => {
     test.each([
-      ['0607080910', '+33 6 07 08 09 10', ],
-      ['05 02 04 06 03', '+33 5 02 04 06 03', ],
-      ['+33678984565', '+33 6 78 98 45 65', ],
-      ['+33 6789845 65', '+33 6 78 98 45 65', ],
-      ['+336 789 84 565', '+33 6 78 98 45 65', ],
+      ['0607080910', '+33 6 07 08 09 10'],
+      ['05 02 04 06 03', '+33 5 02 04 06 03'],
+      ['+33678984565', '+33 6 78 98 45 65'],
+      ['+33 6789845 65', '+33 6 78 98 45 65'],
+      ['+336 789 84 565', '+33 6 78 98 45 65'],
+      ['+356 789 84 565 4565', '+356 789 84 565 4565'],
     ])('should convert %s to %s', (test: string, expected) => {
       expect(service.formatPhoneNumber(test)).toBe(expected);
     });
@@ -298,6 +335,95 @@ describe('UtilsService', () => {
 
       expect(displayConfirmDialogSpy).not.toHaveBeenCalled();
       expect(windowOpenSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('convertImageToBase64', () => {
+    let getSpy: any;
+
+    const blob = new Blob();
+
+    beforeEach(() => {
+      getSpy = jest.spyOn(httpClientMock, 'get').mockImplementation(() => of(blob));
+    });
+
+    it('should convert', async () => {
+      const result = await service.convertImageToBase64('toto');
+
+      expect(getSpy).toHaveBeenCalledTimes(1);
+      expect(getSpy).toHaveBeenCalledWith('toto', { responseType: 'blob' });
+      expect(result).toStrictEqual('data:application/octet-stream;base64,');
+    });
+  });
+
+  describe('share', () => {
+    let
+      windowNavigatorShareSpy: any,
+      onClipboardCopySpy: any,
+      displayAlertDialogSpy: any;
+
+    const shareData: IShareData = {
+      title: 'test', text: 'toto', url: 'https://toto.test',
+    };
+
+    beforeEach(() => {
+      Object.defineProperty(window, "navigator", {
+        value: {
+          share: () => Promise.resolve(),
+        },
+      });
+
+      windowNavigatorShareSpy = jest.spyOn(window.navigator, 'share');
+      onClipboardCopySpy = jest.spyOn(ClipboardService, 'onClipboardCopy');
+      displayAlertDialogSpy = jest.spyOn(alertServiceMock, 'displayAlertDialog');
+    });
+
+    it('should share', async () => {
+      windowNavigatorShareSpy.mockImplementationOnce(() => Promise.resolve());
+      await service.share(shareData);
+
+      expect(onClipboardCopySpy).not.toHaveBeenCalled();
+      expect(displayAlertDialogSpy).not.toHaveBeenCalled();
+    });
+
+    it('should do nothing if share is canceled', async () => {
+      const errorMessage = 'Share canceled';
+      windowNavigatorShareSpy.mockImplementation(() => Promise.reject(errorMessage));
+
+      await service.share(shareData);
+      expect(onClipboardCopySpy).not.toHaveBeenCalled();
+      expect(displayAlertDialogSpy).not.toHaveBeenCalled();
+    });
+
+    it('should copy the link to the clipboard', async () => {
+      const errorMessage = 'window.navigator.share is not a function';
+      windowNavigatorShareSpy.mockImplementation(() => Promise.reject(errorMessage));
+      onClipboardCopySpy.mockImplementation(() => Promise.resolve());
+
+      await service.share(shareData);
+      expect(onClipboardCopySpy).toHaveBeenCalledTimes(1);
+      expect(onClipboardCopySpy).toHaveBeenCalledWith(shareData.url);
+      expect(displayAlertDialogSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('should display an error alert on clipboard failure', async () => {
+      const errorMessage = 'window.navigator.share is not a function';
+      windowNavigatorShareSpy.mockImplementation(() => Promise.reject(errorMessage));
+      onClipboardCopySpy.mockImplementation(() => Promise.reject('failed to copy!'));
+
+      await service.share(shareData);
+      expect(onClipboardCopySpy).toHaveBeenCalledTimes(1);
+      expect(onClipboardCopySpy).toHaveBeenCalledWith(shareData.url);
+      expect(displayAlertDialogSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('should display an error alert on failure', async () => {
+      const errorMessage = 'unknown error';
+      windowNavigatorShareSpy.mockImplementation(() => Promise.reject(errorMessage));
+
+      await service.share(shareData);
+      expect(onClipboardCopySpy).not.toHaveBeenCalled();
+      expect(displayAlertDialogSpy).toHaveBeenCalledTimes(1);
     });
   });
 });
