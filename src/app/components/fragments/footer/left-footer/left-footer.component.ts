@@ -62,11 +62,11 @@ export class LeftFooterComponent implements OnInit, OnDestroy {
 
     const summary = await this.dataService.getSummary();
 
-    const loadedImage = await this.utilsService.convertImageToBase64(cvInfos.logo!.src);
+    const loadedImage = cvInfos.logo ? await this.utilsService.convertImageToBase64(cvInfos.logo.src) : '';
 
     await this.pdfMakeService.createDownloadablePdf({
       ...cvInfos,
-      logo: { ...cvInfos.logo, src: loadedImage },
+      logo: loadedImage ? { ...cvInfos.logo, src: loadedImage } : undefined,
       cvType: 'full-cv',
       data: {
         experienceList: experiences,

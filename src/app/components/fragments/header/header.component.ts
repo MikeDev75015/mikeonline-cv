@@ -20,7 +20,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   private mobile = false;
 
-  private subscriptionList: Subscription[] = [];
+  private readonly subscriptionList: Subscription[] = [];
 
   /**
    * @ignore

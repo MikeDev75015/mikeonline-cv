@@ -45,7 +45,7 @@ export class ItemComponent implements OnInit, OnChanges, OnDestroy, AfterViewChe
 
   private elementId = '';
 
-  private subscriptionList: Subscription[] = [];
+  private readonly subscriptionList: Subscription[] = [];
 
   constructor(
     private readonly animationService: AnimationsService,

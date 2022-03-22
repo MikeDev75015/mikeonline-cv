@@ -47,7 +47,7 @@ export class FooterComponent implements OnInit, OnDestroy {
 
   private isContactOpen: boolean | undefined;
 
-  private subscriptionList: Subscription[] = [];
+  private readonly subscriptionList: Subscription[] = [];
 
   constructor(
     private readonly contactOpenCloseService: ContactOpenCloseService,

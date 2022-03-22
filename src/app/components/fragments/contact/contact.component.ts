@@ -50,7 +50,7 @@ export class ContactComponent implements OnInit, OnDestroy {
 
   private loading = false;
 
-  private subscriptionList: Subscription[] = [];
+  private readonly subscriptionList: Subscription[] = [];
 
   constructor(
     private readonly dataService: DataService,
@@ -164,8 +164,8 @@ export class ContactComponent implements OnInit, OnDestroy {
 
   public async share(): Promise<void> {
     const shareData: IShareData = {
-      title: APP_CREDITS.title + ' (' + APP_CREDITS.subTitle + ')',
-      text: APP_CREDITS.fullName + ' | ' + APP_CREDITS.title,
+      title: `${APP_CREDITS.title}(${APP_CREDITS.subTitle})`,
+      text: `${APP_CREDITS.fullName} | ${APP_CREDITS.title}`,
       url: APP_CREDITS.webAppUrl,
     };
     await this.utilsService.share(shareData);

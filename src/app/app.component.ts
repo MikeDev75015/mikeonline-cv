@@ -50,19 +50,19 @@ export class AppComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   private hideHeaderTimeOut: any;
 
-  private timeOutTimeToHide = 4000;
-
   private pageYOffset = 0;
 
   private sectionMarginBottom = 0;
 
   private matTabHeaderHeight = 0;
 
-  private minHeightView = 483;
+  private readonly minHeightView = 483;
 
-  private splashScreenDelay = 4000;
+  private readonly timeOutTimeToHide = 4000;
 
-  private subscriptionList: Subscription[] = [];
+  private readonly splashScreenDelay = 4000;
+
+  private readonly subscriptionList: Subscription[] = [];
 
   /**
    * Dispatches the startAppLoading action
@@ -204,7 +204,7 @@ export class AppComponent implements OnInit, AfterViewChecked, OnDestroy {
     if (appHeader) {
       const height = this.utilService.convertPixelsToNumber(window.getComputedStyle(appHeader).getPropertyValue('height'), true);
       if (!this.headerHeight.includes('' + height)) {
-        this.headerHeight = '-' + height + 'px';
+        this.headerHeight = `-${height}px`;
         this.cdRef.detectChanges();
       }
     }
