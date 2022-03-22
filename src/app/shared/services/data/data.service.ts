@@ -9,6 +9,7 @@ import { selectAllExperiences, selectExperiencesLoaded } from '../../../core/ngr
 import { selectAllFormations, selectFormationsLoaded } from '../../../core/ngrx/selectors/formations.selectors';
 import { selectInterestsLoaded } from '../../../core/ngrx/selectors/interests.selectors';
 import { selectAllProjects, selectProjectsLoaded } from '../../../core/ngrx/selectors/projects.selectors';
+import { ApplicationActions } from '../../../core/ngrx/ngrx-index';
 
 @Injectable({
   providedIn: 'root',
@@ -57,7 +58,11 @@ export class DataService {
       this.isDataLoaded(selectInterestsLoaded),
     ]).pipe(
       map((allDataLoaded) => {
-        return allDataLoaded.reduce((result, value) => result && value, true);
+        const status: boolean = allDataLoaded.reduce((result, value) => result && value, true);
+        if (status) {
+          this.store.dispatch(ApplicationActions.hideHeader());
+        }
+        return status;
       }),
     );
   }

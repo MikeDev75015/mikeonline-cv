@@ -1,4 +1,4 @@
-import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { IAnimationServiceResponse } from './core/core-index';
@@ -15,7 +15,7 @@ import { DataService, HEADER_ANIMATION, UtilsService } from './shared/shared-ind
   styleUrls: ['./app.component.scss'],
   animations: HEADER_ANIMATION,
 })
-export class AppComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {
+export class AppComponent implements OnInit, AfterViewChecked, OnDestroy {
   /**
    * A boolean to know if it's the mobile view or not
    */
@@ -122,6 +122,14 @@ export class AppComponent implements OnInit, AfterViewInit, AfterViewChecked, On
         }
 
         this.store.dispatch(ApplicationActions.appLoadingSuccess());
+
+        setTimeout(() => {
+          this.introductionTime = true;
+
+          if (this.waitingFor) {
+            this[this.waitingFor]();
+          }
+        }, this.splashScreenDelay);
       }),
     );
 
@@ -137,16 +145,6 @@ export class AppComponent implements OnInit, AfterViewInit, AfterViewChecked, On
 
     this.subscriptionList.forEach(s => s.unsubscribe());
     this.removeEventListenerFromWindow();
-  }
-
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.introductionTime = true;
-
-      if (this.waitingFor) {
-        this[this.waitingFor]();
-      }
-    }, this.splashScreenDelay);
   }
 
   ngAfterViewChecked(): void {

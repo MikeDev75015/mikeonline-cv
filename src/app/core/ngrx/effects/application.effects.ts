@@ -19,11 +19,8 @@ export class ApplicationEffects {
 
   appLoadingSuccess$ = createEffect(() => this.actions$.pipe(
     ofType(ApplicationActions.appLoadingSuccess),
-    tap(() => {
-      this.store.dispatch(ApplicationActions.endAppLoading());
-      this.store.dispatch(ApplicationActions.hideHeader());
-    }),
-  ), { dispatch: false });
+    map(() => ApplicationActions.endAppLoading()),
+  ));
 
   appLoadingFailure$ = createEffect(() => this.actions$.pipe(
     ofType(ApplicationActions.appLoadingFailure),
