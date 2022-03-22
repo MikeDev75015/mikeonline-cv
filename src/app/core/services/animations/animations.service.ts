@@ -7,14 +7,14 @@ import { IAnimationServiceResponse } from '../../interfaces/animation-response.i
   providedIn: 'root',
 })
 export class AnimationsService {
-  private onAnimationAction: BehaviorSubject<IAnimationServiceResponse> = new BehaviorSubject<IAnimationServiceResponse>({ type: '', params: {} });
+  private readonly onAnimationAction: BehaviorSubject<IAnimationServiceResponse> = new BehaviorSubject<IAnimationServiceResponse>({ type: '', params: {} });
 
   public watchResponse(): Subject<IAnimationServiceResponse> {
     return this.onAnimationAction;
   }
 
   public onPhase(e: any, id = ''): void {
-    const type = e.triggerName + '-' + e.toState + '-' + e.phaseName;
+    const type = `${e.triggerName}-${e.toState}-${e.phaseName}`;
     if (e.triggerName === 'hideShowHeader') {
       if (e.toState === 'hide' && e.phaseName === 'start') {
 
@@ -68,13 +68,13 @@ export class AnimationsService {
     if (e.fromState === 'void' || !id) {
       return;
     }
-    this.onAnimationAction.next({ type: id + '_' + type});
+    this.onAnimationAction.next({ type: `${id}_${type}`});
   }
 
   private processAction(action: IAnimationAction): void {
     const actionType = action ? Object.keys(action)[0] : '';
     if (actionType !== 'style') {
-      console.warn('No switch case for ' + actionType + ' action!');
+      console.warn(`No switch case for ${actionType} action!`);
       return;
     }
 
@@ -83,14 +83,14 @@ export class AnimationsService {
       return;
     }
 
-    if (action.style!.classList) {
-      action.style!.classList.forEach((c) => {
+    if (action.style && action.style.classList) {
+      action.style.classList.forEach((c) => {
         // @ts-ignore
         element.classList[c.method](c.name);
       });
     }
-    if (action.style!.propertyList) {
-      action.style!.propertyList.forEach((p) => {
+    if (action.style && action.style.propertyList) {
+      action.style.propertyList.forEach((p) => {
         // @ts-ignore
         element.style[p.name] = p.value;
       });

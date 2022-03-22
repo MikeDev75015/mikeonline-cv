@@ -124,7 +124,7 @@ export class UtilsService {
     if (technoList.length > 6 && !full) {
       const diff = technoList.length - 6;
       technoList = technoList.filter((t, i) => i < 6);
-      technoList.push('et ' + diff + ' autre' + this.pluralize(diff) + '...');
+      technoList.push(`et ${diff} autre${this.pluralize(diff)}...`);
     } else if (technoList.length < 7) {
       for (let i = technoList.length; i < 7; i++) {
         technoList.push(' ');

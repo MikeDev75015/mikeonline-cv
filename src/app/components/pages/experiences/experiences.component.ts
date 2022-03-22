@@ -14,7 +14,7 @@ export class ExperiencesComponent implements OnInit, OnDestroy {
 
   public experienceList: IExperience[] | undefined;
 
-  private subscriptionList: Subscription[] = [];
+  private readonly subscriptionList: Subscription[] = [];
 
   constructor(
     private readonly dataService: DataService,

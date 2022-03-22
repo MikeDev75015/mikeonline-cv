@@ -22,9 +22,9 @@ interface ILogsPayload {
   providedIn: 'root',
 })
 export class LoggerService {
-  private logsEnabled = environment.ACTIVATED_LOGS;
+  private readonly logsEnabled = environment.ACTIVATED_LOGS;
 
-  private appName = environment.APP_NAME;
+  private readonly appName = environment.APP_NAME;
 
   constructor(
     private readonly httpClientService: HttpClientService,
@@ -66,7 +66,7 @@ export class LoggerService {
   private fileFormat(type: 'log' | 'error' | 'warning', toWrite: any): ILogsPayload {
     return {
       appName: this.appName,
-      fileName: DayJsService.getDate(undefined, fileDateFormat) + type + '.json',
+      fileName: `${DayJsService.getDate(undefined, fileDateFormat)}${type}.json`,
       toWrite: {
         jsonDate: DayJsService.getDate(undefined, jsonDateFormat),
         toWrite,

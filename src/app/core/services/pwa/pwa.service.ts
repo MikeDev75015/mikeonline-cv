@@ -7,7 +7,7 @@ import { AlertService } from '../../modules/alert/services/alert.service';
   providedIn: 'root',
 })
 export class PwaService implements OnDestroy {
-  private subscriptionList: Subscription[] = [];
+  private readonly subscriptionList: Subscription[] = [];
 
   /**
    * @ignore

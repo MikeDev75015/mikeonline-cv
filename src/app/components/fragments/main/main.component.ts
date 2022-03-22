@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { ComponentType } from '../../../core/interfaces/types/component.type';
 import { ContactOpenCloseService } from '../../../core/services/contact-open-close/contact-open-close.service';
 import { DataService } from '../../../shared/services/data/data.service';
 import { CompetencesComponent } from '../../pages/competences/competences.component';
@@ -29,15 +30,17 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public indexTab: number | undefined;
 
-  private iconsToAdd: { id: string, icon: string }[] = [
-    { id: '#icon-comp', icon: '<i class="material-icons">playlist_add_check</i>' },
-    { id: '#icon-exp', icon: '<i class="material-icons">business_center</i>' },
-    { id: '#icon-form', icon: '<i class="material-icons">school</i>' },
-    { id: '#icon-port', icon: '<i class="material-icons">code</i>' },
-    { id: '#icon-int', icon: '<i class="material-icons">whatshot</i>' },
+  private urlHash: string | undefined;
+
+  private readonly iconsToAdd: { id: string, iconName: string }[] = [
+    { id: '#icon-comp', iconName: 'playlist_add_check' },
+    { id: '#icon-exp', iconName: 'business_center' },
+    { id: '#icon-form', iconName: 'school' },
+    { id: '#icon-port', iconName: 'code' },
+    { id: '#icon-int', iconName: 'whatshot' },
   ];
 
-  private moduleToShowList = [
+  private readonly moduleToShowList = [
     { hash: 'competences', name: 'Compétences' },
     { hash: 'experiences', name: 'Expériences' },
     { hash: 'formations', name: 'Formations' },
@@ -45,10 +48,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
     { hash: 'interests', name: 'Intérêts' },
   ];
 
-  private components: (
-    typeof CompetencesComponent | typeof ExperiencesComponent | typeof FormationsComponent |
-    typeof PortfolioComponent | typeof InterestsComponent
-  )[] = [
+  private readonly components: ComponentType[] = [
     CompetencesComponent,
     ExperiencesComponent,
     FormationsComponent,
@@ -56,12 +56,10 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
     InterestsComponent,
   ];
 
-  private urlHash: string | undefined;
-
   private readonly subscriptionList: Subscription[] = [];
 
   constructor(
-    private viewContainerRef: ViewContainerRef,
+    private readonly viewContainerRef: ViewContainerRef,
     private readonly contactOpenCloseService: ContactOpenCloseService,
     private readonly dataService: DataService,
   ) {
@@ -172,7 +170,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
           const icon = document.createElement('span');
           icon.id = this.iconsToAdd[i].id;
           icon.style.pointerEvents = 'none';
-          icon.innerHTML = this.iconsToAdd[i].icon;
+          icon.innerHTML = `<i class="material-icons">${this.iconsToAdd[i].iconName}</i>`;
           if (el) {
             el.insertBefore(icon, el.firstChild);
           }

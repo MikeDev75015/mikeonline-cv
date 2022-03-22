@@ -11,6 +11,6 @@ export const PDF_DEFAULT_HEADER = {
 };
 
 export const PDF_DEFAULT_FOOTER = (currentPage: number, pageCount: number) => ({
-  text: currentPage.toString() + ' / ' + pageCount,
+  text: `${currentPage.toString()} / ${pageCount}`,
   style: 'footer'
 });

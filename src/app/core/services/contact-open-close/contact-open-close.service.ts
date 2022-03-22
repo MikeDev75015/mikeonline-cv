@@ -5,9 +5,9 @@ import {BehaviorSubject, Subject} from 'rxjs';
   providedIn: 'root',
 })
 export class ContactOpenCloseService {
-  private openContactMobile$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private readonly openContactMobile$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-  private isHeightTooSmall$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private readonly isHeightTooSmall$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   public onOpenCloseContactStatusChange(): Subject<boolean> {
     return this.openContactMobile$;

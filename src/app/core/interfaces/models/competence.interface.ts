@@ -6,7 +6,7 @@ import { ITag } from './tag.interface';
 export interface ICompetence {
   id?: string;
   name: string;
-  expertiseLevel: 1 | 2 | 3 | 4 | 5;
+  expertiseLevel: ExpertiseLevelType;
   priority: 1 | 2 | 3;
   startDate: string;
   experienceYears: {
@@ -20,3 +20,5 @@ export interface ICompetence {
   detailList?: IDetail[];
   tagList?: ITag[];
 }
+
+type ExpertiseLevelType = 1 | 2 | 3 | 4 | 5;

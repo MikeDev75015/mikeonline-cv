@@ -189,7 +189,7 @@ export class PdfCreatorService {
           widths: ['*', 'auto'],
           body: [
             [
-              { text: exp.title + (exp.society ? ' - ' + exp.society : ''), style: 'bold' },
+              { text: exp.title, style: 'bold' },
               { text: date, style: 'right', bold: true, color: '#555555' },
             ],
           ],
@@ -200,7 +200,7 @@ export class PdfCreatorService {
 
   private static addPlace(expBody: any[], exp: IExperience | IFormation): void {
     if (exp.place) {
-      expBody.push([{ text: exp.place, italics: true, color: '#555555' }]);
+      expBody.push([{ text: (exp.society ? exp.society + ' - ' : '') + exp.place, italics: true, color: '#555555' }]);
     }
   }
 
@@ -248,8 +248,9 @@ export class PdfCreatorService {
             ],
             [
               {
-                text: 'Tel : ' + this.utilsService.formatPhoneNumber(contact.phoneNumberPartList.parts.join(contact.phoneNumberPartList.joiner)) +
-                  '\nMail : ' + contact.emailPartList.parts.join(contact.emailPartList.joiner),
+                text: `Tel : ${
+                  this.utilsService.formatPhoneNumber(contact.phoneNumberPartList.parts.join(contact.phoneNumberPartList.joiner))
+                }\nMail : ${contact.emailPartList.parts.join(contact.emailPartList.joiner)}`,
                 style: 'defaultStyle'
               },
               {text: technoList.join(', '), style: 'subtitle'},
@@ -261,7 +262,7 @@ export class PdfCreatorService {
 
       contact.webLinkList.forEach(wl => {
         this.updatePdfContent.addText(
-          wl.name + ' : ' + wl.url,
+          `${wl.name} : ${wl.url}`,
           'link',
           wl.url
         );

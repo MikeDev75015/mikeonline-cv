@@ -31,7 +31,7 @@ export class VerticalAccordionItemComponent implements OnInit, AfterViewChecked 
 
   private elementId = '';
 
-  private subscriptionList: Subscription[] = [];
+  private readonly subscriptionList: Subscription[] = [];
 
   constructor(
     private readonly cdRef: ChangeDetectorRef,
@@ -56,7 +56,9 @@ export class VerticalAccordionItemComponent implements OnInit, AfterViewChecked 
   }
 
   public onAnimation(e: any): void {
-    if (!this.elementId) this.elementId = e.element.parentElement.parentElement.id;
+    if (!this.elementId) {
+      this.elementId = e.element.parentElement.parentElement.id;
+    }
     this.animationService.onPhase(e, this.elementId);
   }
 
@@ -69,6 +71,8 @@ export class VerticalAccordionItemComponent implements OnInit, AfterViewChecked 
       !this.elementId ||
       !animationServiceResponse.type ||
       !animationServiceResponse.type.includes(this.elementId)
-    ) return;
+    ) {
+      return;
+    }
   }
 }

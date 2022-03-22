@@ -35,8 +35,6 @@ window.WordCloud = window.WordCloud || {};
 export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked {
   public isLoadingData: boolean | undefined;
 
-  public competenceList?: ICompetence[];
-
   public defaultText?: string;
 
   public selectedKeyword?: string;
@@ -49,6 +47,8 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
 
   public portPanelOpenState = false;
 
+  public competenceList?: ICompetence[];
+
   public experienceList?: IExperience[];
 
   public formationList?: IFormation[];
@@ -57,19 +57,19 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
 
   public competencesLoaded = false;
 
-  private expertiseLevelLabel = EXPERTISE_LEVEL_LABEL;
-
-  private priorityLabel = PRIORITY_LABEL;
-
   private initWordCloud = false;
 
   private wordList: [string, number][] = [];
 
-  private wcDefaultPoliceSize = 15;
-
   private timeOutToDrawn = 0;
 
-  private subscriptionList: Subscription[] = [];
+  private readonly wcDefaultPoliceSize = 15;
+
+  private readonly expertiseLevelLabel = EXPERTISE_LEVEL_LABEL;
+
+  private readonly priorityLabel = PRIORITY_LABEL;
+
+  private readonly subscriptionList: Subscription[] = [];
 
   constructor(
     private readonly dataService: DataService,
@@ -107,18 +107,17 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
 
     const wcCanvas = document.getElementById('wc_canvas');
     if (wcCanvas) {
-      const that = this;
       // @ts-ignore
       wcCanvas.removeEventListener('wordcloudstart', () => {
-        that.wordCloudStart();
+        this.wordCloudStart();
       });
       // @ts-ignore
       wcCanvas.removeEventListener('wordclouddrawn', () => {
-        that.wordCloudDrawn();
+        this.wordCloudDrawn();
       });
       // @ts-ignore
       wcCanvas.removeEventListener('wordcloudstop', () => {
-        that.addWorldCloudClick();
+        this.addWorldCloudClick();
       });
     }
   }
@@ -190,7 +189,7 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
       return;
     }
 
-    for (let element of wcElements) {
+    for (const element of wcElements) {
       if (!element.getAttribute('init-onclick')) {
         this.addClickActionOnElement(element as HTMLElement);
       }
@@ -200,11 +199,9 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
   }
 
   private addClickActionOnElement(el: HTMLElement) {
-    const that = this;
-    // tslint:disable-next-line:only-arrow-functions
-    el.onclick = function () {
-      that.selectedKeyword = el.innerText;
-      that.buildCompetencesSummary(el.innerText).then(() => {
+    el.onclick = () => {
+      this.selectedKeyword = el.innerText;
+      this.buildCompetencesSummary(el.innerText).then(() => {
         /**/
       });
     };
@@ -213,7 +210,6 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
   }
 
   private async loadWorldCloud(): Promise<void> {
-    const that = this;
     const wcCanvas = document.getElementById('wc_canvas');
     if (!wcCanvas) {
       console.error('Cannot draw the word cloud, the canvas is missing or invalid!');
@@ -222,15 +218,15 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
 
     // @ts-ignore
     wcCanvas.addEventListener('wordcloudstart', () => {
-      that.wordCloudStart();
+      this.wordCloudStart();
     });
     // @ts-ignore
     wcCanvas.addEventListener('wordclouddrawn', () => {
-      that.wordCloudDrawn();
+      this.wordCloudDrawn();
     });
     // @ts-ignore
     wcCanvas.addEventListener('wordcloudstop', () => {
-      that.addWorldCloudClick();
+      this.addWorldCloudClick();
     });
 
     this.competencesDrawn = 0;

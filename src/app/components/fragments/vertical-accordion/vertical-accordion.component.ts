@@ -21,8 +21,8 @@ const adaptMinWidth = (): '100px' | '50px' => {
 
 const calculateWidth = (): string => {
   return window.innerWidth
-    ? (window.innerWidth * 80 / 100) + 'px'
-    : (document.body.clientWidth * 80 / 100) + 'px';
+    ? `${window.innerWidth * 80 / 100}px`
+    : `${document.body.clientWidth * 80 / 100}px`;
 };
 
 @Component({
@@ -70,7 +70,9 @@ export class VerticalAccordionComponent implements OnInit, OnDestroy, AfterViewC
 
   private elementId = '';
 
-  private subscriptionList: Subscription[] = [];
+  private readonly selectorPrefix = 'vertical-accordion-item';
+
+  private readonly subscriptionList: Subscription[] = [];
 
   constructor(
     private readonly utilService: UtilsService,
@@ -80,8 +82,10 @@ export class VerticalAccordionComponent implements OnInit, OnDestroy, AfterViewC
   }
 
   private static calculateItemMaxWidth(percent: number): string {
-    if (window.innerWidth) return (window.innerWidth * percent / 100) + 'px';
-    else return (document.body.clientWidth * percent / 100) + 'px';
+    if (window.innerWidth) {
+      return `${window.innerWidth * percent / 100}px`;
+    }
+    return `${document.body.clientWidth * percent / 100}px`;
   }
 
   private static returnExpectedItemMinWidth(): '100px' | '50px' {
@@ -89,10 +93,9 @@ export class VerticalAccordionComponent implements OnInit, OnDestroy, AfterViewC
   }
 
   ngOnInit(): void {
-    if (
-      this.itemList &&
-      this.itemList.length
-    ) this.createVerticalAccordionItemStateDictionary(this.itemList);
+    if (this.itemList && this.itemList.length) {
+      this.createVerticalAccordionItemStateDictionary(this.itemList);
+    }
 
     const animationServiceSubscription = this.animationService.watchResponse()
       .subscribe(
@@ -115,7 +118,7 @@ export class VerticalAccordionComponent implements OnInit, OnDestroy, AfterViewC
   }
 
   public onAnimation(e: any, i: number): void {
-    this.elementId = 'vertical-accordion-item' + i;
+    this.elementId = this.selectorPrefix + i;
     this.animationService.onPhase(e, this.elementId);
   }
 
@@ -137,18 +140,18 @@ export class VerticalAccordionComponent implements OnInit, OnDestroy, AfterViewC
   }
 
   public getItemState(index: number): boolean {
-    return this.verticalAccordionItemStateDictionary['vertical-accordion-item' + index];
+    return this.verticalAccordionItemStateDictionary[this.selectorPrefix + index];
   }
 
   public isItemToClose(index: number): boolean {
     return this.itemToClose
-      ? (+this.itemToClose.replace('vertical-accordion-item', '')) === index
+      ? (+this.itemToClose.replace(this.selectorPrefix, '')) === index
       : false;
   }
 
   public isItemToOpen(index: number): boolean {
     return this.itemToOpen
-      ? (+this.itemToOpen.replace('vertical-accordion-item', '')) === index
+      ? (+this.itemToOpen.replace(this.selectorPrefix, '')) === index
       : false;
   }
 
@@ -167,15 +170,14 @@ export class VerticalAccordionComponent implements OnInit, OnDestroy, AfterViewC
   private createVerticalAccordionItemStateDictionary(itemList: any[]): void {
     itemList.forEach(
       (item, i) =>
-        this.verticalAccordionItemStateDictionary['vertical-accordion-item' + i] = false, // (i === 0)
+        this.verticalAccordionItemStateDictionary[this.selectorPrefix + i] = false, // (i === 0)
     );
   }
 
   private onAnimationServiceResponse(animationServiceResponse: IAnimationServiceResponse): void {
-    if (
-      !animationServiceResponse.type ||
-      !animationServiceResponse.type.includes('vertical-accordion-item')
-    ) return;
+    if (!animationServiceResponse.type || !animationServiceResponse.type.includes(this.selectorPrefix)) {
+      return;
+    }
 
     if (animationServiceResponse.type.includes('start')) {
       if (

@@ -14,7 +14,7 @@ export class FormationsComponent implements OnInit, OnDestroy {
 
   public formationList: any[] | undefined;
 
-  private subscriptionList: Subscription[] = [];
+  private readonly subscriptionList: Subscription[] = [];
 
   constructor(
     private readonly dataService: DataService,

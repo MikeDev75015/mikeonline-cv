@@ -37,7 +37,7 @@ export class PortfolioComponent implements OnInit, OnDestroy {
 
   private timeOutToLoad: any;
 
-  private subscriptionList: Subscription[] = [];
+  private readonly subscriptionList: Subscription[] = [];
 
   /**
    * @ignore
