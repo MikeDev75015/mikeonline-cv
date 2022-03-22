@@ -74,7 +74,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private static isMissingLabelsIcons(): boolean {
     return !document.querySelector('#icon-comp') ||
-      !document.querySelector('#icon-form') ||
+      !document.querySelector('#icon-exp') ||
       !document.querySelector('#icon-form') ||
       !document.querySelector('#icon-port') ||
       !document.querySelector('#icon-int');
