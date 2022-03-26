@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Subject} from 'rxjs';
+import { UtilsService } from '../../../shared/services/utils/utils.service';
 import { IAnimationAction } from '../../interfaces/animation-action.interface';
 import { IAnimationServiceResponse } from '../../interfaces/animation-response.interface';
 
@@ -8,6 +9,11 @@ import { IAnimationServiceResponse } from '../../interfaces/animation-response.i
 })
 export class AnimationsService {
   private readonly onAnimationAction: BehaviorSubject<IAnimationServiceResponse> = new BehaviorSubject<IAnimationServiceResponse>({ type: '', params: {} });
+
+  constructor(
+    private readonly utilsService: UtilsService,
+  ) {
+  }
 
   public watchResponse(): Subject<IAnimationServiceResponse> {
     return this.onAnimationAction;
@@ -61,8 +67,9 @@ export class AnimationsService {
       return;
     }
 
+
     if (!id) {
-      id = e.element.id;
+      id = this.utilsService.getElementId(e.element);
     }
 
     if (e.fromState === 'void' || !id) {

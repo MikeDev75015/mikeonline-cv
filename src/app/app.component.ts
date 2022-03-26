@@ -177,9 +177,11 @@ export class AppComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   private onAnimationServiceResponse(animationServiceResponse: IAnimationServiceResponse): void {
-    if (!animationServiceResponse.type) {
+    if (!animationServiceResponse.type || !animationServiceResponse.type.includes('hideShowHeader-')) {
       return;
     }
+
+    console.debug(animationServiceResponse);
 
     if (animationServiceResponse.type.includes('start')) {
       this.headerOnAnimation = true;
