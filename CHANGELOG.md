@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.8.1](https://bitbucket.org/mikeonline75/ocv-frontend/compare/v1.8.0...v1.8.1) (2022-03-26)
+
+
+### Bug Fixes
+
+* adjust the behavior of the vertical accordion component when refreshing the view ([f9412b4](https://bitbucket.org/mikeonline75/ocv-frontend/commit/f9412b4c8cee1c8efa2a6c6357daae1df4c0bec5))
+* fix unexpected contact component behavior during animations ([40072d9](https://bitbucket.org/mikeonline75/ocv-frontend/commit/40072d9b9ff72e86f9de1739958055083eef2a59))
+
 ## [1.8.0](https://bitbucket.org/mikeonline75/ocv-frontend/compare/v1.7.0...v1.8.0) (2022-03-22)
 
 
