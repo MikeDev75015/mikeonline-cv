@@ -6,17 +6,17 @@
       [itemData]="item"
       [itemClass]="verticalAccordionItemClass"
       [ngClass]="{
-      'right-border': i >= 0,
-      'item-not-opened': !getItemState(i) || isItemToClose(i),
-      'opened-item': getItemState(i) || isItemToOpen(i)
-    }"
+          'right-border': i >= 0,
+          'item-not-opened': !getItemState(i) || isItemToClose(i),
+          'opened-item': getItemState(i) || isItemToOpen(i)
+        }"
       [expanded]="getItemState(i) && !isItemToOpen(i)"
       (open)="updateVerticalAccordionItemState(i, $event)"
 
       [@VerticalAccordionItemInOut]="{
-      value: getItemState(i) || isItemToClose(i) ? 'in' : 'out',
-      params: {minWidthOpened: minWidthOpened, minWidthClosed: minWidthClosed}
-    }"
+          value: getItemState(i) || isItemToClose(i) ? 'in' : 'out',
+          params: {itemWidth: getItemState(i) || isItemToClose(i) ? itemMaxWidth : itemMinWidth, itemMinWidth: itemMinWidth, itemMaxWidth: itemMaxWidth}
+        }"
       (@VerticalAccordionItemInOut.start)="onAnimation($event, i)"
       (@VerticalAccordionItemInOut.done)="onAnimation($event, i)"
     ></app-vertical-accordion-item>

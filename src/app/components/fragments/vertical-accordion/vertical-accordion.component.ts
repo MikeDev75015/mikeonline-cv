@@ -13,17 +13,23 @@ const getMinWidthByDocumentClientWidth = (): '100px' | '50px' => {
   return document.body.clientWidth > 840 ? '100px' : '50px';
 };
 
-const adaptMinWidth = (): '100px' | '50px' => {
+const adaptItemMinWidth = (): '100px' | '50px' => {
   return window.innerWidth
     ? getMinWidthByWindowInnerWidth()
     : getMinWidthByDocumentClientWidth();
 };
 
-const calculateWidth = (): string => {
-  return window.innerWidth
-    ? `${window.innerWidth * 80 / 100}px`
-    : `${document.body.clientWidth * 80 / 100}px`;
+const calculateItemMaxWidth = (percent: number): string => {
+  const widthPercent = window.innerWidth
+    ? window.innerWidth * (percent / 100)
+    : document.body.clientWidth * (percent / 100);
+  const itemMinWidth = parseInt(adaptItemMinWidth(), 10);
+  return `${widthPercent - (itemMinWidth * 2)}px`;
 };
+
+const verticalAccordionItemPercentParentWidth = 85;
+const verticalAccordionItemMinWidth = adaptItemMinWidth();
+const verticalAccordionItemMaxWidth = calculateItemMaxWidth(verticalAccordionItemPercentParentWidth);
 
 @Component({
   selector: 'app-vertical-accordion',
@@ -34,17 +40,43 @@ const calculateWidth = (): string => {
       true,
       { in: 500, out: 600 },
       {
-        style: { minWidth: '{{minWidthOpened}}', maxWidth: calculateWidth() },
-        options: { params: { minWidthOpened: calculateWidth() } },
+        style: { width: '{{itemMaxWidth}}', minWidth: '{{itemMinWidth}}', maxWidth: '{{itemMaxWidth}}' },
+        options: {
+          params: {
+            itemMinWidth: verticalAccordionItemMinWidth,
+            itemMaxWidth: verticalAccordionItemMaxWidth,
+          },
+        },
       },
       {
-        style: { minWidth: adaptMinWidth(), maxWidth: '{{minWidthClosed}}' },
-        options: { params: { minWidthClosed: adaptMinWidth() } },
+        style: { width: '{{itemMinWidth}}', minWidth: '{{itemMinWidth}}', maxWidth: '{{itemMaxWidth}}' },
+        options: {
+          params: {
+            itemMinWidth: verticalAccordionItemMinWidth,
+            itemMaxWidth: verticalAccordionItemMaxWidth,
+          },
+        },
       },
       {
         voidDelay: { in: 0, out: 0 },
-        voidInPayload: { style: { minWidth: '250px' } },
-        voidOutPayload: { style: { minWidth: adaptMinWidth() } },
+        voidInPayload: {
+          style: { width: '{{itemMaxWidth}}', minWidth: '{{itemMinWidth}}', maxWidth: '{{itemMaxWidth}}' },
+          options: {
+            params: {
+              itemMinWidth: verticalAccordionItemMinWidth,
+              itemMaxWidth: verticalAccordionItemMaxWidth,
+            },
+          },
+        },
+        voidOutPayload: {
+          style: { width: '{{itemMinWidth}}', minWidth: '{{itemMinWidth}}', maxWidth: '{{itemMaxWidth}}' },
+          options: {
+            params: {
+              itemMinWidth: verticalAccordionItemMinWidth,
+              itemMaxWidth: verticalAccordionItemMaxWidth,
+            },
+          },
+        },
       },
     ),
   ],
@@ -58,17 +90,17 @@ export class VerticalAccordionComponent implements OnInit, OnDestroy, AfterViewC
 
   @Input() options = {};
 
-  public minWidthOpened = '300px';
+  public itemMaxWidth: string | undefined;
 
-  public minWidthClosed = '50px';
+  public itemMinWidth: string | undefined;
+
+  public isRefreshing = false;
 
   private verticalAccordionItemStateDictionary: { [key: string]: any } = {};
 
   private itemToOpen = '';
 
   private itemToClose = '';
-
-  private elementId = '';
 
   private readonly selectorPrefix = 'vertical-accordion-item';
 
@@ -81,31 +113,22 @@ export class VerticalAccordionComponent implements OnInit, OnDestroy, AfterViewC
   ) {
   }
 
-  private static calculateItemMaxWidth(percent: number): string {
-    if (window.innerWidth) {
-      return `${window.innerWidth * percent / 100}px`;
-    }
-    return `${document.body.clientWidth * percent / 100}px`;
-  }
-
-  private static returnExpectedItemMinWidth(): '100px' | '50px' {
-    return window.innerWidth ? getMinWidthByWindowInnerWidth() : getMinWidthByDocumentClientWidth();
-  }
-
   ngOnInit(): void {
+    this.subscriptionList.push(
+      this.animationService.watchResponse().subscribe(
+        animationServiceResponse => this.onAnimationServiceResponse(animationServiceResponse),
+      ),
+    );
+
     if (this.itemList && this.itemList.length) {
       this.createVerticalAccordionItemStateDictionary(this.itemList);
     }
 
-    const animationServiceSubscription = this.animationService.watchResponse()
-      .subscribe(
-        animationServiceResponse => this.onAnimationServiceResponse(animationServiceResponse),
-      );
-    this.subscriptionList.push(animationServiceSubscription);
-
     window.addEventListener('resize', () => {
       this.updateVerticalAccordionItemMinWidth();
     });
+
+    this.updateVerticalAccordionItemMinWidth();
   }
 
   ngOnDestroy(): void {
@@ -118,8 +141,7 @@ export class VerticalAccordionComponent implements OnInit, OnDestroy, AfterViewC
   }
 
   public onAnimation(e: any, i: number): void {
-    this.elementId = this.selectorPrefix + i;
-    this.animationService.onPhase(e, this.elementId);
+    this.animationService.onPhase(e, this.selectorPrefix + i);
   }
 
   public updateVerticalAccordionItemState(index: number, state: boolean): void {
@@ -140,12 +162,12 @@ export class VerticalAccordionComponent implements OnInit, OnDestroy, AfterViewC
   }
 
   public getItemState(index: number): boolean {
-    return this.verticalAccordionItemStateDictionary[this.selectorPrefix + index];
+    return this.verticalAccordionItemStateDictionary[index];
   }
 
   public isItemToClose(index: number): boolean {
     return this.itemToClose
-      ? (+this.itemToClose.replace(this.selectorPrefix, '')) === index
+      ? +this.itemToClose === index
       : false;
   }
 
@@ -160,17 +182,19 @@ export class VerticalAccordionComponent implements OnInit, OnDestroy, AfterViewC
   }
 
   private updateVerticalAccordionItemMinWidth(): void {
-    this.minWidthOpened = VerticalAccordionComponent.calculateItemMaxWidth(50);
-    const minWidthExpected = VerticalAccordionComponent.returnExpectedItemMinWidth();
-    if (this.minWidthClosed !== minWidthExpected) {
-      this.minWidthClosed = minWidthExpected;
+    const itemMaxWidthExpected = calculateItemMaxWidth(verticalAccordionItemPercentParentWidth);
+    const iTemMinWidthExpected = adaptItemMinWidth();
+    if (this.itemMaxWidth !==itemMaxWidthExpected) {
+      this.itemMaxWidth = itemMaxWidthExpected;
+    }
+    if (this.itemMinWidth !== iTemMinWidthExpected) {
+      this.itemMinWidth = iTemMinWidthExpected;
     }
   }
 
   private createVerticalAccordionItemStateDictionary(itemList: any[]): void {
     itemList.forEach(
-      (item, i) =>
-        this.verticalAccordionItemStateDictionary[this.selectorPrefix + i] = false, // (i === 0)
+      (item, i) => this.verticalAccordionItemStateDictionary[i] = i === 0,
     );
   }
 
