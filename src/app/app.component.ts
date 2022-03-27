@@ -181,8 +181,6 @@ export class AppComponent implements OnInit, AfterViewChecked, OnDestroy {
       return;
     }
 
-    console.debug(animationServiceResponse);
-
     if (animationServiceResponse.type.includes('start')) {
       this.headerOnAnimation = true;
     } else if (animationServiceResponse.type.includes('done')) {
