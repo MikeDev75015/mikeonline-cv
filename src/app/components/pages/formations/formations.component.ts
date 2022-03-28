@@ -1,6 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { isLoadingDisplayTimeout } from '../../../core/constants/common.constant';
+import { Component, OnInit } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import { IFormation } from '../../../core/core-index';
 import { selectAllFormations, selectFormationsLoaded } from '../../../core/ngrx/selectors/formations.selectors';
 import { DataService, UtilsService } from '../../../shared/shared-index';
@@ -9,20 +9,19 @@ import { DataService, UtilsService } from '../../../shared/shared-index';
   selector: 'app-formations',
   templateUrl: './formations.component.html',
 })
-export class FormationsComponent implements OnInit, OnDestroy {
-  public isLoadingData: boolean | undefined;
+export class FormationsComponent implements OnInit {
+  public isLoadingData: Observable<boolean> = of(true);
 
   public formationList: any[] | undefined;
 
-  private readonly subscriptionList: Subscription[] = [];
-
   constructor(
     private readonly dataService: DataService,
-  ) {}
+  ) {
+  }
 
   async ngOnInit(): Promise<void> {
-    this.subscriptionList.push(
-      this.dataService.isDataLoaded(selectFormationsLoaded).subscribe((loaded) => {
+    this.isLoadingData = this.dataService.isDataLoaded(selectFormationsLoaded).pipe(
+      tap((loaded) => {
         if (loaded) {
           this.dataService.getStoreData<IFormation[]>({
             selector: selectAllFormations,
@@ -33,19 +32,11 @@ export class FormationsComponent implements OnInit, OnDestroy {
                 UtilsService.addMissingEndDate<IFormation>(list),
                 'desc', 'endDate', 'date',
               );
-              setTimeout(() => {
-                this.isLoadingData = false;
-              }, isLoadingDisplayTimeout);
             },
           );
-        } else {
-          this.isLoadingData = true;
         }
       }),
+      map((loaded) => !loaded),
     );
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptionList.forEach((s) => s.unsubscribe());
   }
 }

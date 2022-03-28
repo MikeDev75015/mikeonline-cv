@@ -1,12 +1,11 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MockComponent } from 'ng2-mock-component';
 import { KnobModule } from 'primeng/knob';
 import { dataServiceMock } from '../../../__mocks__/services/data-service.mock';
 import { AlertModule } from '../../../core/core-index';
-import { LoadingDirective } from '../../../core/directives/loading.directive';
 import { DataService } from '../../../shared/services/data/data.service';
 import { UtilsService } from '../../../shared/shared-index';
 import { CompetencesComponent } from './competences.component';
@@ -15,8 +14,8 @@ describe('CompetencesComponent', () => {
   let component: CompetencesComponent;
   let fixture: ComponentFixture<CompetencesComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [
         MatExpansionModule,
         HttpClientTestingModule,
@@ -40,16 +39,16 @@ describe('CompetencesComponent', () => {
           inputs: ['siteDemo'],
         }),
         MockComponent({
-          selector: 'app-loading',
+          selector: 'app-page-layout',
+          inputs: ['elementsNumber', 'isLoadingData'],
         }),
-        LoadingDirective,
       ],
       providers: [
         { provide: DataService, useValue: dataServiceMock },
         { provide: UtilsService, useValue: {} },
       ],
     }).compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(CompetencesComponent);

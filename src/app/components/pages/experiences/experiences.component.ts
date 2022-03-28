@@ -1,6 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { isLoadingDisplayTimeout } from '../../../core/constants/common.constant';
+import { Component, OnInit } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import { IExperience } from '../../../core/core-index';
 import { selectAllExperiences, selectExperiencesLoaded } from '../../../core/ngrx/selectors/experiences.selectors';
 import { DataService, UtilsService } from '../../../shared/shared-index';
@@ -9,12 +9,10 @@ import { DataService, UtilsService } from '../../../shared/shared-index';
   selector: 'app-experiences',
   templateUrl: './experiences.component.html',
 })
-export class ExperiencesComponent implements OnInit, OnDestroy {
-  public isLoadingData: boolean | undefined;
+export class ExperiencesComponent implements OnInit {
+  public isLoadingData: Observable<boolean> = of(true);
 
   public experienceList: IExperience[] | undefined;
-
-  private readonly subscriptionList: Subscription[] = [];
 
   constructor(
     private readonly dataService: DataService,
@@ -22,8 +20,8 @@ export class ExperiencesComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
-    this.subscriptionList.push(
-      this.dataService.isDataLoaded(selectExperiencesLoaded).subscribe((loaded) => {
+    this.isLoadingData = this.dataService.isDataLoaded(selectExperiencesLoaded).pipe(
+      tap((loaded) => {
         if (loaded) {
           this.dataService.getStoreData<IExperience[]>({
             selector: selectAllExperiences, defaultValue: [],
@@ -32,19 +30,11 @@ export class ExperiencesComponent implements OnInit, OnDestroy {
               this.experienceList = UtilsService.sortObjectList<IExperience>(
                 list, 'desc', 'beginDate', 'date',
               );
-              setTimeout(() => {
-                this.isLoadingData = false;
-              }, isLoadingDisplayTimeout);
             },
           );
-        } else {
-          this.isLoadingData = true;
         }
       }),
+      map((loaded) => !loaded),
     );
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptionList.forEach((s) => s.unsubscribe());
   }
 }

@@ -1,9 +1,8 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MockComponent } from 'ng2-mock-component';
 import { AlertModule } from '../../../core/core-index';
-import { LoadingDirective } from '../../../core/directives/loading.directive';
 import { DataService } from '../../../shared/shared-index';
 
 import { PortfolioComponent } from './portfolio.component';
@@ -12,8 +11,8 @@ describe('PortfolioComponent', () => {
   let component: PortfolioComponent;
   let fixture: ComponentFixture<PortfolioComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [
         PortfolioComponent,
         MockComponent({
@@ -21,9 +20,9 @@ describe('PortfolioComponent', () => {
           inputs: ['siteDemo'],
         }),
         MockComponent({
-          selector: 'app-loading',
+          selector: 'app-page-layout',
+          inputs: ['elementsNumber', 'isLoadingData'],
         }),
-        LoadingDirective,
       ],
       providers: [
         { provide: DataService, useValue: {} },
@@ -35,10 +34,9 @@ describe('PortfolioComponent', () => {
       ],
     })
       .compileComponents();
-  }));
+  });
 
   beforeEach(() => {
-    TestBed.get(DataService);
     fixture = TestBed.createComponent(PortfolioComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

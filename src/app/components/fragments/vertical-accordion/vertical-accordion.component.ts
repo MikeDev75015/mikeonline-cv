@@ -1,6 +1,15 @@
-import { AfterViewChecked, ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  AfterViewChecked,
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
-import { IAnimationServiceResponse } from '../../../core/core-index';
+import { IAnimationServiceResponse, IInterest } from '../../../core/core-index';
 import { AnimationsService } from '../../../core/services/animations/animations.service';
 import { UtilsService } from '../../../shared/services/utils/utils.service';
 import { IN_OUT_TEMPLATE_ANIMATION } from '../../../shared/shared-index';
@@ -81,8 +90,8 @@ const verticalAccordionItemMaxWidth = calculateItemMaxWidth(verticalAccordionIte
     ),
   ],
 })
-export class VerticalAccordionComponent implements OnInit, OnDestroy, AfterViewChecked {
-  @Input() itemList: any[] = [];
+export class VerticalAccordionComponent implements OnInit, OnChanges, OnDestroy, AfterViewChecked {
+  @Input() itemList: IInterest[] | undefined;
 
   @Input() verticalAccordionContainerClass = '';
 
@@ -113,6 +122,13 @@ export class VerticalAccordionComponent implements OnInit, OnDestroy, AfterViewC
   ) {
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes && changes['itemList'] && changes['itemList'].currentValue && changes['itemList'].currentValue.length) {
+      this.updateVerticalAccordionItemMinWidth();
+      this.createVerticalAccordionItemStateDictionary(this.itemList as IInterest[]);
+    }
+  }
+
   ngOnInit(): void {
     this.subscriptionList.push(
       this.animationService.watchResponse().subscribe(
@@ -120,15 +136,14 @@ export class VerticalAccordionComponent implements OnInit, OnDestroy, AfterViewC
       ),
     );
 
-    if (this.itemList && this.itemList.length) {
-      this.createVerticalAccordionItemStateDictionary(this.itemList);
-    }
-
     window.addEventListener('resize', () => {
       this.updateVerticalAccordionItemMinWidth();
     });
 
-    this.updateVerticalAccordionItemMinWidth();
+    if (this.itemList && this.itemList.length) {
+      this.updateVerticalAccordionItemMinWidth();
+      this.createVerticalAccordionItemStateDictionary(this.itemList);
+    }
   }
 
   ngOnDestroy(): void {
@@ -184,7 +199,7 @@ export class VerticalAccordionComponent implements OnInit, OnDestroy, AfterViewC
   private updateVerticalAccordionItemMinWidth(): void {
     const itemMaxWidthExpected = calculateItemMaxWidth(verticalAccordionItemPercentParentWidth);
     const iTemMinWidthExpected = adaptItemMinWidth();
-    if (this.itemMaxWidth !==itemMaxWidthExpected) {
+    if (this.itemMaxWidth !== itemMaxWidthExpected) {
       this.itemMaxWidth = itemMaxWidthExpected;
     }
     if (this.itemMinWidth !== iTemMinWidthExpected) {

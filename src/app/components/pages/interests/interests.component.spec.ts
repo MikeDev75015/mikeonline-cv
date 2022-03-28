@@ -1,9 +1,8 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MockComponent } from 'ng2-mock-component';
 import { dataServiceMock } from '../../../__mocks__/services/data-service.mock';
-import { LoadingDirective } from '../../../core/directives/loading.directive';
 import { DataService } from '../../../shared/shared-index';
 
 import { InterestsComponent } from './interests.component';
@@ -12,8 +11,8 @@ describe('InterestsComponent', () => {
   let component: InterestsComponent;
   let fixture: ComponentFixture<InterestsComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [
         InterestsComponent,
         MockComponent({
@@ -26,9 +25,9 @@ describe('InterestsComponent', () => {
           ],
         }),
         MockComponent({
-          selector: 'app-loading',
+          selector: 'app-page-layout',
+          inputs: ['elementsNumber', 'isLoadingData'],
         }),
-        LoadingDirective,
       ],
       providers: [
         { provide: DataService, useValue: dataServiceMock },
@@ -39,7 +38,7 @@ describe('InterestsComponent', () => {
       ],
     })
       .compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(InterestsComponent);

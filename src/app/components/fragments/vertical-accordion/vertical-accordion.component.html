@@ -2,7 +2,7 @@
   <ng-container *ngFor="let item of itemList; let i = index">
     <app-vertical-accordion-item
       [id]="'vertical-accordion-item' + i"
-      [lastItem]="i === (itemList.length - 1)"
+      [lastItem]="itemList ? i === (itemList.length - 1) : false"
       [itemData]="item"
       [itemClass]="verticalAccordionItemClass"
       [ngClass]="{
