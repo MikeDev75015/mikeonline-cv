@@ -69,8 +69,6 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
 
   private readonly priorityLabel = PRIORITY_LABEL;
 
-  // private readonly subscriptionList: Subscription[] = [];
-
   constructor(
     private readonly dataService: DataService,
     private readonly utilsService: UtilsService,
@@ -190,11 +188,10 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
   }
 
   private addClickActionOnElement(el: HTMLElement) {
-    el.onclick = () => {
+    el.onclick = async (e) => {
+      e.preventDefault();
       this.selectedKeyword = el.innerText;
-      this.buildCompetencesSummary(el.innerText).then(() => {
-        /**/
-      });
+      await this.buildCompetencesSummary(el.innerText);
     };
 
     el.setAttribute('init-onclick', 'true');
