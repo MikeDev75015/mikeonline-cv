@@ -1,7 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { isLoadingDisplayTimeout } from '../../../core/constants/common.constant';
+import { Component, OnInit } from '@angular/core';
+import { Observable, of, tap } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { IProject, ITag } from '../../../core/core-index';
 import { selectAllProjects, selectProjectsLoaded } from '../../../core/ngrx/selectors/projects.selectors';
 import { DataService, UtilsService } from '../../../shared/shared-index';
@@ -26,8 +26,8 @@ import { DataService, UtilsService } from '../../../shared/shared-index';
     ]),
   ],
 })
-export class PortfolioComponent implements OnInit, OnDestroy {
-  public isLoadingData: boolean | undefined;
+export class PortfolioComponent implements OnInit {
+  public isLoadingData: Observable<boolean> = of(true);
 
   public siteDemoList: IProject[] = [];
 
@@ -36,8 +36,6 @@ export class PortfolioComponent implements OnInit, OnDestroy {
   public backgroundImage = '';
 
   private timeOutToLoad: any;
-
-  private readonly subscriptionList: Subscription[] = [];
 
   /**
    * @ignore
@@ -51,8 +49,8 @@ export class PortfolioComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
-    this.subscriptionList.push(
-      this.dataService.isDataLoaded(selectProjectsLoaded).subscribe((loaded) => {
+    this.isLoadingData = this.dataService.isDataLoaded(selectProjectsLoaded).pipe(
+      tap((loaded) => {
         if (loaded) {
           this.dataService.getStoreData<IProject[]>({
             selector: selectAllProjects,
@@ -64,20 +62,12 @@ export class PortfolioComponent implements OnInit, OnDestroy {
                 technoList: this.utilsService.initTechnoListWithTagList(s.tagList as ITag[]),
               }));
               this.siteDemoList = UtilsService.sortObjectList<IProject>(listWithTechnoName, 'asc', 'position', 'number');
-              setTimeout(() => {
-                this.isLoadingData = false;
-              }, isLoadingDisplayTimeout);
             },
           );
-        } else {
-          this.isLoadingData = true;
         }
       }),
+      map((loaded) => !loaded),
     );
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptionList.forEach((s) => s.unsubscribe());
   }
 
   public onLoadBackgroundImage(siteDemo: IProject): void {

@@ -1,13 +1,17 @@
-<section id="PORTFOLIO" class="fsc column w100">
-  <ng-container *appLoading="isLoadingData">
+<app-page-layout
+  id="PORTFOLIO"
+  pageTitle="mon Portfolio"
+  [elementsNumber]="siteDemoList.length"
+  [isLoadingData]="isLoadingData"
+>
+  <ng-container>
     <div
       [@showHideBackgroundImage]="showImage ? 'show' : 'hide'"
       class="full-screen"
       style="background-position: center; background-repeat: no-repeat; background-size: cover; opacity: 0; pointer-events: none;"
       [ngStyle]="{backgroundImage: backgroundImage ? 'url(' + backgroundImage + ')' : ''}"
     ></div>
-    <h3 class="animated-background"><span>mon Portfolio<span class="badge-element">{{ siteDemoList.length }}</span></span>
-    </h3>
+
     <div *ngIf="siteDemoList.length" class="pf_flip w100 fcc">
       <app-portfolio-item
         *ngFor="let siteDemo of siteDemoList"
@@ -18,4 +22,4 @@
       ></app-portfolio-item>
     </div>
   </ng-container>
-</section>
+</app-page-layout>
