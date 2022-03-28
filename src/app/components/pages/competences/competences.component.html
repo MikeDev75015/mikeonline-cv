@@ -1,11 +1,10 @@
-<section id="COMPETENCES" class="fsc column w100" style="padding-bottom: 100px;">
-  <ng-container *appLoading="isLoadingData">
-    <h3 class="animated-background">
-    <span>
-      mes Compétences
-      <span *ngIf="competencesDrawn" class="badge-element">{{ competencesDrawn }}</span>
-    </span>
-    </h3>
+<app-page-layout
+  id="COMPETENCES"
+  pageTitle="mes Compétences"
+  [elementsNumber]="competencesDrawn"
+  [isLoadingData]="isLoadingData"
+>
+  <ng-container>
     <div class="w90 fcc" id="wc_canvas" style="min-height: 200px; height: auto;"></div>
     <p *ngIf="selectedKeyword || defaultText" style="margin-top: 50px !important;" class="fcc chip">{{ selectedKeyword || defaultText }}</p><br>
 
@@ -124,4 +123,4 @@
       </mat-expansion-panel>
     </mat-accordion>
   </ng-container>
-</section>
+</app-page-layout>

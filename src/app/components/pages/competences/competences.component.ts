@@ -1,6 +1,6 @@
 import { AfterViewChecked, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { isLoadingDisplayTimeout } from '../../../core/constants/common.constant';
+import { Observable, of, tap } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { partialIsoDatePattern } from '../../../core/constants/patterns.constant';
 import {
   EXPERTISE_LEVEL_LABEL,
@@ -12,13 +12,13 @@ import {
   PRIORITY_LABEL,
   WorldCloudOptions,
 } from '../../../core/core-index';
-import { DayJsService } from '../../../core/services/dayjs/dayjs.service';
-import { DataService, UtilsService } from '../../../shared/shared-index';
-import { selectAllTags } from '../../../core/ngrx/selectors/tags.selectors';
 import { selectAllCompetences, selectCompetencesLoaded } from '../../../core/ngrx/selectors/competences.selectors';
 import { selectAllExperiences } from '../../../core/ngrx/selectors/experiences.selectors';
 import { selectAllFormations } from '../../../core/ngrx/selectors/formations.selectors';
 import { selectAllProjects } from '../../../core/ngrx/selectors/projects.selectors';
+import { selectAllTags } from '../../../core/ngrx/selectors/tags.selectors';
+import { DayJsService } from '../../../core/services/dayjs/dayjs.service';
+import { DataService, UtilsService } from '../../../shared/shared-index';
 
 declare global {
   interface Window {
@@ -33,7 +33,7 @@ window.WordCloud = window.WordCloud || {};
   styleUrls: ['./competences.component.scss'],
 })
 export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked {
-  public isLoadingData: boolean | undefined;
+  public isLoadingData: Observable<boolean> = of(true);
 
   public defaultText?: string;
 
@@ -69,13 +69,14 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
 
   private readonly priorityLabel = PRIORITY_LABEL;
 
-  private readonly subscriptionList: Subscription[] = [];
+  // private readonly subscriptionList: Subscription[] = [];
 
   constructor(
     private readonly dataService: DataService,
     private readonly utilsService: UtilsService,
     private readonly cdRef: ChangeDetectorRef,
-  ) {}
+  ) {
+  }
 
   private static getGridForWidth(): number {
     let gridValue = 12;
@@ -86,25 +87,15 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
   }
 
   ngOnInit(): void {
-    this.isLoadingData = true;
-
-    this.subscriptionList.push(
-      this.dataService.isDataLoaded(selectCompetencesLoaded).subscribe(async (loaded) => {
-        if (!loaded) {
-          return;
-        }
-
-        this.competencesLoaded = true;
-        setTimeout(() => {
-          this.isLoadingData = false;
-        }, isLoadingDisplayTimeout);
+    this.isLoadingData = this.dataService.isDataLoaded(selectCompetencesLoaded).pipe(
+      tap((loaded) => {
+        this.competencesLoaded = loaded;
       }),
+      map((loaded) => !loaded),
     );
   }
 
   ngOnDestroy(): void {
-    this.subscriptionList.forEach((s) => s.unsubscribe());
-
     const wcCanvas = document.getElementById('wc_canvas');
     if (wcCanvas) {
       // @ts-ignore
