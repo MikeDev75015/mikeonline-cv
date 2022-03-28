@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule, Optional, Provider, SkipSelf } from '@angular/core';
 import { LoadingComponent } from './components/loading/loading.component';
 import { LoadingDirective } from './directives/loading.directive';
+import { PageLayoutComponent } from './layouts/page-layout/page-layout.component';
 
 const importList = [
   CommonModule,
@@ -13,10 +14,12 @@ const providerList: Provider[] = [];
   declarations: [
     LoadingComponent,
     LoadingDirective,
+    PageLayoutComponent,
   ],
   imports: importList,
   exports: [
     LoadingDirective,
+    PageLayoutComponent,
   ],
 })
 export class CoreModule {
