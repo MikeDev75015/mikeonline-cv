@@ -27,21 +27,28 @@ export class DataService {
     return Array.isArray(el[property]) ? el[property].includes(value) : el[property] === value;
   }
 
+  /**
+   *
+   * @param selector
+   * @param defaultValue
+   * @param value
+   * @param property
+   */
   public async getStoreData<T>({ selector, defaultValue, value, property }: {
     selector: (state: object) => T, defaultValue: T, value?: string | number, property?: string,
   }): Promise<T> {
-    const data: T = await lastValueFrom(this.store.select(selector).pipe(take(1)), { defaultValue });
-
-    if (value !== undefined) {
-      if (!property) {
-        property = 'id';
-      }
-      return Array.isArray(data)
-        ? data.filter((el: { [key: string]: any }) => DataService.listFilterPredicate(el, property as string, value)) as unknown as T
-        : data;
+    let data: T = await lastValueFrom(this.store.select(selector).pipe(take(1)), { defaultValue });
+    if (!data) {
+      return defaultValue;
     }
 
-    return data;
+    if (value === undefined && !property) {
+      return data;
+    }
+
+    return Array.isArray(data) && value
+      ? data.filter((el: { [key: string]: any }) => DataService.listFilterPredicate(el, property || 'id', value)) as unknown as T
+      : (data as { [key: string]: any; })[property as string];
   }
 
   public getSummary(): Promise<ITag[]> {

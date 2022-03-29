@@ -13,11 +13,17 @@ export class TagsService {
   ) {
   }
 
-  public getAllTags(): Promise<ITag[]> {
-    return lastValueFrom(this.store.select(selectAllTags).pipe(take(1)), { defaultValue: [] });
+  public async getAllTags(): Promise<ITag[]> {
+    const allTags = await lastValueFrom(this.store.select(selectAllTags).pipe(take(1)), { defaultValue: [] });
+    return allTags || [];
   }
 
   public getTagsByIds(tagIdList: number[], allTags: ITag[]): ITag[] {
-    return tagIdList.map((tagId) => allTags.find((tag) => tag.id === tagId)) as ITag[]
+    return tagIdList.map((tagId) => allTags.find((tag) => tag.id === tagId)).filter((tag, i) => {
+      if (!tag) {
+        console.warn(`Unknown tag id found: ${tagIdList[i]} at position ${i}.`);
+      }
+      return !!tag;
+    }) as ITag[];
   }
 }
