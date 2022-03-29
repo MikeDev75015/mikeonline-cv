@@ -28,6 +28,11 @@
     }
   }
 
+  .line-body {
+    margin-bottom: 50px !important;
+  }
+;
+
   p, a, li{
     font-size: 12px;
   }
@@ -40,9 +45,11 @@
   app-vertical-accordion-item.item-not-opened {
     min-width: 50px;
   }
+
   .vertical-accordion-item p {
     font-size: 14px !important;
   }
+
   .vertical-accordion-item-header {
     width: 50px;
     min-width: 50px;
