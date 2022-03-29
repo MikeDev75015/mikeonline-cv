@@ -4,8 +4,8 @@ import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { alertServiceMock } from '../../../__mocks__/services/alert-service.mock';
 import { httpClientMock } from '../../../__mocks__/services/http-client.mock';
+import { tagListMock } from '../../../__mocks__/tag-list.mock';
 import { waitTimeout } from '../../../__mocks__/timeout.mock';
-import { ITag } from '../../../core/interfaces/models/tag.interface';
 import { IShareData } from '../../../core/interfaces/share-data.interface';
 import { AlertModule } from '../../../core/modules/alert/alert.module';
 import { AlertService } from '../../../core/modules/alert/services/alert.service';
@@ -243,35 +243,20 @@ describe('UtilsService', () => {
   });
 
   describe('initTechnoListWithTagList', () => {
-    const tagList: ITag[] = [
-      { id: 1, name: 'tag1', times: 1, weight: 1 },
-      { id: 2, name: 'tag2', times: 2, weight: 2 },
-      { id: 3, name: 'tag3', times: 3, weight: 3 },
-      { id: 4, name: 'tag4', times: 4, weight: 4 },
-      { id: 11, name: 'tag11', times: 1, weight: 1 },
-      { id: 12, name: 'tag12', times: 2, weight: 2 },
-      { id: 13, name: 'tag13', times: 3, weight: 3 },
-      { id: 14, name: 'tag14', times: 4, weight: 4 },
-      { id: 21, name: 'tag21', times: 1, weight: 1 },
-      { id: 22, name: 'tag22', times: 2, weight: 2 },
-      { id: 23, name: 'tag23', times: 3, weight: 3 },
-      { id: 24, name: 'tag24', times: 4, weight: 4 },
-    ];
-
     it('should return a techno list', () => {
-      expect(service.initTechnoListWithTagList(tagList.slice(0, 6))).toStrictEqual([
+      expect(service.initTechnoListWithTagList(tagListMock.slice(0, 6))).toStrictEqual([
         'tag1', 'tag2', 'tag3', 'tag4', 'tag11', 'tag12', ' ',
       ]);
     });
 
     it('should return a limited techno list', () => {
-      expect(service.initTechnoListWithTagList(tagList, false)).toStrictEqual([
+      expect(service.initTechnoListWithTagList(tagListMock, false)).toStrictEqual([
         'tag1', 'tag2', 'tag3', 'tag4', 'tag11', 'tag12', 'et 6 autres...',
       ]);
     });
 
     it('should return a full techno list', () => {
-      expect(service.initTechnoListWithTagList(tagList, true)).toStrictEqual([
+      expect(service.initTechnoListWithTagList(tagListMock, true)).toStrictEqual([
         'tag1', 'tag2', 'tag3', 'tag4', 'tag11', 'tag12', 'tag13', 'tag14', 'tag21', 'tag22', 'tag23', 'tag24',
       ]);
     });
@@ -367,7 +352,7 @@ describe('UtilsService', () => {
     };
 
     beforeEach(() => {
-      Object.defineProperty(window, "navigator", {
+      Object.defineProperty(window, 'navigator', {
         value: {
           share: () => Promise.resolve(),
         },
