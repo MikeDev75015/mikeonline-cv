@@ -37,7 +37,7 @@ export class DataService {
   public async getStoreData<T>({ selector, defaultValue, value, property }: {
     selector: (state: object) => T, defaultValue: T, value?: string | number, property?: string,
   }): Promise<T> {
-    let data: T = await lastValueFrom(this.store.select(selector).pipe(take(1)), { defaultValue });
+    const data: T = await lastValueFrom(this.store.select(selector).pipe(take(1)), { defaultValue });
     if (!data) {
       return defaultValue;
     }
