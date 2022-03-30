@@ -4,7 +4,7 @@ import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { alertServiceMock } from '../../../__mocks__/services/alert-service.mock';
 import { httpClientMock } from '../../../__mocks__/services/http-client.mock';
-import { tagListMock } from '../../../__mocks__/tag-list.mock';
+import { tagListMock } from '../../../__mocks__/data/tag-list.mock';
 import { waitTimeout } from '../../../__mocks__/timeout.mock';
 import { IShareData } from '../../../core/interfaces/share-data.interface';
 import { AlertModule } from '../../../core/modules/alert/alert.module';
@@ -245,19 +245,19 @@ describe('UtilsService', () => {
   describe('initTechnoListWithTagList', () => {
     it('should return a techno list', () => {
       expect(service.initTechnoListWithTagList(tagListMock.slice(0, 6))).toStrictEqual([
-        'tag1', 'tag2', 'tag3', 'tag4', 'tag11', 'tag12', ' ',
+        'Angular', 'AWS Cloud', 'CQRS', 'DevOps', 'Docker', 'Jest', ' ',
       ]);
     });
 
     it('should return a limited techno list', () => {
       expect(service.initTechnoListWithTagList(tagListMock, false)).toStrictEqual([
-        'tag1', 'tag2', 'tag3', 'tag4', 'tag11', 'tag12', 'et 6 autres...',
+        'Angular', 'AWS Cloud', 'CQRS', 'DevOps', 'Docker', 'Jest', 'et 9 autres...',
       ]);
     });
 
     it('should return a full techno list', () => {
       expect(service.initTechnoListWithTagList(tagListMock, true)).toStrictEqual([
-        'tag1', 'tag2', 'tag3', 'tag4', 'tag11', 'tag12', 'tag13', 'tag14', 'tag21', 'tag22', 'tag23', 'tag24',
+        'Angular', 'AWS Cloud', 'CQRS', 'DevOps', 'Docker', 'Jest', 'Nest.js', 'tag11', 'tag12', 'tag13', 'tag14', 'tag21', 'tag22', 'tag23', 'tag24',
       ]);
     });
   });

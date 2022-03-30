@@ -1,6 +1,6 @@
 import { of } from 'rxjs';
 
 export const storeMock = {
-  dispatch: () => of(undefined),
+  dispatch: () => undefined,
   select: () => of(undefined),
 }

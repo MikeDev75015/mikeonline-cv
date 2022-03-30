@@ -1,0 +1,11 @@
+import { ICompetence } from '../../core/interfaces/models/competence.interface';
+
+export const competenceListMock: ICompetence[] = [
+  {tagList: [{ id: 1, name: 'Angular', times: 1, weight: 1 }], tagIdList: [1], name: 'Angular', expertiseLevel: 4, priority: 3, startDate: '2018-11', experienceYears: { text: '', value: 0}},
+  {tagList: [{ id: 2, name: 'AWS Cloud', times: 2, weight: 2 }], tagIdList: [2], name: 'AWS Cloud', expertiseLevel: 3, priority: 2, startDate: '2020-09', experienceYears: { text: '', value: 0}},
+  {tagList: [{ id: 3, name: 'CQRS', times: 3, weight: 3 }], tagIdList: [3], name: 'CQRS', expertiseLevel: 3, priority: 2, startDate: '2020-04', experienceYears: { text: '', value: 0}},
+  {tagList: [{ id: 4, name: 'DevOps', times: 4, weight: 4 }], tagIdList: [4], name: 'DevOps', expertiseLevel: 3, priority: 3, startDate: '2021-01', experienceYears: { text: '', value: 0}},
+  {tagList: [{ id: 5, name: 'Docker', times: 2, weight: 2 }], tagIdList: [5], name: 'Docker', expertiseLevel: 2, priority: 3, startDate: '2021-01', experienceYears: { text: '', value: 0}},
+  {tagList: [{ id: 6, name: 'Jest', times: 3, weight: 3 }], tagIdList: [6], name: 'Jest', expertiseLevel: 4, priority: 3, startDate: '2019-01', experienceYears: { text: '', value: 0}},
+  {tagList: [{ id: 7, name: 'Nest.js', times: 4, weight: 4 }], tagIdList: [7], name: 'Nest.js', expertiseLevel: 4, priority: 3, startDate: '2020-04', experienceYears: { text: '', value: 0}},
+];

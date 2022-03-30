@@ -15,6 +15,7 @@ export interface IProject {
   detailList: IDetail[];
   tagIdList: number[];
   tagList?: ITag[];
+  position?: number;
   styles: {
     classicView: {
       title?: any;

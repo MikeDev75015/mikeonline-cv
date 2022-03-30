@@ -1,10 +1,13 @@
-import { ITag } from '../core/interfaces/models/tag.interface';
+import { ITag } from '../../core/interfaces/models/tag.interface';
 
 export const tagListMock = [
-  { id: 1, name: 'tag1', times: 1, weight: 1 },
-  { id: 2, name: 'tag2', times: 2, weight: 2 },
-  { id: 3, name: 'tag3', times: 3, weight: 3 },
-  { id: 4, name: 'tag4', times: 4, weight: 4 },
+  { id: 1, name: 'Angular', times: 1, weight: 1 },
+  { id: 2, name: 'AWS Cloud', times: 2, weight: 2 },
+  { id: 3, name: 'CQRS', times: 3, weight: 3 },
+  { id: 4, name: 'DevOps', times: 4, weight: 4 },
+  { id: 5, name: 'Docker', times: 2, weight: 2 },
+  { id: 6, name: 'Jest', times: 3, weight: 3 },
+  { id: 7, name: 'Nest.js', times: 4, weight: 4 },
   { id: 11, name: 'tag11', times: 1, weight: 1 },
   { id: 12, name: 'tag12', times: 2, weight: 2 },
   { id: 13, name: 'tag13', times: 3, weight: 3 },

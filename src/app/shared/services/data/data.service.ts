@@ -46,9 +46,16 @@ export class DataService {
       return data;
     }
 
-    return Array.isArray(data) && value
-      ? data.filter((el: { [key: string]: any }) => DataService.listFilterPredicate(el, property || 'id', value)) as unknown as T
-      : (data as { [key: string]: any; })[property as string];
+    try {
+      const selected = Array.isArray(data) && value
+        ? data.filter((el: { [key: string]: any }) => DataService.listFilterPredicate(el, property || 'id', value)) as unknown as T
+        : (data as { [key: string]: any; })[property as string];
+
+      return selected || defaultValue;
+    } catch (e) {
+      console.debug('Cannot get the expected value!', { value, property });
+      return defaultValue;
+    }
   }
 
   public getSummary(): Promise<ITag[]> {
@@ -115,7 +122,7 @@ export class DataService {
           value.tagList.forEach((tag, i) => {
             if (!tag || !tag.id) {
               console.warn(value);
-              console.error('error with tag at index:', i, ' - tag id was:', value.tagIdList[i]);
+              console.debug('error with tag at index:', i, ' - tag id was:', value.tagIdList[i]);
               return;
             }
 

@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
 import { storeMock } from '../../../__mocks__/services/store.mock';
-import { tagListMock } from '../../../__mocks__/tag-list.mock';
+import { tagListMock } from '../../../__mocks__/data/tag-list.mock';
 import { ITag } from '../../../core/interfaces/models/tag.interface';
 
 import { TagsService } from './tags.service';
@@ -52,19 +52,19 @@ describe('TagsService', () => {
   describe('getTagsByIds', () => {
     it('should return found tags by their ids', () => {
       expect(service.getTagsByIds([2, 3], tagListMock)).toStrictEqual([
-        { id: 2, name: 'tag2', times: 2, weight: 2 },
-        { id: 3, name: 'tag3', times: 3, weight: 3 },
+        { id: 2, name: 'AWS Cloud', times: 2, weight: 2 },
+        { id: 3, name: 'CQRS', times: 3, weight: 3 },
       ]);
     });
 
     it('should return only valid tags found by their ids and warn for unknown reference', () => {
-      expect(service.getTagsByIds([0, 4, 5], tagListMock)).toStrictEqual([
-        { id: 4, name: 'tag4', times: 4, weight: 4 },
+      expect(service.getTagsByIds([0, 4, 8], tagListMock)).toStrictEqual([
+        { id: 4, name: 'DevOps', times: 4, weight: 4 },
       ]);
 
       expect(consoleWarnSpy).toHaveBeenCalledTimes(2);
       expect(consoleWarnSpy).toHaveBeenNthCalledWith(1, `Unknown tag id found: 0 at position 0.`);
-      expect(consoleWarnSpy).toHaveBeenNthCalledWith(2, `Unknown tag id found: 5 at position 2.`);
+      expect(consoleWarnSpy).toHaveBeenNthCalledWith(2, `Unknown tag id found: 8 at position 2.`);
     });
   });
 });
