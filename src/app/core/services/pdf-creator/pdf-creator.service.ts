@@ -51,7 +51,6 @@ export interface IPdfImageOptions {
   providedIn: 'root',
 })
 export class PdfCreatorService {
-
   private pdfDocument = PdfCreatorService.initPdf();
   private readonly updatePdfContent = {
     addText: (
@@ -101,6 +100,70 @@ export class PdfCreatorService {
   constructor(
     private readonly utilsService: UtilsService,
   ) {}
+
+  public async createDownloadablePdf(pdfInfos: ICvInfos): Promise<void> {
+    return new Promise(async resolve => {
+
+      const {fileName, contact, title, technoList, logo, cvType} = pdfInfos;
+
+      this.updatePdfContent.setHeader();
+      this.updatePdfContent.setFooter();
+
+      const headerTable: IPdfTableBundle = {
+        layout: 'noBorders',
+        table: {
+          headerRows: 1,
+          widths: ['*', '*'],
+          body: [
+            [
+              // @ts-ignore
+              {image: logo.src, width: logo.width, height: logo.height},
+              {text: 'Le ' + DayJsService.getDate(undefined, 'DD MMMM YYYY'), style: 'right'},
+            ],
+            [
+              {text: '\n' + contact.fullName, style: 'contact'},
+              {text: title, style: 'title'},
+            ],
+            [
+              {
+                text: `Tel : ${
+                  this.utilsService.formatPhoneNumber(contact.phoneNumberPartList.parts.join(contact.phoneNumberPartList.joiner))
+                }\nMail : ${contact.emailPartList.parts.join(contact.emailPartList.joiner)}`,
+                style: 'defaultStyle'
+              },
+              {text: technoList.join(', '), style: 'subtitle'},
+            ]
+          ]
+        }
+      };
+      this.updatePdfContent.addTable(headerTable);
+
+      contact.webLinkList.forEach(wl => {
+        this.updatePdfContent.addText(
+          `${wl.name} : ${wl.url}`,
+          'link',
+          wl.url
+        );
+      });
+
+      await this.addAdditionalFields(cvType, pdfInfos.data);
+
+      // @ts-ignore
+      pdfMake.fonts = {
+        Roboto: {
+          normal: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Regular.ttf',
+          bold: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Medium.ttf',
+          italics: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Italic.ttf',
+          bolditalics: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-MediumItalic.ttf'
+        }
+      };
+
+      // @ts-ignore
+      pdfMake.createPdf(this.pdfDocument).download(fileName);
+      this.pdfDocument = PdfCreatorService.initPdf();
+      resolve();
+    });
+  }
 
   private static getDefaultStyle() {
     return {
@@ -221,70 +284,6 @@ export class PdfCreatorService {
       return 'before';
     }
     return '';
-  }
-
-  public async createDownloadablePdf(pdfInfos: ICvInfos): Promise<void> {
-    return new Promise(async resolve => {
-
-      const {fileName, contact, title, technoList, logo, cvType} = pdfInfos;
-
-      this.updatePdfContent.setHeader();
-      this.updatePdfContent.setFooter();
-
-      const headerTable: IPdfTableBundle = {
-        layout: 'noBorders',
-        table: {
-          headerRows: 1,
-          widths: ['*', '*'],
-          body: [
-            [
-              // @ts-ignore
-              {image: logo.src, width: logo.width, height: logo.height},
-              {text: 'Le ' + DayJsService.getDate(undefined, 'DD MMMM YYYY'), style: 'right'},
-            ],
-            [
-              {text: '\n' + contact.fullName, style: 'contact'},
-              {text: title, style: 'title'},
-            ],
-            [
-              {
-                text: `Tel : ${
-                  this.utilsService.formatPhoneNumber(contact.phoneNumberPartList.parts.join(contact.phoneNumberPartList.joiner))
-                }\nMail : ${contact.emailPartList.parts.join(contact.emailPartList.joiner)}`,
-                style: 'defaultStyle'
-              },
-              {text: technoList.join(', '), style: 'subtitle'},
-            ]
-          ]
-        }
-      };
-      this.updatePdfContent.addTable(headerTable);
-
-      contact.webLinkList.forEach(wl => {
-        this.updatePdfContent.addText(
-          `${wl.name} : ${wl.url}`,
-          'link',
-          wl.url
-        );
-      });
-
-      await this.addAdditionalFields(cvType, pdfInfos.data);
-
-      // @ts-ignore
-      pdfMake.fonts = {
-        Roboto: {
-          normal: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Regular.ttf',
-          bold: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Medium.ttf',
-          italics: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Italic.ttf',
-          bolditalics: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-MediumItalic.ttf'
-        }
-      };
-
-      // @ts-ignore
-      pdfMake.createPdf(this.pdfDocument).download(fileName);
-      this.pdfDocument = PdfCreatorService.initPdf();
-      resolve();
-    });
   }
 
   private async addAdditionalFields(type: string, data: {

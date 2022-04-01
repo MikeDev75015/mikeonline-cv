@@ -34,7 +34,7 @@ export class PwaService implements OnDestroy {
       );
 
       this.subscriptionList.push(
-        this.swUpdate.versionUpdates.subscribe((event) => {
+        this.swUpdate.versionUpdates.subscribe(async (event) => {
           if (event.type === 'VERSION_DETECTED') {
             return;
           }
@@ -44,7 +44,7 @@ export class PwaService implements OnDestroy {
             return;
           }
 
-          this.showUpdateInvitation();
+          await this.showUpdateInvitation();
         }),
       );
 
@@ -61,24 +61,23 @@ export class PwaService implements OnDestroy {
     });
   }
 
-  private showUpdateInvitation(): void {
-    this.alertService.displayConfirmDialog({
+  private async showUpdateInvitation(): Promise<void> {
+    const action = await this.alertService.displayConfirmDialog({
       title: 'mise à jour disponible...',
       msg: 'Hey, il existe une version plus récente de cette app ;)',
       actionsList: [
         { name: 'mettre à jour', action: 'update' },
       ],
-    }).then(action => {
-      if (action === 'update') {
-        this.swUpdate.activateUpdate().then((updated) => {
-          if (!updated) {
-            this.showUpdateErrorMessage();
-            return;
-          }
-
-          window.location.reload();
-        });
-      }
     });
+
+    if (action === 'update') {
+      const updated = await this.swUpdate.activateUpdate();
+      if (!updated) {
+        this.showUpdateErrorMessage();
+        return;
+      }
+
+      window.location.reload();
+    }
   }
 }

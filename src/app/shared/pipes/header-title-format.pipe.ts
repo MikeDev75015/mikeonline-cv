@@ -6,7 +6,7 @@ import {Pipe, PipeTransform} from '@angular/core';
 export class HeaderTitleFormatPipe implements PipeTransform {
 
   transform(value: any, ...args: any[]): string {
-    return value ? value.replace('TS CV', 'TS<br>CV').replace(/ /g, '&nbsp;') : '';
+    return value ? value.replace(/ /g, '&nbsp;') : '';
   }
 
 }
