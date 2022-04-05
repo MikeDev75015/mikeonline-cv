@@ -184,6 +184,8 @@ workflows:
                 - master
                 - develop
       - cypress/run:
+          requires:
+            - ci-test-job
           executor: cypress-base-16
           name: ci-cypress-job
           start: npm start
@@ -271,6 +273,8 @@ workflows:
               only:
                 - develop
       - cypress/run:
+          requires:
+            - ci-test-job
           executor: cypress-base-16
           name: ci-cypress-job
           start: npm start
