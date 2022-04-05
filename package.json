@@ -8,15 +8,16 @@
     "build-staging": "ng build --configuration staging --output-path=dist/staging",
     "build-prod": "ng build --prod",
     "release": "standard-version",
-    "deploy-local": "firebase deploy --project cv-mikeonline",
     "jcc": "jest --clearCache",
     "test": "jest",
     "test-coverage": "jest --coverage",
     "test:ci": "CI=true npm test -- --coverage --testResultsProcessor=jest-sonar-reporter --runInBand",
     "lint": "ng lint",
+    "sonar-test": "git tag -f sonar && git push -f upstream sonar",
+    "cypress:open": "cypress open",
+    "deploy-local": "firebase deploy --project cv-mikeonline",
     "deploy-test": "git tag -f deploy && git push -f origin deploy",
-    "deploy-prod": "git tag -f release && git push -f origin release",
-    "sonar-test": "git tag -f sonar && git push -f upstream sonar"
+    "deploy-prod": "git tag -f release && git push -f origin release"
   },
   "private": true,
   "dependencies": {
@@ -59,6 +60,8 @@
     "@types/jest": "^27.4.1",
     "@types/node": "^12.11.1",
     "@types/pdfmake": "^0.1.20",
+    "cypress": "^9.5.3",
+    "cypress-jest-adapter": "^0.1.1",
     "firebase-tools": "^9.2.2",
     "jasmine-core": "~4.0.0",
     "jest": "^27.5.1",
