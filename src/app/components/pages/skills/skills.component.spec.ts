@@ -12,9 +12,9 @@ import { utilsServiceMock } from '../../../__mocks__/services/utils-service.mock
 import { AlertModule } from '../../../core/core-index';
 import { DataService } from '../../../shared/services/data/data.service';
 import { UtilsService } from '../../../shared/shared-index';
-import { SkillsComponent } from './competences.component';
+import { SkillsComponent } from './skills.component';
 
-describe('CompetencesComponent', () => {
+describe('SkillsComponent', () => {
   let component: SkillsComponent;
   let fixture: ComponentFixture<SkillsComponent>;
   const isDataLoadedSpy = jest.spyOn(dataServiceMock, 'isDataLoaded');
@@ -32,7 +32,6 @@ describe('CompetencesComponent', () => {
       ],
       declarations: [
         SkillsComponent,
-        MockComponent({ selector: 'app-categorie' }),
         MockComponent({
           selector: 'app-experience-item',
           inputs: ['exp', 'index'],
