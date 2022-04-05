@@ -258,16 +258,18 @@ workflows:
   ##################################### STAGING WORKFLOW - only develop ################################################
   ci-cd-workflow-staging:
     jobs:
-      - ci-build-job:
-          post-steps:
-            - jira/notify:
-                environment_type: staging
-                job_type: build
+      - ci-test-job:
           filters:
             branches:
               only:
                 - develop
-      - ci-test-job:
+      - ci-build-job:
+          requires:
+            - ci-test-job
+          post-steps:
+            - jira/notify:
+                environment_type: staging
+                job_type: build
           filters:
             branches:
               only:
