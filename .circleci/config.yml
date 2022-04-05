@@ -248,9 +248,15 @@ workflows:
             branches:
               only:
                 - develop
+      - ci-test-job:
+          filters:
+            branches:
+              only:
+                - develop
       - cd-deploy-job-firebase:
           requires:
             - ci-build-job
+            - ci-test-job
           context: FIREBASE
           hosting: cv-mikeonline-staging
           post-steps:
@@ -261,15 +267,16 @@ workflows:
             branches:
               only:
                 - develop
+
+  ##################################### MASTER WORKFLOW - only master ################################################
+  ci-cd-workflow-master:
+    jobs:
       - ci-sonar-job:
-          requires:
-            - ci-build-job
-            - cd-deploy-job-firebase
           context: OCV_SONARCLOUD
           filters:
             branches:
               only:
-                - develop
+                - master
 
   ################################## PRODUCTION WORKFLOW - only [version] TAG ##########################################
   ci-cd-workflow-production:
