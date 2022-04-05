@@ -1,10 +1,10 @@
-import { CompetencesComponent } from '../../../components/pages/competences/competences.component';
+import { SkillsComponent } from '../../../components/pages/skills/skills.component';
 import { ExperiencesComponent } from '../../../components/pages/experiences/experiences.component';
 import { FormationsComponent } from '../../../components/pages/formations/formations.component';
 import { InterestsComponent } from '../../../components/pages/interests/interests.component';
 import { PortfolioComponent } from '../../../components/pages/portfolio/portfolio.component';
 
-export type ComponentType = typeof CompetencesComponent
+export type ComponentType = typeof SkillsComponent
   | typeof ExperiencesComponent
   | typeof FormationsComponent
   | typeof PortfolioComponent

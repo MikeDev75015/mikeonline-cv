@@ -80,7 +80,7 @@ export class ItemComponent implements OnInit, OnChanges, OnDestroy, AfterViewChe
   }
 
   ngAfterViewChecked(): void {
-    const compSection = document.querySelector('#COMPETENCES');
+    const compSection = document.querySelector('#SKILLS');
     const expSection = document.querySelector('#EXPERIENCES');
     const formSection = document.querySelector('#FORMATIONS');
     if (

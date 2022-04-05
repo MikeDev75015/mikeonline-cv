@@ -1,6 +1,6 @@
-<section [id]="sectionId" class="fsc column w100" style="padding-bottom: 100px;">
-  <ng-container *appLoading="isLoadingData | async">
-    <h3 class="animated-background">
+<ng-container *appLoading="isLoadingData | async">
+  <section [id]="sectionId" class="fsc column w100" style="padding-bottom: 100px;">
+  <h3 class="animated-background">
     <span>
       {{ pageTitle }}
       <span *ngIf="elementsNumber" class="badge-element">{{ elementsNumber }}</span>
@@ -9,5 +9,5 @@
 
     <ng-content></ng-content>
 
-  </ng-container>
 </section>
+</ng-container>

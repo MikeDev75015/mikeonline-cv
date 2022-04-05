@@ -2,7 +2,7 @@
   *ngIf="menuTab" id="menuTab" class="mat-elevation-z4" mat-stretch-tabs
   [ngClass]="{'full-screen': hideHeader}" [(selectedIndex)]="indexTab" (click)="updateHash($any($event))"
 >
-  <mat-tab label="Compétences"><app-competences></app-competences></mat-tab>
+  <mat-tab label="Compétences"><app-skills></app-skills></mat-tab>
   <mat-tab label="Expériences"><app-experiences></app-experiences></mat-tab>
   <mat-tab label="Formations"><app-formations></app-formations></mat-tab>
   <mat-tab label="Portfolio"><app-portfolio></app-portfolio></mat-tab>
@@ -22,8 +22,8 @@
     <app-header></app-header>
 
     <button mat-menu-item
-            [ngClass]="{'selected-menu': selectedMenu === 'competences', 'no-pointer-events': isLoadingData}"
-            (click)="selectMenu($event, 'competences')"
+            [ngClass]="{'selected-menu': selectedMenu === 'skills', 'no-pointer-events': isLoadingData}"
+            (click)="selectMenu($event, 'skills')"
             [disabled]="selectedMenu === 'Compétences'"
             aria-label="Display the Skill Menu">
       <mat-icon class="no-pointer-events matIcon">playlist_add_check</mat-icon>

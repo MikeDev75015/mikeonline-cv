@@ -11,7 +11,7 @@ import { Observable, of } from 'rxjs';
 export class PageLayoutComponent implements OnInit {
   @Input() isLoadingData: Observable<boolean> = of(true);
 
-  @Input() sectionId!: string;
+  @Input() sectionId: string | undefined;
 
   @Input() pageTitle!: string;
 

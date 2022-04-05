@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { ComponentType } from '../../../core/interfaces/types/component.type';
 import { ContactOpenCloseService } from '../../../core/services/contact-open-close/contact-open-close.service';
 import { DataService } from '../../../shared/services/data/data.service';
-import { CompetencesComponent } from '../../pages/competences/competences.component';
+import { SkillsComponent } from '../../pages/skills/skills.component';
 import { ExperiencesComponent } from '../../pages/experiences/experiences.component';
 import { FormationsComponent } from '../../pages/formations/formations.component';
 import { InterestsComponent } from '../../pages/interests/interests.component';
@@ -33,7 +33,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
   private urlHash: string | undefined;
 
   private readonly iconsToAdd: { id: string, iconName: string }[] = [
-    { id: '#icon-comp', iconName: 'playlist_add_check' },
+    { id: '#icon-skill', iconName: 'playlist_add_check' },
     { id: '#icon-exp', iconName: 'business_center' },
     { id: '#icon-form', iconName: 'school' },
     { id: '#icon-port', iconName: 'code' },
@@ -41,7 +41,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
   ];
 
   private readonly moduleToShowList = [
-    { hash: 'competences', name: 'Compétences' },
+    { hash: 'skills', name: 'Compétences' },
     { hash: 'experiences', name: 'Expériences' },
     { hash: 'formations', name: 'Formations' },
     { hash: 'portfolio', name: 'Portfolio' },
@@ -49,7 +49,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
   ];
 
   private readonly components: ComponentType[] = [
-    CompetencesComponent,
+    SkillsComponent,
     ExperiencesComponent,
     FormationsComponent,
     PortfolioComponent,
@@ -69,11 +69,11 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
     return decodeURI(window.location.hash.replace('#', '')) &&
     decodeURI(window.location.hash.replace('#', '')) !== 'undefined'
       ? decodeURI(window.location.hash.replace('#', ''))
-      : 'competences';
+      : 'skills';
   }
 
   private static isMissingLabelsIcons(): boolean {
-    return !document.querySelector('#icon-comp') ||
+    return !document.querySelector('#icon-skill') ||
       !document.querySelector('#icon-exp') ||
       !document.querySelector('#icon-form') ||
       !document.querySelector('#icon-port') ||

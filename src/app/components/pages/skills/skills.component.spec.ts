@@ -12,11 +12,11 @@ import { utilsServiceMock } from '../../../__mocks__/services/utils-service.mock
 import { AlertModule } from '../../../core/core-index';
 import { DataService } from '../../../shared/services/data/data.service';
 import { UtilsService } from '../../../shared/shared-index';
-import { CompetencesComponent } from './competences.component';
+import { SkillsComponent } from './competences.component';
 
 describe('CompetencesComponent', () => {
-  let component: CompetencesComponent;
-  let fixture: ComponentFixture<CompetencesComponent>;
+  let component: SkillsComponent;
+  let fixture: ComponentFixture<SkillsComponent>;
   const isDataLoadedSpy = jest.spyOn(dataServiceMock, 'isDataLoaded');
   const canvasMock = document.createElement('div');
   let getElementSpy: any;
@@ -31,7 +31,7 @@ describe('CompetencesComponent', () => {
         AlertModule,
       ],
       declarations: [
-        CompetencesComponent,
+        SkillsComponent,
         MockComponent({ selector: 'app-categorie' }),
         MockComponent({
           selector: 'app-experience-item',
@@ -59,7 +59,7 @@ describe('CompetencesComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CompetencesComponent);
+    fixture = TestBed.createComponent(SkillsComponent);
     component = fixture.componentInstance;
     getElementSpy = jest.spyOn(document, 'getElementById');
   });
@@ -79,7 +79,7 @@ describe('CompetencesComponent', () => {
         value: 840,
       });
 
-      expect(CompetencesComponent['getGridForWidth']()).toStrictEqual(12);
+      expect(SkillsComponent['getGridForWidth']()).toStrictEqual(12);
     });
 
     it('should return 4 if the width is less than or equal to 839px', () => {
@@ -87,7 +87,7 @@ describe('CompetencesComponent', () => {
         value: 839,
       });
 
-      expect(CompetencesComponent['getGridForWidth']()).toStrictEqual(4);
+      expect(SkillsComponent['getGridForWidth']()).toStrictEqual(4);
     });
   });
 

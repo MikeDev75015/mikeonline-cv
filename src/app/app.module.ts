@@ -35,7 +35,6 @@ import {
   VerticalAccordionItemComponent,
 } from './components/fragments/vertical-accordion/vertical-accordion-item/vertical-accordion-item.component';
 import { VerticalAccordionComponent } from './components/fragments/vertical-accordion/vertical-accordion.component';
-import { CompetencesComponent } from './components/pages/competences/competences.component';
 import {
   ExperienceItemDetailComponent,
 } from './components/pages/experiences/experience-item-detail/experience-item-detail.component';
@@ -48,6 +47,7 @@ import { FormationsComponent } from './components/pages/formations/formations.co
 import { InterestsComponent } from './components/pages/interests/interests.component';
 import { PortfolioItemComponent } from './components/pages/portfolio/portfolio-item/portfolio-item.component';
 import { PortfolioComponent } from './components/pages/portfolio/portfolio.component';
+import { SkillsComponent } from './components/pages/skills/skills.component';
 import { CoreModule } from './core/core.module';
 import { AlertModule } from './core/modules/alert/alert.module';
 import { LoggerModule } from './core/modules/logger/logger.module';
@@ -76,7 +76,7 @@ import { ItemDatesComponent } from './components/fragments/item-elements/item-da
     HeaderComponent,
     MainComponent,
     FooterComponent,
-    CompetencesComponent,
+    SkillsComponent,
     ExperiencesComponent,
     FormationsComponent,
     PortfolioComponent,
@@ -149,7 +149,7 @@ import { ItemDatesComponent } from './components/fragments/item-elements/item-da
   ],
   bootstrap: [AppComponent],
   entryComponents: [
-    CompetencesComponent,
+    SkillsComponent,
     ExperiencesComponent,
     FormationsComponent,
     PortfolioComponent,

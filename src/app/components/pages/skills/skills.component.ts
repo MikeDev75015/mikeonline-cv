@@ -28,11 +28,11 @@ declare global {
 window.WordCloud = window.WordCloud || {};
 
 @Component({
-  selector: 'app-competences',
-  templateUrl: './competences.component.html',
-  styleUrls: ['./competences.component.scss'],
+  selector: 'app-skills',
+  templateUrl: './skills.component.html',
+  styleUrls: ['./skills.component.scss'],
 })
-export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked {
+export class SkillsComponent implements OnInit, OnDestroy, AfterViewChecked {
   public isLoadingData: Observable<boolean> = of(true);
 
   public defaultText?: string;
@@ -80,6 +80,10 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
     return window?.innerWidth < 840 ? 4 : 12;
   }
 
+  private static getCanvasElement(): HTMLElement | null {
+    return document.getElementById('wc_canvas');
+  }
+
   ngOnInit(): void {
     this.isLoadingData = this.dataService.isDataLoaded(selectCompetencesLoaded).pipe(
       tap((loaded) => {
@@ -90,7 +94,7 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
   }
 
   ngOnDestroy(): void {
-    const wcCanvas = this.getCanvasElement();
+    const wcCanvas = SkillsComponent.getCanvasElement();
     if (wcCanvas) {
       // @ts-ignore
       wcCanvas.removeEventListener('wordcloudstart', () => {
@@ -113,7 +117,7 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
     if (
       !this.initWordCloud &&
       window.WordCloud.isSupported &&
-      this.getCanvasElement() &&
+      SkillsComponent.getCanvasElement() &&
       !document.querySelector('.word-in-cloud') &&
       this.competencesLoaded
     ) {
@@ -152,7 +156,7 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
 
   private setWorldCloudOptions(): WorldCloudOptions {
     return {
-      gridSize: CompetencesComponent.getGridForWidth(),
+      gridSize: SkillsComponent.getGridForWidth(),
       fontFamily: 'Roboto',
       color() {
         return (['#555', '#024873', '#4E7F9D'])[Math.floor(Math.random() * 3)];
@@ -195,12 +199,8 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
     el.setAttribute('init-onclick', 'true');
   }
 
-  private getCanvasElement(): HTMLElement | null {
-    return document.getElementById('wc_canvas');
-  }
-
   private async loadWorldCloud(): Promise<void> {
-    const wcCanvas = this.getCanvasElement();
+    const wcCanvas = SkillsComponent.getCanvasElement();
     if (!wcCanvas) {
       console.error('Cannot draw the word cloud, the canvas is missing or invalid!');
       return;
