@@ -1,5 +1,6 @@
 import { AfterViewChecked, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { IAnimationServiceResponse } from './core/core-index';
 import * as ApplicationActions from './core/ngrx/actions/application.actions';
@@ -72,6 +73,7 @@ export class AppComponent implements OnInit, AfterViewChecked, OnDestroy {
    * @param utilService
    * @param animationService
    * @param contactOpenCloseService
+   * @param translateService
    * @param cdRef
    */
   constructor(
@@ -81,8 +83,11 @@ export class AppComponent implements OnInit, AfterViewChecked, OnDestroy {
     private readonly utilService: UtilsService,
     private readonly animationService: AnimationsService,
     private readonly contactOpenCloseService: ContactOpenCloseService,
+    private readonly translateService: TranslateService,
     private readonly cdRef: ChangeDetectorRef,
   ) {
+    translateService.setDefaultLang('fr');
+    translateService.use('fr');
     this.store.dispatch(ApplicationActions.startAppLoading());
   }
 

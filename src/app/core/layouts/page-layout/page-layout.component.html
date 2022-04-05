@@ -2,7 +2,7 @@
   <section [id]="sectionId" class="fsc column w100" style="padding-bottom: 100px;">
   <h3 class="animated-background">
     <span>
-      {{ pageTitle }}
+      {{ pageTitle | translate }}
       <span *ngIf="elementsNumber" class="badge-element">{{ elementsNumber }}</span>
     </span>
     </h3>
