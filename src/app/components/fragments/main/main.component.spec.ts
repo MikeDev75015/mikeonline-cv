@@ -27,7 +27,7 @@ describe('MainComponent', () => {
           selector: 'app-header'
         }),
         MockComponent({
-          selector: 'app-competences'
+          selector: 'app-skills'
         }),
         MockComponent({
           selector: 'app-experiences'
