@@ -18,7 +18,7 @@ describe('FormationsComponent', () => {
         }),
         MockComponent({
           selector: 'app-page-layout',
-          inputs: ['elementsNumber', 'isLoadingData'],
+          inputs: ['pageTitle', 'elementsNumber', 'isLoadingData'],
         }),
       ],
       providers: [

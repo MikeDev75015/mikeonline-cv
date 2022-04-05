@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Store } from '@ngrx/store';
+import { TranslateModule } from '@ngx-translate/core';
 import { MockComponent } from 'ng2-mock-component';
 import { of } from 'rxjs';
 import { animationServiceMock } from './__mocks__/services/animation-service.mock';
@@ -40,6 +41,7 @@ describe('AppComponent', () => {
       ],
       imports: [
         NoopAnimationsModule,
+        TranslateModule.forRoot(),
       ]
     }).compileComponents();
 

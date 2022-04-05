@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TranslateModule } from '@ngx-translate/core';
+import { LoadingComponent } from '../../components/loading/loading.component';
 import { LoadingDirective } from '../../directives/loading.directive';
 
 import { PageLayoutComponent } from './page-layout.component';
@@ -9,12 +11,16 @@ describe('PageLayoutComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [
+        TranslateModule.forRoot(),
+      ],
       declarations: [
         PageLayoutComponent,
         LoadingDirective,
-      ]
+        LoadingComponent,
+      ],
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
