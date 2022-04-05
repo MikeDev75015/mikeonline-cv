@@ -179,7 +179,10 @@ workflows:
                 - master
                 - develop
       - cypress/run:
-          executor: cypress/base:16
+          executors:
+            cypress-base-16:
+              docker:
+                - image: 'cypress/base:16.13.2'
           name: ci-cypress-job
           start: npm start
           wait-on: 'http://localhost:4200'
