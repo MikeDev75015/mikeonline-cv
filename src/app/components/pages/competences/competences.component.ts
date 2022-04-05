@@ -90,7 +90,7 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
   }
 
   ngOnDestroy(): void {
-    const wcCanvas = document.querySelector('#wc_canvas');
+    const wcCanvas = this.getCanvasElement();
     if (wcCanvas) {
       // @ts-ignore
       wcCanvas.removeEventListener('wordcloudstart', () => {
@@ -113,7 +113,7 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
     if (
       !this.initWordCloud &&
       window.WordCloud.isSupported &&
-      document.querySelector('#wc_canvas') &&
+      this.getCanvasElement() &&
       !document.querySelector('.word-in-cloud') &&
       this.competencesLoaded
     ) {
@@ -195,8 +195,12 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
     el.setAttribute('init-onclick', 'true');
   }
 
+  private getCanvasElement(): HTMLElement | null {
+    return document.getElementById('wc_canvas');
+  }
+
   private async loadWorldCloud(): Promise<void> {
-    const wcCanvas = document.querySelector('#wc_canvas');
+    const wcCanvas = this.getCanvasElement();
     if (!wcCanvas) {
       console.error('Cannot draw the word cloud, the canvas is missing or invalid!');
       return;
