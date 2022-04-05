@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.9.0](https://bitbucket.org/mikeonline75/ocv-frontend/compare/v1.8.1...v1.9.0) (2022-04-05)
+
+
+### Features
+
+* add a page layout ([b38cace](https://bitbucket.org/mikeonline75/ocv-frontend/commit/b38cace2c71ecb384e976dd544d70bbf2c0b4b9e))
+
+
+### Bug Fixes
+
+* add margin-bottom ([7ae026c](https://bitbucket.org/mikeonline75/ocv-frontend/commit/7ae026cd856ecbb1ff6f82863ca11e4adeed8f69))
+* add padding-bottom to in mobile view ([57df0f3](https://bitbucket.org/mikeonline75/ocv-frontend/commit/57df0f3deff170b5937d0d113c15e2350740c8b6))
+
 ### [1.8.1](https://bitbucket.org/mikeonline75/ocv-frontend/compare/v1.8.0...v1.8.1) (2022-03-26)
 
 
