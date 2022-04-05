@@ -19,6 +19,7 @@ describe('CompetencesComponent', () => {
   let fixture: ComponentFixture<CompetencesComponent>;
   const isDataLoadedSpy = jest.spyOn(dataServiceMock, 'isDataLoaded');
   const canvasMock = document.createElement('div');
+  let getElementSpy: any;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -60,6 +61,7 @@ describe('CompetencesComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(CompetencesComponent);
     component = fixture.componentInstance;
+    getElementSpy = jest.spyOn(document, 'getElementById');
   });
 
   afterEach(() => {
@@ -108,12 +110,10 @@ describe('CompetencesComponent', () => {
   });
 
   describe('ngOnDestroy', () => {
-    let getElementSpy: any;
     let removeEventListenerSpy: any;
     let consoleWarnSpy: any;
 
     beforeEach(() => {
-      getElementSpy = jest.spyOn(document, 'querySelector');
       consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
     });
 
@@ -137,8 +137,6 @@ describe('CompetencesComponent', () => {
   });
 
   describe('ngAfterViewChecked', () => {
-    let querySelectorSpy: any;
-
     beforeAll(() => {
       Object.defineProperty(window, 'WordCloud', {
         value: {
@@ -148,12 +146,7 @@ describe('CompetencesComponent', () => {
     });
 
     beforeEach(() => {
-      querySelectorSpy = jest.spyOn(document, 'querySelector').mockImplementation((cssSelector: string) => {
-        if (cssSelector === '#wc_canvas') {
-          return canvasMock;
-        }
-        return null;
-      });
+      getElementSpy.mockImplementation(() => canvasMock);
       isDataLoadedSpy.mockImplementationOnce(() => of(true));
       fixture.detectChanges();
     });
