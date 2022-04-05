@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule, Optional, Provider, SkipSelf } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { LoadingComponent } from './components/loading/loading.component';
 import { LoadingDirective } from './directives/loading.directive';
 import { PageLayoutComponent } from './layouts/page-layout/page-layout.component';
@@ -16,7 +17,10 @@ const providerList: Provider[] = [];
     LoadingDirective,
     PageLayoutComponent,
   ],
-  imports: importList,
+  imports: [
+    importList,
+    TranslateModule,
+  ],
   exports: [
     LoadingDirective,
     PageLayoutComponent,

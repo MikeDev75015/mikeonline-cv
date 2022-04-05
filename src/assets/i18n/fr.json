@@ -1,0 +1,23 @@
+{
+  "common": {},
+  "components": {
+    "loading": {
+      "waitingMessage": "Un instant svp...<br><em>Chargement des données en cours</em>"
+    },
+    "experiences": {
+      "title": "mes expériences"
+    },
+    "formations": {
+      "title": "mes formations"
+    },
+    "interests": {
+      "title": "mes centres d'intérêts"
+    },
+    "portfolio": {
+      "title": "mon Portfolio"
+    },
+    "skills": {
+      "title": "mes Compétences"
+    }
+  }
+}

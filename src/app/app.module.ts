@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatBadgeModule } from '@angular/material/badge';
@@ -16,6 +16,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { KnobModule } from 'primeng/knob';
 import { environment } from '../environments/environment';
 
@@ -68,6 +70,10 @@ import { DateFormatPipe } from './shared/pipes/date-format.pipe';
 import { ItemTagListComponent } from './components/fragments/item-elements/item-tag-list/item-tag-list.component';
 import { ItemOpenCloseButtonsComponent } from './components/fragments/item-elements/item-open-close-buttons/item-open-close-buttons.component';
 import { ItemDatesComponent } from './components/fragments/item-elements/item-dates/item-dates.component';
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http);
+}
 
 @NgModule({
   declarations: [
@@ -122,6 +128,14 @@ import { ItemDatesComponent } from './components/fragments/item-elements/item-da
       maxAge: 25, // Retains last 25 states
       logOnly: environment.production, // Restrict extension to log-only mode
       autoPause: true, // Pauses recording actions and state changes when the extension window is not open
+    }),
+    TranslateModule.forRoot({
+      defaultLanguage: 'fr',
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient],
+      }
     }),
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
