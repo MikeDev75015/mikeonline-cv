@@ -179,6 +179,7 @@ workflows:
                 - master
                 - develop
       - cypress/run:
+          executor: cypress/base-14
           name: ci-cypress-job
           start: npm start
           wait-on: 'http://localhost:4200'
