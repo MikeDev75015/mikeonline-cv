@@ -270,10 +270,21 @@ workflows:
             branches:
               only:
                 - develop
+      - cypress/run:
+          executor: cypress-base-16
+          name: ci-cypress-job
+          start: npm start
+          wait-on: 'http://localhost:4200'
+          no-workspace: true
+          filters:
+            branches:
+              only:
+                - develop
       - cd-deploy-job-firebase:
           requires:
             - ci-build-job
             - ci-test-job
+            - ci-cypress-job
           context: FIREBASE
           hosting: cv-mikeonline-staging
           post-steps:
