@@ -77,11 +77,7 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
   }
 
   private static getGridForWidth(): number {
-    let gridValue = 12;
-    if (window.innerWidth < 840) {
-      gridValue = 4;
-    }
-    return gridValue;
+    return window?.innerWidth < 840 ? 4 : 12;
   }
 
   ngOnInit(): void {
@@ -94,7 +90,7 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
   }
 
   ngOnDestroy(): void {
-    const wcCanvas = document.getElementById('wc_canvas');
+    const wcCanvas = document.querySelector('#wc_canvas');
     if (wcCanvas) {
       // @ts-ignore
       wcCanvas.removeEventListener('wordcloudstart', () => {
@@ -108,6 +104,8 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
       wcCanvas.removeEventListener('wordcloudstop', () => {
         this.addWorldCloudClick();
       });
+    } else {
+      console.warn('Canvas element not found!');
     }
   }
 
@@ -198,7 +196,7 @@ export class CompetencesComponent implements OnInit, OnDestroy, AfterViewChecked
   }
 
   private async loadWorldCloud(): Promise<void> {
-    const wcCanvas = document.getElementById('wc_canvas');
+    const wcCanvas = document.querySelector('#wc_canvas');
     if (!wcCanvas) {
       console.error('Cannot draw the word cloud, the canvas is missing or invalid!');
       return;

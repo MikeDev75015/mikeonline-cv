@@ -8,17 +8,17 @@ export const APP_CREDITS = {
 };
 
 export const EXPERTISE_LEVEL_LABEL: { [key: string]: string } = {
-  '1': 'débutant',
-  '2': 'averti',
-  '3': 'bon',
-  '4': 'très bon',
-  '5': 'expert',
+  1: 'débutant',
+  2: 'averti',
+  3: 'bon',
+  4: 'très bon',
+  5: 'expert',
 };
 
 export const PRIORITY_LABEL: { [key: string]: string } = {
-  '1': 'au besoin',
-  '2': 'normal',
-  '3': 'maximum',
+  1: 'au besoin',
+  2: 'normal',
+  3: 'maximum',
 };
 
 export const isLoadingDisplayTimeout = 1500;
