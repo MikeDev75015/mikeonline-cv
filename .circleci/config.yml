@@ -85,7 +85,7 @@ jobs:
   ci-test-job:
     docker:
       - image: cimg/node:16.13.1
-    parallelism: 16
+    parallelism: 14
     parameters:
       sonarcloud:
         type: boolean
