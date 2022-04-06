@@ -1,0 +1,28 @@
+<div *ngIf="project && project.pictureList && project.pictureList.length" class="p_conteneur">
+  <div class="p_main">
+    <figure class="p_face">
+      <img
+        [src]="project.pictureList[0].src"
+        [alt]="project.pictureList[0].alt"
+        [title]="project.pictureList[0].title">
+      <p>
+        <span
+          [ngStyle]="
+            project.styles &&
+            project.styles[mobileView ? 'mobileView' : 'classicView'] &&
+            project.styles[mobileView ? 'mobileView' : 'classicView'].title
+              ? project.styles[mobileView ? 'mobileView' : 'classicView'].title
+              : {}
+          "
+        >{{ project.title }}</span>
+        <span>{{ project.subTitle }}</span>
+      </p>
+    </figure>
+    <ul class="p_dos"
+        [ngStyle]="{'cursor': project.link && project.link.url ? 'pointer': 'default'}"
+        (click)="project.link && project.link.url ? openLinkInTab(project.link.url) : null">
+      <li><p>Technos utilisées</p></li>
+      <li *ngFor="let techno of project.technoList">{{ techno }}</li>
+    </ul>
+  </div>
+</div>

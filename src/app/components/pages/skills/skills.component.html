@@ -114,11 +114,11 @@
           </mat-panel-title>
         </mat-expansion-panel-header>
         <div class="pf_flip w100 fcc">
-          <app-portfolio-item
+          <app-project-item
             *ngFor="let siteDemo of portfolioList"
             class="app-portfolio-item"
-            [siteDemo]="siteDemo"
-          ></app-portfolio-item>
+            [project]="siteDemo"
+          ></app-project-item>
         </div>
       </mat-expansion-panel>
     </mat-accordion>

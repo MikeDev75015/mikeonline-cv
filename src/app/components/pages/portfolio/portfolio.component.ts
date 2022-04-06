@@ -6,6 +6,9 @@ import { IProject, ITag } from '../../../core/core-index';
 import { selectAllProjects, selectProjectsLoaded } from '../../../core/ngrx/selectors/projects.selectors';
 import { DataService, UtilsService } from '../../../shared/shared-index';
 
+/**
+ * The component of the portfolio page.
+ */
 @Component({
   selector: 'app-portfolio',
   templateUrl: './portfolio.component.html',
@@ -27,15 +30,37 @@ import { DataService, UtilsService } from '../../../shared/shared-index';
   ],
 })
 export class PortfolioComponent implements OnInit {
-  public isLoadingData: Observable<boolean> = of(true);
+  /**
+   * An observable allowing to initialize the page when data are loaded.
+   */
+  public isLoadingData$: Observable<boolean> = of(true);
 
-  public siteDemoList: IProject[] = [];
+  /**
+   * Contains the projects loaded.
+   */
+  public projectList: IProject[] = [];
 
+  /**
+   * A boolean to start/stop animations that show/hide the background image of the project on hover.
+   */
   public showImage = false;
 
+  /**
+   * Contains the background image URL when the animation starts.
+   */
   public backgroundImage = '';
 
-  private timeOutToLoad: any;
+  /**
+   A timeout to avoid displaying background images too quickly.
+   * @private
+   */
+  private onLoadTimeout = 400;
+
+  /**
+   * Contains the timeout created when loading background image
+   * @private
+   */
+  private timeoutCreated: any;
 
   /**
    * @ignore
@@ -48,42 +73,53 @@ export class PortfolioComponent implements OnInit {
   ) {
   }
 
+  /**
+   * Initializes the component when data are loaded.
+   * Add technoList for each project from tags.
+   * Sort projects by position.
+   */
   async ngOnInit(): Promise<void> {
-    this.isLoadingData = this.dataService.isDataLoaded(selectProjectsLoaded).pipe(
-      tap((loaded) => {
+    this.isLoadingData$ = this.dataService.isDataLoaded(selectProjectsLoaded).pipe(
+      tap(async (loaded) => {
         if (loaded) {
-          this.dataService.getStoreData<IProject[]>({
+          const unsortedList = await this.dataService.getStoreData<IProject[]>({
             selector: selectAllProjects,
             defaultValue: [],
-          }).then(
-            (list) => {
-              const listWithTechnoName: IProject[] = list.map(s => ({
-                ...s,
-                technoList: this.utilsService.initTechnoListWithTagList(s.tagList as ITag[]),
-              }));
-              this.siteDemoList = UtilsService.sortObjectList<IProject>(listWithTechnoName, 'asc', 'position', 'number');
-            },
-          );
+          });
+
+          const listWithTechnoName: IProject[] = unsortedList.map(s => ({
+            ...s,
+            technoList: this.utilsService.initTechnoListWithTagList(s.tagList as ITag[]),
+          }));
+
+          this.projectList = UtilsService.sortObjectList<IProject>(listWithTechnoName, 'asc', 'position', 'number');
         }
       }),
       map((loaded) => !loaded),
     );
   }
 
-  public onLoadBackgroundImage(siteDemo: IProject): void {
+  /**
+   * Displays the project background image
+   * @param project
+   */
+  public onLoadBackgroundImage(project: IProject): void {
     this.onRemoveBackgroundImage();
 
-    this.timeOutToLoad = setTimeout(() => {
-      this.backgroundImage = siteDemo.pictureList[0].src;
+    this.timeoutCreated = setTimeout(() => {
+      this.backgroundImage = project.pictureList[0].src;
       this.showImage = true;
-      this.timeOutToLoad = null;
-    }, 400);
+      this.timeoutCreated = null;
+    }, this.onLoadTimeout);
   }
 
+  /**
+   * Hides the project background image
+   */
   public onRemoveBackgroundImage(): void {
-    if (this.timeOutToLoad) {
-      clearTimeout(this.timeOutToLoad);
-      this.timeOutToLoad = null;
+    if (this.timeoutCreated) {
+      clearTimeout(this.timeoutCreated);
+      this.timeoutCreated = null;
     }
     if (this.showImage || this.backgroundImage) {
       this.showImage = false;

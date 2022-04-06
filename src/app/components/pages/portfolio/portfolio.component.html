@@ -1,8 +1,8 @@
 <app-page-layout
   sectionId="PORTFOLIO"
   [pageTitle]="'components.portfolio.title'"
-  [elementsNumber]="siteDemoList.length"
-  [isLoadingData]="isLoadingData"
+  [elementsNumber]="projectList.length"
+  [isLoadingData]="isLoadingData$"
 >
   <ng-container>
     <div
@@ -12,14 +12,14 @@
       [ngStyle]="{backgroundImage: backgroundImage ? 'url(' + backgroundImage + ')' : ''}"
     ></div>
 
-    <div *ngIf="siteDemoList.length" class="pf_flip w100 fcc">
-      <app-portfolio-item
-        *ngFor="let siteDemo of siteDemoList"
+    <div *ngIf="projectList.length" class="pf_flip w100 fcc">
+      <app-project-item
+        *ngFor="let project of projectList"
         class="app-portfolio-item"
-        [siteDemo]="siteDemo"
-        (mouseenter)="onLoadBackgroundImage(siteDemo)"
+        [project]="project"
+        (mouseenter)="onLoadBackgroundImage(project)"
         (mouseleave)="onRemoveBackgroundImage()"
-      ></app-portfolio-item>
+      ></app-project-item>
     </div>
   </ng-container>
 </app-page-layout>

@@ -47,7 +47,7 @@ import {
 } from './components/pages/formations/formation-item-detail/formation-item-detail.component';
 import { FormationsComponent } from './components/pages/formations/formations.component';
 import { InterestsComponent } from './components/pages/interests/interests.component';
-import { PortfolioItemComponent } from './components/pages/portfolio/portfolio-item/portfolio-item.component';
+import { ProjectItemComponent } from './components/pages/portfolio/portfolio-item/project-item.component';
 import { PortfolioComponent } from './components/pages/portfolio/portfolio.component';
 import { SkillsComponent } from './components/pages/skills/skills.component';
 import { CoreModule } from './core/core.module';
@@ -91,7 +91,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ItemComponent,
     ExperienceItemDetailComponent,
     FormationItemDetailComponent,
-    PortfolioItemComponent,
+    ProjectItemComponent,
     BottomFooterComponent,
     LeftFooterComponent,
     VerticalAccordionComponent,

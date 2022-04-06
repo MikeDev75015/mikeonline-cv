@@ -2,15 +2,15 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import { utilsServiceMock } from '../../../../__mocks__/services/utils-service.mock';
 import { UtilsService } from '../../../../shared/shared-index';
 
-import {PortfolioItemComponent} from './portfolio-item.component';
+import {ProjectItemComponent} from './project-item.component';
 
-describe('PortfolioItemComponent', () => {
-  let component: PortfolioItemComponent;
-  let fixture: ComponentFixture<PortfolioItemComponent>;
+describe('ProjectItemComponent', () => {
+  let component: ProjectItemComponent;
+  let fixture: ComponentFixture<ProjectItemComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PortfolioItemComponent ],
+      declarations: [ ProjectItemComponent ],
       providers: [
         { provide: UtilsService, useValue: utilsServiceMock },
       ]
@@ -19,7 +19,7 @@ describe('PortfolioItemComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PortfolioItemComponent);
+    fixture = TestBed.createComponent(ProjectItemComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

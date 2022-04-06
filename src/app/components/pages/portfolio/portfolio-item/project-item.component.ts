@@ -3,13 +3,13 @@ import { IProject } from '../../../../core/core-index';
 import { UtilsService } from '../../../../shared/shared-index';
 
 @Component({
-  selector: 'app-portfolio-item',
-  templateUrl: './portfolio-item.component.html',
-  styleUrls: ['./portfolio-item.component.scss']
+  selector: 'app-project-item',
+  templateUrl: './project-item.component.html',
+  styleUrls: ['./project-item.component.scss']
 })
-export class PortfolioItemComponent implements OnInit, OnDestroy {
+export class ProjectItemComponent implements OnInit, OnDestroy {
   mobileView = false;
-  @Input() siteDemo: IProject | undefined;
+  @Input() project: IProject | undefined;
 
   constructor(
     private readonly utilsService: UtilsService,
