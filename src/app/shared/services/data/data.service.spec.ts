@@ -5,7 +5,7 @@ import { competenceListMock } from '../../../__mocks__/data/competence-list.mock
 import { contactMock } from '../../../__mocks__/data/contact.mock';
 import { cvInfoMock } from '../../../__mocks__/data/cv-info.mock';
 import { unsortedExperienceListMock } from '../../../__mocks__/data/experience-list.mock';
-import { formationListMock } from '../../../__mocks__/data/formation-list.mock';
+import { unsortedFormationListMock } from '../../../__mocks__/data/formation-list.mock';
 import { projectListMock } from '../../../__mocks__/data/project-list.mock';
 import { storeMock } from '../../../__mocks__/services/store.mock';
 import { tagListMock } from '../../../__mocks__/data/tag-list.mock';
@@ -139,7 +139,7 @@ describe('DataService', () => {
         switch (selector) {
           case selectAllCompetences: return of(competenceListMock);
           case selectAllExperiences: return of(unsortedExperienceListMock);
-          case selectAllFormations: return of(formationListMock);
+          case selectAllFormations: return of(unsortedFormationListMock);
           case selectAllProjects: return of(projectListMock);
           default: return of([]);
         }
