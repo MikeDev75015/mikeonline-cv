@@ -73,7 +73,7 @@ describe('FormationsComponent', () => {
       expect(addMissingEndDateSpy).toHaveBeenCalledWith(unsortedFormationListMock);
       expect(sortObjectListSpy).toHaveBeenCalledTimes(1);
       expect(sortObjectListSpy).toHaveBeenCalledWith(unsortedFormationListMock, 'desc', 'endDate', 'date');
-      expect(component.formationList).toStrictEqual(sortedFormationListMock)
+      expect(component.formationList).toStrictEqual(sortedFormationListMock);
     });
   });
 });

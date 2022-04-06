@@ -69,7 +69,7 @@ describe('ExperiencesComponent', () => {
       expect(getStoreDataSpy).toHaveBeenCalledTimes(1);
       expect(sortObjectListSpy).toHaveBeenCalledTimes(1);
       expect(sortObjectListSpy).toHaveBeenCalledWith(unsortedExperienceListMock, 'desc', 'beginDate', 'date');
-      expect(component.experienceList).toStrictEqual(sortedExperienceListMock)
+      expect(component.experienceList).toStrictEqual(sortedExperienceListMock);
     });
   });
 });

@@ -6,7 +6,7 @@ import { contactMock } from '../../../__mocks__/data/contact.mock';
 import { cvInfoMock } from '../../../__mocks__/data/cv-info.mock';
 import { unsortedExperienceListMock } from '../../../__mocks__/data/experience-list.mock';
 import { unsortedFormationListMock } from '../../../__mocks__/data/formation-list.mock';
-import { projectListMock } from '../../../__mocks__/data/project-list.mock';
+import { unsortedProjectListMock } from '../../../__mocks__/data/project-list.mock';
 import { storeMock } from '../../../__mocks__/services/store.mock';
 import { tagListMock } from '../../../__mocks__/data/tag-list.mock';
 import { ICvInfos } from '../../../core/interfaces/models/cv-infos.interface';
@@ -140,7 +140,7 @@ describe('DataService', () => {
           case selectAllCompetences: return of(competenceListMock);
           case selectAllExperiences: return of(unsortedExperienceListMock);
           case selectAllFormations: return of(unsortedFormationListMock);
-          case selectAllProjects: return of(projectListMock);
+          case selectAllProjects: return of(unsortedProjectListMock);
           default: return of([]);
         }
       });
