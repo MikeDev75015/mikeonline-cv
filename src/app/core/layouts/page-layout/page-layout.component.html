@@ -1,8 +1,12 @@
-<ng-container *appLoading="isLoadingData | async">
+<ng-container *appLoading="isLoadingData$ | async">
   <section [id]="sectionId" class="fsc column w100" style="padding-bottom: 100px;">
   <h3 class="animated-background">
     <span>
-      {{ pageTitle | translate }}
+      <div *ngIf="titleParts && titleParts.length" class="fsc title-parts">
+        <ng-container *ngFor="let part of titleParts">
+          <span [ngClass]="{'transform-first-letter': part.length > 2}">{{ part }}&nbsp;</span>
+        </ng-container>
+      </div>
       <span *ngIf="elementsNumber" class="badge-element">{{ elementsNumber }}</span>
     </span>
     </h3>

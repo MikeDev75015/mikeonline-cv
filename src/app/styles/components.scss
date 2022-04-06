@@ -39,13 +39,22 @@ section > h3 > span {
   white-space: nowrap;
 }
 
-section > h3 > span::first-letter{
+div.title-parts > span.transform-first-letter::first-letter {
   text-transform: uppercase;
-  font-size: 25px;
+  font-size: 20px;
   text-shadow: 1px 1px 2px black;
   border-top: 1px solid white;
   border-bottom: 1px solid white;
   border-radius: 20%;
+}
+
+div.title-parts > span:first-of-type::first-letter {
+  text-transform: unset;
+  font-size: 22px;
+  text-shadow: 1px 1px 2px black;
+  border-top: none;
+  border-bottom: none;
+  border-radius: unset;
 }
 
 section > div > .exp-line, section > div > .form-line {
