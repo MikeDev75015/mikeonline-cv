@@ -2,7 +2,7 @@
   sectionId="INTERESTS"
   [pageTitle]="'components.interests.title'"
   [elementsNumber]="interestList ? interestList.length : 0"
-  [isLoadingData]="isLoadingData"
+  [isLoadingData]="isLoadingData$"
 >
   <ng-container *ngIf="interestList">
     <div class="fcs w100">
