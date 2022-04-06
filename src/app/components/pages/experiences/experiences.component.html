@@ -2,7 +2,7 @@
   sectionId="EXPERIENCES"
   [pageTitle]="'components.experiences.title'"
   [elementsNumber]="experienceList ? experienceList.length : 0"
-  [isLoadingData]="isLoadingData"
+  [isLoadingData]="isLoadingData$"
 >
   <ng-container *ngIf="experienceList">
     <div class="exp w100 column fsc">
