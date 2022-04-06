@@ -5,34 +5,50 @@ import { IFormation } from '../../../core/core-index';
 import { selectAllFormations, selectFormationsLoaded } from '../../../core/ngrx/selectors/formations.selectors';
 import { DataService, UtilsService } from '../../../shared/shared-index';
 
+/**
+ * The component of the formations page.
+ */
 @Component({
   selector: 'app-formations',
   templateUrl: './formations.component.html',
 })
 export class FormationsComponent implements OnInit {
-  public isLoadingData: Observable<boolean> = of(true);
+  /**
+   * An observable allowing to initialize the page when data are loaded.
+   */
+  public isLoadingData$: Observable<boolean> = of(true);
 
+  /**
+   * Contains the formations loaded.
+   */
   public formationList: any[] | undefined;
 
+  /**
+   * @ignore
+   * @param dataService
+   */
   constructor(
     private readonly dataService: DataService,
   ) {
   }
 
+  /**
+   * Initializes the component when data are loaded.
+   * Add missing end date if needed.
+   * Sort formations by end date.
+   */
   async ngOnInit(): Promise<void> {
-    this.isLoadingData = this.dataService.isDataLoaded(selectFormationsLoaded).pipe(
-      tap((loaded) => {
+    this.isLoadingData$ = this.dataService.isDataLoaded(selectFormationsLoaded).pipe(
+      tap(async (loaded) => {
         if (loaded) {
-          this.dataService.getStoreData<IFormation[]>({
+          const unsortedList = await this.dataService.getStoreData<IFormation[]>({
             selector: selectAllFormations,
             defaultValue: [],
-          }).then(
-            (list) => {
-              this.formationList = UtilsService.sortObjectList<IFormation>(
-                UtilsService.addMissingEndDate<IFormation>(list),
-                'desc', 'endDate', 'date',
-              );
-            },
+          });
+
+          this.formationList = UtilsService.sortObjectList<IFormation>(
+            UtilsService.addMissingEndDate<IFormation>(unsortedList),
+            'desc', 'endDate', 'date',
           );
         }
       }),
