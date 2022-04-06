@@ -4,7 +4,7 @@ import { lastValueFrom, of } from 'rxjs';
 import { competenceListMock } from '../../../__mocks__/data/competence-list.mock';
 import { contactMock } from '../../../__mocks__/data/contact.mock';
 import { cvInfoMock } from '../../../__mocks__/data/cv-info.mock';
-import { experienceListMock } from '../../../__mocks__/data/experience-list.mock';
+import { unsortedExperienceListMock } from '../../../__mocks__/data/experience-list.mock';
 import { formationListMock } from '../../../__mocks__/data/formation-list.mock';
 import { projectListMock } from '../../../__mocks__/data/project-list.mock';
 import { storeMock } from '../../../__mocks__/services/store.mock';
@@ -138,7 +138,7 @@ describe('DataService', () => {
       storeSelectSpy.mockImplementation((selector: <T>(state: object) => T) => {
         switch (selector) {
           case selectAllCompetences: return of(competenceListMock);
-          case selectAllExperiences: return of(experienceListMock);
+          case selectAllExperiences: return of(unsortedExperienceListMock);
           case selectAllFormations: return of(formationListMock);
           case selectAllProjects: return of(projectListMock);
           default: return of([]);
