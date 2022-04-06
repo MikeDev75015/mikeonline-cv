@@ -54,7 +54,7 @@ export class PortfolioComponent implements OnInit {
    A timeout to avoid displaying background images too quickly.
    * @private
    */
-  private onLoadTimeout = 400;
+  private readonly onLoadTimeout = 400;
 
   /**
    * Contains the timeout created when loading background image

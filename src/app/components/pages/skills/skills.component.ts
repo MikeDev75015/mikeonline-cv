@@ -246,7 +246,7 @@ export class SkillsComponent implements OnInit, OnDestroy, AfterViewChecked {
   /**
    * The callback of the wordclouddrawn event.
    */
-  private wordCloudDrawnCallback = () => {
+  private readonly wordCloudDrawnCallback = () => {
     this.timeOutToDrawn += 25;
     setTimeout(() => {
       this.skillsDrawn = this.skillsDrawn !== undefined ? this.skillsDrawn + 1 : 1;
@@ -256,7 +256,7 @@ export class SkillsComponent implements OnInit, OnDestroy, AfterViewChecked {
   /**
    * The callback of the wordcloudstart event.
    */
-  private wordCloudStartCallback = () => {
+  private readonly wordCloudStartCallback = () => {
     this.skillsDrawn = 0;
     this.timeOutToDrawn = 0;
   }
@@ -264,7 +264,7 @@ export class SkillsComponent implements OnInit, OnDestroy, AfterViewChecked {
   /**
    * The callback of the wordcloudstop event.
    */
-  private worldCloudStopCallback = () => {
+  private readonly worldCloudStopCallback = () => {
     const wcElements = Array.from(document.getElementsByClassName('word-in-cloud'));
     if (!wcElements || !wcElements.length) {
       return;
@@ -282,7 +282,7 @@ export class SkillsComponent implements OnInit, OnDestroy, AfterViewChecked {
   /**
    * The callback of the window resize event.
    */
-  private windowResizeCallback = () => {
+  private readonly windowResizeCallback = () => {
     if (this.drawingTimeout) {
       clearTimeout(this.drawingTimeout);
       this.drawingTimeout = undefined;
@@ -290,10 +290,14 @@ export class SkillsComponent implements OnInit, OnDestroy, AfterViewChecked {
 
     this.drawingTimeout = window.setTimeout(async () => {
       const wcCanvas = SkillsComponent.getCanvasElement();
-      wcCanvas!.innerHTML = '';
+      if (!wcCanvas) {
+        return;
+      }
+
+      wcCanvas.innerHTML = '';
 
       this.defaultText = 'Chargement des technos en cours...';
-      await this.loadWordCloudInCanvasElement(wcCanvas!);
+      await this.loadWordCloudInCanvasElement(wcCanvas);
     }, 500);
   }
 
