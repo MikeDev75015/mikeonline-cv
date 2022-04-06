@@ -1,15 +1,15 @@
 <app-page-layout
   sectionId="SKILLS"
   [pageTitle]="'components.skills.title'"
-  [elementsNumber]="competencesDrawn"
-  [isLoadingData]="isLoadingData"
+  [elementsNumber]="skillsDrawn"
+  [isLoadingData]="isLoadingData$"
 >
   <ng-container>
     <div class="w90 fcc" id="wc_canvas" style="min-height: 200px; height: auto;"></div>
     <p *ngIf="selectedKeyword || defaultText" style="margin-top: 50px !important;" class="fcc chip">{{ selectedKeyword || defaultText }}</p><br>
 
-    <ng-container *ngIf="competenceList">
-      <div *ngFor="let comp of competenceList" class="fsc column w100 skill-details">
+    <ng-container *ngIf="skillList">
+      <div *ngFor="let comp of skillList" class="fsc column w100 skill-details">
         <div class="fce w100">
 
           <div class="fcc column" title="Années d'expérience">
@@ -65,10 +65,10 @@
 
       <mat-expansion-panel
         *ngIf="experienceList && experienceList.length"
-        (opened)="expPanelOpenState = true"
-        (closed)="expPanelOpenState = false">
-        <mat-expansion-panel-header [ngClass]="{'closed-panel': !expPanelOpenState}">
-          <mat-panel-title [ngStyle]="{'color': expPanelOpenState ? '#024873' : '#555'}">
+        (opened)="experiencesPanelOpenState = true"
+        (closed)="experiencesPanelOpenState = false">
+        <mat-expansion-panel-header [ngClass]="{'closed-panel': !experiencesPanelOpenState}">
+          <mat-panel-title [ngStyle]="{'color': experiencesPanelOpenState ? '#024873' : '#555'}">
             {{ experienceList.length + ' expérience' + pluralize(experienceList.length) +
           ' professionnelle' + pluralize(experienceList.length) }}
           </mat-panel-title>
@@ -85,10 +85,10 @@
 
       <mat-expansion-panel
         *ngIf="formationList && formationList.length"
-        (opened)="formPanelOpenState = true"
-        (closed)="formPanelOpenState = false">
-        <mat-expansion-panel-header [ngClass]="{'closed-panel': !formPanelOpenState}">
-          <mat-panel-title [ngStyle]="{'color': formPanelOpenState ? '#024873' : '#555'}">
+        (opened)="formationsPanelOpenState = true"
+        (closed)="formationsPanelOpenState = false">
+        <mat-expansion-panel-header [ngClass]="{'closed-panel': !formationsPanelOpenState}">
+          <mat-panel-title [ngStyle]="{'color': formationsPanelOpenState ? '#024873' : '#555'}">
             {{ formationList.length + ' formation' + pluralize(formationList.length) +
           ' suivie' + pluralize(formationList.length) }}
           </mat-panel-title>
@@ -105,10 +105,10 @@
 
       <mat-expansion-panel
         *ngIf="portfolioList && portfolioList.length"
-        (opened)="portPanelOpenState = true"
-        (closed)="portPanelOpenState = false">
-        <mat-expansion-panel-header [ngClass]="{'closed-panel': !portPanelOpenState}">
-          <mat-panel-title [ngStyle]="{'color': portPanelOpenState ? '#024873' : '#555'}">
+        (opened)="projectsPanelOpenState = true"
+        (closed)="projectsPanelOpenState = false">
+        <mat-expansion-panel-header [ngClass]="{'closed-panel': !projectsPanelOpenState}">
+          <mat-panel-title [ngStyle]="{'color': projectsPanelOpenState ? '#024873' : '#555'}">
             {{ portfolioList.length + ' projet' + pluralize(portfolioList.length) +
           ' réalisé' + pluralize(portfolioList.length) }}
           </mat-panel-title>
