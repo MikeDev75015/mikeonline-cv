@@ -1,7 +1,7 @@
 export const utilsServiceMock = {
   pluralize : jest.fn(),
   dateConverter : jest.fn(),
-  convertDateToNumber : jest.fn(),
+  convertDateToKnobYearsValue : jest.fn(),
   getComputedProperty : jest.fn(),
   getElementId : jest.fn(),
   convertPixelsToNumber : jest.fn(),

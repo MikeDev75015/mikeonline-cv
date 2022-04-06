@@ -15,5 +15,5 @@ export const tagListMock = [
   { id: 21, name: 'tag21', times: 1, weight: 1 },
   { id: 22, name: 'tag22', times: 2, weight: 2 },
   { id: 23, name: 'tag23', times: 3, weight: 3 },
-  { id: 24, name: 'tag24', times: 4, weight: 4 },
+  { id: 24, name: 'tag24', times: 4, weight: undefined },
 ] as ITag[];
