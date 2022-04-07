@@ -93,20 +93,33 @@ jobs:
     steps:
       - checkout
       - dependencies-in-cache
-      - run:
-          name: Run tests with JUnit as reporter
-          command: |
-            TESTFILES=$(circleci tests glob "src/**/*.spec.ts" | circleci tests split --split-by=timings)
-            npm run test:ci $TESTFILES
-          environment:
-            JEST_JUNIT_OUTPUT_DIR: ./reports/junit/
-      - store_test_results:
-          path: ./reports/junit/
-      - store_artifacts:
-          path: ./reports/junit
+      - when:
+          condition:
+            not: << parameters.sonarcloud >>
+          steps:
+            - run:
+                name: Run tests with JUnit as reporter
+                command: |
+                  TESTFILES=$(circleci tests glob "src/**/*.spec.ts" | circleci tests split --split-by=timings)
+                  npm run test:ci $TESTFILES
+                environment:
+                  JEST_JUNIT_OUTPUT_DIR: ./reports/junit/
+            - store_test_results:
+                path: ./reports/junit/
+            - store_artifacts:
+                path: ./reports/junit
       - when:
           condition: << parameters.sonarcloud >>
           steps:
+            - run:
+                name: Run tests with JUnit as reporter
+                command: npm run test:ci
+                environment:
+                  JEST_JUNIT_OUTPUT_DIR: ./reports/junit/
+            - store_test_results:
+                path: ./reports/junit/
+            - store_artifacts:
+                path: ./reports/junit
             - sonarcloud/scan
 
   ci-sonar-job:
