@@ -60,7 +60,6 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private readonly viewContainerRef: ViewContainerRef,
-    private readonly contactOpenCloseService: ContactOpenCloseService,
     private readonly dataService: DataService,
   ) {
   }
@@ -142,7 +141,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public toggleMenu(opened: boolean): void {
-    this.contactOpenCloseService.setOpenCloseContactStatus(false);
+    ContactOpenCloseService.setOpenCloseContactStatus(false);
     this.openedMenu = opened;
   }
 

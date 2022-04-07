@@ -55,14 +55,13 @@ export class ContactComponent implements OnInit, OnDestroy {
   constructor(
     private readonly dataService: DataService,
     private readonly utilsService: UtilsService,
-    private readonly contactOpenCloseService: ContactOpenCloseService,
     private readonly store: Store,
   ) {
   }
 
   async ngOnInit(): Promise<void> {
     this.subscriptionList.push(
-      this.contactOpenCloseService.onOpenCloseContactStatusChange()
+      ContactOpenCloseService.onOpenCloseContactStatusChange()
         .subscribe(status => {
           if (this.contactMobileOpened !== status) {
             this.contactMobileOpened = status;
@@ -71,7 +70,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptionList.push(
-      this.contactOpenCloseService.onHeightIsTooSmallChange()
+      ContactOpenCloseService.onHeightIsTooSmallChange()
         .subscribe(status => {
           if (this.heightIsTooSmall !== status) {
             this.heightIsTooSmall = status;

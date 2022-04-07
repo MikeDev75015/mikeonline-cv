@@ -50,7 +50,6 @@ export class FooterComponent implements OnInit, OnDestroy {
   private readonly subscriptionList: Subscription[] = [];
 
   constructor(
-    private readonly contactOpenCloseService: ContactOpenCloseService,
     private readonly dataService: DataService,
   ) {
   }
@@ -59,13 +58,13 @@ export class FooterComponent implements OnInit, OnDestroy {
     this.isLoadingData = true;
 
     this.subscriptionList.push(
-      this.contactOpenCloseService.onOpenCloseContactStatusChange().subscribe(status => {
+      ContactOpenCloseService.onOpenCloseContactStatusChange().subscribe(status => {
         this.isContactOpen = status;
       }),
     );
 
     this.subscriptionList.push(
-      this.contactOpenCloseService.onHeightIsTooSmallChange().subscribe(status => {
+      ContactOpenCloseService.onHeightIsTooSmallChange().subscribe(status => {
         if (this.heightIsTooSmall !== status) {
           this.heightIsTooSmall = status;
         }
@@ -92,6 +91,6 @@ export class FooterComponent implements OnInit, OnDestroy {
   }
 
   public onOpenContact(): void {
-    this.contactOpenCloseService.setOpenCloseContactStatus(!this.isContactOpen);
+    ContactOpenCloseService.setOpenCloseContactStatus(!this.isContactOpen);
   }
 }

@@ -72,7 +72,6 @@ export class AppComponent implements OnInit, AfterViewChecked, OnDestroy {
    * @param pwaService
    * @param utilService
    * @param animationService
-   * @param contactOpenCloseService
    * @param translateService
    * @param cdRef
    */
@@ -82,7 +81,6 @@ export class AppComponent implements OnInit, AfterViewChecked, OnDestroy {
     private readonly pwaService: PwaService,
     private readonly utilService: UtilsService,
     private readonly animationService: AnimationsService,
-    private readonly contactOpenCloseService: ContactOpenCloseService,
     private readonly translateService: TranslateService,
     private readonly cdRef: ChangeDetectorRef,
   ) {
@@ -201,7 +199,7 @@ export class AppComponent implements OnInit, AfterViewChecked, OnDestroy {
       this.isHeaderHidden = true;
     }
     this.heightView = window.innerHeight;
-    this.contactOpenCloseService.setHeightIsTooSmall(this.heightView < this.minHeightView);
+    ContactOpenCloseService.setHeightIsTooSmall(this.heightView < this.minHeightView);
   }
 
   private updateWrapperHeaderHeight(): void {

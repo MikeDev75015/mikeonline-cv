@@ -5,23 +5,23 @@ import {BehaviorSubject, Subject} from 'rxjs';
   providedIn: 'root',
 })
 export class ContactOpenCloseService {
-  private readonly openContactMobile$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private static readonly openContactMobile$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-  private readonly isHeightTooSmall$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private static readonly isHeightTooSmall$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-  public onOpenCloseContactStatusChange(): Subject<boolean> {
+  public static onOpenCloseContactStatusChange(): Subject<boolean> {
     return this.openContactMobile$;
   }
 
-  public setOpenCloseContactStatus(requestedStatus: boolean): void {
+  public static setOpenCloseContactStatus(requestedStatus: boolean): void {
     this.openContactMobile$.next(requestedStatus);
   }
 
-  public onHeightIsTooSmallChange(): Subject<boolean> {
+  public static onHeightIsTooSmallChange(): Subject<boolean> {
     return this.isHeightTooSmall$;
   }
 
-  public setHeightIsTooSmall(updatedStatus: boolean): void {
+  public static setHeightIsTooSmall(updatedStatus: boolean): void {
     this.isHeightTooSmall$.next(updatedStatus);
   }
 }
