@@ -26,7 +26,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public openedMenu = false;
 
-  public menuTab = false;
+  public tabsMenu = false;
 
   public indexTab: number | undefined;
 
@@ -92,7 +92,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
       })
     );
 
-    this.menuTab = window.innerWidth > 840 && !this.menuTab;
+    this.tabsMenu = window.innerWidth > 840 && !this.tabsMenu;
 
     this.urlHash = MainComponent.getActualHashOrSetDefault();
     this.indexTab = this.urlHash ? this.moduleToShowList.findIndex((module) => module.hash === this.urlHash) : 0;
@@ -109,11 +109,11 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    if (this.menuTab && MainComponent.isMissingLabelsIcons()) {
+    if (this.tabsMenu && MainComponent.isMissingLabelsIcons()) {
       this.addIconsToLabels();
     }
 
-    if (!this.menuTab) {
+    if (!this.tabsMenu) {
       this.loadModules();
     }
   }
@@ -146,15 +146,15 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private refreshView(): void {
-    if (window.innerWidth > 840 && !this.menuTab) {
+    if (window.innerWidth > 840 && !this.tabsMenu) {
       this.clearViewContainerRef();
-      this.menuTab = true;
-    } else if (window.innerWidth < 841 && this.menuTab) {
-      this.menuTab = false;
+      this.tabsMenu = true;
+    } else if (window.innerWidth < 841 && this.tabsMenu) {
+      this.tabsMenu = false;
       this.loadModules();
     }
 
-    if (this.menuTab && MainComponent.isMissingLabelsIcons()) {
+    if (this.tabsMenu && MainComponent.isMissingLabelsIcons()) {
       this.addIconsToLabels();
     }
   }
