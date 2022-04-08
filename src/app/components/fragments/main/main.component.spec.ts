@@ -1,4 +1,5 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { TranslateModule } from '@ngx-translate/core';
 import { dataServiceMock } from '../../../__mocks__/services/data-service.mock';
 import { DataService } from '../../../shared/shared-index';
 
@@ -19,7 +20,8 @@ describe('MainComponent', () => {
         MatTabsModule,
         MatIconModule,
         MatMenuModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+        TranslateModule.forRoot(),
       ],
       declarations: [
         MainComponent,
