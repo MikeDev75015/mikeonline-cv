@@ -201,6 +201,8 @@ workflows:
             - ci-test-job
           executor: cypress-base-16
           name: ci-cypress-job
+          parallel: true
+          parallelism: 14
           start: npm start
           wait-on: 'http://localhost:4200'
           no-workspace: true
@@ -292,6 +294,8 @@ workflows:
             - ci-test-job
           executor: cypress-base-16
           name: ci-cypress-job
+          parallel: true
+          parallelism: 14
           start: npm start
           wait-on: 'http://localhost:4200'
           no-workspace: true
