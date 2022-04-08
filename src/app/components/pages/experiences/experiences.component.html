@@ -5,7 +5,7 @@
   [isLoadingData$]="isLoadingData$"
 >
   <ng-container *ngIf="experienceList">
-    <div class="exp w100 column fsc">
+    <div class="exp w100 column fsc" aria-labelledby="experiences content">
       <ng-container *ngFor="let exp of experienceList; let i = index">
         <app-item
           [id]="'experience-item-' + i"

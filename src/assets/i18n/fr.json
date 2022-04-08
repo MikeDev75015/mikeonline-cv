@@ -4,20 +4,27 @@
     "loading": {
       "waitingMessage": "Un instant svp...<br><em>Chargement des données en cours</em>"
     },
+    "main": {
+      "menuLabel.skills": "Compétences",
+      "menuLabel.experiences": "Expériences",
+      "menuLabel.formations": "Formations",
+      "menuLabel.portfolio": "Portfolio",
+      "menuLabel.interests": "Intérêts"
+    },
+    "skills": {
+      "title": "mes compétences"
+    },
     "experiences": {
       "title": "mes expériences"
     },
     "formations": {
       "title": "mes formations"
     },
+    "portfolio": {
+      "title": "mon portfolio"
+    },
     "interests": {
       "title": "mes centres d'intérêts"
-    },
-    "portfolio": {
-      "title": "mon Portfolio"
-    },
-    "skills": {
-      "title": "mes Compétences"
     }
   }
 }

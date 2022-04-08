@@ -12,7 +12,7 @@
       [ngStyle]="{backgroundImage: backgroundImage ? 'url(' + backgroundImage + ')' : ''}"
     ></div>
 
-    <div *ngIf="projectList.length" class="pf_flip w100 fcc">
+    <div *ngIf="projectList.length" class="pf_flip w100 fcc" aria-labelledby="portfolio content">
       <app-project-item
         *ngFor="let project of projectList"
         class="app-portfolio-item"

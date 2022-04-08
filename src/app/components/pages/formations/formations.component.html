@@ -5,7 +5,7 @@
   [isLoadingData$]="isLoadingData$"
 >
   <ng-container *ngIf="formationList">
-    <div class="exp w100 column fsc">
+    <div class="exp w100 column fsc" aria-labelledby="formations content">
       <ng-container *ngFor="let form of formationList; let i = index">
         <app-item
           [id]="'formation-item-' + i"
