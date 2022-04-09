@@ -10,6 +10,9 @@ executors:
   cypress-base-16:
     docker:
       - image: 'cypress/base:16.13.2'
+  cypress-base-16-with-chrome-and-firefox:
+    docker:
+      - image: "cypress/browsers:node14.17.0-chrome88-ff89"
 
 commands:
   dependencies-in-cache:
@@ -43,6 +46,14 @@ commands:
     description: Push tag to run sonarcloud scan
     steps:
       - run: git tag -f sonar && git push -f https://${SONAR_REPO_USER}:${SONAR_REPO_PASS}@bitbucket.org/${SONAR_REPO_TEAM}/${SONAR_REPO_NAME}.git sonar
+
+  cypress-post-steps:
+    description: Store test results and coverage report as an artifact
+    steps:
+      - store_test_results:
+          path: ./reports/cypress/
+      - store_artifacts:
+          path: ./reports/cypress
 
 jobs:
   ci-build-job:
@@ -197,19 +208,25 @@ workflows:
                 - master
                 - develop
       - cypress/install:
+          executor: cypress-base-16-with-chrome-and-firefox
           requires:
             - ci-test-job
       - cypress/run:
+          name: ci-cypress-job
           requires:
             - cypress/install
-          executor: cypress-base-16
-          name: ci-cypress-job
+          executor: cypress-base-16-with-chrome-and-firefox
+          browser: chrome
           parallel: true
+          record: true
           parallelism: 14
           group: 'all tests'
+          command: npx cypress run --record --key 3e7233f2-3112-46a9-b9c5-7c70dbb71f99
           start: npm start
           wait-on: 'http://localhost:4200'
           no-workspace: true
+          post-steps:
+            - cypress-post-steps
           filters:
             branches:
               ignore:
