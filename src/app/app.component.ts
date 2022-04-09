@@ -2,6 +2,7 @@ import { AfterViewChecked, ChangeDetectorRef, Component, OnDestroy, OnInit } fro
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
+import { environment } from '../environments/environment';
 import { IAnimationServiceResponse } from './core/core-index';
 import * as ApplicationActions from './core/ngrx/actions/application.actions';
 import { selectAppHideHeader } from './core/ngrx/selectors/application.selectors';
@@ -59,9 +60,9 @@ export class AppComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   private readonly minHeightView = 483;
 
-  private readonly timeOutTimeToHide = 4000;
+  private readonly timeOutTimeToHide = 2000;
 
-  private readonly splashScreenDelay = 4000;
+  private readonly splashScreenDelay = environment.SPLASH_SCREEN_DELAY;
 
   private readonly subscriptionList: Subscription[] = [];
 

@@ -8,7 +8,8 @@ export const environment = {
   // BACKEND_URL: 'https://ocv-backend-staging.herokuapp.com',
   // BACKEND_URL: 'https://ocv-backend.herokuapp.com',
   ACTIVATED_LOGS: true,
-  APP_NAME: 'online-cv'
+  APP_NAME: 'online-cv',
+  SPLASH_SCREEN_DELAY: 2500,
 };
 
 /*
