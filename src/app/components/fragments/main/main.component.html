@@ -2,6 +2,9 @@
   *ngIf="tabsMenu" id="menuTab" class="mat-elevation-z4" mat-stretch-tabs
   [ngClass]="{'full-screen': hideHeader}" [(selectedIndex)]="indexTab" (click)="updateHash($any($event))"
 >
+  <mat-tab [label]="'components.main.menuLabel.home' | translate" aria-labelledby="home tab">
+    <app-home></app-home>
+  </mat-tab>
   <mat-tab [label]="'components.main.menuLabel.skills' | translate" aria-labelledby="skills tab">
     <app-skills></app-skills>
   </mat-tab>
@@ -31,6 +34,15 @@
     class="matMenu" #menu="matMenu" overlapTrigger="true" (closed)="toggleMenu(false)" aria-labelledby="mobile menu container">
 
     <app-header></app-header>
+
+    <button mat-menu-item
+            [ngClass]="{'selected-menu': selectedMenu === 'home', 'no-pointer-events': isLoadingData}"
+            (click)="selectMenu($event, 'home')"
+            [disabled]="selectedMenu === 'Accueil'"
+            aria-label="Display the Home Page" aria-labelledby="home menu button">
+      <mat-icon class="no-pointer-events matIcon">home</mat-icon>
+      <span class="no-pointer-events btn-title">{{ 'components.main.menuLabel.home' | translate }}</span>
+    </button>
 
     <button mat-menu-item
             [ngClass]="{'selected-menu': selectedMenu === 'skills', 'no-pointer-events': isLoadingData}"

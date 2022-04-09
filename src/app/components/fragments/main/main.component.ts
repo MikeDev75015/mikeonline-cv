@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { ComponentType } from '../../../core/interfaces/types/component.type';
 import { ContactOpenCloseService } from '../../../core/services/contact-open-close/contact-open-close.service';
 import { DataService } from '../../../shared/services/data/data.service';
+import { HomeComponent } from '../../pages/home/home.component';
 import { SkillsComponent } from '../../pages/skills/skills.component';
 import { ExperiencesComponent } from '../../pages/experiences/experiences.component';
 import { FormationsComponent } from '../../pages/formations/formations.component';
@@ -33,6 +34,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
   private urlHash: string | undefined;
 
   private readonly iconsToAdd: { id: string, iconName: string }[] = [
+    { id: '#icon-home', iconName: 'home' },
     { id: '#icon-skill', iconName: 'playlist_add_check' },
     { id: '#icon-exp', iconName: 'business_center' },
     { id: '#icon-form', iconName: 'school' },
@@ -41,6 +43,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
   ];
 
   private readonly moduleToShowList = [
+    { hash: 'home', name: 'Accueil' },
     { hash: 'skills', name: 'Compétences' },
     { hash: 'experiences', name: 'Expériences' },
     { hash: 'formations', name: 'Formations' },
@@ -49,6 +52,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
   ];
 
   private readonly components: ComponentType[] = [
+    HomeComponent,
     SkillsComponent,
     ExperiencesComponent,
     FormationsComponent,
@@ -68,7 +72,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
     return decodeURI(window.location.hash.replace('#', '')) &&
     decodeURI(window.location.hash.replace('#', '')) !== 'undefined'
       ? decodeURI(window.location.hash.replace('#', ''))
-      : 'skills';
+      : 'home';
   }
 
   private static isMissingLabelsIcons(): boolean {

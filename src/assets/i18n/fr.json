@@ -5,6 +5,7 @@
       "waitingMessage": "Un instant svp...<br><em>Chargement des données en cours</em>"
     },
     "main": {
+      "menuLabel.home": "Accueil",
       "menuLabel.skills": "Compétences",
       "menuLabel.experiences": "Expériences",
       "menuLabel.formations": "Formations",
