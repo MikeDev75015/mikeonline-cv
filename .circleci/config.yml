@@ -7,9 +7,6 @@ orbs:
   cypress: cypress-io/cypress@1.29.0
 
 executors:
-  cypress-base-16:
-    docker:
-      - image: 'cypress/base:16.13.2'
   cypress-base-16-with-chrome-and-firefox:
     docker:
       - image: "cypress/browsers:node14.17.0-chrome88-ff89"
@@ -94,7 +91,7 @@ jobs:
   ci-test-job:
     docker:
       - image: cimg/node:16.13.1
-    parallelism: 16
+    parallelism: 15
     parameters:
       sonarcloud:
         type: boolean
@@ -207,11 +204,15 @@ workflows:
                 - develop
       - cypress/install:
           executor: cypress-base-16-with-chrome-and-firefox
-          requires:
-            - ci-test-job
+          filters:
+            branches:
+              ignore:
+                - master
+                - develop
       - cypress/run:
           name: ci-cypress-job
           requires:
+            - ci-test-job
             - cypress/install
           executor: cypress-base-16-with-chrome-and-firefox
           ci-build-id: 'testing-commit-${CIRCLE_SHA1}'
@@ -299,28 +300,43 @@ workflows:
             branches:
               only:
                 - develop
-      - ci-build-job:
-          requires:
-            - ci-test-job
-          post-steps:
-            - jira/notify:
-                environment_type: staging
-                job_type: build
+      - cypress/install:
+          executor: cypress-base-16-with-chrome-and-firefox
           filters:
             branches:
               only:
                 - develop
       - cypress/run:
+          name: ci-cypress-job
           requires:
             - ci-test-job
-          executor: cypress-base-16
-          name: ci-cypress-job
-          parallel: true
+            - cypress/install
+          executor: cypress-base-16-with-chrome-and-firefox
+          ci-build-id: 'testing-commit-${CIRCLE_SHA1}'
+          browser: chrome
           parallelism: 14
-          group: 'all tests'
+          parallel: true
+          record: true
+          group: all-test
+          command: npx cypress run --record --key 3e7233f2-3112-46a9-b9c5-7c70dbb71f99 --parallel --group all-test
           start: npm start
           wait-on: 'http://localhost:4200'
           no-workspace: true
+          store_artifacts: true
+          post-steps:
+            - cypress-post-steps
+          filters:
+            branches:
+              only:
+                - develop
+      - ci-build-job:
+          requires:
+            - ci-test-job
+            - ci-cypress-job
+          post-steps:
+            - jira/notify:
+                environment_type: staging
+                job_type: build
           filters:
             branches:
               only:
