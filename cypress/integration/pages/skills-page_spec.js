@@ -13,7 +13,7 @@ describe('Skills page', () => {
   beforeEach(() => {
     cy.visit('/');
     cy.wait(Cypress.env('SPLASH_SCREEN_DELAY'));
-    cy.get('[aria-labelledby="skills tab"]').click();
+    cy.get('[aria-labelledby="skills tab"]').click({ waitForAnimations: false });
   });
 
   it('should be on skills page', () => {

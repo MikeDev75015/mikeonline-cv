@@ -13,7 +13,7 @@ describe('Portfolio page', () => {
   beforeEach(() => {
     cy.visit('/');
     cy.wait(Cypress.env('SPLASH_SCREEN_DELAY'));
-    cy.get('[aria-labelledby="portfolio tab"]').click();
+    cy.get('[aria-labelledby="portfolio tab"]').click({ waitForAnimations: false });
   });
 
   it('should be on portfolio page', () => {

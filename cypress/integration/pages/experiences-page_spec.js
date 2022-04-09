@@ -13,7 +13,7 @@ describe('Experiences page', () => {
   beforeEach(() => {
     cy.visit('/');
     cy.wait(Cypress.env('SPLASH_SCREEN_DELAY'));
-    cy.get('[aria-labelledby="experiences tab"]').click();
+    cy.get('[aria-labelledby="experiences tab"]').click({ waitForAnimations: false });
   });
 
   it('should be on experiences page', () => {

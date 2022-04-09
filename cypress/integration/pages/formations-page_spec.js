@@ -13,7 +13,7 @@ describe('Formations page', () => {
   beforeEach(() => {
     cy.visit('/');
     cy.wait(Cypress.env('SPLASH_SCREEN_DELAY'));
-    cy.get('[aria-labelledby="formations tab"]').click();
+    cy.get('[aria-labelledby="formations tab"]').click({ waitForAnimations: false });
   });
 
   it('should be on formations page', () => {

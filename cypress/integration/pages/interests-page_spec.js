@@ -13,7 +13,7 @@ describe('Interests page', () => {
   beforeEach(() => {
     cy.visit('/');
     cy.wait(Cypress.env('SPLASH_SCREEN_DELAY'));
-    cy.get('[aria-labelledby="interests tab"]').click();
+    cy.get('[aria-labelledby="interests tab"]').click({ waitForAnimations: false });
   });
 
   it('should be on interests page', () => {
