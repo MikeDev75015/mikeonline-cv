@@ -51,9 +51,7 @@ commands:
     description: Store test results and coverage report as an artifact
     steps:
       - store_test_results:
-          path: ./reports/cypress/
-      - store_artifacts:
-          path: ./reports/cypress
+          path: cypress/results
 
 jobs:
   ci-build-job:
@@ -218,10 +216,14 @@ workflows:
           executor: cypress-base-16-with-chrome-and-firefox
           browser: chrome
           parallelism: 14
+          parallel: true
+          record: true
+          group: all-test
           command: npx cypress run --record --key 3e7233f2-3112-46a9-b9c5-7c70dbb71f99 --parallel --group all-test
           start: npm start
           wait-on: 'http://localhost:4200'
           no-workspace: true
+          store_artifacts: true
           post-steps:
             - cypress-post-steps
           filters:
