@@ -214,6 +214,7 @@ workflows:
           requires:
             - cypress/install
           executor: cypress-base-16-with-chrome-and-firefox
+          ci-build-id: 'testing-commit-${CIRCLE_SHA1}'
           browser: chrome
           parallelism: 14
           parallel: true
