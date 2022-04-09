@@ -1,3 +1,7 @@
 {
-  "baseUrl": "http://localhost:4200"
+  "baseUrl": "http://localhost:4200",
+  "env": {
+    "BACKEND_URL": "https://ocv-backend-cypress.tests.com",
+    "SPLASH_SCREEN_DELAY": 2500
+  }
 }
