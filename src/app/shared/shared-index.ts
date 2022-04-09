@@ -9,7 +9,7 @@ export { HeaderTitleFormatPipe } from './pipes/header-title-format.pipe';
 export { IncompressibleSpacePipe } from './pipes/incompressible-space.pipe';
 
 // services
-export { ApiV0Service } from './services/api-v0/api-v0.service';
+export { ApiV0Service } from '../core/services/api-v0/api-v0.service';
 export { DataService } from './services/data/data.service';
 export { TagsService } from './services/tags/tags.service';
 export { UtilsService } from './services/utils/utils.service';

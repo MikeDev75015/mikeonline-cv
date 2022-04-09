@@ -31,6 +31,15 @@ import { BottomFooterComponent } from './components/fragments/footer/bottom-foot
 import { FooterComponent } from './components/fragments/footer/footer.component';
 import { LeftFooterComponent } from './components/fragments/footer/left-footer/left-footer.component';
 import { HeaderComponent } from './components/fragments/header/header.component';
+import { ItemDatesComponent } from './components/fragments/item-elements/item-dates/item-dates.component';
+import {
+  ItemOpenCloseButtonsComponent,
+} from './components/fragments/item-elements/item-open-close-buttons/item-open-close-buttons.component';
+import { ItemTagListComponent } from './components/fragments/item-elements/item-tag-list/item-tag-list.component';
+import { ItemComponent } from './components/fragments/item/item.component';
+import {
+  DynamicComponentLoaderDirective,
+} from './components/fragments/main/directives/dynamic-component-loader.directive';
 import { MainComponent } from './components/fragments/main/main.component';
 import { OneLetterByLinePipe } from './components/fragments/vertical-accordion/pipes/one-letter-by-line.pipe';
 import {
@@ -40,17 +49,18 @@ import { VerticalAccordionComponent } from './components/fragments/vertical-acco
 import {
   ExperienceItemDetailComponent,
 } from './components/pages/experiences/experience-item-detail/experience-item-detail.component';
-import { ItemComponent } from './components/fragments/item/item.component';
 import { ExperiencesComponent } from './components/pages/experiences/experiences.component';
 import {
   FormationItemDetailComponent,
 } from './components/pages/formations/formation-item-detail/formation-item-detail.component';
 import { FormationsComponent } from './components/pages/formations/formations.component';
+import { HomeComponent } from './components/pages/home/home.component';
 import { InterestsComponent } from './components/pages/interests/interests.component';
 import { ProjectItemComponent } from './components/pages/portfolio/portfolio-item/project-item.component';
 import { PortfolioComponent } from './components/pages/portfolio/portfolio.component';
 import { SkillsComponent } from './components/pages/skills/skills.component';
 import { CoreModule } from './core/core.module';
+import { httpInterceptorProviders } from './core/interceptors';
 import { AlertModule } from './core/modules/alert/alert.module';
 import { LoggerModule } from './core/modules/logger/logger.module';
 import { ApplicationEffects } from './core/ngrx/effects/application.effects';
@@ -64,12 +74,8 @@ import { TagsEffects } from './core/ngrx/effects/tags.effects';
 import { metaReducers, reducers } from './core/ngrx/ngrx-index';
 import { HttpClientService } from './core/services/http-client/http-client.service';
 import { PdfCreatorService } from './core/services/pdf-creator/pdf-creator.service';
-import { FirstLetterUppercasePipe, HeaderTitleFormatPipe, IncompressibleSpacePipe } from './shared/shared-index';
-import { DynamicComponentLoaderDirective } from './components/fragments/main/directives/dynamic-component-loader.directive';
 import { DateFormatPipe } from './shared/pipes/date-format.pipe';
-import { ItemTagListComponent } from './components/fragments/item-elements/item-tag-list/item-tag-list.component';
-import { ItemOpenCloseButtonsComponent } from './components/fragments/item-elements/item-open-close-buttons/item-open-close-buttons.component';
-import { ItemDatesComponent } from './components/fragments/item-elements/item-dates/item-dates.component';
+import { FirstLetterUppercasePipe, HeaderTitleFormatPipe, IncompressibleSpacePipe } from './shared/shared-index';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -106,6 +112,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ItemTagListComponent,
     ItemOpenCloseButtonsComponent,
     ItemDatesComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,
@@ -135,7 +142,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
         deps: [HttpClient],
-      }
+      },
     }),
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
@@ -158,6 +165,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     FormsModule,
   ],
   providers: [
+    environment.production ? [] : httpInterceptorProviders,
     HttpClientService,
     PdfCreatorService,
   ],
