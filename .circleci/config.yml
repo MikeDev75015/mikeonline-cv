@@ -196,11 +196,14 @@ workflows:
               ignore:
                 - master
                 - develop
-      - cypress/run:
+      - cypress/install:
           requires:
             - ci-test-job
           executor: cypress-base-16
-          install-command: npm i
+      - cypress/run:
+          requires:
+            - cypress/install
+          executor: cypress-base-16
           name: ci-cypress-job
           parallel: true
           parallelism: 14
