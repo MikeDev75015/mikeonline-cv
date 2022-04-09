@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpClientService } from '../../../core/services/http-client/http-client.service';
+import { HttpClientService } from '../http-client/http-client.service';
 import { ApiV0Path } from './models/api-v0-path.type';
 
 
