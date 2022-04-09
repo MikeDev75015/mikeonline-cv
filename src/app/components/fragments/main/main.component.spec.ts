@@ -1,21 +1,21 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatTabsModule } from '@angular/material/tabs';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
+import { MockComponent } from 'ng2-mock-component';
 import { dataServiceMock } from '../../../__mocks__/services/data-service.mock';
 import { DataService } from '../../../shared/shared-index';
 
-import {MainComponent} from './main.component';
-import {MatTabsModule} from '@angular/material/tabs';
-import {MockComponent} from 'ng2-mock-component';
-import {MatMenuModule} from '@angular/material/menu';
-import {MatIconModule} from '@angular/material/icon';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { MainComponent } from './main.component';
 
 describe('MainComponent', () => {
   let component: MainComponent;
   let fixture: ComponentFixture<MainComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [
         MatTabsModule,
         MatIconModule,
@@ -26,30 +26,33 @@ describe('MainComponent', () => {
       declarations: [
         MainComponent,
         MockComponent({
-          selector: 'app-header'
+          selector: 'app-header',
         }),
         MockComponent({
-          selector: 'app-skills'
+          selector: 'app-home',
         }),
         MockComponent({
-          selector: 'app-experiences'
+          selector: 'app-skills',
         }),
         MockComponent({
-          selector: 'app-formations'
+          selector: 'app-experiences',
         }),
         MockComponent({
-          selector: 'app-portfolio'
+          selector: 'app-formations',
         }),
         MockComponent({
-          selector: 'app-interests'
-        })
+          selector: 'app-portfolio',
+        }),
+        MockComponent({
+          selector: 'app-interests',
+        }),
       ],
       providers: [
         { provide: DataService, useValue: dataServiceMock },
       ],
     })
-    .compileComponents();
-  }));
+      .compileComponents();
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(MainComponent);
