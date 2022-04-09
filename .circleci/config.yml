@@ -217,11 +217,8 @@ workflows:
             - cypress/install
           executor: cypress-base-16-with-chrome-and-firefox
           browser: chrome
-          parallel: true
-          record: true
           parallelism: 14
-          group: 'all tests'
-          command: npx cypress run --record --key 3e7233f2-3112-46a9-b9c5-7c70dbb71f99
+          command: npx cypress run --record --key 3e7233f2-3112-46a9-b9c5-7c70dbb71f99 --parallel --group all-test
           start: npm start
           wait-on: 'http://localhost:4200'
           no-workspace: true
