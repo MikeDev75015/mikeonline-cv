@@ -22,7 +22,6 @@ export class ApiV0Interceptor implements HttpInterceptor {
       return next.handle(request);
     }
 
-    console.debug('ApiV0Interceptor:', request);
     const apiPath = request.url.split('/v0/')[1];
     return ApiV0Interceptor.jsonFile(apiPath);
   }
