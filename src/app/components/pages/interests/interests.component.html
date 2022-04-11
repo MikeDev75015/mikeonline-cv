@@ -3,6 +3,7 @@
   [pageTitle]="'components.interests.title'"
   [elementsNumber]="interestList ? interestList.length : 0"
   [isLoadingData$]="isLoadingData$"
+  [scrollSection]="true"
 >
   <div *ngIf="interestList" class="fcs w100" aria-labelledby="interests content">
     <app-vertical-accordion

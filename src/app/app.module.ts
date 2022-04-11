@@ -18,7 +18,9 @@ import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { ChartModule } from 'primeng/chart';
 import { KnobModule } from 'primeng/knob';
+import { ScrollTopModule } from 'primeng/scrolltop';
 import { environment } from '../environments/environment';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -76,6 +78,7 @@ import { HttpClientService } from './core/services/http-client/http-client.servi
 import { PdfCreatorService } from './core/services/pdf-creator/pdf-creator.service';
 import { DateFormatPipe } from './shared/pipes/date-format.pipe';
 import { FirstLetterUppercasePipe, HeaderTitleFormatPipe, IncompressibleSpacePipe } from './shared/shared-index';
+import { SkillsRadarChartComponent } from './components/fragments/skills-radar-chart/skills-radar-chart.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -113,6 +116,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ItemOpenCloseButtonsComponent,
     ItemDatesComponent,
     HomeComponent,
+    SkillsRadarChartComponent,
   ],
   imports: [
     BrowserModule,
@@ -163,6 +167,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     AlertModule,
     KnobModule,
     FormsModule,
+    ChartModule,
+    ScrollTopModule,
   ],
   providers: [
     environment.production ? [] : httpInterceptorProviders,

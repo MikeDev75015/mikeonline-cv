@@ -1,3 +1,10 @@
+.mat-tab-group {
+  .mat-tab-body {
+    .mat-tab-body-content {
+      overflow: hidden;
+    }
+  }
+}
 .mat-elevation-z4 {
   box-shadow: unset !important;
 }

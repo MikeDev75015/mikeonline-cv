@@ -1,11 +1,38 @@
 @media screen and (max-width: 840px) {
-  section {
-    padding: 40px 0 100px;
+  p, a, li {
+    font-size: 12px;
+  }
 
+  .dynamic-component-container {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: calc(100vh - 60px);
+    overflow: hidden;
+  }
+
+  section {
+    padding-top: 40px;
 
     > h3 {
       font-size: 25px;
     }
+
+    > .page-layout-content {
+      .scroll-top-content {
+        top: unset;
+        bottom: 70px;
+      }
+    }
+
+    .scroll-top-section {
+      top: unset;
+      bottom: 70px;
+    }
+  }
+
+  .badge-element {
+    top: -1px;
   }
 
   .exp-line h3, .form-line h3 {
@@ -30,28 +57,6 @@
 
   .line-body {
     margin-bottom: 50px !important;
-  }
-
-  p, a, li{
-    font-size: 12px;
-  }
-
-  .badge-element {
-    top: -1px;
-  }
-
-
-  app-vertical-accordion-item.item-not-opened {
-    min-width: 50px;
-  }
-
-  .vertical-accordion-item p {
-    font-size: 14px !important;
-  }
-
-  .vertical-accordion-item-header {
-    width: 50px;
-    min-width: 50px;
   }
 
   .line-body::-webkit-scrollbar {

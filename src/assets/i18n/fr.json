@@ -4,13 +4,12 @@
     "loading": {
       "waitingMessage": "Un instant svp...<br><em>Chargement des données en cours</em>"
     },
-    "main": {
-      "menuLabel.home": "Accueil",
-      "menuLabel.skills": "Compétences",
-      "menuLabel.experiences": "Expériences",
-      "menuLabel.formations": "Formations",
-      "menuLabel.portfolio": "Portfolio",
-      "menuLabel.interests": "Intérêts"
+    "home": {
+      "summary.title": "Bienvenue",
+      "summary.text.part1": "Développeur FullStack Web depuis 2003 (FullStack TS depuis 2018), j'ai à mon actif plusieurs projets personnels et professionnels au travers desquels j'ai pu acquérir et mettre en application de nombreuses compétences :",
+      "summary.text.part2": "* Angular 2+, React, PWA, Angular material, PrimeNg, Socket.io, Css 3<br>* Node.js, Nest.js, Express, MongoDb<br>* Jest, Cypress, Compodoc, Swagger<br>* API : CRUD, REST, Google Maps, Stripe, Stuart, Deliver.ee, Bitly, Shopify, Here<br>* OPS : Circle-Ci, Docker, AWS Cloud, Firebase, Netlify, Heroku, NPM<br>* SEO : Google Analytics, Google Tag Manager<br>* Analyses, Specs Fonctionnelles et Techniques, Diagrammes de classes, Use Cases",
+      "summary.text.part3": "Sensible aux bonnes pratiques !",
+      "summary.text.part4": "Au plaisir de vous aider à mettre ou à maintenir votre projet sur les rails."
     },
     "skills": {
       "title": "mes compétences"
@@ -26,6 +25,14 @@
     },
     "interests": {
       "title": "mes centres d'intérêts"
+    },
+    "main": {
+      "menuLabel.home": "Accueil",
+      "menuLabel.skills": "Compétences",
+      "menuLabel.experiences": "Expériences",
+      "menuLabel.formations": "Formations",
+      "menuLabel.portfolio": "Portfolio",
+      "menuLabel.interests": "Intérêts"
     }
   }
 }

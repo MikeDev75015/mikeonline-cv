@@ -1,1 +1,24 @@
-<p>home works!</p>
+<app-page-layout
+  sectionId="HOME"
+  [pageTitle]="''"
+  [isLoadingData$]="isLoadingData$"
+  [scrollSection]="true"
+>
+  <div class="fsc column w100 home-content" aria-labelledby="home content">
+
+    <div class="fcs w100 home-summary" aria-labelledby="home summary">
+      <div class="fss column w100">
+        <h1>{{ 'components.home.summary.title' | translate }}</h1>
+        <span [innerHTML]="'components.home.summary.text.part1' | translate"></span><br>
+        <span [innerHTML]="'components.home.summary.text.part2' | translate"></span><br>
+        <span [innerHTML]="'components.home.summary.text.part3' | translate"></span><br>
+        <span [innerHTML]="'components.home.summary.text.part4' | translate"></span>
+      </div>
+    </div>
+
+    <div class="fcs w100 home-radar-chart" aria-labelledby="home radar chart">
+      <app-skills-radar-chart></app-skills-radar-chart>
+    </div>
+
+  </div>
+</app-page-layout>

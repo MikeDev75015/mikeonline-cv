@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable, of } from 'rxjs';
 
@@ -9,7 +9,7 @@ import { Observable, of } from 'rxjs';
   selector: 'app-page-layout',
   templateUrl: './page-layout.component.html',
 })
-export class PageLayoutComponent implements OnInit, OnChanges {
+export class PageLayoutComponent implements OnInit {
   @Input() isLoadingData$: Observable<boolean> = of(true);
 
   @Input() sectionId: string | undefined;
@@ -17,6 +17,8 @@ export class PageLayoutComponent implements OnInit, OnChanges {
   @Input() pageTitle: string | undefined;
 
   @Input() elementsNumber?: number;
+
+  @Input() scrollSection?: boolean;
 
   public titleParts: string[] = [];
 
@@ -33,34 +35,28 @@ export class PageLayoutComponent implements OnInit, OnChanges {
    * @throws an error if sectionId and/or pageTitle are missing or invalid
    */
   ngOnInit(): void {
-    if (!this.sectionId || !this.pageTitle) {
+    if (!this.sectionId || this.pageTitle === undefined) {
       throw new Error('sectionId and/or pageTitle are missing or invalid');
     }
-  }
 
-  /**
-   *
-   * @param changes
-   */
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes && changes['pageTitle'] && changes['pageTitle'].currentValue) {
-      this.translateService.get(this.pageTitle as string).subscribe(
+    if (this.pageTitle !== '') {
+      this.translateService.get(this.pageTitle).subscribe(
         (title) => {
           const spaceSplit = title.split(' ');
           this.titleParts = spaceSplit.map((part: string) => {
-            if (part.includes("'")) {
-              const subPart = part.split("'");
+            if (part.includes('\'')) {
+              const subPart = part.split('\'');
               return subPart.map((p, i) => {
-                if (i === (subPart.length -1)) {
+                if (i === (subPart.length - 1)) {
                   return p;
                 }
-                return [p, "'"];
+                return [p, '\''];
               });
             }
 
             return part;
           }).flat(3);
-        }
+        },
       );
     }
   }

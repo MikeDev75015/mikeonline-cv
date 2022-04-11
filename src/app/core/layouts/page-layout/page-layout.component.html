@@ -1,7 +1,8 @@
 <ng-container *appLoading="isLoadingData$ | async">
-  <section [id]="sectionId" class="fsc column w100" style="padding-bottom: 100px;" aria-labelledby="page section">
+  <section
+    [id]="sectionId" class="fsc column w100" [ngClass]="{'scrollable-section': scrollSection}" aria-labelledby="page section">
 
-    <h3 class="animated-background">
+    <h3 *ngIf="pageTitle" class="animated-background">
       <span>
         <div *ngIf="titleParts && titleParts.length" class="fsc title-parts" aria-labelledby="page title">
           <ng-container *ngFor="let part of titleParts">
@@ -15,7 +16,14 @@
       </span>
     </h3>
 
-    <ng-content></ng-content>
+    <div class="w100" [ngClass]="{'page-layout-content': !scrollSection}">
+      <ng-content></ng-content>
+      <p-scrollTop
+        *ngIf="!scrollSection" styleClass="scroll-top-content" target="parent" [threshold]="100" icon="pi pi-angle-up"></p-scrollTop>
+    </div>
 
+    <p-scrollTop
+      *ngIf="scrollSection" styleClass="scroll-top-section" target="parent" [threshold]="100" icon="pi pi-angle-up"
+    ></p-scrollTop>
   </section>
 </ng-container>

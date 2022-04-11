@@ -103,3 +103,18 @@ app-vertical-accordion-item:last-of-type .vertical-accordion-item-body {
     font-weight: 600;
   }
 }
+
+@media screen and (max-width: 840px) {
+  app-vertical-accordion-item.item-not-opened {
+    min-width: 50px;
+  }
+
+  .vertical-accordion-item p {
+    font-size: 14px !important;
+  }
+
+  .vertical-accordion-item-header {
+    width: 50px;
+    min-width: 50px;
+  }
+}

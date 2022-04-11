@@ -6,55 +6,123 @@
   }
 }
 
+.home-content {
+  height: calc(100vh - 100px);
+
+  .home-summary {
+    padding: 30px;
+    max-width: 850px;
+  }
+
+  .home-radar-chart {
+    margin-top: 30px;
+    padding-bottom: 50px;
+  }
+}
+
 section {
   margin-bottom: 140px !important;
   position: relative;
+
+  > h3 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+    text-align: center;
+    font-size: 30px;
+    width: 100%;
+    height: 80px;
+    min-height: 80px;
+    text-shadow: 1px 1px 1px black;
+    background-color: rgba(2, 72, 115, 1);
+    border-top: 2px solid white;
+    color: #fff;
+    border-bottom: 2px solid #024873;
+    cursor: context-menu;
+    transition: all 1s;
+
+    > span {
+      position: relative;
+      white-space: nowrap;
+    }
+
+    div.title-parts > span.transform-first-letter::first-letter {
+      text-transform: uppercase;
+      font-size: 20px;
+      text-shadow: 1px 1px 2px black;
+      border-top: 1px solid white;
+      border-bottom: 1px solid white;
+      border-radius: 20%;
+    }
+
+    div.title-parts > span:first-of-type::first-letter {
+      text-transform: unset;
+      font-size: 22px;
+      text-shadow: 1px 1px 2px black;
+      border-top: none;
+      border-bottom: none;
+      border-radius: unset;
+    }
+  }
+
+  > h3:hover {
+    color: #024873;
+    border-bottom: 2px solid #024873;
+  }
+
+  > .page-layout-content {
+    height: calc(100vh - 200px);
+    overflow: auto;
+    padding-bottom: 100px;
+
+    .scroll-top-content {
+      position: fixed !important;
+      top: 150px;
+      width: 40px;
+      height: 30px;
+      background: rgba(2, 72, 115, .7);
+      border: 1px solid #024873;
+      border-radius: 5px;
+      color: white;
+      cursor: pointer;
+
+      .p-scrolltop-icon {
+        z-index: 1002;
+        position: relative;
+        color: white;
+        font-size: 15px;
+        width: 15px;
+        height: 15px;
+      }
+    }
+  }
+
+  .scroll-top-section {
+    position: fixed !important;
+    top: 150px;
+    width: 40px;
+    height: 30px;
+    background: rgba(2, 72, 115, .7);
+    border: 1px solid #024873;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+
+    .p-scrolltop-icon {
+      z-index: 1002;
+      position: relative;
+      color: white;
+      font-size: 15px;
+      width: 15px;
+      height: 15px;
+    }
+  }
 }
 
-section > h3 {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 30px;
-  text-align: center;
-  font-size: 30px;
-  width: 100%;
-  height: 80px;
-  text-shadow: 1px 1px 1px black;
-  background-color: rgba(2,72,115,1);
-  border-top: 2px solid white;
-  color: #fff;
-  border-bottom: 2px solid #024873;
-  cursor: context-menu;
-  transition: all 1s;
-}
-
-section > h3:hover{
-  color: #024873;
-  border-bottom: 2px solid #024873;
-}
-
-section > h3 > span {
-  position: relative;
-  white-space: nowrap;
-}
-
-div.title-parts > span.transform-first-letter::first-letter {
-  text-transform: uppercase;
-  font-size: 20px;
-  text-shadow: 1px 1px 2px black;
-  border-top: 1px solid white;
-  border-bottom: 1px solid white;
-  border-radius: 20%;
-}
-
-div.title-parts > span:first-of-type::first-letter {
-  text-transform: unset;
-  font-size: 22px;
-  text-shadow: 1px 1px 2px black;
-  border-top: none;
-  border-bottom: none;
-  border-radius: unset;
+section.scrollable-section {
+  height: calc(100vh - 51px);
+  overflow: auto;
 }
 
 section > div > .exp-line, section > div > .form-line {
@@ -72,7 +140,6 @@ section > div > .exp-line, section > div > .form-line {
 }
 
 .closed-view {
-  // overflow: hidden;
   max-height: 100px;
 }
 
@@ -169,4 +236,8 @@ section > div > .exp-line, section > div > .form-line {
 
 .app-portfolio-item {
   margin: 20px !important;
+}
+
+app-interests, app-skills {
+  width: 100%;
 }
