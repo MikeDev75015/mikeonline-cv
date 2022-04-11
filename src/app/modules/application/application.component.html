@@ -1,0 +1,24 @@
+<app-contact
+  [hidden]="!mobileView && headerOnAnimation"
+  [mobileView]="mobileView"
+  class="app-contact"
+></app-contact>
+
+<div
+  *ngIf="!mobileView"
+  [@hideShowHeader]="{value: isHeaderHidden ? 'hide' : 'show', params: {headerHeight: headerHeight}}"
+  (@hideShowHeader.start)="onAnimation($event)"
+  (@hideShowHeader.done)="onAnimation($event)"
+  class="wrapper-header"
+>
+  <app-header class="app-header"></app-header>
+</div>
+
+<app-main class="app-main"></app-main>
+
+<app-footer
+  class="app-footer"
+  [mobile]="mobileView"
+  [hideHeader]="isHeaderHidden"
+  (showHeader)="isHeaderHidden ? showHeader() : hideHeader()"
+></app-footer>

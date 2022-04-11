@@ -12,11 +12,6 @@ import { AuthGuard } from './services/auth-guard/auth.guard';
 
 const routes: Routes = [
   {
-    path: '',
-    redirectTo: '/tags',
-    pathMatch: 'full',
-  },
-  {
     path: 'sign-in',
     component: SignInComponent,
   },
@@ -25,6 +20,11 @@ const routes: Routes = [
     component: AdminLayoutComponent,
     canActivate: [AuthGuard],
     children: [
+      {
+        path: '',
+        redirectTo: 'tags',
+        pathMatch: 'full',
+      },
       {
         path: 'tags',
         component: AdminTagsComponent,
@@ -54,7 +54,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
 export class AdminRoutingModule { }

@@ -6,14 +6,15 @@ import {
   HttpInterceptor, HttpResponse,
 } from '@angular/common/http';
 import { EMPTY, Observable, of } from 'rxjs';
+import { ApiV0Path } from '../../services/api-v0/models/api-v0-path.type';
 
-import CvInfosJsonFile from './json-files/cv-infos.json';
-import TagsJsonFile from './json-files/tags.json';
-import SkillsJsonFile from './json-files/skills.json';
-import ExperiencesJsonFile from './json-files/experiences.json';
-import FormationsJsonFile from './json-files/formations.json';
-import ProjectsJsonFile from './json-files/projects.json';
-import InterestsJsonFile from './json-files/interests.json';
+import CvInfosJsonFile from '../../../__mocks__/json-files/cv-infos.json';
+import TagsJsonFile from '../../../__mocks__/json-files/tags.json';
+import SkillsJsonFile from '../../../__mocks__/json-files/skills.json';
+import ExperiencesJsonFile from '../../../__mocks__/json-files/experiences.json';
+import FormationsJsonFile from '../../../__mocks__/json-files/formations.json';
+import ProjectsJsonFile from '../../../__mocks__/json-files/projects.json';
+import InterestsJsonFile from '../../../__mocks__/json-files/interests.json';
 
 @Injectable()
 export class ApiV0Interceptor implements HttpInterceptor {
@@ -23,10 +24,10 @@ export class ApiV0Interceptor implements HttpInterceptor {
     }
 
     const apiPath = request.url.split('/v0/')[1];
-    return ApiV0Interceptor.jsonFile(apiPath);
+    return ApiV0Interceptor.jsonFile(apiPath as ApiV0Path);
   }
 
-  private static jsonFile(apiPath: string):Observable<HttpEvent<any>> {
+  private static jsonFile(apiPath: ApiV0Path):Observable<HttpEvent<any>> {
     let jsonFile: any;
 
     switch (apiPath) {

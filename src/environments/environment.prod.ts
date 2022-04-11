@@ -3,5 +3,5 @@ export const environment = {
   BACKEND_URL: 'https://ocv-backend.herokuapp.com',
   ACTIVATED_LOGS: false,
   APP_NAME: 'online-cv',
-  SPLASH_SCREEN_DELAY: 2500,
+  SPLASH_SCREEN_DELAY: 2000,
 };

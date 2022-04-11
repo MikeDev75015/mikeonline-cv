@@ -1,10 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule, Optional, Provider, SkipSelf } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
-import { ScrollTopModule } from 'primeng/scrolltop';
-import { LoadingComponent } from './components/loading/loading.component';
-import { LoadingDirective } from './directives/loading.directive';
-import { PageLayoutComponent } from './layouts/page-layout/page-layout.component';
 
 const importList = [
   CommonModule,
@@ -13,19 +8,9 @@ const importList = [
 const providerList: Provider[] = [];
 
 @NgModule({
-  declarations: [
-    LoadingComponent,
-    LoadingDirective,
-    PageLayoutComponent,
-  ],
+  declarations: [],
   imports: [
     importList,
-    TranslateModule,
-    ScrollTopModule,
-  ],
-  exports: [
-    LoadingDirective,
-    PageLayoutComponent,
   ],
 })
 export class CoreModule {
