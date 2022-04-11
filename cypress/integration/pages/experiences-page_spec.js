@@ -17,8 +17,6 @@ describe('Experiences page', () => {
       expect(url).toContain('/#experiences');
     });
 
-    cy.get('[aria-labelledby="experiences content"]').should((content) => {
-      expect(content).toBeDefined();
-    });
+    cy.get('[aria-labelledby="experiences content"]').should('not.be.undefined');
   });
 });

@@ -17,8 +17,6 @@ describe('Portfolio page', () => {
       expect(url).toContain('/#portfolio');
     });
 
-    cy.get('[aria-labelledby="portfolio content"]').should((content) => {
-      expect(content).toBeDefined();
-    });
+    cy.get('[aria-labelledby="portfolio content"]').should('not.be.undefined');
   });
 });

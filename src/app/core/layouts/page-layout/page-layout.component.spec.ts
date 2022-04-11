@@ -37,7 +37,7 @@ describe('PageLayoutComponent', () => {
 
   test.each([
     ['sectionId is invalid', '', 'TEST'],
-    ['pageTitle is invalid', 'Toto', ''],
+    ['pageTitle is invalid', 'Toto', undefined as unknown as string],
   ])('should throw an error if %s', (name: string, sectionId: string, pageTitle: string) => {
     component.sectionId = sectionId;
     component.pageTitle = pageTitle;

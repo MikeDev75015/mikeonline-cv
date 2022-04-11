@@ -15,6 +15,8 @@ describe('main component', () => {
     cy.url().should((url) => {
       expect(url).toContain('/#home');
     });
+
+    cy.get('[aria-labelledby="home content"]').should('not.be.undefined');
   });
 
   it('Clicking skills tab should display the skills page', () => {
@@ -24,9 +26,7 @@ describe('main component', () => {
       expect(url).toContain('/#skills');
     });
 
-    cy.get('[aria-labelledby="skills content"]').should((content) => {
-      expect(content).toBeDefined();
-    });
+    cy.get('[aria-labelledby="skills content"]').should('not.be.undefined');
   });
 
   it('Clicking experiences tab should display the experiences page', () => {
@@ -36,9 +36,7 @@ describe('main component', () => {
       expect(url).toContain('/#experiences');
     });
 
-    cy.get('[aria-labelledby="experiences content"]').should((content) => {
-      expect(content).toBeDefined();
-    });
+    cy.get('[aria-labelledby="experiences content"]').should('not.be.undefined');
   });
 
   it('Clicking formations tab should display the formations page', () => {
@@ -48,9 +46,7 @@ describe('main component', () => {
       expect(url).toContain('/#formations');
     });
 
-    cy.get('[aria-labelledby="formations content"]').should((content) => {
-      expect(content).toBeDefined();
-    });
+    cy.get('[aria-labelledby="formations content"]').should('not.be.undefined');
   });
 
   it('Clicking portfolio tab should display the portfolio page', () => {
@@ -60,9 +56,7 @@ describe('main component', () => {
       expect(url).toContain('/#portfolio');
     });
 
-    cy.get('[aria-labelledby="portfolio content"]').should((content) => {
-      expect(content).toBeDefined();
-    });
+    cy.get('[aria-labelledby="portfolio content"]').should('not.be.undefined');
   });
 
   it('Clicking interests tab should display the interests page', () => {
@@ -72,8 +66,19 @@ describe('main component', () => {
       expect(url).toContain('/#interests');
     });
 
-    cy.get('[aria-labelledby="interests content"]').should((content) => {
-      expect(content).toBeDefined();
+    cy.get('[aria-labelledby="interests content"]').should('not.be.undefined');
+  });
+
+  it('Clicking home tab should display the home page', () => {
+    cy.get('[aria-labelledby="interests tab"]').click({ waitForAnimations: false });
+    cy.wait(1000);
+
+    cy.get('[aria-labelledby="home tab"]').click({ waitForAnimations: false });
+
+    cy.url().should((url) => {
+      expect(url).toContain('/#home');
     });
+
+    cy.get('[aria-labelledby="home content"]').should('not.be.undefined');
   });
 });

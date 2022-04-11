@@ -17,8 +17,6 @@ describe('Interests page', () => {
       expect(url).toContain('/#interests');
     });
 
-    cy.get('[aria-labelledby="interests content"]').should((content) => {
-      expect(content).toBeDefined();
-    });
+    cy.get('[aria-labelledby="interests content"]').should('not.be.undefined');
   });
 });

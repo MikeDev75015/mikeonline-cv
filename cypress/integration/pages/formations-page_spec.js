@@ -17,8 +17,6 @@ describe('Formations page', () => {
       expect(url).toContain('/#formations');
     });
 
-    cy.get('[aria-labelledby="formations content"]').should((content) => {
-      expect(content).toBeDefined();
-    });
+    cy.get('[aria-labelledby="formations content"]').should('not.be.undefined');
   });
 });

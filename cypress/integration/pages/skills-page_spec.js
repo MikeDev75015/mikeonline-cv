@@ -17,8 +17,6 @@ describe('Skills page', () => {
       expect(url).toContain('/#skills');
     });
 
-    cy.get('[aria-labelledby="skills content"]').should((content) => {
-      expect(content).toBeDefined();
-    });
+    cy.get('[aria-labelledby="skills content"]').should('not.be.undefined');
   });
 });
