@@ -14,6 +14,14 @@
   pointer-events: none !important;
 }
 
+.relative {
+  position: relative !important;
+}
+
+.absolute {
+  position: absolute !important;
+}
+
 .fcc { display: flex !important; justify-content: center !important; align-items: center !important; }
 .fcs { display: flex !important; justify-content: center !important; align-items: flex-start !important; }
 .fce { display: flex !important; justify-content: center !important; align-items: flex-end !important; }

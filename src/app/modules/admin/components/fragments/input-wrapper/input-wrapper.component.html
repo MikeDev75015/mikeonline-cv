@@ -1,0 +1,16 @@
+<div class="fss relative" [ngStyle]="{width: inputWidth, height: inputHeight}">
+
+  <input
+    [type]="type" pInputText [(ngModel)]="value" (ngModelChange)="onValueChange()"
+    [ngStyle]="{width: '100%', height: inputHeight}"
+  />
+
+  <div
+    *ngIf="inputType === 'password'" class="fcc absolute" style="top: 0; right: 0;"
+    [ngStyle]="{width: '' + inputHeight, height: inputHeight}"
+    (click)="toggleType()"
+  >
+    <i [class]="type === 'password' ? 'pi pi-eye' : 'pi pi-eye-slash'"></i>
+  </div>
+
+</div>

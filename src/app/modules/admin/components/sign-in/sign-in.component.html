@@ -1,3 +1,5 @@
-<div class="fcc column w100">
-  <p>sign-in works!</p>
+<div class="fcc column full-screen">
+  <app-input-wrapper inputType="text" [(value)]="username"></app-input-wrapper>
+  <app-input-wrapper inputType="password" [(value)]="userPassword"></app-input-wrapper>
+  <mat-icon (click)="onLogin()">login</mat-icon>
 </div>

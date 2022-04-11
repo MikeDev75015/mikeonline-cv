@@ -1,3 +1,8 @@
-<p>admin-layout works!</p>
+<p-tabMenu styleClass="admin-tab-menu" [model]="items">
+  <ng-template pTemplate="item" let-item>
+    <span *ngIf="item.label">{{ item.label }}</span>
+    <mat-icon *ngIf="item.matIcon">{{ item.matIcon }}</mat-icon>
+  </ng-template>
+</p-tabMenu>
 
 <router-outlet></router-outlet>

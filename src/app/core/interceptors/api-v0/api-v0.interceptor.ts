@@ -5,7 +5,8 @@ import {
   HttpEvent,
   HttpInterceptor, HttpResponse,
 } from '@angular/common/http';
-import { EMPTY, Observable, of } from 'rxjs';
+import { EMPTY, Observable, of, throwError } from 'rxjs';
+import { IUser } from '../../interfaces/models/user.interface';
 import { ApiV0Path } from '../../services/api-v0/models/api-v0-path.type';
 
 import CvInfosJsonFile from '../../../__mocks__/json-files/cv-infos.json';
@@ -15,6 +16,7 @@ import ExperiencesJsonFile from '../../../__mocks__/json-files/experiences.json'
 import FormationsJsonFile from '../../../__mocks__/json-files/formations.json';
 import ProjectsJsonFile from '../../../__mocks__/json-files/projects.json';
 import InterestsJsonFile from '../../../__mocks__/json-files/interests.json';
+import UsersJsonFile from '../../../__mocks__/json-files/users.json';
 
 @Injectable()
 export class ApiV0Interceptor implements HttpInterceptor {
@@ -24,10 +26,10 @@ export class ApiV0Interceptor implements HttpInterceptor {
     }
 
     const apiPath = request.url.split('/v0/')[1];
-    return ApiV0Interceptor.jsonFile(apiPath as ApiV0Path);
+    return ApiV0Interceptor.jsonFile(apiPath as ApiV0Path, request.body);
   }
 
-  private static jsonFile(apiPath: ApiV0Path):Observable<HttpEvent<any>> {
+  private static jsonFile(apiPath: ApiV0Path, payload: any):Observable<HttpEvent<any>> {
     let jsonFile: any;
 
     switch (apiPath) {
@@ -51,6 +53,18 @@ export class ApiV0Interceptor implements HttpInterceptor {
         break;
       case 'interests':
         jsonFile = InterestsJsonFile;
+        break;
+
+      case 'login':
+        const userFound = UsersJsonFile.find((user) => (user.name === payload.username && user.password === payload.password));
+        if (!userFound) {
+          return throwError(() => new Error('User not found!'));
+        }
+        jsonFile = {
+          id: userFound.id,
+          name: userFound.name,
+          role: userFound.role,
+        } as IUser;
         break;
 
       default:

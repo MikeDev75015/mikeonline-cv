@@ -5,4 +5,5 @@ export type ApiV0Path = 'cv-infos' |
   'experiences' |
   'formations' |
   'projects' |
-  'interests';
+  'interests' |
+  'login';

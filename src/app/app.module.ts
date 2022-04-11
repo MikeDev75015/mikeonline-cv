@@ -25,7 +25,7 @@ import { FormationsEffects } from './core/ngrx/effects/formations.effects';
 import { InterestsEffects } from './core/ngrx/effects/interests.effects';
 import { ProjectsEffects } from './core/ngrx/effects/projects.effects';
 import { TagsEffects } from './core/ngrx/effects/tags.effects';
-import { metaReducers, reducers } from './core/ngrx/ngrx-index';
+import { AuthEffects, metaReducers, reducers } from './core/ngrx/ngrx-index';
 import { HttpClientService } from './core/services/http-client/http-client.service';
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -52,6 +52,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       FormationsEffects,
       ProjectsEffects,
       InterestsEffects,
+      AuthEffects,
     ]),
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states
