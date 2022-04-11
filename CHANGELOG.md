@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.10.0](https://bitbucket.org/mikeonline75/ocv-frontend/compare/v1.9.2...v1.10.0) (2022-04-11)
+
+
+### Features
+
+* update home page, add home subcomponent, update styles, add layout scroll top button ([d90dc72](https://bitbucket.org/mikeonline75/ocv-frontend/commit/d90dc722e5f5ab02e2daf57673812d66f9314574))
+
+
+### Bug Fixes
+
+* add primeicons scss file ([0e075c7](https://bitbucket.org/mikeonline75/ocv-frontend/commit/0e075c7f9b544fc809b9fc4bcbd80682163c9010))
+
 ### [1.9.2](https://bitbucket.org/mikeonline75/ocv-frontend/compare/v1.9.1...v1.9.2) (2022-04-06)
 
 ### [1.9.1](https://bitbucket.org/mikeonline75/ocv-frontend/compare/v1.9.0...v1.9.1) (2022-04-05)
