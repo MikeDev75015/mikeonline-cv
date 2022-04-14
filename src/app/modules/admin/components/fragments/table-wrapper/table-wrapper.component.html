@@ -20,8 +20,8 @@
   >
 
     <ng-template pTemplate="header" let-columns>
-      <tr>
-        <th scope="col" style="width: 30px">
+      <tr class="fss w100">
+        <th class="fcc" scope="col" style="width: 54px; min-width: 54px; max-width: 54px;">
           <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
         </th>
 
@@ -29,7 +29,7 @@
           <th pResizableColumn>{{ col.header }}</th>
         </ng-container>
 
-        <th></th>
+        <th *ngIf="crudEndPoint" scope="col" style="width: 120px; max-width: 120px; min-width: 120px;">Actions</th>
       </tr>
     </ng-template>
 
