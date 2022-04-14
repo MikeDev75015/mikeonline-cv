@@ -1,0 +1,21 @@
+<div class="fcc column w100 form-wrapper-container">
+
+  <div *ngFor="let field of formFields" class="fbc w100 form-wrapper-field">
+    <label>{{ field.label }}&nbsp;:</label>
+
+    <app-input-wrapper
+      (valueChange)="onValueChange()" *ngIf="field.inputType !== 'dropdown'"
+      [(value)]="formValue[field.name]" [inlineClass]="'form-wrapper-' + field.inputType + '-input'"
+      [inputType]="field.inputType"
+      [max]="field.max" [min]="field.min" [rows]="field.rows" [step]="field.step"
+      inputWidth="100%"
+    ></app-input-wrapper>
+
+    <app-dropdown-wrapper
+      (selectedValueChange)="onValueChange()" *ngIf="field.inputType === 'dropdown'"
+      [(selectedValue)]="formValue[field.name]" [list]="field.list"
+      [scrollHeight]="field.scrollHeight || '200px'" inlineClass="form-wrapper-dropdown"
+    ></app-dropdown-wrapper>
+  </div>
+
+</div>
