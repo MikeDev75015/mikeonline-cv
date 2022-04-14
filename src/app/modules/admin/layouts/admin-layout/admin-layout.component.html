@@ -1,8 +1,31 @@
-<p-tabMenu styleClass="admin-tab-menu" [model]="items">
-  <ng-template pTemplate="item" let-item>
-    <span *ngIf="item.label">{{ item.label }}</span>
-    <mat-icon *ngIf="item.matIcon">{{ item.matIcon }}</mat-icon>
-  </ng-template>
-</p-tabMenu>
+<div class="fbs w100">
+  <p-tabMenu [model]="leftItems" styleClass="admin-tab-menu">
+    <ng-template let-item pTemplate="item">
+      <span *ngIf="item.label">{{ item.label }}</span>
+      <mat-icon *ngIf="item.matIcon">{{ item.matIcon }}</mat-icon>
+    </ng-template>
+  </p-tabMenu>
+
+  <div class="fec">
+    <div class="fcc">
+      <span>Thème :</span>&nbsp;
+      <app-dropdown-wrapper
+        (selectedValueChange)="onSelectedThemeChange()" [(selectedValue)]="selectedTheme"
+        [inlineStyle]="{'margin-right': '10px'}"
+        [scrollHeight]="'80vh'" [stringList]="themeList"
+      ></app-dropdown-wrapper>
+    </div>
+
+    <span
+      *ngIf="currentUser" [pTooltip]="currentUser.role"
+      style="margin-right: 10px;" tooltipPosition="bottom"
+    >Utilisateur: {{ currentUser.name }}</span>
+
+    <button (click)="menu.toggle($event)" pButton type="button">
+      <mat-icon>logout</mat-icon>
+    </button>
+    <p-menu #menu [model]="rightItems" [popup]="true"></p-menu>
+  </div>
+</div>
 
 <router-outlet></router-outlet>

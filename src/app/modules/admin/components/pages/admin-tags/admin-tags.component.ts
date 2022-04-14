@@ -13,9 +13,19 @@ export class AdminTagsComponent implements OnInit {
   public data: ITag[] = [];
 
   public columnList: TableColumn[] = [
-    { field: 'name', header: 'Nom' },
-    { field: 'weight', header: 'Poids' },
+    {
+      field: 'name', header: 'Nom', editable: true, exportable: true,
+      style: 'width: 70%; min-width: 300px;',
+    },
+    {
+      field: 'weight', header: 'Poids', editable: true, inputType: 'number', min: 0.1, max: 9.9, step: 0.1,
+      style: 'width: 10%; min-width: 50px; max-width: 120px;',
+    },
   ];
+
+  public formFields: FormFields[] | undefined;
+
+  public crudEndPoint = '/v1/tags';
 
   constructor(
     private readonly dataService: DataService,
@@ -24,7 +34,18 @@ export class AdminTagsComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.data = await this.dataService.getStoreData<ITag[]>(
-      { selector: selectAllTags, defaultValue: [] }
+      { selector: selectAllTags, defaultValue: [] },
     );
+
+    if (this.crudEndPoint) {
+      this.formFields = [
+        { name: 'name', label: 'Nom', inputType: 'text' },
+        { name: 'weight', label: 'Poids', inputType: 'number', min: 0.1, max: 9.9, step: 0.1 },
+      ];
+    }
+  }
+
+  public onTableDataChanges(event: ITag[]): void {
+    console.debug('AdminTagsComponent onTableDataChanges:', event);
   }
 }
