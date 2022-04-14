@@ -12,7 +12,7 @@ export class HttpClientService {
    * Backend URL
    * @private
    */
-  private readonly API_URL = environment.BACKEND_URL;
+  private readonly API_URL = environment.API_URL;
 
   /**
    * @ignore

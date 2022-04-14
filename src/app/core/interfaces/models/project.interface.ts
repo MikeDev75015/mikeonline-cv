@@ -1,21 +1,31 @@
-import {IImage} from '../image.interface';
-import {IDetail} from '../detail.interface';
-import {ILink} from '../link.interface';
-import {IDescription} from '../description.interface';
+import { IDetail } from '../detail.interface';
+import { IImage } from '../image.interface';
+import { ILink } from '../link.interface';
 import { ITag } from './tag.interface';
 
 export interface IProject {
   id: string;
+
   title: string;
+
   subTitle: string;
-  description: IDescription
+
+  description: string;
+
   pictureList: IImage[];
-  technoList: string[];
+
   link: ILink;
+
   detailList: IDetail[];
+
   tagIdList: number[];
+
+  position: number;
+
   tagList?: ITag[];
-  position?: number;
+
+  technoList?: string[];
+
   styles: {
     classicView: {
       title?: any;

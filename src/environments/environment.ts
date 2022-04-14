@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  BACKEND_URL: 'http://localhost:5000',
+  API_URL: 'http://localhost:5000',
   // BACKEND_URL: 'https://ocv-backend-staging.herokuapp.com',
   // BACKEND_URL: 'https://ocv-backend.herokuapp.com',
   ACTIVATED_LOGS: true,

@@ -21,7 +21,7 @@ import UsersJsonFile from '../../../__mocks__/json-files/users.json';
 @Injectable()
 export class ApiV0Interceptor implements HttpInterceptor {
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    if (!request.url.includes('/v0/')) {
+    if (!request.url.includes('/v0/') || request.method !== 'GET') {
       return next.handle(request);
     }
 

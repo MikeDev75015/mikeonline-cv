@@ -88,3 +88,23 @@
 
 .fw-600 { font-weight: 600 !important }
 .fw-bold { font-weight: bold !important }
+
+.no-border {
+  border: unset !important;
+}
+
+.no-border-left {
+  border-left: unset !important;
+}
+
+.no-border-right {
+  border-right: unset !important;
+}
+
+.no-border-top {
+  border-top: unset !important;
+}
+
+.no-border-bottom {
+  border-bottom: unset !important;
+}
