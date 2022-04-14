@@ -8,7 +8,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTreeModule } from '@angular/material/tree';
 import { LoadingComponent } from '../../core/components/loading/loading.component';
-import { LoadingDirective } from '../../core/directives/loading.directive';
+import { LoadingDirective } from '../../core/directives/loading/loading.directive';
 import { PdfCreatorService } from '../../core/services/pdf-creator/pdf-creator.service';
 import { FirstLetterUppercasePipe } from '../../shared/pipes/first-letter-uppercase.pipe';
 import { HeaderTitleFormatPipe } from '../../shared/pipes/header-title-format.pipe';
@@ -30,9 +30,6 @@ import {
 } from './components/fragments/item-elements/item-open-close-buttons/item-open-close-buttons.component';
 import { ItemTagListComponent } from './components/fragments/item-elements/item-tag-list/item-tag-list.component';
 import { ItemComponent } from './components/fragments/item/item.component';
-import {
-  DynamicComponentLoaderDirective,
-} from './components/fragments/main/directives/dynamic-component-loader.directive';
 import { MainComponent } from './components/fragments/main/main.component';
 import { SkillsRadarChartComponent } from './components/fragments/skills-radar-chart/skills-radar-chart.component';
 import { OneLetterByLinePipe } from './components/fragments/vertical-accordion/pipes/one-letter-by-line.pipe';
@@ -93,8 +90,6 @@ import { PageLayoutComponent } from './layouts/page-layout/page-layout.component
     HeaderTitleFormatPipe,
     IncompressibleSpacePipe,
     FirstLetterUppercasePipe,
-
-    DynamicComponentLoaderDirective,
   ],
   imports: [
     CommonModule,

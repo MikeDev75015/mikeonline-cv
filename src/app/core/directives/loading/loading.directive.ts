@@ -1,5 +1,5 @@
 import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
-import { LoadingComponent } from '../components/loading/loading.component';
+import { LoadingComponent } from '../../components/loading/loading.component';
 
 /**
  * Structural directive that replace the template reference by the loading component

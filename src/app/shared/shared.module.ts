@@ -7,14 +7,21 @@ import { ButtonModule } from 'primeng/button';
 import { ChartModule } from 'primeng/chart';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 import { KnobModule } from 'primeng/knob';
+import { MenuModule } from 'primeng/menu';
 import { PasswordModule } from 'primeng/password';
 import { RippleModule } from 'primeng/ripple';
 import { ScrollTopModule } from 'primeng/scrolltop';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
+import {
+  DynamicComponentLoaderDirective,
+} from '../core/directives/dynamic-component-loader/dynamic-component-loader.directive';
 import { DateFormatPipe } from './pipes/date-format.pipe';
 
 const primeNgModules: any[] = [
@@ -30,11 +37,16 @@ const primeNgModules: any[] = [
   RippleModule,
   DialogModule,
   ConfirmDialogModule,
+  DropdownModule,
+  MenuModule,
+  InputNumberModule,
+  InputTextareaModule,
 ];
 
 @NgModule({
   declarations: [
     DateFormatPipe,
+    DynamicComponentLoaderDirective,
   ],
   imports: [
     CommonModule,
@@ -50,6 +62,7 @@ const primeNgModules: any[] = [
     ...primeNgModules,
 
     DateFormatPipe,
+    DynamicComponentLoaderDirective,
   ],
 })
 export class SharedModule {

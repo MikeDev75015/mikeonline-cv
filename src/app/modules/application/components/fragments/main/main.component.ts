@@ -1,15 +1,17 @@
 import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Subscription } from 'rxjs';
+import {
+  DynamicComponentLoaderDirective,
+} from '../../../../../core/directives/dynamic-component-loader/dynamic-component-loader.directive';
 import { ComponentType } from '../../../../../core/interfaces/types/component.type';
 import { ContactOpenCloseService } from '../../../../../core/services/contact-open-close/contact-open-close.service';
 import { DataService } from '../../../../../shared/services/data/data.service';
-import { HomeComponent } from '../../pages/home/home.component';
-import { SkillsComponent } from '../../pages/skills/skills.component';
 import { ExperiencesComponent } from '../../pages/experiences/experiences.component';
 import { FormationsComponent } from '../../pages/formations/formations.component';
+import { HomeComponent } from '../../pages/home/home.component';
 import { InterestsComponent } from '../../pages/interests/interests.component';
 import { PortfolioComponent } from '../../pages/portfolio/portfolio.component';
-import { DynamicComponentLoaderDirective } from './directives/dynamic-component-loader.directive';
+import { SkillsComponent } from '../../pages/skills/skills.component';
 
 @Component({
   selector: 'app-main',
