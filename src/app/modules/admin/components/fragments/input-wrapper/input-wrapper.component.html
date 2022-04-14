@@ -1,16 +1,41 @@
-<div class="fss relative" [ngStyle]="{width: inputWidth, height: inputHeight}">
+<div [ngStyle]="{width: inputWidth, height: inputHeight}" class="fss relative input-wrapper-container">
 
-  <input
-    [type]="type" pInputText [(ngModel)]="value" (ngModelChange)="onValueChange()"
-    [ngStyle]="{width: '100%', height: inputHeight}"
-  />
+  <ng-container *ngIf="inputType === 'text' || inputType === 'password'">
+    <input
+      (ngModelChange)="onValueChange()"
+      *ngIf="displayed === ''" [(ngModel)]="value" [class]="inlineClass" [disabled]="disabled"
+      [ngStyle]="{width: '100%', height: inputHeight}" [type]="type" pInputText
+    />
 
-  <div
-    *ngIf="inputType === 'password'" class="fcc absolute" style="top: 0; right: 0;"
-    [ngStyle]="{width: '' + inputHeight, height: inputHeight}"
-    (click)="toggleType()"
-  >
-    <i [class]="type === 'password' ? 'pi pi-eye' : 'pi pi-eye-slash'"></i>
-  </div>
+    <input
+      (click)="displayed = ''"
+      *ngIf="displayed !== ''" [class]="inlineClass" [disabled]="disabled"
+      [ngStyle]="{width: '100%', height: inputHeight}"
+      [type]="type" [value]="displayed" pInputText
+    />
 
+    <div
+      (click)="toggleType()" *ngIf="inputType === 'password'" [ngStyle]="{width: '' + inputHeight, height: inputHeight}"
+      class="fcc absolute"
+      style="top: 0; right: 0;"
+    >
+      <i [class]="type === 'password' ? 'pi pi-eye' : 'pi pi-eye-slash'"></i>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="inputType === 'number'">
+    <input
+      #inputNumber (ngModelChange)="onValueChange()"
+      [(ngModel)]="value" [class]="inlineClass" [disabled]="disabled"
+      [ngStyle]="{width: '100%', height: inputHeight}" [type]="type" pInputText
+    />
+  </ng-container>
+
+  <ng-container *ngIf="inputType === 'textarea'">
+    <textarea
+      #inputTextarea (ngModelChange)="onValueChange()"
+      [(ngModel)]="value" [class]="inlineClass"
+      [disabled]="disabled" [ngStyle]="{width: '100%', height: inputHeight}" pInputTextarea
+    ></textarea>
+  </ng-container>
 </div>
