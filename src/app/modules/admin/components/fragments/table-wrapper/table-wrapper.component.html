@@ -3,20 +3,42 @@
 <div class="card">
   <p-toolbar styleClass="mb-4">
     <ng-template pTemplate="left">
-      <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
-      <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedElements()" [disabled]="!selectedProducts || !selectedProducts.length"></button>
+      <button (click)="onOpenDialog()" *ngIf="crudEndPoint" class="p-button-success" icon="pi pi-plus" label="Ajouter"
+              pButton pRipple></button>
+      <button
+        (click)="deleteSelectedRows()" *ngIf="crudEndPoint" [disabled]="!selectedTableData || !selectedTableData.length"
+        class="p-button-danger" icon="pi pi-trash" label="Supprimer" pButton
+        pRipple
+      ></button>
     </ng-template>
 
     <ng-template pTemplate="right">
-      <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"></button>
+      <button
+        (click)="onExportSelectedData()" *ngIf="hasExportableData" class="p-button-help" icon="pi pi-upload"
+        label="Exporter" pButton
+        pRipple
+      ></button>
+      <button
+        (click)="resetTableChanges()" *ngIf="crudEndPoint" [disabled]="!changedData || !changedData.length"
+        class="p-button-danger" icon="pi pi-trash" label="Annuler les changements"
+        pButton pRipple
+      ></button>
+      <button
+        (click)="onSaveChangedData()" *ngIf="crudEndPoint" [disabled]="!changedData || !changedData.length"
+        class="p-button-info" icon="pi pi-save" label="Enregistrer"
+        pButton pRipple
+      ></button>
     </ng-template>
   </p-toolbar>
 
   <p-table
-    [columns]="columnList" [value]="tableData" [paginator]="true" [rows]="15" [showCurrentPageReport]="true"
-    [(selection)]="selectedProducts" [rowHover]="true"
-    [resizableColumns]="true" styleClass="p-datatable-gridlines" dataKey="id"
-    currentPageReportTemplate="{first} à {last} éléments sur {totalRecords}" [rowsPerPageOptions]="[5, 10, 15, 25, 50, 100]"
+    (onRowReorder)="onRowsReorder()" [(selection)]="selectedTableData" [columns]="columnList" [loading]="submitted"
+    [paginator]="!!rowsNumber" [resizableColumns]="false" [rowHover]="true"
+    [rowsPerPageOptions]="[5, 10, 15, 25, 50, 100]" [rows]="rowsNumber || tableData.length"
+    [scrollHeight]="scrollHeight" [scrollable]="true" [showCurrentPageReport]="!!rowsNumber"
+    [value]="tableData"
+    currentPageReportTemplate="{first} à {last} éléments sur {totalRecords}"
+    dataKey="id"
   >
 
     <ng-template pTemplate="header" let-columns>
@@ -26,49 +48,104 @@
         </th>
 
         <ng-container *ngFor="let col of columns">
-          <th pResizableColumn>{{ col.header }}</th>
+          <th [style]="col.style || ''" scope="col">{{ col.header }}</th>
         </ng-container>
 
         <th *ngIf="crudEndPoint" scope="col" style="width: 120px; max-width: 120px; min-width: 120px;">Actions</th>
       </tr>
     </ng-template>
 
-    <ng-template pTemplate="body" let-rowData let-columns="columns">
-      <tr>
-        <td>
+    <ng-template let-columns="columns" let-index="rowIndex" let-rowData pTemplate="body">
+      <!-- row not reorderable -->
+      <tr *ngIf="!reorderable" class="fss w100 no-border">
+        <td class="no-border" style="width: 54px; min-width: 54px; max-width: 54px;">
           <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
         </td>
 
-        <ng-container *ngFor="let col of columns">
-          <td [pEditableColumn]="true">
-            <p-cellEditor>
-              <ng-template pTemplate="input">
-                <app-input-wrapper inputType="text" [(value)]="rowData[col.field]"></app-input-wrapper>
-              </ng-template>
-              <ng-template pTemplate="output">
-                {{ rowData[col.field] }}
-              </ng-template>
-            </p-cellEditor>
-          </td>
-        </ng-container>
+        <ng-container
+          *ngFor="let col of columns"
+          [ngTemplateOutletContext]="{col: col, rowData: rowData, rowIndex: index}"
+          [ngTemplateOutlet]="crudEndPoint && col.editable ? editableCell : basicCell"
+        ></ng-container>
 
-        <td>
-          <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editElement(rowData)"></button>
-          <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteElement(rowData)"></button>
+        <td *ngIf="crudEndPoint" class="fcc no-border"
+            style="width: 120px; max-width: 120px; min-width: 120px; padding: 10px;">
+          <button (click)="editRow(rowData)" class="p-button-rounded p-button-success mr-2" icon="pi pi-pencil" pButton
+                  pRipple></button>
+          <button
+            (click)="deleteRow(rowData)" class="p-button-rounded p-button-warning" icon="pi pi-trash" pButton pRipple
+            style="margin-left: 10px !important;"
+          ></button>
         </td>
       </tr>
+
+      <!-- row reorderable -->
+      <tr *ngIf="reorderable" [pReorderableRowHandle]="index" [pReorderableRow]="index" class="fss w100 no-border">
+        <td class="no-border" style="width: 54px; min-width: 54px; max-width: 54px;">
+          <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+        </td>
+
+        <ng-container
+          *ngFor="let col of columns"
+          [ngTemplateOutletContext]="{col: col, rowData: rowData, rowIndex: index}"
+          [ngTemplateOutlet]="crudEndPoint && col.editable ? editableCell : basicCell"
+        ></ng-container>
+
+        <td *ngIf="crudEndPoint" class="fcc no-border"
+            style="width: 120px; max-width: 120px; min-width: 120px; padding: 10px;">
+          <button (click)="editRow(rowData)" class="p-button-rounded p-button-success mr-2" icon="pi pi-pencil" pButton
+                  pRipple></button>
+          <button (click)="deleteRow(rowData)" class="p-button-rounded p-button-warning" icon="pi pi-trash" pButton
+                  pRipple style="margin-left: 10px !important;"></button>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template #basicCell let-col="col" let-rowData="rowData">
+      <td [style]="col.style || ''" class="no-border">
+        {{ rowData[col.field] | formatValueDisplay: col.field }}
+      </td>
+    </ng-template>
+
+    <ng-template #editableCell let-col="col" let-rowData="rowData" let-rowIndex="rowIndex">
+      <td *ngIf="col.editable" [pEditableColumnField]="col.field" [pEditableColumnRowIndex]="rowIndex"
+          [pEditableColumn]="rowData.id" [style]="col.style || ''" class="no-border">
+        <p-cellEditor class="w100">
+          <ng-template pTemplate="input">
+            <app-input-wrapper
+              (valueChange)="onCellValueChange(rowData.id, col, $event)"
+              *ngIf="col.inputType !== 'dropdown'" [(value)]="rowData[col.field]" [inputType]="col.inputType"
+              [max]="col.max" [min]="col.min" [rows]="col.rows" [step]="col.step"
+              inputWidth="100%"
+            ></app-input-wrapper>
+
+            <app-dropdown-wrapper
+              (selectedValueChange)="onCellValueChange(rowData.id, col, $event)"
+              *ngIf="col.inputType === 'dropdown'" [(selectedValue)]="rowData[col.field]" [list]="col.list"
+              [scrollHeight]="col.scrollHeight" inlineClass="table-editable-cell-dropdown"
+            ></app-dropdown-wrapper>
+          </ng-template>
+          <ng-template pTemplate="output">
+            {{ rowData[col.field] | formatValueDisplay: col.field }}
+          </ng-template>
+        </p-cellEditor>
+      </td>
     </ng-template>
 
   </p-table>
 </div>
 
-<p-dialog [(visible)]="addElementDialog" [style]="{width: '450px'}" header="Product Details" [modal]="true" styleClass="p-fluid">
+<p-dialog *ngIf="crudEndPoint" [(visible)]="elementDialog"
+          [header]="formData.id ? 'Editer l\'élément' : 'Ajouter un élément'" [modal]="true" [style]="{width: '450px'}"
+          styleClass="p-fluid">
   <ng-template pTemplate="content">
+    <app-form-wrapper [(formValue)]="formData" [formFields]="formFields"></app-form-wrapper>
   </ng-template>
 
   <ng-template pTemplate="footer">
-    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-    <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveNewElement()"></button>
+    <button (click)="onCloseDialog()" class="p-button-text" icon="pi pi-times" label="Annuler" pButton pRipple></button>
+    <button (click)="onSaveDialogData()" class="p-button-text" icon="pi pi-check" label="Enregistrer" pButton
+            pRipple></button>
   </ng-template>
 </p-dialog>
 

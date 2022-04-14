@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ITag } from '../../../../../core/interfaces/models/tag.interface';
 import { selectAllTags } from '../../../../../core/ngrx/selectors/tags.selectors';
 import { DataService } from '../../../../../shared/services/data/data.service';
+import { FormFields } from '../../fragments/form-wrapper/form-wrapper.component';
 import { TableColumn } from '../../fragments/table-wrapper/table-wrapper.component';
 
 @Component({
