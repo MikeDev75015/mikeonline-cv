@@ -1,9 +1,6 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { EXPERTISE_LEVEL_DROPDOWN_LIST, PRIORITY_DROPDOWN_LIST } from '../../../../../core/constants/common.constant';
-import { ISkill } from '../../../../../core/interfaces/models/skill.interface';
-import { ITag } from '../../../../../core/interfaces/models/tag.interface';
-import { selectAllCompetences } from '../../../../../core/ngrx/selectors/competences.selectors';
-import { DataService } from '../../../../../shared/services/data/data.service';
+import { DEFAULT_TABLE_COLUMNS_CONFIG } from '../../../constants/common.config';
 import { FormFields } from '../../fragments/form-wrapper/interfaces/form-fields.interface';
 import { TableColumn } from '../../fragments/table-wrapper/interfaces/table-column.interface';
 
@@ -12,10 +9,6 @@ import { TableColumn } from '../../fragments/table-wrapper/interfaces/table-colu
   templateUrl: './admin-skills.component.html',
 })
 export class AdminSkillsComponent implements OnInit {
-  @ViewChild('pickListItem', { static: true }) pickListItem: ElementRef | undefined;
-
-  public data: ISkill[] = [];
-
   public columnList: TableColumn[] = [];
 
   public formFields: FormFields[] | undefined;
@@ -24,22 +17,11 @@ export class AdminSkillsComponent implements OnInit {
 
   public exportCsvFileName = 'Mes Compétences';
 
-  constructor(
-    private readonly dataService: DataService,
-  ) {
-  }
+  public queryAdapter = DEFAULT_TABLE_COLUMNS_CONFIG.tagListQueryAdapter;
 
   async ngOnInit(): Promise<void> {
-    this.data = await this.dataService.getStoreData<ISkill[]>(
-      { selector: selectAllCompetences, defaultValue: [] },
-    );
-
     this.columnList = [
-      {
-        field: 'name', header: 'Nom', sortField: true, globalFilterField: true,
-        sortable: true, exportable: true, editable: true,
-        style: 'width: 30%; min-width: 300px;',
-      },
+      DEFAULT_TABLE_COLUMNS_CONFIG.name,
       {
         field: 'expertiseLevel', header: 'Niveau d\'expertise',
         sortable: true, exportable: true, editable: true,
@@ -51,20 +33,8 @@ export class AdminSkillsComponent implements OnInit {
         editable: true, inputType: 'dropdown', dropdownWrapperOptions: { list: PRIORITY_DROPDOWN_LIST },
         style: 'width: 160px; min-width: 160px; max-width: 160px;',
       },
-      {
-        field: 'startDate', header: 'Date de début', sortable: true, exportable: true, editable: true,
-        style: 'width: 164.5px; min-width: 164.5px; max-width: 164.5px;',
-      },
-      {
-        field: 'tagList', header: 'Liste des tags', exportable: true,
-        overlayPanel: true, pickListWrapperOptions: {
-          sourceListEndPoint: '/v1/tags', propertyToDisplay: 'name',
-          inlineStyle: { width: '100%' }, inlineClass: 'table-tag-list-pickList',
-          sourceHeader: 'Disponible(s)', targetHeader: 'Sélection', showSourceFilter: true,
-          sourceFilterPlaceholder: 'Rechercher', showTargetFilter: false, filterBy: 'name',
-        },
-        style: 'width: 20%; min-width: 250px; cursor: pointer;',
-      },
+      DEFAULT_TABLE_COLUMNS_CONFIG.startDate,
+      DEFAULT_TABLE_COLUMNS_CONFIG.tagList,
     ];
 
     if (this.crudEndPoint) {
@@ -83,7 +53,7 @@ export class AdminSkillsComponent implements OnInit {
     }
   }
 
-  public onTableDataChanges(event: ITag[]): void {
+  public onTableDataChanges(event: any[]): void {
     console.debug('AdminSkillsComponent onTableDataChanges:', event);
   }
 }

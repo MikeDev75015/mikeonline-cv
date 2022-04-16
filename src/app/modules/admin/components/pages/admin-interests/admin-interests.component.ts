@@ -1,8 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IInterest } from '../../../../../core/interfaces/models/interest.interface';
-import { ITag } from '../../../../../core/interfaces/models/tag.interface';
-import { selectAllInterests } from '../../../../../core/ngrx/selectors/interests.selectors';
-import { DataService } from '../../../../../shared/services/data/data.service';
+import { DEFAULT_TABLE_COLUMNS_CONFIG } from '../../../constants/common.config';
 import { FormFields } from '../../fragments/form-wrapper/interfaces/form-fields.interface';
 import { TableColumn } from '../../fragments/table-wrapper/interfaces/table-column.interface';
 
@@ -11,8 +8,6 @@ import { TableColumn } from '../../fragments/table-wrapper/interfaces/table-colu
   templateUrl: './admin-interests.component.html',
 })
 export class AdminInterestsComponent implements OnInit {
-  public data: IInterest[] = [];
-
   public columnList: TableColumn[] = [];
 
   public formFields: FormFields[] | undefined;
@@ -21,22 +16,9 @@ export class AdminInterestsComponent implements OnInit {
 
   public exportCsvFileName = 'Mes Centres d\'Intérêts';
 
-  constructor(
-    private readonly dataService: DataService,
-  ) {
-  }
-
   async ngOnInit(): Promise<void> {
-    this.data = await this.dataService.getStoreData<IInterest[]>(
-      { selector: selectAllInterests, defaultValue: [] },
-    );
-
     this.columnList = [
-      {
-        field: 'title', header: 'Titre', globalFilterField: true,
-        sortable: true, editable: true, exportable: true,
-        style: 'width: 30%; min-width: 300px;',
-      },
+      DEFAULT_TABLE_COLUMNS_CONFIG.title,
       {
         field: 'description', header: 'Description', globalFilterField: true,
         sortable: true, editable: true, exportable: true,
@@ -57,7 +39,7 @@ export class AdminInterestsComponent implements OnInit {
     }
   }
 
-  public onTableDataChanges(event: ITag[]): void {
+  public onTableDataChanges(event: any[]): void {
     console.debug('AdminInterestsComponent onTableDataChanges:', event);
   }
 }

@@ -32,9 +32,11 @@ export class TableWrapperComponent implements OnInit, OnChanges {
 
   @Input() formFields: FormFields[] | undefined;
 
-  @Input() globalFilterFields: string[] = [];
+  @Input() queryAdapter?: (data: any) => any;
 
   @Output() tableDataChange = new EventEmitter<any[]>();
+
+  public globalFilterFields: string[] = [];
 
   public sortMode: 'single' | 'multiple' = 'single';
 
@@ -129,9 +131,11 @@ export class TableWrapperComponent implements OnInit, OnChanges {
     try {
       this.isLoading = true;
 
+      const data = this.queryAdapter ? this.queryAdapter(this.formValues) : this.formValues;
+
       const response: any = this.formValues.id
-        ? await lastValueFrom(this.crudService.put<any>(this.crudEndPoint, { data: this.formValues }))
-        : await lastValueFrom(this.crudService.post<any>(this.crudEndPoint, { data: this.formValues }));
+        ? await lastValueFrom(this.crudService.put<any>(this.crudEndPoint, { data }))
+        : await lastValueFrom(this.crudService.post<any>(this.crudEndPoint, { data }));
 
       if (!response || !response.id) {
         console.debug('onSaveDialogData respone:', response);
@@ -374,8 +378,14 @@ export class TableWrapperComponent implements OnInit, OnChanges {
     try {
       this.isLoading = true;
 
+      let adaptedData: any[] = [];
+      if (this.queryAdapter) {
+        // @ts-ignore
+        adaptedData = this.changedData.map((eachData) => this.queryAdapter(eachData));
+      }
+
       const response: any = await lastValueFrom(this.crudService.put<any[]>(this.crudEndPoint + '/many', {
-        data: this.changedData,
+        data: adaptedData.length ? adaptedData : this.changedData,
       }));
 
       if (!response || !Array.isArray(response) || response.length === 0) {
