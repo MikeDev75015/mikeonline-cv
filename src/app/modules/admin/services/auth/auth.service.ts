@@ -14,6 +14,6 @@ export class AuthService {
   ) {}
 
   public login(payload: LoginPayloadRequest): Observable<IUser> {
-    return this.httpClientService.post<IUser>('/v0/login', payload);
+    return this.httpClientService.post<IUser>('/v1/login', payload);
   }
 }

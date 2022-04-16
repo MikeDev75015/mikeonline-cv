@@ -1,5 +1,20 @@
+<p-toast key="signInToast" position="top-center"></p-toast>
+
 <div class="fcc column full-screen">
-  <app-input-wrapper inputType="text" [(value)]="username"></app-input-wrapper>
-  <app-input-wrapper inputType="password" [(value)]="userPassword"></app-input-wrapper>
-  <mat-icon (click)="onLogin()">login</mat-icon>
+
+  <app-input-wrapper
+    (valueChange)="onValueChange($event, 'username')" [(value)]="username" inputType="text"
+  ></app-input-wrapper>
+
+  <app-input-wrapper
+    (valueChange)="onValueChange($event, 'userPassword')" [(value)]="userPassword" inputType="password"
+  ></app-input-wrapper>
+
+  <button (click)="onLogin()" class="fcc" pButton style="width: 250px; margin-top: 20px;">
+    <div class="fcc w100">
+      <span>Se connecter</span>
+      <mat-icon style="margin-left: 10px;">login</mat-icon>
+    </div>
+  </button>
+
 </div>
