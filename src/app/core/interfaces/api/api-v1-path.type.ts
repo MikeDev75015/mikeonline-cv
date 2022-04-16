@@ -1,7 +1,6 @@
-export type ApiV0Path = 'cv-infos' |
+export type ApiV1Path = 'cv-infos' |
   'tags' |
-  // TODO replace with skills
-  'competences' |
+  'skills' |
   'experiences' |
   'formations' |
   'projects' |
