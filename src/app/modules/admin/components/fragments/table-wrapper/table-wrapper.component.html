@@ -1,4 +1,5 @@
-<p-toast></p-toast>
+<!--suppress ALL -->
+<p-toast key="tableToast" position="bottom-center"></p-toast>
 
 <div class="card">
   <p-toolbar styleClass="mb-4">
@@ -6,39 +7,39 @@
       <button (click)="onOpenDialog()" *ngIf="crudEndPoint" class="p-button-success" icon="pi pi-plus" label="Ajouter"
               pButton pRipple></button>
       <button
-        (click)="deleteSelectedRows()" *ngIf="crudEndPoint" [disabled]="!selectedTableData || !selectedTableData.length"
-        class="p-button-danger" icon="pi pi-trash" label="Supprimer" pButton
+        (click)="onDeleteSelectedRows()" *ngIf="crudEndPoint && selectedTableData && selectedTableData.length > 1"
+        class="p-button-danger" icon="pi pi-trash" label="Supprimer" pButton style="margin-left: 10px;"
         pRipple
       ></button>
     </ng-template>
 
     <ng-template pTemplate="right">
       <button
-        (click)="onExportSelectedData()" *ngIf="hasExportableData" class="p-button-help" icon="pi pi-upload"
-        label="Exporter" pButton
+        (click)="onExportSelectedData(wrappedTable)" *ngIf="hasExportableData" class="p-button-help" icon="pi pi-upload"
+        label="Exporter CSV" pButton
         pRipple
       ></button>
       <button
-        (click)="resetTableChanges()" *ngIf="crudEndPoint" [disabled]="!changedData || !changedData.length"
-        class="p-button-danger" icon="pi pi-trash" label="Annuler les changements"
+        (click)="resetTableChanges()" *ngIf="crudEndPoint && changedData && changedData.length > 0"
+        class="p-button-danger" icon="pi pi-times" label="Réinitialiser" style="margin-left: 10px;"
         pButton pRipple
       ></button>
       <button
         (click)="onSaveChangedData()" *ngIf="crudEndPoint" [disabled]="!changedData || !changedData.length"
-        class="p-button-info" icon="pi pi-save" label="Enregistrer"
+        class="p-button-info" icon="pi pi-save" label="Enregistrer" style="margin-left: 10px;"
         pButton pRipple
       ></button>
     </ng-template>
   </p-toolbar>
 
   <p-table
-    (onRowReorder)="onRowsReorder()" [(selection)]="selectedTableData" [columns]="columnList" [loading]="submitted"
-    [paginator]="!!rowsNumber" [resizableColumns]="false" [rowHover]="true"
+    #wrappedTable (onRowReorder)="onRowsReorder()" [(selection)]="selectedTableData" [columns]="columnList"
+    [globalFilterFields]="globalFilterFields" [loading]="isLoading" [paginator]="!!rowsNumber"
+    [resizableColumns]="false" [rowHover]="true" [sortField]="sortField" [sortMode]="sortMode"
     [rowsPerPageOptions]="[5, 10, 15, 25, 50, 100]" [rows]="rowsNumber || tableData.length"
     [scrollHeight]="scrollHeight" [scrollable]="true" [showCurrentPageReport]="!!rowsNumber"
-    [value]="tableData"
+    [sortOrder]="sortOrder" [value]="tableData" dataKey="id" styleClass="p-datatable-striped"
     currentPageReportTemplate="{first} à {last} éléments sur {totalRecords}"
-    dataKey="id"
   >
 
     <ng-template pTemplate="header" let-columns>
@@ -48,7 +49,12 @@
         </th>
 
         <ng-container *ngFor="let col of columns">
-          <th [style]="col.style || ''" scope="col">{{ col.header }}</th>
+          <th *ngIf="!col.sortable" [style]="col.style || ''" scope="col">{{ col.header }}</th>
+          <th
+            *ngIf="col.sortable" [pSortableColumn]="col.field" [style]="col.style || ''" scope="col"
+          >{{ col.header }}
+            <p-sortIcon [field]="col.field"></p-sortIcon>
+          </th>
         </ng-container>
 
         <th *ngIf="crudEndPoint" scope="col" style="width: 120px; max-width: 120px; min-width: 120px;">Actions</th>
@@ -57,45 +63,76 @@
 
     <ng-template let-columns="columns" let-index="rowIndex" let-rowData pTemplate="body">
       <!-- row not reorderable -->
-      <tr *ngIf="!reorderable" class="fss w100 no-border">
+      <tr #rowNotReorderable *ngIf="!reorderableRows" class="fss w100 no-border">
         <td class="no-border" style="width: 54px; min-width: 54px; max-width: 54px;">
           <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
         </td>
 
-        <ng-container
-          *ngFor="let col of columns"
-          [ngTemplateOutletContext]="{col: col, rowData: rowData, rowIndex: index}"
-          [ngTemplateOutlet]="crudEndPoint && col.editable ? editableCell : basicCell"
-        ></ng-container>
+        <ng-container *ngFor="let col of columns">
+          <ng-container
+            *ngIf="(!crudEndPoint || !col.editable) && (!col.overlayPanel || !col.pickListWrapperOptions)"
+            [ngTemplateOutletContext]="{col: col, rowData: rowData, rowIndex: index}"
+            [ngTemplateOutlet]="basicCell"
+          ></ng-container>
+          <ng-container
+            *ngIf="crudEndPoint && col.editable"
+            [ngTemplateOutletContext]="{col: col, rowData: rowData, rowIndex: index}"
+            [ngTemplateOutlet]="editableCell"
+          ></ng-container>
+          <ng-container
+            *ngIf="col.overlayPanel && col.pickListWrapperOptions"
+            [ngTemplateOutletContext]="{col: col, rowData: rowData, rowIndex: index}"
+            [ngTemplateOutlet]="overlayCell"
+          ></ng-container>
+        </ng-container>
 
         <td *ngIf="crudEndPoint" class="fcc no-border"
             style="width: 120px; max-width: 120px; min-width: 120px; padding: 10px;">
-          <button (click)="editRow(rowData)" class="p-button-rounded p-button-success mr-2" icon="pi pi-pencil" pButton
+          <button (click)="onEditRow(rowData)" class="p-button-rounded p-button-success mr-2" icon="pi pi-pencil"
+                  pButton
                   pRipple></button>
           <button
-            (click)="deleteRow(rowData)" class="p-button-rounded p-button-warning" icon="pi pi-trash" pButton pRipple
+            (click)="onDeleteRow(rowData.id, rowNotReorderable)" class="p-button-rounded p-button-warning"
+            icon="pi pi-trash" pButton pRipple
             style="margin-left: 10px !important;"
           ></button>
         </td>
       </tr>
 
       <!-- row reorderable -->
-      <tr *ngIf="reorderable" [pReorderableRowHandle]="index" [pReorderableRow]="index" class="fss w100 no-border">
+      <tr
+        #rowReorderable *ngIf="reorderableRows" [pReorderableRowHandle]="index"
+        [pReorderableRow]="index" class="fss w100 no-border"
+      >
         <td class="no-border" style="width: 54px; min-width: 54px; max-width: 54px;">
           <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
         </td>
 
-        <ng-container
-          *ngFor="let col of columns"
-          [ngTemplateOutletContext]="{col: col, rowData: rowData, rowIndex: index}"
-          [ngTemplateOutlet]="crudEndPoint && col.editable ? editableCell : basicCell"
-        ></ng-container>
+        <ng-container *ngFor="let col of columns">
+          <ng-container
+            *ngIf="(!crudEndPoint || !col.editable) && (!col.overlayPanel || !col.pickListWrapperOptions)"
+            [ngTemplateOutletContext]="{col: col, rowData: rowData, rowIndex: index}"
+            [ngTemplateOutlet]="basicCell"
+          ></ng-container>
+          <ng-container
+            *ngIf="crudEndPoint && col.editable"
+            [ngTemplateOutletContext]="{col: col, rowData: rowData, rowIndex: index}"
+            [ngTemplateOutlet]="editableCell"
+          ></ng-container>
+          <ng-container
+            *ngIf="col.overlayPanel && col.pickListWrapperOptions"
+            [ngTemplateOutletContext]="{col: col, rowData: rowData, rowIndex: index}"
+            [ngTemplateOutlet]="overlayCell"
+          ></ng-container>
+        </ng-container>
 
         <td *ngIf="crudEndPoint" class="fcc no-border"
             style="width: 120px; max-width: 120px; min-width: 120px; padding: 10px;">
-          <button (click)="editRow(rowData)" class="p-button-rounded p-button-success mr-2" icon="pi pi-pencil" pButton
+          <button (click)="onEditRow(rowData)" class="p-button-rounded p-button-success mr-2" icon="pi pi-pencil"
+                  pButton
                   pRipple></button>
-          <button (click)="deleteRow(rowData)" class="p-button-rounded p-button-warning" icon="pi pi-trash" pButton
+          <button (click)="onDeleteRow(rowData.id, rowReorderable)" class="p-button-rounded p-button-warning"
+                  icon="pi pi-trash" pButton
                   pRipple style="margin-left: 10px !important;"></button>
         </td>
       </tr>
@@ -109,20 +146,27 @@
 
     <ng-template #editableCell let-col="col" let-rowData="rowData" let-rowIndex="rowIndex">
       <td *ngIf="col.editable" [pEditableColumnField]="col.field" [pEditableColumnRowIndex]="rowIndex"
-          [pEditableColumn]="rowData.id" [style]="col.style || ''" class="no-border">
+          [pEditableColumn]="rowData.id" [style]="'cursor: pointer; ' + (col.style || '')" class="no-border">
         <p-cellEditor class="w100">
           <ng-template pTemplate="input">
             <app-input-wrapper
-              (valueChange)="onCellValueChange(rowData.id, col, $event)"
-              *ngIf="col.inputType !== 'dropdown'" [(value)]="rowData[col.field]" [inputType]="col.inputType"
-              [max]="col.max" [min]="col.min" [rows]="col.rows" [step]="col.step"
+              (valueChange)="onCellValueChange(rowData.id, col, $event)" *ngIf="col.inputType !== 'dropdown'"
+              [(value)]="rowData[col.field]"
+              [checkboxOptions]="col.inputCheckboxOptions
+                ? {label: col.inputCheckboxOptions.label, labelPlacement: col.inputCheckboxOptions.labelPlacement}
+                : {}" [inputType]="col.inputType"
+              [numberOptions]="col.inputNumberOptions ? {
+              min: col.inputNumberOptions.min, max: col.inputNumberOptions.max, step: col.inputNumberOptions.step
+              } : {}"
+              [textareaOptions]="col.inputTextareaOptions ? {rows: col.inputTextareaOptions.rows} : {}"
               inputWidth="100%"
             ></app-input-wrapper>
 
             <app-dropdown-wrapper
               (selectedValueChange)="onCellValueChange(rowData.id, col, $event)"
-              *ngIf="col.inputType === 'dropdown'" [(selectedValue)]="rowData[col.field]" [list]="col.list"
-              [scrollHeight]="col.scrollHeight" inlineClass="table-editable-cell-dropdown"
+              *ngIf="col.inputType === 'dropdown' && col.dropdownWrapperOptions"
+              [(selectedValue)]="rowData[col.field]" [list]="col.dropdownWrapperOptions.list"
+              [scrollHeight]="col.dropdownWrapperOptions.scrollHeight" inlineClass="table-editable-cell-dropdown"
             ></app-dropdown-wrapper>
           </ng-template>
           <ng-template pTemplate="output">
@@ -132,14 +176,46 @@
       </td>
     </ng-template>
 
+    <ng-template #overlayCell let-col="col" let-rowData="rowData">
+      <p-overlayPanel #op styleClass="table-cell-overlay-panel">
+        <ng-template pTemplate>
+          <app-pick-list-wrapper
+            (closeOverlayPanel)="onClosePickListOverlayPanel(op, rowData, col, $event)"
+            [dragdrop]="col.pickListWrapperOptions.dragdrop"
+            [filterBy]="col.pickListWrapperOptions.filterBy" [inlineClass]="col.pickListWrapperOptions.inlineClass"
+            [inlineStyle]="col.pickListWrapperOptions.inlineStyle"
+            [propertyToDisplay]="col.pickListWrapperOptions.propertyToDisplay"
+            [showSourceControls]="col.pickListWrapperOptions.showSourceControls"
+            [showSourceFilter]="col.pickListWrapperOptions.showSourceFilter"
+            [showTargetControls]="col.pickListWrapperOptions.showTargetControls"
+            [showTargetFilter]="col.pickListWrapperOptions.showTargetFilter"
+            [sourceFilterPlaceholder]="col.pickListWrapperOptions.sourceFilterPlaceholder"
+            [sourceHeader]="col.pickListWrapperOptions.sourceHeader"
+            [sourceList]="col.pickListWrapperOptions.sourceList"
+            [stripedRows]="col.pickListWrapperOptions.stripedRows"
+            [targetFilterPlaceholder]="col.pickListWrapperOptions.targetFilterPlaceholder"
+            [targetHeader]="col.pickListWrapperOptions.targetHeader"
+            [targetList]="rowData[col.field]"
+          ></app-pick-list-wrapper>
+        </ng-template>
+      </p-overlayPanel>
+
+      <td (click)="onOpenPickListOverlayPanel(op, col, $event)" [style]="'cursor: pointer; ' + (col.style || '')"
+          class="no-border">
+        {{ rowData[col.field] | formatValueDisplay: col.field }}
+      </td>
+    </ng-template>
+
   </p-table>
 </div>
 
 <p-dialog *ngIf="crudEndPoint" [(visible)]="elementDialog"
-          [header]="formData.id ? 'Editer l\'élément' : 'Ajouter un élément'" [modal]="true" [style]="{width: '450px'}"
+          [header]="formValues.id ? 'Editer l\'élément' : 'Ajouter un élément'" [modal]="true"
+          [style]="{width: '450px'}"
           styleClass="p-fluid">
   <ng-template pTemplate="content">
-    <app-form-wrapper [(formValue)]="formData" [formFields]="formFields"></app-form-wrapper>
+    <app-form-wrapper (formValueChange)="onFormValueChange($event)" [(formValue)]="formValues"
+                      [formFields]="formFields"></app-form-wrapper>
   </ng-template>
 
   <ng-template pTemplate="footer">

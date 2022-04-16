@@ -11,3 +11,30 @@
     height: 40px;
   }
 }
+
+.table-cell-overlay-panel {
+  width: 70%;
+  min-width: 800px;
+}
+
+.pick-list-wrapper-container {
+  > .p-element {
+    width: 100%;
+
+    .p-picklist-list {
+      width: 100%;
+      min-width: 215px;
+      height: auto;
+      max-height: 50vh;
+      min-height: 300px;
+    }
+  }
+
+  .pick-list-buttons-wrapped {
+    margin-top: 20px;
+  }
+}
+
+.table-wrapper-row-to-delete {
+  background: #dd6363 !important;
+}
