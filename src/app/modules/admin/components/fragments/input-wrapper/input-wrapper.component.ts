@@ -1,132 +1,71 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { InputText } from 'primeng/inputtext';
-import { InputTextarea } from 'primeng/inputtextarea';
-
-export type InputWrapperType = 'text' | 'password' | 'number' | 'textarea' | 'dropdown';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { InputWrapperType } from '../../../interfaces/input-wrapper.type';
+import { DEFAULT_INPUT_HEIGHT, DEFAULT_INPUT_TYPE, DEFAULT_INPUT_WIDTH } from './constants/input-wrapper.constant';
+import { InputWrapperCheckboxOptions } from './interfaces/checkbox-options.interface';
+import { InputWrapperNumberOptions } from './interfaces/number-options.interface';
+import { InputWrapperTextareaOptions } from './interfaces/textarea-options.interface';
 
 @Component({
   selector: 'app-input-wrapper',
   templateUrl: './input-wrapper.component.html',
-  styleUrls: ['./input-wrapper.component.scss'],
 })
-export class InputWrapperComponent implements OnInit, AfterViewInit {
+export class InputWrapperComponent implements OnInit {
+  @Input() inputWidth = DEFAULT_INPUT_WIDTH;
+
+  @Input() inputHeight = DEFAULT_INPUT_HEIGHT;
+
+  @Input() inputType: InputWrapperType = DEFAULT_INPUT_TYPE;
+
   @Input() inlineClass = '';
 
-  @Input() inputType: InputWrapperType = 'text';
+  @Input() name = '';
 
-  @Input() inputWidth = '250px';
-
-  @Input() inputHeight = '40px';
-
-  @Input() value = '';
-
-  @Input() valueType: 'string' | 'number' = 'string';
-
-  @Input() displayed = '';
+  @Input() placeholder = '';
 
   @Input() disabled = false;
 
-  @Output() valueChange = new EventEmitter<string>();
+  @Input() textareaOptions: InputWrapperTextareaOptions = {};
 
-  @ViewChild('inputNumber', { static: false }) inputNumber: InputText | undefined;
+  @Input() numberOptions: InputWrapperNumberOptions = {};
 
-  @ViewChild('inputTextarea', { static: false }) inputTextarea: InputTextarea | undefined;
+  @Input() checkboxOptions: InputWrapperCheckboxOptions = {};
 
-  // Textarea options
-  @Input() rows?: number;
+  @Input() value: any = '';
 
-  /**
-   * When present, textarea size changes as being typed.
-   */
-  @Input() autoResize = false;
-
-  // Number options
-  /**
-   *Default: false  Displays spinner buttons.
-   */
-  @Input() showButtons = false;
-
-  /**
-   *Default: null  Text to display before the value.
-   */
-  @Input() prefix = '';
-
-  /**
-   *Default: decimal  Text to display after the value.
-   */
-  @Input() suffix = '';
-
-  /**
-   *Default: null  Mininum boundary value.
-   */
-  @Input() min?: number;
-
-  /**
-   *Default: null  Maximum boundary value.
-   */
-  @Input() max?: number;
-
-  /**
-   *Default: 1, Step factor to increment/decrement the value.
-   */
-  @Input() step?: number;
-
-  /**
-   *Default: null  Advisory information to display on input.
-   */
-  @Input() placeholder = '';
-
-  /**
-   *Default: null  Maximum number of character allows in the input field.
-   */
-  @Input() maxlength?: number;
-
-  /**
-   *Default: false  When present, it specifies that an input field is read-only.
-   */
-  @Input() readonly = false;
-
-  /**
-   *Default: null  Title text of the input text.
-   */
-  @Input() title = '';
-
-  /**
-   *Default: null  Name of the input field.
-   */
-  @Input() name = '';
-
-  public type: InputWrapperType = 'text';
+  @Output() valueChange = new EventEmitter<any>();
 
   ngOnInit(): void {
     if (!this.inputType) {
       this.inputType = 'text';
     }
-    this.type = this.inputType;
-  }
 
-  ngAfterViewInit(): void {
-    if (this.inputType === 'number' && this.inputNumber) {
-      // @ts-ignore
-      this.inputNumber.nativeElement.min = this.min || 0;
-      // @ts-ignore
-      this.inputNumber.nativeElement.max = this.max || 999;
-      // @ts-ignore
-      this.inputNumber.nativeElement.step = this.step || 1;
+    if (!this.inputWidth) {
+      this.inputWidth = DEFAULT_INPUT_WIDTH;
     }
 
-    if (this.inputType === 'textarea' && this.inputTextarea) {
-      this.inputHeight = 'auto';
-      // @ts-ignore
-      this.inputTextarea.nativeElement.rows = this.rows || 3;
+    if (!this.inputHeight) {
+      this.inputHeight = DEFAULT_INPUT_HEIGHT;
+    }
+
+    if (!this.inlineClass) {
+      this.inlineClass = '';
+    }
+
+    if (this.inputType === 'number' && !this.numberOptions) {
+      this.numberOptions = {};
+    }
+
+    if (this.inputType === 'textarea' && !this.textareaOptions) {
+      this.textareaOptions = {};
+    }
+
+    if (this.inputType === 'checkbox' && !this.checkboxOptions) {
+      this.checkboxOptions = {};
     }
   }
 
-  public onValueChange(): void {
+  public onValueChange(value: any): void {
+    this.value = value;
     this.valueChange.emit(this.value);
-  }
-
-  public toggleType(): void {
-    this.type = this.type === 'text' ? 'password' : 'text';
   }
 }

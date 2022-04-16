@@ -1,0 +1,91 @@
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { PickList } from 'primeng/picklist';
+
+@Component({
+  selector: 'app-pick-list-wrapper',
+  templateUrl: './pick-list-wrapper.component.html',
+})
+export class PickListWrapperComponent implements OnInit {
+  @ViewChild('pickListWrapped', { static: false }) pickList: PickList | undefined;
+
+  @Input() inlineClass = '';
+
+  @Input() inlineStyle: { [key: string]: any } = {};
+
+  @Input() sourceHeader = '';
+
+  @Input() targetHeader = '';
+
+  @Input() showSourceFilter = true;
+
+  @Input() showTargetFilter = true;
+
+  @Input() showSourceControls = true;
+
+  @Input() showTargetControls = true;
+
+  @Input() sourceFilterPlaceholder = '';
+
+  @Input() targetFilterPlaceholder = '';
+
+  @Input() filterBy = '';
+
+  @Input() dragdrop = true;
+
+  @Input() stripedRows = true;
+
+  @Input() sourceList: any[] = [];
+
+  @Input() targetList: any[] = [];
+
+  @Input() propertyToDisplay = '';
+
+  @Output() closeOverlayPanel = new EventEmitter<any[] | undefined>();
+
+  public availableList: any[] = [];
+
+  public selectedList: any[] = [];
+
+  private static setValidOrDefaultValue<T>(value: T, defaultValue: T): T {
+    return value !== undefined ? value : defaultValue;
+  }
+
+  ngOnInit(): void {
+    if (!this.sourceList || !this.sourceList.length) {
+      throw new Error('Cannot initialize the pick-list, a valid source list must be passed!');
+    }
+
+    if (!this.propertyToDisplay) {
+      throw new Error('Cannot initialize the pick-list, the item property to display must be passed!');
+    }
+
+    this.inlineStyle = PickListWrapperComponent.setValidOrDefaultValue(this.inlineStyle, {});
+    this.sourceHeader = PickListWrapperComponent.setValidOrDefaultValue(this.sourceHeader, '');
+    this.targetHeader = PickListWrapperComponent.setValidOrDefaultValue(this.targetHeader, '');
+    this.showSourceControls = PickListWrapperComponent.setValidOrDefaultValue(this.showSourceControls, false);
+    this.showTargetControls = PickListWrapperComponent.setValidOrDefaultValue(this.showTargetControls, false);
+    this.sourceFilterPlaceholder = PickListWrapperComponent.setValidOrDefaultValue(this.sourceFilterPlaceholder, '');
+    this.targetFilterPlaceholder = PickListWrapperComponent.setValidOrDefaultValue(this.targetFilterPlaceholder, '');
+    this.showSourceFilter = PickListWrapperComponent.setValidOrDefaultValue(this.showSourceFilter, true);
+    this.showTargetFilter = PickListWrapperComponent.setValidOrDefaultValue(this.showTargetFilter, true);
+    this.filterBy = PickListWrapperComponent.setValidOrDefaultValue(this.filterBy, '');
+    this.dragdrop = PickListWrapperComponent.setValidOrDefaultValue(this.dragdrop, true);
+    this.stripedRows = PickListWrapperComponent.setValidOrDefaultValue(this.stripedRows, false);
+
+    if (!this.targetList) {
+      this.selectedList = [];
+      this.availableList = this.sourceList.map((value) => ({ ...value }));
+    } else {
+      this.selectedList = this.targetList.map((value) => ({ ...value }));
+      this.availableList = this.sourceList.filter((available) => !this.targetList.find((selected) => selected[this.filterBy] === available[this.filterBy]));
+    }
+  }
+
+  public onCloseOverlayPanel(): void {
+    this.closeOverlayPanel.emit();
+  }
+
+  public onSaveData(): void {
+    this.closeOverlayPanel.emit(this.selectedList);
+  }
+}

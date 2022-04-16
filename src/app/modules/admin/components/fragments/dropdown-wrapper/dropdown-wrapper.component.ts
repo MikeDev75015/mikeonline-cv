@@ -1,20 +1,26 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-
-export interface DropdownOption {
-  label: string;
-
-  value: string | number;
-}
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Dropdown } from 'primeng/dropdown';
+import { DEFAULT_DROPDOWN_WRAPPER_SCROLL_HEIGHT } from './constants/dropdown-wrapper.constant';
+import { DropdownOption } from './interfaces/dropdown-option.interface';
 
 @Component({
   selector: 'app-dropdown-wrapper',
   templateUrl: './dropdown-wrapper.component.html',
-  styleUrls: ['./dropdown-wrapper.component.scss'],
 })
-export class DropdownWrapperComponent implements OnInit {
+export class DropdownWrapperComponent implements OnInit, AfterViewInit {
+  @ViewChild('dropdownWrapped', { static: false }) dropdown: Dropdown | undefined;
+
+  @Input() scrollHeight = DEFAULT_DROPDOWN_WRAPPER_SCROLL_HEIGHT;
+
   @Input() inlineStyle: { [key: string]: any } = {};
 
   @Input() inlineClass = '';
+
+  @Input() title = '';
+
+  @Input() name = '';
+
+  @Input() placeholder = '';
 
   @Input() list: DropdownOption[] | undefined;
 
@@ -22,11 +28,11 @@ export class DropdownWrapperComponent implements OnInit {
 
   @Input() selectedValue: any;
 
-  @Input() scrollHeight = '200px';
-
   @Output() selectedValueChange = new EventEmitter<any>();
 
   public dropdownList: DropdownOption[] = [];
+
+  public appendTo = 'body';
 
   private static convertStringListToDropdownList(list: string[]): DropdownOption[] {
     return list.map((el) => ({ label: el, value: el }));
@@ -46,6 +52,10 @@ export class DropdownWrapperComponent implements OnInit {
       throw new Error('Cannot initialize the dropdown, a valid list must be passed!');
     }
 
+    if (!this.scrollHeight) {
+      this.scrollHeight = DEFAULT_DROPDOWN_WRAPPER_SCROLL_HEIGHT;
+    }
+
     const validList = this.stringList ? DropdownWrapperComponent.convertStringListToDropdownList(this.stringList) : this.list as DropdownOption[];
 
     if (!this.selectedValue) {
@@ -62,7 +72,16 @@ export class DropdownWrapperComponent implements OnInit {
     }
   }
 
-  public onSelectedValueChange(): void {
+  ngAfterViewInit(): void {
+    this.selectedValueChange.emit(this.selectedValue);
+    if (this.dropdown) {
+      this.dropdown.name = this.name || '';
+      this.dropdown.placeholder = this.placeholder || '';
+    }
+  }
+
+  public onSelectedValueChange(value: any): void {
+    this.selectedValue = value;
     this.selectedValueChange.emit(this.selectedValue);
   }
 }

@@ -1,7 +1,7 @@
 <p-dropdown
-  (ngModelChange)="onSelectedValueChange()" [(ngModel)]="selectedValue"
-  [disabled]="!dropdownList || !dropdownList.length" [ngStyle]="inlineStyle"
-  [options]="dropdownList" [scrollHeight]="scrollHeight"
-  [styleClass]="inlineClass" optionLabel="label"
-  optionValue="value"
+  #dropdownWrapped
+  (ngModelChange)="onSelectedValueChange($event)" [(ngModel)]="selectedValue" [appendTo]="appendTo"
+  [disabled]="!dropdownList || !dropdownList.length"
+  [ngStyle]="inlineStyle" [options]="dropdownList" [scrollHeight]="scrollHeight" [styleClass]="inlineClass || ''"
+  optionLabel="label" optionValue="value"
 ></p-dropdown>

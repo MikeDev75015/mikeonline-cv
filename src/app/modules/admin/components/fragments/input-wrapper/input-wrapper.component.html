@@ -1,41 +1,47 @@
-<div [ngStyle]="{width: inputWidth, height: inputHeight}" class="fss relative input-wrapper-container">
+<div
+  [ngStyle]="{width: inputWidth, height: inputType === 'textarea' ? 'auto' : inputHeight}"
+  class="fss relative input-wrapper-container"
+>
 
-  <ng-container *ngIf="inputType === 'text' || inputType === 'password'">
-    <input
-      (ngModelChange)="onValueChange()"
-      *ngIf="displayed === ''" [(ngModel)]="value" [class]="inlineClass" [disabled]="disabled"
-      [ngStyle]="{width: '100%', height: inputHeight}" [type]="type" pInputText
-    />
+  <ng-container *ngIf="inputType === 'text'">
+    <app-input-text
+      (valueChange)="onValueChange($event)" [(value)]="value" [class]="inlineClass"
+      [disabled]="disabled" [name]="name"
+      [ngStyle]="{width: inputWidth, height: inputHeight}" [placeholder]="placeholder"
+    ></app-input-text>
+  </ng-container>
 
-    <input
-      (click)="displayed = ''"
-      *ngIf="displayed !== ''" [class]="inlineClass" [disabled]="disabled"
-      [ngStyle]="{width: '100%', height: inputHeight}"
-      [type]="type" [value]="displayed" pInputText
-    />
-
-    <div
-      (click)="toggleType()" *ngIf="inputType === 'password'" [ngStyle]="{width: '' + inputHeight, height: inputHeight}"
-      class="fcc absolute"
-      style="top: 0; right: 0;"
-    >
-      <i [class]="type === 'password' ? 'pi pi-eye' : 'pi pi-eye-slash'"></i>
-    </div>
+  <ng-container *ngIf="inputType === 'password'">
+    <app-input-password
+      (valueChange)="onValueChange($event)" [(value)]="value" [class]="inlineClass"
+      [disabled]="disabled" [name]="name"
+      [ngStyle]="{width: inputWidth, height: inputHeight}" [placeholder]="placeholder"
+    ></app-input-password>
   </ng-container>
 
   <ng-container *ngIf="inputType === 'number'">
-    <input
-      #inputNumber (ngModelChange)="onValueChange()"
-      [(ngModel)]="value" [class]="inlineClass" [disabled]="disabled"
-      [ngStyle]="{width: '100%', height: inputHeight}" [type]="type" pInputText
-    />
+    <app-input-number
+      (valueChange)="onValueChange($event)" [(value)]="value" [class]="inlineClass"
+      [disabled]="disabled" [max]="numberOptions.max"
+      [min]="numberOptions.min" [name]="name" [ngStyle]="{width: inputWidth, height: inputHeight}"
+      [placeholder]="placeholder" [step]="numberOptions.step"
+    ></app-input-number>
   </ng-container>
 
   <ng-container *ngIf="inputType === 'textarea'">
-    <textarea
-      #inputTextarea (ngModelChange)="onValueChange()"
-      [(ngModel)]="value" [class]="inlineClass"
-      [disabled]="disabled" [ngStyle]="{width: '100%', height: inputHeight}" pInputTextarea
-    ></textarea>
+    <app-input-textarea
+      (valueChange)="onValueChange($event)" [(value)]="value" [class]="inlineClass"
+      [disabled]="disabled" [name]="name" [ngStyle]="{width: inputWidth, height: 'auto'}"
+      [placeholder]="placeholder" [rows]="textareaOptions.rows"
+    ></app-input-textarea>
+  </ng-container>
+
+  <ng-container *ngIf="inputType === 'checkbox'">
+    <app-input-checkbox
+      (valueChange)="onValueChange($event)" [(value)]="value" [class]="inlineClass"
+      [disabled]="disabled" [labelPlacement]="checkboxOptions.labelPlacement"
+      [label]="checkboxOptions.label"
+      [name]="name" [ngStyle]="{width: inputWidth, height: 'auto'}"
+    ></app-input-checkbox>
   </ng-container>
 </div>
