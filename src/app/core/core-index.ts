@@ -19,7 +19,7 @@ export { IImage } from './interfaces/image.interface';
 export { ILink } from './interfaces/link.interface';
 export { IWebLink } from './interfaces/web-link.interface';
 export { WorldCloudOptions } from './interfaces/world-cloud-options.interface';
-export { ICompetence } from './interfaces/models/competence.interface';
+export { ISkill } from './interfaces/models/skill.interface';
 export { IExperience } from './interfaces/models/experience.interface';
 export { IFormation } from './interfaces/models/formation.interface';
 export { IInterest } from './interfaces/models/interest.interface';

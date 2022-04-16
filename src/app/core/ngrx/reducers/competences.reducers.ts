@@ -1,19 +1,19 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { Action, createReducer, on } from '@ngrx/store';
-import { ICompetence } from '../../interfaces/models/competence.interface';
+import { ISkill } from '../../interfaces/models/skill.interface';
 import * as CompetencesActions from '../actions/competences.actions';
 
 /**
  * Competences State
  */
-export interface CompetencesState extends EntityState<ICompetence> {
+export interface CompetencesState extends EntityState<ISkill> {
   loaded: boolean;
 }
 
 /**
  * Competences Adapter
  */
-export const adapter: EntityAdapter<ICompetence> = createEntityAdapter<ICompetence>();
+export const adapter: EntityAdapter<ISkill> = createEntityAdapter<ISkill>();
 
 /**
  * Competences Initial State

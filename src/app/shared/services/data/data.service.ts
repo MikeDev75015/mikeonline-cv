@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { DefaultProjectorFn, MemoizedSelector, Store } from '@ngrx/store';
 import { combineLatest, lastValueFrom, Observable, take } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ICompetence, IExperience, IFormation, IProject, ITag } from '../../../core/core-index';
+import { IExperience, IFormation, IProject, ISkill, ITag } from '../../../core/core-index';
+import { ApplicationActions } from '../../../core/ngrx/ngrx-index';
 import { selectAppCvInfosLoaded } from '../../../core/ngrx/selectors/application.selectors';
 import { selectAllCompetences, selectCompetencesLoaded } from '../../../core/ngrx/selectors/competences.selectors';
 import { selectAllExperiences, selectExperiencesLoaded } from '../../../core/ngrx/selectors/experiences.selectors';
 import { selectAllFormations, selectFormationsLoaded } from '../../../core/ngrx/selectors/formations.selectors';
 import { selectInterestsLoaded } from '../../../core/ngrx/selectors/interests.selectors';
 import { selectAllProjects, selectProjectsLoaded } from '../../../core/ngrx/selectors/projects.selectors';
-import { ApplicationActions } from '../../../core/ngrx/ngrx-index';
 
 @Injectable({
   providedIn: 'root',
@@ -92,7 +92,7 @@ export class DataService {
   private async extractUsedTags(): Promise<ITag[]> {
     const usedTagList: ITag[] = [];
 
-    const skillList = await this.getStoreData<ICompetence[]>({
+    const skillList = await this.getStoreData<ISkill[]>({
       selector: selectAllCompetences,
       defaultValue: [],
     });

@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ICompetence } from '../../../../../core/interfaces/models/competence.interface';
 import { IExperience } from '../../../../../core/interfaces/models/experience.interface';
 import { IFormation } from '../../../../../core/interfaces/models/formation.interface';
 import { IProject } from '../../../../../core/interfaces/models/project.interface';
+import { ISkill } from '../../../../../core/interfaces/models/skill.interface';
 import { selectAllCompetences } from '../../../../../core/ngrx/selectors/competences.selectors';
 import { selectAllExperiences } from '../../../../../core/ngrx/selectors/experiences.selectors';
 import { selectAllFormations } from '../../../../../core/ngrx/selectors/formations.selectors';
@@ -168,7 +168,7 @@ export class SkillsRadarChartComponent implements OnInit, OnDestroy {
 
   private async initializeRadarData(): Promise<void> {
     const [skills, experiences, formations, projects] = await Promise.all([
-      this.dataService.getStoreData<ICompetence[]>({ selector: selectAllCompetences, defaultValue: [] }),
+      this.dataService.getStoreData<ISkill[]>({ selector: selectAllCompetences, defaultValue: [] }),
       this.dataService.getStoreData<IExperience[]>({ selector: selectAllExperiences, defaultValue: [] }),
       this.dataService.getStoreData<IFormation[]>({ selector: selectAllFormations, defaultValue: [] }),
       this.dataService.getStoreData<IProject[]>({ selector: selectAllProjects, defaultValue: [] }),

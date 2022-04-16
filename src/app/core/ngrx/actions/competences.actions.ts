@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { ICompetence } from '../../interfaces/models/competence.interface';
+import { ISkill } from '../../interfaces/models/skill.interface';
 
 /**
  * Fetch Competences
@@ -15,5 +15,5 @@ export const fetchCompetencesFailure = createAction('[Competences] Fetch Compete
  * Fetch Competences Success
  */
 export const fetchCompetencesSuccess = createAction(
-  '[Competences] Fetch Competences Success', props<{ competenceList: ICompetence[] }>(),
+  '[Competences] Fetch Competences Success', props<{ competenceList: ISkill[] }>(),
 );

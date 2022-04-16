@@ -4,15 +4,18 @@ import { map } from 'rxjs/operators';
 import { partialIsoDatePattern } from '../../../../../core/constants/patterns.constant';
 import {
   EXPERTISE_LEVEL_LABEL,
-  ICompetence,
   IExperience,
   IFormation,
   IProject,
+  ISkill,
   ITag,
   PRIORITY_LABEL,
   WorldCloudOptions,
 } from '../../../../../core/core-index';
-import { selectAllCompetences, selectCompetencesLoaded } from '../../../../../core/ngrx/selectors/competences.selectors';
+import {
+  selectAllCompetences,
+  selectCompetencesLoaded,
+} from '../../../../../core/ngrx/selectors/competences.selectors';
 import { selectAllExperiences } from '../../../../../core/ngrx/selectors/experiences.selectors';
 import { selectAllFormations } from '../../../../../core/ngrx/selectors/formations.selectors';
 import { selectAllProjects } from '../../../../../core/ngrx/selectors/projects.selectors';
@@ -77,7 +80,7 @@ export class SkillsComponent implements OnInit, OnDestroy, AfterViewChecked {
   /**
    * Contains the skills loaded.
    */
-  public skillList?: ICompetence[];
+  public skillList?: ISkill[];
 
   /**
    * Contains the related experiences found.
@@ -406,7 +409,7 @@ export class SkillsComponent implements OnInit, OnDestroy, AfterViewChecked {
       { list: [] as IExperience[], selector: selectAllExperiences },
       { list: [] as IFormation[], selector: selectAllFormations },
       { list: [] as IProject[], selector: selectAllProjects },
-      { list: [] as ICompetence[], selector: selectAllCompetences },
+      { list: [] as ISkill[], selector: selectAllCompetences },
     ].map((v) => {
       return this.dataService.getStoreData<typeof v.list>({
         selector: v.selector, defaultValue: [], value: tag.id, property: 'tagIdList',
@@ -420,7 +423,7 @@ export class SkillsComponent implements OnInit, OnDestroy, AfterViewChecked {
       technoList: this.utilsService.initTechnoListWithTagList(s.tagList as ITag[]),
     })) as IProject[];
     this.skillList = allRelatedList[3].map((c) => {
-      const comp = c as ICompetence;
+      const comp = c as ISkill;
       const compStartDate = comp.startDate.match(partialIsoDatePattern) ? comp.startDate + '-01' : comp.startDate;
       const experienceYearsText = DayJsService.getTimeToNow(compStartDate, true);
       return {
@@ -430,6 +433,6 @@ export class SkillsComponent implements OnInit, OnDestroy, AfterViewChecked {
           value: this.utilsService.convertDateToKnobYearsValue(experienceYearsText),
         },
       };
-    }) as ICompetence[];
+    }) as ISkill[];
   }
 }
