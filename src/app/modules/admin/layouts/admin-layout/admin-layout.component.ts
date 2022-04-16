@@ -14,7 +14,6 @@ interface ExtendedMenuItem extends MenuItem {
 @Component({
   selector: 'app-admin-layout',
   templateUrl: './admin-layout.component.html',
-  styleUrls: ['./admin-layout.component.scss'],
   providers: [ThemingService],
 })
 export class AdminLayoutComponent implements OnInit {

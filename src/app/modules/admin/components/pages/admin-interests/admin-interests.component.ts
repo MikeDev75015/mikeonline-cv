@@ -3,33 +3,23 @@ import { IInterest } from '../../../../../core/interfaces/models/interest.interf
 import { ITag } from '../../../../../core/interfaces/models/tag.interface';
 import { selectAllInterests } from '../../../../../core/ngrx/selectors/interests.selectors';
 import { DataService } from '../../../../../shared/services/data/data.service';
-import { FormFields } from '../../fragments/form-wrapper/form-wrapper.component';
-import { TableColumn } from '../../fragments/table-wrapper/table-wrapper.component';
+import { FormFields } from '../../fragments/form-wrapper/interfaces/form-fields.interface';
+import { TableColumn } from '../../fragments/table-wrapper/interfaces/table-column.interface';
 
 @Component({
   selector: 'app-admin-interests',
   templateUrl: './admin-interests.component.html',
-  styleUrls: ['./admin-interests.component.scss'],
 })
 export class AdminInterestsComponent implements OnInit {
   public data: IInterest[] = [];
 
-  public columnList: TableColumn[] = [
-    { field: 'title', header: 'Titre', editable: true, style: 'width: 30%; min-width: 300px;' },
-    {
-      field: 'description',
-      header: 'Description',
-      editable: true,
-      inputType: 'textarea',
-      rows: 5,
-      style: 'width: 30%; min-width: 200px;',
-    },
-    { field: 'link', header: 'Lien', style: 'width: 40%; min-width: 200px;' },
-  ];
+  public columnList: TableColumn[] = [];
 
   public formFields: FormFields[] | undefined;
 
   public crudEndPoint = '/v1/interests';
+
+  public exportCsvFileName = 'Mes Centres d\'Intérêts';
 
   constructor(
     private readonly dataService: DataService,
@@ -41,10 +31,28 @@ export class AdminInterestsComponent implements OnInit {
       { selector: selectAllInterests, defaultValue: [] },
     );
 
+    this.columnList = [
+      {
+        field: 'title', header: 'Titre', globalFilterField: true,
+        sortable: true, editable: true, exportable: true,
+        style: 'width: 30%; min-width: 300px;',
+      },
+      {
+        field: 'description', header: 'Description', globalFilterField: true,
+        sortable: true, editable: true, exportable: true,
+        inputType: 'textarea', inputTextareaOptions: { rows: 5 },
+        style: 'width: 30%; min-width: 200px;',
+      },
+      {
+        field: 'link', header: 'Lien', exportable: true,
+        style: 'width: 40%; min-width: 200px;',
+      },
+    ];
+
     if (this.crudEndPoint) {
       this.formFields = [
-        { name: 'title', label: 'Titre', inputType: 'text' },
-        { name: 'description', label: 'Description', inputType: 'textarea', rows: 5 },
+        { field: 'title', fieldLabel: 'Titre', inputType: 'text' },
+        { field: 'description', fieldLabel: 'Description', inputType: 'textarea', inputTextareaOptions: { rows: 5 } },
       ];
     }
   }
