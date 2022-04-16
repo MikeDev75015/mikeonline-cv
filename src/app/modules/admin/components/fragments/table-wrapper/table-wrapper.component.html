@@ -41,6 +41,18 @@
     [sortOrder]="sortOrder" [value]="tableData" dataKey="id" styleClass="p-datatable-striped"
     currentPageReportTemplate="{first} à {last} éléments sur {totalRecords}"
   >
+    <ng-template pTemplate="caption">
+      <div class="fec">
+        <span class="p-input-icon-left ml-auto">
+          <i class="pi pi-search"></i>
+          <input
+            #filterGlobalInput
+            (input)="wrappedTable.filterGlobal(filterGlobalInput.value, 'contains')" pInputText placeholder="Rechercher"
+            type="text"
+          />
+        </span>
+      </div>
+    </ng-template>
 
     <ng-template pTemplate="header" let-columns>
       <tr class="fss w100">

@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { InputText } from 'primeng/inputtext';
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { Table } from 'primeng/table';
 import { lastValueFrom } from 'rxjs';
@@ -18,6 +19,8 @@ import { CrudService } from './services/crud.service';
   providers: [MessageService, ConfirmationService, CrudService],
 })
 export class TableWrapperComponent implements OnInit, OnChanges {
+  @ViewChild('filterGlobalInput', { static: false }) filterGlobalInput: InputText | undefined;
+
   @Input() columnList: TableColumn[] = [];
 
   @Input() rowsNumber: number | undefined;
