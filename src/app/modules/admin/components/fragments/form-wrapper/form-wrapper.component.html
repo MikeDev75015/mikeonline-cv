@@ -1,21 +1,37 @@
 <div class="fcc column w100 form-wrapper-container">
 
-  <div *ngFor="let field of formFields" class="fbc w100 form-wrapper-field">
-    <label>{{ field.label }}&nbsp;:</label>
+  <div *ngFor="let element of formFields" class="fbc w100 form-wrapper-field">
+    <label>{{ element.fieldLabel }}&nbsp;:</label>
 
-    <app-input-wrapper
-      (valueChange)="onValueChange()" *ngIf="field.inputType !== 'dropdown'"
-      [(value)]="formValue[field.name]" [inlineClass]="'form-wrapper-' + field.inputType + '-input'"
-      [inputType]="field.inputType"
-      [max]="field.max" [min]="field.min" [rows]="field.rows" [step]="field.step"
-      inputWidth="100%"
-    ></app-input-wrapper>
+    <ng-container *ngIf="element.inputType !== 'dropdown'">
+      <app-input-wrapper
+        (valueChange)="onValueChange(element.field, $event)" [(value)]="formValue[element.field]"
+        [checkboxOptions]="element.inputCheckboxOptions
+        ? {label: element.inputCheckboxOptions.label, labelPlacement: element.inputCheckboxOptions.labelPlacement}
+        : {}"
+        [inlineClass]="'form-wrapper-' + element.inputType + '-input'" [inputType]="element.inputType"
+        [name]="element.inputName || ''"
+        [numberOptions]="element.inputNumberOptions
+          ? {min: element.inputNumberOptions.min, max: element.inputNumberOptions.max, step: element.inputNumberOptions.step}
+          : {}"
+        [placeholder]="element.inputPlaceholder || ''"
+        [textareaOptions]="element.inputTextareaOptions ? {rows: element.inputTextareaOptions.rows} : {}"
+        [title]="element.inputTitle || ''"
+        inputWidth="100%"
+      ></app-input-wrapper>
+    </ng-container>
 
-    <app-dropdown-wrapper
-      (selectedValueChange)="onValueChange()" *ngIf="field.inputType === 'dropdown'"
-      [(selectedValue)]="formValue[field.name]" [list]="field.list"
-      [scrollHeight]="field.scrollHeight || '200px'" inlineClass="form-wrapper-dropdown"
-    ></app-dropdown-wrapper>
+    <ng-container *ngIf="element.inputType === 'dropdown' && element.dropdownWrapperOptions">
+      <app-dropdown-wrapper
+        (selectedValueChange)="onValueChange(element.field, $event)"
+        [(selectedValue)]="formValue[element.field]" [list]="element.dropdownWrapperOptions.list"
+        [name]="element.inputName || ''"
+        [placeholder]="element.inputPlaceholder || ''"
+        [scrollHeight]="element.dropdownWrapperOptions.scrollHeight || ''"
+        [title]="element.inputTitle || ''" inlineClass="form-wrapper-dropdown"
+      ></app-dropdown-wrapper>
+    </ng-container>
+
   </div>
 
 </div>

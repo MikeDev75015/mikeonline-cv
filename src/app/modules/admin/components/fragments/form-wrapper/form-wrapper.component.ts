@@ -1,41 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { DropdownOption } from '../dropdown-wrapper/dropdown-wrapper.component';
-import { InputWrapperType } from '../input-wrapper/input-wrapper.component';
-
-export interface InputWrapperOptions {
-  inputType: InputWrapperType;
-
-  label: string;
-
-  value?: any;
-
-  /**
-   * Textarea options
-   */
-  rows?: number;
-
-  /**
-   * Number options
-   */
-  min?: number;
-
-  max?: number;
-
-  step?: number;
-
-  /**
-   * Dropdown options
-   */
-  list?: DropdownOption[];
-
-  stringList?: string[];
-
-  scrollHeight?: string;
-}
-
-export interface FormFields extends InputWrapperOptions {
-  name: string;
-}
+import { FormFields } from './interfaces/form-fields.interface';
 
 @Component({
   selector: 'app-form-wrapper',
@@ -55,7 +19,8 @@ export class FormWrapperComponent implements OnInit {
     }
   }
 
-  public onValueChange(): void {
+  public onValueChange(field: string, value: any): void {
+    this.formValue[field] = value;
     this.formValueChange.emit(this.formValue);
   }
 }
