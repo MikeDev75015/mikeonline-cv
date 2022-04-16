@@ -79,6 +79,16 @@ export class UtilsService {
     return firstList;
   }
 
+  /**
+   * Converts a list of string to string
+   * @param listToConvert
+   * @private
+   */
+  public static convertSortedStringListToString(listToConvert: string[]): string {
+    listToConvert.sort();
+    return listToConvert.join('');
+  }
+
   public static addMissingEndDate<T>(list: T[]): T[] {
     return list.map((element: any) => {
       if (!element.endDate) {
