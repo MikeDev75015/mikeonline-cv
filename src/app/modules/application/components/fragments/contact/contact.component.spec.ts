@@ -1,11 +1,11 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Store } from '@ngrx/store';
-import { storeMock } from '../../../../../__mocks__/services/store.mock';
-import { AlertModule } from '../../../../../core/core-index';
+import { MockComponent } from 'ng2-mock-component';
+import { storeMock } from '../../../../../../../__mocks__/services/store.mock';
+import { AlertModule } from '../../../../../core';
 
-import {ContactComponent} from './contact.component';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {MockComponent} from 'ng2-mock-component';
+import { ContactComponent } from './contact.component';
 
 describe('ContactComponent', () => {
   let component: ContactComponent;

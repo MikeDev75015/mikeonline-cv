@@ -1,7 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { IDetail } from '../../../core/interfaces/detail.interface';
-import { IExperience } from '../../../core/interfaces/models/experience.interface';
-import { IFormation } from '../../../core/interfaces/models/formation.interface';
+import { IDetail, IExperience, IFormation } from '../../../core';
 
 import { TemplatesService } from './templates.service';
 

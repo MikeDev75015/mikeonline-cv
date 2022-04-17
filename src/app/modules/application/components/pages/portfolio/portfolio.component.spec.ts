@@ -3,17 +3,18 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MockComponent } from 'ng2-mock-component';
 import { lastValueFrom, of } from 'rxjs';
+import { dataServiceMock } from '../../../../../../../__mocks__/services/data-service.mock';
+import { utilsServiceMock } from '../../../../../../../__mocks__/services/utils-service.mock';
+import { waitTimeout } from '../../../../../../../__mocks__/timeout.mock';
 import {
   projectMock1,
-  sortedProjectListMock, technoListMock,
+  sortedProjectListMock,
+  technoListMock,
   unsortedProjectListMock,
   unsortedProjectsWithTechnoListMock,
-} from '../../../../../__mocks__/data/project-list.mock';
-import { dataServiceMock } from '../../../../../__mocks__/services/data-service.mock';
-import { utilsServiceMock } from '../../../../../__mocks__/services/utils-service.mock';
-import { waitTimeout } from '../../../../../__mocks__/timeout.mock';
-import { AlertModule, IProject } from '../../../../../core/core-index';
-import { DataService, UtilsService } from '../../../../../shared/shared-index';
+} from '../../../../../../../__mocks__/v0/data/project-list.mock';
+import { AlertModule, IProject } from '../../../../../core';
+import { DataService, UtilsService } from '../../../../../shared';
 
 import { PortfolioComponent } from './portfolio.component';
 

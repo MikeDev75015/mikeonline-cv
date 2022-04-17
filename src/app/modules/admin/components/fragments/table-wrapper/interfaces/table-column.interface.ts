@@ -10,8 +10,6 @@ export interface TableColumn {
 
   header: string;
 
-  style?: string;
-
   globalFilterField?: boolean;
 
   sortField?: boolean;
@@ -27,6 +25,12 @@ export interface TableColumn {
   overlayPanel?: boolean;
 
   exportable?: boolean;
+
+  style?: string;
+
+  adapter?: (data: any) => any;
+
+  generator?: (data: any) => any;
 
   inputType?: InputWrapperType;
 

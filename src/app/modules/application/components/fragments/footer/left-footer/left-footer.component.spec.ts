@@ -1,8 +1,8 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { dataServiceMock } from '../../../../../../__mocks__/services/data-service.mock';
-import { utilsServiceMock } from '../../../../../../__mocks__/services/utils-service.mock';
-import { DataService, UtilsService } from '../../../../../../shared/shared-index';
+import { dataServiceMock } from '../../../../../../../../__mocks__/services/data-service.mock';
+import { utilsServiceMock } from '../../../../../../../../__mocks__/services/utils-service.mock';
+import { DataService, UtilsService } from '../../../../../../shared';
 
 import { LeftFooterComponent } from './left-footer.component';
 

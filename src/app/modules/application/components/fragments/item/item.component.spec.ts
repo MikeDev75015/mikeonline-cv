@@ -2,11 +2,11 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockComponent } from 'ng2-mock-component';
-import { animationServiceMock } from '../../../../../__mocks__/services/animation-service.mock';
-import { utilsServiceMock } from '../../../../../__mocks__/services/utils-service.mock';
-import { AlertModule } from '../../../../../core/core-index';
-import { AnimationsService } from '../../../../../core/services/animations/animations.service';
-import { IncompressibleSpacePipe, UtilsService } from '../../../../../shared/shared-index';
+import { animationServiceMock } from '../../../../../../../__mocks__/services/animation-service.mock';
+import { utilsServiceMock } from '../../../../../../../__mocks__/services/utils-service.mock';
+import { AlertModule } from '../../../../../core';
+import { IncompressibleSpacePipe, UtilsService } from '../../../../../shared';
+import { AnimationsService } from '../../../../../shared/services/animations/animations.service';
 
 import { ItemComponent } from './item.component';
 

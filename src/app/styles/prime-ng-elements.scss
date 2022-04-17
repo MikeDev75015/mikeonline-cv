@@ -1,16 +1,4 @@
-.admin-tab-menu {
-  .p-tabmenu-nav {
-    border: none;
-  }
 
-  .p-menuitem-link {
-    display: flex;
-    align-content: center;
-    padding: 0 20px !important;
-    border: none !important;
-    height: 40px;
-  }
-}
 
 .table-cell-overlay-panel {
   width: 70%;
@@ -21,12 +9,37 @@
   > .p-element {
     width: 100%;
 
-    .p-picklist-list {
-      width: 100%;
-      min-width: 215px;
-      height: auto;
-      max-height: 50vh;
-      min-height: 300px;
+    .p-component {
+      > .p-picklist-list-wrapper {
+        width: 100%;
+        min-width: 215px;
+        height: auto;
+        max-height: 50vh;
+        min-height: 300px;
+        overflow-y: auto;
+        border: 1px solid #CCC;
+
+        * {
+          border: none;
+        }
+
+        .p-picklist-header {
+          z-index: 1;
+          position: sticky;
+          top: 0;
+          background: var(--primary-color);
+          color: var(--primary-color-text)
+        }
+
+        .p-picklist-filter-container {
+          z-index: 2;
+          position: sticky;
+          top: 52px;
+          padding: unset;
+          border-bottom: 1px solid #CCC;
+          background: white;
+        }
+      }
     }
   }
 

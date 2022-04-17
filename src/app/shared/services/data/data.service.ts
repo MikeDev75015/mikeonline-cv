@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { DefaultProjectorFn, MemoizedSelector, Store } from '@ngrx/store';
 import { combineLatest, lastValueFrom, Observable, take } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { IExperience, IFormation, IProject, ISkill, ITag } from '../../../core/core-index';
+import { IExperience, IFormation, IProject, ISkill, ITag } from '../../../core';
 import { ApplicationActions } from '../../../core/ngrx/ngrx-index';
 import { selectAppCvInfosLoaded } from '../../../core/ngrx/selectors/application.selectors';
 import { selectAllCompetences, selectCompetencesLoaded } from '../../../core/ngrx/selectors/competences.selectors';

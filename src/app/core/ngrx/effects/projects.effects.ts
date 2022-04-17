@@ -4,9 +4,9 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { mergeMap, tap } from 'rxjs/operators';
+import { ApiV0Service, TagsService } from '../../../shared';
+import { IProject } from '../../index';
 import { ProjectsActions } from '../ngrx-index';
-import { IProject } from '../../core-index';
-import { ApiV0Service, TagsService } from '../../../shared/shared-index';
 
 /**
  * Effects for projects actions

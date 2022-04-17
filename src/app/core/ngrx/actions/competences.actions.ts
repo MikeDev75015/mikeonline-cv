@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { ISkill } from '../../interfaces/models/skill.interface';
+import { ISkill } from '../../interfaces/models/v0/skill.interface';
 
 /**
  * Fetch Competences

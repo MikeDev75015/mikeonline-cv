@@ -1,16 +1,16 @@
 import { TestBed } from '@angular/core/testing';
 import { Store } from '@ngrx/store';
 import { lastValueFrom, of } from 'rxjs';
-import { competenceListMock } from '../../../__mocks__/data/competence-list.mock';
-import { contactMock } from '../../../__mocks__/data/contact.mock';
-import { cvInfoMock } from '../../../__mocks__/data/cv-info.mock';
-import { unsortedExperienceListMock } from '../../../__mocks__/data/experience-list.mock';
-import { unsortedFormationListMock } from '../../../__mocks__/data/formation-list.mock';
-import { unsortedProjectListMock } from '../../../__mocks__/data/project-list.mock';
-import { storeMock } from '../../../__mocks__/services/store.mock';
-import { tagListMock } from '../../../__mocks__/data/tag-list.mock';
-import { ICvInfos } from '../../../core/interfaces/models/cv-infos.interface';
-import { ITag } from '../../../core/interfaces/models/tag.interface';
+import { storeMock } from '../../../../../__mocks__/services/store.mock';
+import { competenceListMock } from '../../../../../__mocks__/v0/data/competence-list.mock';
+import { contactMock } from '../../../../../__mocks__/v0/data/contact.mock';
+import { cvInfoMock } from '../../../../../__mocks__/v0/data/cv-info.mock';
+import { unsortedExperienceListMock } from '../../../../../__mocks__/v0/data/experience-list.mock';
+import { unsortedFormationListMock } from '../../../../../__mocks__/v0/data/formation-list.mock';
+import { unsortedProjectListMock } from '../../../../../__mocks__/v0/data/project-list.mock';
+import { tagListMock } from '../../../../../__mocks__/v0/data/tag-list.mock';
+import { ICvInfos, ITag } from '../../../core';
+import { ApplicationActions } from '../../../core/ngrx/ngrx-index';
 import { selectAppCvInfosLoaded } from '../../../core/ngrx/selectors/application.selectors';
 import { selectAllCompetences, selectCompetencesLoaded } from '../../../core/ngrx/selectors/competences.selectors';
 import { selectCvInfos } from '../../../core/ngrx/selectors/cv-infos.selectors';
@@ -19,7 +19,6 @@ import { selectAllFormations, selectFormationsLoaded } from '../../../core/ngrx/
 import { selectInterestsLoaded } from '../../../core/ngrx/selectors/interests.selectors';
 import { selectAllProjects, selectProjectsLoaded } from '../../../core/ngrx/selectors/projects.selectors';
 import { selectAllTags } from '../../../core/ngrx/selectors/tags.selectors';
-import { ApplicationActions } from '../../../core/ngrx/ngrx-index';
 
 import { DataService } from './data.service';
 

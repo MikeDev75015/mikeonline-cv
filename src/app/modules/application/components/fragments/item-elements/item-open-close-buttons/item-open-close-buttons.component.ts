@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { AnimationsService } from '../../../../../../core/services/animations/animations.service';
-import { IN_OUT_TEMPLATE_ANIMATION } from '../../../../../../shared/animations/in-out-template.animation';
-import { UtilsService } from '../../../../../../shared/services/utils/utils.service';
+import { IN_OUT_TEMPLATE_ANIMATION, UtilsService } from '../../../../../../shared';
+import { AnimationsService } from '../../../../../../shared/services/animations/animations.service';
 
 @Component({
   selector: 'app-item-open-close-buttons',

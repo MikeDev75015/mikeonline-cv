@@ -1,6 +1,6 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { Action, createReducer, on } from '@ngrx/store';
-import { IInterest } from '../../interfaces/models/interest.interface';
+import { IInterest } from '../../interfaces/models/v0/interest.interface';
 import * as InterestsActions from '../actions/interests.actions';
 
 /**

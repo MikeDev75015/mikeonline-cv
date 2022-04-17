@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { lastValueFrom, take } from 'rxjs';
-import { ITag } from '../../../core/interfaces/models/tag.interface';
+import { ITag } from '../../../core';
 import { selectAllTags } from '../../../core/ngrx/selectors/tags.selectors';
 
 @Injectable({

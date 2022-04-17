@@ -1,6 +1,6 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import { IProject } from '../../../../../../core/core-index';
-import { UtilsService } from '../../../../../../shared/shared-index';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { IProject } from '../../../../../../core';
+import { UtilsService } from '../../../../../../shared';
 
 @Component({
   selector: 'app-project-item',

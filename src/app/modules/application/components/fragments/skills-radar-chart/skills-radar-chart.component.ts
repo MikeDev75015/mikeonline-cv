@@ -1,15 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { IExperience } from '../../../../../core/interfaces/models/experience.interface';
-import { IFormation } from '../../../../../core/interfaces/models/formation.interface';
-import { IProject } from '../../../../../core/interfaces/models/project.interface';
-import { ISkill } from '../../../../../core/interfaces/models/skill.interface';
+import { IExperience, IFormation, IProject, ISkill } from '../../../../../core';
 import { selectAllCompetences } from '../../../../../core/ngrx/selectors/competences.selectors';
 import { selectAllExperiences } from '../../../../../core/ngrx/selectors/experiences.selectors';
 import { selectAllFormations } from '../../../../../core/ngrx/selectors/formations.selectors';
 import { selectAllProjects } from '../../../../../core/ngrx/selectors/projects.selectors';
-import { DataService } from '../../../../../shared/services/data/data.service';
-import { UtilsService } from '../../../../../shared/shared-index';
+import { UtilsService, DataService } from '../../../../../shared';
 import { RadarConfig } from './models/radar-config.interface';
 import { DataSets, RadarData } from './models/radar-data.interface';
 import { RadarConfigService } from './services/radar-config/radar-config.service';

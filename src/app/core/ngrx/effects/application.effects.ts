@@ -4,8 +4,8 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { map, tap } from 'rxjs/operators';
+import { ApiV0Service } from '../../../shared';
 import { ApplicationActions, CvInfosActions } from '../ngrx-index';
-import { ApiV0Service } from '../../../shared/shared-index';
 
 /**
  * Effects for cv infos actions

@@ -1,9 +1,9 @@
 import { AfterContentInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { IInterest } from '../../../../../core/core-index';
+import { IInterest } from '../../../../../core';
 import { selectAllInterests, selectInterestsLoaded } from '../../../../../core/ngrx/selectors/interests.selectors';
-import { DataService } from '../../../../../shared/shared-index';
+import { DataService } from '../../../../../shared';
 
 /**
  * The component of the interests page.

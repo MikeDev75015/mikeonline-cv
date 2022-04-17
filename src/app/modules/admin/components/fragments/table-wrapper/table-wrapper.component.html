@@ -4,7 +4,7 @@
 <div class="card">
   <p-toolbar styleClass="mb-4">
     <ng-template pTemplate="left">
-      <button (click)="onOpenDialog()" *ngIf="crudEndPoint" class="p-button-success" icon="pi pi-plus" label="Ajouter"
+      <button (click)="onOpenDialog()" *ngIf="crudEndPoint && formFields && formFields.length > 0" class="p-button-success" icon="pi pi-plus" label="Ajouter"
               pButton pRipple></button>
       <button
         (click)="onDeleteSelectedRows()" *ngIf="crudEndPoint && selectedTableData && selectedTableData.length > 1"
@@ -100,9 +100,10 @@
 
         <td *ngIf="crudEndPoint" class="fcc no-border"
             style="width: 120px; max-width: 120px; min-width: 120px; padding: 10px;">
-          <button (click)="onEditRow(rowData)" class="p-button-rounded p-button-success mr-2" icon="pi pi-pencil"
-                  pButton
-                  pRipple></button>
+          <button
+            *ngIf="formFields && formFields.length > 0" class="p-button-rounded p-button-success mr-2" icon="pi pi-pencil"
+            pButton pRipple (click)="onEditRow(rowData)"
+          ></button>
           <button
             (click)="onDeleteRow(rowData.id, rowNotReorderable)" class="p-button-rounded p-button-warning"
             icon="pi pi-trash" pButton pRipple
@@ -151,8 +152,7 @@
     </ng-template>
 
     <ng-template #basicCell let-col="col" let-rowData="rowData">
-      <td [style]="col.style || ''" class="no-border">
-        {{ rowData[col.field] | formatValueDisplay: col.field }}
+      <td class="no-border" [style]="col.style || ''" [innerHTML]="rowData[col.field] | formatValueDisplay: col.field">
       </td>
     </ng-template>
 
@@ -182,7 +182,7 @@
             ></app-dropdown-wrapper>
           </ng-template>
           <ng-template pTemplate="output">
-            {{ rowData[col.field] | formatValueDisplay: col.field }}
+            <span class="w100" [innerHTML]="rowData[col.field] | formatValueDisplay: col.field"></span>
           </ng-template>
         </p-cellEditor>
       </td>
@@ -212,16 +212,17 @@
         </ng-template>
       </p-overlayPanel>
 
-      <td (click)="onOpenPickListOverlayPanel(op, col, $event)" [style]="'cursor: pointer; ' + (col.style || '')"
-          class="no-border">
-        {{ rowData[col.field] | formatValueDisplay: col.field }}
-      </td>
+      <td
+        class="no-border" [style]="'cursor: pointer; ' + (col.style || '')"
+        [innerHTML]="rowData[col.field] | formatValueDisplay: col.field"
+        (click)="onOpenPickListOverlayPanel(op, col, $event)"
+      ></td>
     </ng-template>
 
   </p-table>
 </div>
 
-<p-dialog *ngIf="crudEndPoint" [(visible)]="elementDialog"
+<p-dialog *ngIf="crudEndPoint" [(visible)]="showFormDialog"
           [header]="formValues.id ? 'Editer l\'élément' : 'Ajouter un élément'" [modal]="true"
           [style]="{width: '450px'}"
           styleClass="p-fluid">

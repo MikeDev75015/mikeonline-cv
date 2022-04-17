@@ -1,8 +1,8 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import { utilsServiceMock } from '../../../../../../__mocks__/services/utils-service.mock';
-import { UtilsService } from '../../../../../../shared/shared-index';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { utilsServiceMock } from '../../../../../../../../__mocks__/services/utils-service.mock';
+import { UtilsService } from '../../../../../../shared';
 
-import {ProjectItemComponent} from './project-item.component';
+import { ProjectItemComponent } from './project-item.component';
 
 describe('ProjectItemComponent', () => {
   let component: ProjectItemComponent;

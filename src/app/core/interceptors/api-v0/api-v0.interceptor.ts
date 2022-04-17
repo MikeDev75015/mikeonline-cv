@@ -2,13 +2,13 @@ import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } fr
 import { Injectable } from '@angular/core';
 import { EMPTY, Observable, of } from 'rxjs';
 
-import CvInfosJsonFile from '../../../__mocks__/json-files/cv-infos.json';
-import ExperiencesJsonFile from '../../../__mocks__/json-files/experiences.json';
-import FormationsJsonFile from '../../../__mocks__/json-files/formations.json';
-import InterestsJsonFile from '../../../__mocks__/json-files/interests.json';
-import ProjectsJsonFile from '../../../__mocks__/json-files/projects.json';
-import SkillsJsonFile from '../../../__mocks__/json-files/skills.json';
-import TagsJsonFile from '../../../__mocks__/json-files/tags.json';
+import CvInfosJsonFile from '../../../../../__mocks__/v0/json-files/cv-infos.json';
+import ExperiencesJsonFile from '../../../../../__mocks__/v0/json-files/experiences.json';
+import FormationsJsonFile from '../../../../../__mocks__/v0/json-files/formations.json';
+import InterestsJsonFile from '../../../../../__mocks__/v0/json-files/interests.json';
+import ProjectsJsonFile from '../../../../../__mocks__/v0/json-files/projects.json';
+import SkillsJsonFile from '../../../../../__mocks__/v0/json-files/skills.json';
+import TagsJsonFile from '../../../../../__mocks__/v0/json-files/tags.json';
 import { ApiV0Path } from '../../interfaces/api/api-v0-path.type';
 
 @Injectable()
@@ -48,11 +48,11 @@ export class ApiV0Interceptor implements HttpInterceptor {
   }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    if (!request.url.includes('/v0/')) {
-      return next.handle(request);
+    if (request.url.includes('/v0/')) {
+      const apiPath = request.url.split('/v0/')[1];
+      return ApiV0Interceptor.jsonFile(apiPath as ApiV0Path);
     }
 
-    const apiPath = request.url.split('/v0/')[1];
-    return ApiV0Interceptor.jsonFile(apiPath as ApiV0Path);
+    return next.handle(request);
   }
 }

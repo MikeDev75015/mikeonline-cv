@@ -1,5 +1,5 @@
-import {Component, Input} from '@angular/core';
-import { IDetail } from '../../../../../../core/core-index';
+import { Component, Input } from '@angular/core';
+import { IDetail } from '../../../../../../core';
 
 @Component({
   selector: 'app-experience-item-detail',

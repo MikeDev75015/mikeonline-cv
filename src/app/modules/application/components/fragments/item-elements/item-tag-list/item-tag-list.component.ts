@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ITag } from '../../../../../../core/interfaces/models/tag.interface';
+import { ITag } from '../../../../../../core';
 
 @Component({
   selector: 'app-item-tag-list',

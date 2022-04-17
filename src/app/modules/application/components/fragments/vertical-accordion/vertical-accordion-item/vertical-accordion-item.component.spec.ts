@@ -1,7 +1,7 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { animationServiceMock } from '../../../../../../__mocks__/services/animation-service.mock';
-import { AnimationsService } from '../../../../../../core/services/animations/animations.service';
+import { animationServiceMock } from '../../../../../../../../__mocks__/services/animation-service.mock';
+import { AnimationsService } from '../../../../../../shared/services/animations/animations.service';
 
 import {VerticalAccordionItemComponent} from './vertical-accordion-item.component';
 import {OneLetterByLinePipe} from '../pipes/one-letter-by-line.pipe';

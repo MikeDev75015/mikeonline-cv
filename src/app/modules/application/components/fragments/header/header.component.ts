@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
+import { ICvInfos } from '../../../../../core';
 import { selectAppCvInfosLoaded } from '../../../../../core/ngrx/selectors/application.selectors';
-import { ICvInfos } from '../../../../../core/core-index';
 import { selectCvInfos } from '../../../../../core/ngrx/selectors/cv-infos.selectors';
-import { DataService } from '../../../../../shared/shared-index';
+import { DataService } from '../../../../../shared';
 
 @Component({
   selector: 'app-header',

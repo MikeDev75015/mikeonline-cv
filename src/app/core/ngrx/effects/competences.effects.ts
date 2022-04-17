@@ -4,8 +4,8 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { mergeMap, tap } from 'rxjs/operators';
-import { ApiV0Service, TagsService } from '../../../shared/shared-index';
-import { ISkill } from '../../core-index';
+import { ApiV0Service, TagsService } from '../../../shared';
+import { ISkill } from '../../index';
 import { CompetencesActions } from '../ngrx-index';
 
 /**

@@ -1,23 +1,32 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { ITag } from '../../../../../../core';
 import {
   EXPERTISE_LEVEL_DROPDOWN_LIST,
   JOB_TYPE_DROPDOWN_LIST,
   PRIORITY_DROPDOWN_LIST,
 } from '../../../../../../core/constants/common.constant';
-import { ITag } from '../../../../../../core/interfaces/models/tag.interface';
 import { DayJsService } from '../../../../../../core/services/dayjs/dayjs.service';
+import { DropdownOption } from '../../dropdown-wrapper/interfaces/dropdown-option.interface';
 
 @Pipe({
   name: 'formatValueDisplay',
 })
 export class FormatValueDisplayPipe implements PipeTransform {
 
-  transform(value: any, field: string): string {
+  transform(value: any, field: string, html = true): string {
     if (value === undefined || value === '') {
       return '';
     }
+    const lineEnding = html ? '<br>' : '';
+    const incompressibleSpace = html ? '&nbsp;' : ' ';
 
     switch (field) {
+      case 'cvType':
+        return value === 'full-cv' ? 'Complet' : 'Partiel';
+      case 'technoList':
+        return value.join(', ');
+      case 'contact':
+        return FormatValueDisplayPipe.displayContactInLine(value, lineEnding, incompressibleSpace);
       case 'tagList':
         return (value as ITag[]).map((tag) => tag.name).join(', ');
       case 'beginDate':
@@ -27,11 +36,11 @@ export class FormatValueDisplayPipe implements PipeTransform {
       case 'endDate':
         return DayJsService.getDate(value, 'MM/YYYY');
       case 'expertiseLevel':
-        return EXPERTISE_LEVEL_DROPDOWN_LIST.find((level) => level.value === value)?.label || 'Non valide';
+        return FormatValueDisplayPipe.getDropdownLabel(EXPERTISE_LEVEL_DROPDOWN_LIST, value);
       case 'priority':
-        return PRIORITY_DROPDOWN_LIST.find((priority) => priority.value === value)?.label || 'Non valide';
+        return FormatValueDisplayPipe.getDropdownLabel(PRIORITY_DROPDOWN_LIST, value);
       case 'jobType':
-        return JOB_TYPE_DROPDOWN_LIST.find((job) => job.value === value)?.label || 'Non valide';
+        return FormatValueDisplayPipe.getDropdownLabel(JOB_TYPE_DROPDOWN_LIST, value);
       case 'link':
         return value.title + '\n' + value.url;
       case 'actualJob':
@@ -44,4 +53,16 @@ export class FormatValueDisplayPipe implements PipeTransform {
     }
   }
 
+  private static getDropdownLabel(list: DropdownOption[], value: any): string {
+    return list.find((option) => option.value === value)?.label || 'Non valide';
+  }
+
+  private static displayContactInLine(value: any, lineEnding: string, incompressibleSpace: string): string {
+    return `${value.fullName}${lineEnding}
+${value.phoneNumberPartList.parts.join(value.phoneNumberPartList.joiner)}${lineEnding}
+${value.emailPartList.parts.join(value.emailPartList.joiner)}${lineEnding}
+${value.location}${lineEnding}
+${value.personalSituation.familyStatus},${lineEnding}
+${DayJsService.getTimeToNow(value.personalSituation.birthDate, true)},${incompressibleSpace} ${value.personalSituation.drivingLicense}`;
+  }
 }

@@ -1,6 +1,6 @@
-import {Component, Input} from '@angular/core';
-import { IDetail } from '../../../../../../core/core-index';
-import { UtilsService } from '../../../../../../shared/services/utils/utils.service';
+import { Component, Input } from '@angular/core';
+import { IDetail } from '../../../../../../core';
+import { UtilsService } from '../../../../../../shared';
 
 @Component({
   selector: 'app-formation-item-detail',

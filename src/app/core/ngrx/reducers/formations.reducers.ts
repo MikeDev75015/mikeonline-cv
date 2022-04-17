@@ -1,6 +1,6 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { Action, createReducer, on } from '@ngrx/store';
-import { IFormation } from '../../interfaces/models/formation.interface';
+import { IFormation } from '../../interfaces/models/v0/formation.interface';
 import * as FormationsActions from '../actions/formations.actions';
 
 /**

@@ -1,9 +1,9 @@
 import { Action, createReducer, on } from '@ngrx/store';
-import { IUser } from '../../interfaces/models/user.interface';
+import { UserV1 } from '../../interfaces/models/v1/user.interface';
 import * as AuthActions from '../actions/auth.actions';
 
 export interface AuthState {
-  currentUser?: IUser;
+  currentUser?: UserV1;
 }
 
 export const initialState: AuthState = {

@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { ITag } from '../../interfaces/models/tag.interface';
+import { ITag } from '../../interfaces/models/v0/tag.interface';
 
 /**
  * Fetch Tags

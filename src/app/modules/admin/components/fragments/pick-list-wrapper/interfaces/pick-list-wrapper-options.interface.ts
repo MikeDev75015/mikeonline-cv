@@ -3,7 +3,11 @@ export interface PickListWrapperOptions {
 
   sourceList?: any[];
 
+  sourceAdapter?: (data: any) => any;
+
   targetList?: any[];
+
+  targetAdapter?: (data: any) => any;
 
   sourceHeader?: string;
 

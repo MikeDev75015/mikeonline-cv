@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { APP_CREDITS } from '../../../../../../core/core-index';
+import { APP_CREDITS } from '../../../../../../core';
 
 @Component({
   selector: 'app-bottom-footer',

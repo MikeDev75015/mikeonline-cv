@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { PickList } from 'primeng/picklist';
+import { UtilsService } from '../../../../../shared';
 
 @Component({
   selector: 'app-pick-list-wrapper',
@@ -55,10 +56,6 @@ export class PickListWrapperComponent implements OnInit {
       throw new Error('Cannot initialize the pick-list, a valid source list must be passed!');
     }
 
-    if (!this.propertyToDisplay) {
-      throw new Error('Cannot initialize the pick-list, the item property to display must be passed!');
-    }
-
     this.inlineStyle = PickListWrapperComponent.setValidOrDefaultValue(this.inlineStyle, {});
     this.sourceHeader = PickListWrapperComponent.setValidOrDefaultValue(this.sourceHeader, '');
     this.targetHeader = PickListWrapperComponent.setValidOrDefaultValue(this.targetHeader, '');
@@ -76,8 +73,24 @@ export class PickListWrapperComponent implements OnInit {
       this.selectedList = [];
       this.availableList = this.sourceList.map((value) => ({ ...value }));
     } else {
-      this.selectedList = this.targetList.map((value) => ({ ...value }));
-      this.availableList = this.sourceList.filter((available) => !this.targetList.find((selected) => selected[this.filterBy] === available[this.filterBy]));
+      this.selectedList = this.propertyToDisplay ? this.targetList.map((value) => ({ ...value })) : [...this.targetList];
+      this.availableList = this.sourceList.filter(
+        (available) => this.propertyToDisplay
+          ? !this.targetList.find((selected) => selected[this.propertyToDisplay] === available[this.propertyToDisplay])
+          : !this.targetList.includes(available),
+      );
+
+      this.sortLists();
+    }
+  }
+
+  public sortLists(): void {
+    if (!this.propertyToDisplay) {
+      this.availableList.sort();
+      this.selectedList.sort();
+    } else {
+      this.availableList = UtilsService.sortObjectList([...this.availableList], 'asc', this.propertyToDisplay);
+      this.selectedList = UtilsService.sortObjectList([...this.selectedList], 'asc', this.propertyToDisplay);
     }
   }
 

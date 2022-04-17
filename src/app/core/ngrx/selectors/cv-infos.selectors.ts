@@ -1,5 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { ICvInfos } from '../../interfaces/models/cv-infos.interface';
+import { ICvInfos } from '../../interfaces/models/v0/cv-infos.interface';
 import { CvInfosState } from '../reducers/cv-infos.reducers';
 
 const cvInfosState = createFeatureSelector<CvInfosState>('cvInfos');

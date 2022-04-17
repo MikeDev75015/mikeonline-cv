@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { IFormation } from '../../interfaces/models/formation.interface';
+import { IFormation } from '../../interfaces/models/v0/formation.interface';
 
 /**
  * Fetch Formations

@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { ICvInfos } from '../../interfaces/models/cv-infos.interface';
+import { ICvInfos } from '../../interfaces/models/v0/cv-infos.interface';
 
 /**
  * load CvInfo

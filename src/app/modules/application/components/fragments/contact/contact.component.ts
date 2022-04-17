@@ -1,8 +1,8 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { APP_CREDITS, IContact, ICvInfos, IWebLink } from '../../../../../core/core-index';
-import { IShareData } from '../../../../../core/interfaces/share-data.interface';
+import { APP_CREDITS, IContact, ICvInfos, IWebLink } from '../../../../../core';
+import { IShareData } from '../../../../../core/interfaces/models/commons/share-data.interface';
 import { selectAppCvInfosLoaded } from '../../../../../core/ngrx/selectors/application.selectors';
 import { selectCvInfos } from '../../../../../core/ngrx/selectors/cv-infos.selectors';
 import { ContactOpenCloseService } from '../../../../../core/services/contact-open-close/contact-open-close.service';
@@ -11,7 +11,7 @@ import {
   IN_OUT_TEMPLATE_ANIMATION,
   STAGGER_IN_OUT_TEMPLATE_ANIMATION,
   UtilsService,
-} from '../../../../../shared/shared-index';
+} from '../../../../../shared';
 
 @Component({
   selector: 'app-contact',

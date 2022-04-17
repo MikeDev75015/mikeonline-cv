@@ -1,6 +1,6 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { Action, createReducer, on } from '@ngrx/store';
-import { ISkill } from '../../interfaces/models/skill.interface';
+import { ISkill } from '../../interfaces/models/v0/skill.interface';
 import * as CompetencesActions from '../actions/competences.actions';
 
 /**

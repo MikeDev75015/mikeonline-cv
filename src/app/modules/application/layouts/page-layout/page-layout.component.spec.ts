@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateModule } from '@ngx-translate/core';
-import { LoadingComponent } from '../../../../core/components/loading/loading.component';
+import { LoadingComponent } from '../../../../core/directives/loading/component/loading.component';
 import { LoadingDirective } from '../../../../core/directives/loading/loading.directive';
 
 import { PageLayoutComponent } from './page-layout.component';

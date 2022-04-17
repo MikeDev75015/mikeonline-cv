@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { IExperience } from '../../../../../core/core-index';
-import { selectAllExperiences, selectExperiencesLoaded } from '../../../../../core/ngrx/selectors/experiences.selectors';
-import { DataService, UtilsService } from '../../../../../shared/shared-index';
+import { IExperience } from '../../../../../core';
+import {
+  selectAllExperiences,
+  selectExperiencesLoaded,
+} from '../../../../../core/ngrx/selectors/experiences.selectors';
+import { DataService, UtilsService } from '../../../../../shared';
 
 /**
  * The component of the experiences page.

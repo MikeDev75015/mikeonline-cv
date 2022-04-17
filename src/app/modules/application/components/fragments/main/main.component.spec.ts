@@ -5,8 +5,8 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 import { MockComponent } from 'ng2-mock-component';
-import { dataServiceMock } from '../../../../../__mocks__/services/data-service.mock';
-import { DataService } from '../../../../../shared/shared-index';
+import { dataServiceMock } from '../../../../../../../__mocks__/services/data-service.mock';
+import { DataService } from '../../../../../shared';
 
 import { MainComponent } from './main.component';
 

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { IFormation } from '../../../../../core/core-index';
+import { IFormation } from '../../../../../core';
 import { selectAllFormations, selectFormationsLoaded } from '../../../../../core/ngrx/selectors/formations.selectors';
-import { DataService, UtilsService } from '../../../../../shared/shared-index';
+import { DataService, UtilsService } from '../../../../../shared';
 
 /**
  * The component of the formations page.

@@ -2,14 +2,11 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { IAnimationServiceResponse } from '../../core/interfaces/animation-response.interface';
 import * as ApplicationActions from '../../core/ngrx/actions/application.actions';
 import { selectAppHideHeader } from '../../core/ngrx/selectors/application.selectors';
-import { AnimationsService } from '../../core/services/animations/animations.service';
 import { ContactOpenCloseService } from '../../core/services/contact-open-close/contact-open-close.service';
-import { HEADER_ANIMATION } from '../../shared/animations/header.animation';
-import { DataService } from '../../shared/services/data/data.service';
-import { UtilsService } from '../../shared/services/utils/utils.service';
+import { DataService, HEADER_ANIMATION, IAnimationServiceResponse, UtilsService } from '../../shared';
+import { AnimationsService } from '../../shared/services/animations/animations.service';
 
 @Component({
   selector: 'app-application',

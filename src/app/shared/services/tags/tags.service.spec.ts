@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
-import { storeMock } from '../../../__mocks__/services/store.mock';
-import { tagListMock } from '../../../__mocks__/data/tag-list.mock';
-import { ITag } from '../../../core/interfaces/models/tag.interface';
+import { storeMock } from '../../../../../__mocks__/services/store.mock';
+import { tagListMock } from '../../../../../__mocks__/v0/data/tag-list.mock';
+import { ITag } from '../../../core';
 
 import { TagsService } from './tags.service';
 

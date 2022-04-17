@@ -1,10 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MockComponent } from 'ng2-mock-component';
 import { lastValueFrom, of } from 'rxjs';
-import { sortedFormationListMock, unsortedFormationListMock } from '../../../../../__mocks__/data/formation-list.mock';
-import { dataServiceMock } from '../../../../../__mocks__/services/data-service.mock';
-import { DataService } from '../../../../../shared/services/data/data.service';
-import { UtilsService } from '../../../../../shared/services/utils/utils.service';
+import { dataServiceMock } from '../../../../../../../__mocks__/services/data-service.mock';
+import {
+  sortedFormationListMock,
+  unsortedFormationListMock,
+} from '../../../../../../../__mocks__/v0/data/formation-list.mock';
+import { DataService, UtilsService } from '../../../../../shared';
 
 import { FormationsComponent } from './formations.component';
 

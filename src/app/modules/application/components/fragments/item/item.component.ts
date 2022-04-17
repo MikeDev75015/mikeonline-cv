@@ -1,11 +1,9 @@
 import { AfterViewChecked, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { IAnimationServiceResponse, IFormation } from '../../../../../core/core-index';
-import { IExperience } from '../../../../../core/interfaces/models/experience.interface';
-import { AnimationsService } from '../../../../../core/services/animations/animations.service';
+import { IExperience, IFormation } from '../../../../../core';
+import { IAnimationServiceResponse, IN_OUT_TEMPLATE_ANIMATION, UtilsService } from '../../../../../shared';
+import { AnimationsService } from '../../../../../shared/services/animations/animations.service';
 import { TemplatesService } from '../../../../../shared/services/templates/templates.service';
-import { UtilsService } from '../../../../../shared/services/utils/utils.service';
-import { IN_OUT_TEMPLATE_ANIMATION } from '../../../../../shared/shared-index';
 
 @Component({
   selector: 'app-item',

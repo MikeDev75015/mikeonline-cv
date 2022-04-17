@@ -7,8 +7,8 @@ import { map, mergeMap, tap } from 'rxjs/operators';
 import {
   CompetencesActions, InterestsActions, TagsActions, ExperiencesActions, FormationsActions, ProjectsActions,
 } from '../ngrx-index';
-import { ITag } from '../../core-index';
-import { ApiV0Service } from '../../../shared/shared-index';
+import { ITag } from '../../index';
+import { ApiV0Service } from '../../../shared';
 
 /**
  * Effects for tags actions

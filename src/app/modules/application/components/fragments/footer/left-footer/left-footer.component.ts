@@ -1,13 +1,13 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ICvInfos, IExperience, IFormation, IInterest, IProject, ITag } from '../../../../../../core/core-index';
+import { ICvInfos, IExperience, IFormation, IInterest, IProject, ITag } from '../../../../../../core';
 import { selectCvInfos } from '../../../../../../core/ngrx/selectors/cv-infos.selectors';
 import { selectAllExperiences } from '../../../../../../core/ngrx/selectors/experiences.selectors';
 import { selectAllFormations } from '../../../../../../core/ngrx/selectors/formations.selectors';
 import { selectAllInterests } from '../../../../../../core/ngrx/selectors/interests.selectors';
 import { selectAllProjects } from '../../../../../../core/ngrx/selectors/projects.selectors';
 import { PdfCreatorService } from '../../../../../../core/services/pdf-creator/pdf-creator.service';
-import { DataService, UtilsService } from '../../../../../../shared/shared-index';
+import { DataService, UtilsService } from '../../../../../../shared';
 
 @Component({
   selector: 'app-left-footer',

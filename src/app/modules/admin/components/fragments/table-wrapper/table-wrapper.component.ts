@@ -6,7 +6,7 @@ import { Table } from 'primeng/table';
 import { lastValueFrom } from 'rxjs';
 import { ApiResponsePayload } from '../../../../../core/interfaces/api/api-response.payload';
 import { MessageSeverity } from '../../../../../core/interfaces/types/message-severity.type';
-import { UtilsService } from '../../../../../shared/shared-index';
+import { UtilsService } from '../../../../../shared';
 import { FormFields } from '../form-wrapper/interfaces/form-fields.interface';
 import { SEVERITY_MESSAGE_SUMMARY } from './constants/common.constant';
 import { TableColumn } from './interfaces/table-column.interface';
@@ -25,7 +25,7 @@ export class TableWrapperComponent implements OnInit, OnChanges {
 
   @Input() rowsNumber: number | undefined;
 
-  @Input() scrollHeight = '85vh';
+  @Input() scrollHeight = '80vh';
 
   @Input() reorderableRows = false;
 
@@ -35,9 +35,13 @@ export class TableWrapperComponent implements OnInit, OnChanges {
 
   @Input() formFields: FormFields[] | undefined;
 
-  @Input() queryAdapter?: (data: any) => any;
+  @Input() dataAdapter?: (data: any) => any;
+
+  @Input() dataGenerator?: (data: any) => any;
 
   @Output() tableDataChange = new EventEmitter<any[]>();
+
+  public isLoading = true;
 
   public globalFilterFields: string[] = [];
 
@@ -47,21 +51,19 @@ export class TableWrapperComponent implements OnInit, OnChanges {
 
   public sortOrder = 1;
 
-  public elementDialog = false;
+  public showFormDialog = false;
 
   public formValues: any = {};
 
-  public hasExportableData = false;
-
-  public isLoading = true;
+  public selectedTableData: any[] = [];
 
   public changedData: any[] = [];
 
-  public selectedTableData: any[] = [];
-
   public tableData: any[] = [];
 
-  private data: any[] = [];
+  private originalData: any[] = [];
+
+  public hasExportableData: boolean | undefined;
 
   constructor(
     private readonly messageService: MessageService,
@@ -73,7 +75,7 @@ export class TableWrapperComponent implements OnInit, OnChanges {
   async ngOnInit(): Promise<void> {
     if (this.crudEndPoint) {
       this.tableData = await this.loadData<any[]>(this.crudEndPoint, []);
-      this.data = this.tableData.map((value: any) => ({ ...value }));
+      this.originalData = this.tableData.map((value: any) => ({ ...value }));
 
       if (this.tableData.length > 0) {
         this.hasExportableData = this.columnList.filter((col) => col.exportable).length > 0;
@@ -87,7 +89,7 @@ export class TableWrapperComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes && changes['data'] && changes['data'].currentValue && changes['data'].currentValue.length) {
-      this.tableData = this.data.map((value: any) => ({ ...value }));
+      this.tableData = this.originalData.map((value: any) => ({ ...value }));
       this.hasExportableData = this.columnList.filter((data) => data.exportable).length > 0;
     }
   }
@@ -96,7 +98,7 @@ export class TableWrapperComponent implements OnInit, OnChanges {
    * onCloseDialog
    */
   public onCloseDialog(): void {
-    this.elementDialog = false;
+    this.showFormDialog = false;
     this.formValues = {};
   }
 
@@ -106,7 +108,7 @@ export class TableWrapperComponent implements OnInit, OnChanges {
   public onOpenDialog(): void {
     this.formValues = {};
     this.initializeFormWrapperValues();
-    this.elementDialog = true;
+    this.showFormDialog = true;
   }
 
   /**
@@ -116,7 +118,7 @@ export class TableWrapperComponent implements OnInit, OnChanges {
   public onEditRow(rowData: { [key: string]: any; }): void {
     this.formValues = { ...rowData };
     this.initializeFormWrapperValues({ ...rowData });
-    this.elementDialog = true;
+    this.showFormDialog = true;
   }
 
   /**
@@ -134,7 +136,7 @@ export class TableWrapperComponent implements OnInit, OnChanges {
     try {
       this.isLoading = true;
 
-      const data = this.queryAdapter ? this.queryAdapter(this.formValues) : this.formValues;
+      const data = this.dataAdapter ? this.dataAdapter(this.formValues) : this.formValues;
 
       const response: any = this.formValues.id
         ? await lastValueFrom(this.crudService.put<any>(this.crudEndPoint, { data }))
@@ -154,7 +156,7 @@ export class TableWrapperComponent implements OnInit, OnChanges {
       );
 
       this.tableData = await this.loadData<any[]>(this.crudEndPoint, []);
-      this.data = this.tableData.map((value: any) => ({ ...value }));
+      this.originalData = this.tableData.map((value: any) => ({ ...value }));
 
     } catch (e: any) {
       console.debug(e);
@@ -247,7 +249,7 @@ export class TableWrapperComponent implements OnInit, OnChanges {
 
           this.changedData = [];
           this.tableData = await this.loadData<any[]>(this.crudEndPoint, []);
-          this.data = this.tableData.map((value: any) => ({ ...value }));
+          this.originalData = this.tableData.map((value: any) => ({ ...value }));
 
         } catch (e: any) {
           console.debug(e);
@@ -267,7 +269,7 @@ export class TableWrapperComponent implements OnInit, OnChanges {
     if (this.tableData[0].position !== undefined) {
       this.tableData.forEach((data, i) => {
         data.position = i;
-        const originalData = this.data.find((element) => element.id === data.id);
+        const originalData = this.originalData.find((element) => element.id === data.id);
         if (originalData.position !== data.position) {
           this.updateList(data, 'add-or-update', 'changedData');
         }
@@ -282,7 +284,7 @@ export class TableWrapperComponent implements OnInit, OnChanges {
    * @param value
    */
   public onCellValueChange(elementId: string, col: TableColumn, value: any): void {
-    const originalData = this.data.find((element) => element.id === elementId);
+    const originalData = this.originalData.find((element) => element.id === elementId);
 
     let dataToUpdate: { [key: string]: any; } = { id: elementId };
     if ((col.inputType === 'number' || typeof originalData[col.field] === 'number') && originalData[col.field] !== +value) {
@@ -347,18 +349,20 @@ export class TableWrapperComponent implements OnInit, OnChanges {
   public onClosePickListOverlayPanel(op: OverlayPanel, rowData: any, col: TableColumn, value?: any[]): void {
     op.hide();
 
-    if (!value || !col.pickListWrapperOptions || !col.pickListWrapperOptions.propertyToDisplay) {
+    if (!value || !col.pickListWrapperOptions) {
       return;
     }
 
     rowData[col.field] = value;
 
-    const originalValue: any[] = this.data.find((element) => element.id === rowData.id)[col.field];
+    const originalValue: any[] = this.originalData.find((element) => element.id === rowData.id)[col.field];
     const propertyToDisplay = col.pickListWrapperOptions.propertyToDisplay;
     const comparableOriginalValue = UtilsService.convertSortedStringListToString(
-      originalValue.map((v) => v[propertyToDisplay]),
+      originalValue.map((v) => propertyToDisplay ? v[propertyToDisplay] : v),
     );
-    const comparableValue = UtilsService.convertSortedStringListToString(value.map((v) => v[propertyToDisplay]));
+    const comparableValue = UtilsService.convertSortedStringListToString(
+      value.map((v) => propertyToDisplay ? v[propertyToDisplay] : v),
+    );
 
     let dataToUpdate: { [key: string]: any; } = { id: rowData.id };
     if (comparableOriginalValue !== comparableValue) {
@@ -382,9 +386,9 @@ export class TableWrapperComponent implements OnInit, OnChanges {
       this.isLoading = true;
 
       let adaptedData: any[] = [];
-      if (this.queryAdapter) {
+      if (this.dataAdapter) {
         // @ts-ignore
-        adaptedData = this.changedData.map((eachData) => this.queryAdapter(eachData));
+        adaptedData = this.changedData.map((eachData) => this.dataAdapter(eachData));
       }
 
       const response: any = await lastValueFrom(this.crudService.put<any[]>(this.crudEndPoint + '/many', {
@@ -406,7 +410,7 @@ export class TableWrapperComponent implements OnInit, OnChanges {
 
       this.changedData = [];
       this.tableData = await this.loadData<any[]>(this.crudEndPoint, []);
-      this.data = this.tableData.map((value: any) => ({ ...value }));
+      this.originalData = this.tableData.map((value: any) => ({ ...value }));
 
     } catch (e: any) {
       console.debug(e);
@@ -433,7 +437,7 @@ export class TableWrapperComponent implements OnInit, OnChanges {
 
     const pipe = new FormatValueDisplayPipe();
     table.exportFunction = (col: { field: string; data: any; }) => {
-      return pipe.transform(col.data, col.field);
+      return pipe.transform(col.data, col.field, false);
     };
 
     table.columns = this.columnList.filter((col) => col.exportable);
@@ -447,7 +451,7 @@ export class TableWrapperComponent implements OnInit, OnChanges {
    * resetTableChanges
    */
   public resetTableChanges(): void {
-    this.tableData = this.data.map((value: any) => ({ ...value }));
+    this.tableData = this.originalData.map((value: any) => ({ ...value }));
     this.changedData = [];
     this.emitChanges([]);
   }
@@ -479,22 +483,39 @@ export class TableWrapperComponent implements OnInit, OnChanges {
    * @private
    */
   private initializeTableOptions(column: TableColumn): void {
-    this.hasExportableData = !!column.exportable && !this.hasExportableData;
+    this.initializeDefaultSortField(column);
+    this.initializeGlobalFilter(column);
+    this.initializePickList(column);
+  }
 
+  private initializeDefaultSortField(column: TableColumn): void {
     if (column.sortField && !this.sortField) {
       this.sortField = column.field;
       this.sortOrder = column.sortOrder || 1;
       this.sortMode = column.sortMode || 'single';
     }
+  }
 
+  private initializeGlobalFilter(column: TableColumn): void {
     if (column.globalFilterField) {
       this.globalFilterFields.push(column.field);
     }
+  }
 
+  private initializePickList(column: TableColumn): void {
     if (column.pickListWrapperOptions && column.pickListWrapperOptions.sourceListEndPoint) {
       const pickListWrapperOptions = column.pickListWrapperOptions;
       this.loadData<any[]>(column.pickListWrapperOptions.sourceListEndPoint, []).then((list) => {
-        pickListWrapperOptions.sourceList = list || [];
+        if (!list || list.length === 0) {
+          return;
+        }
+
+        if (pickListWrapperOptions.sourceAdapter) {
+          // @ts-ignore
+          pickListWrapperOptions.sourceList = list.map((data) => pickListWrapperOptions.sourceAdapter(data));
+        } else {
+          pickListWrapperOptions.sourceList = list;
+        }
       });
     }
   }
@@ -551,7 +572,7 @@ export class TableWrapperComponent implements OnInit, OnChanges {
       severity,
       summary: SEVERITY_MESSAGE_SUMMARY[severity],
       detail: message,
-      // life: 3000,
+      life: 3000,
     });
   }
 

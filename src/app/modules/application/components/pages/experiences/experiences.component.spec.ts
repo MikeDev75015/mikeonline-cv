@@ -1,10 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MockComponent } from 'ng2-mock-component';
 import { lastValueFrom, of } from 'rxjs';
-import { sortedExperienceListMock, unsortedExperienceListMock } from '../../../../../__mocks__/data/experience-list.mock';
-import { dataServiceMock } from '../../../../../__mocks__/services/data-service.mock';
-import { DataService } from '../../../../../shared/services/data/data.service';
-import { UtilsService } from '../../../../../shared/shared-index';
+import { dataServiceMock } from '../../../../../../../__mocks__/services/data-service.mock';
+import {
+  sortedExperienceListMock,
+  unsortedExperienceListMock,
+} from '../../../../../../../__mocks__/v0/data/experience-list.mock';
+import { DataService, UtilsService } from '../../../../../shared';
 
 import { ExperiencesComponent } from './experiences.component';
 

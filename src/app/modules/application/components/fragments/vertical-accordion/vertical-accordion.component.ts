@@ -9,10 +9,9 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { IAnimationServiceResponse, IInterest } from '../../../../../core/core-index';
-import { AnimationsService } from '../../../../../core/services/animations/animations.service';
-import { UtilsService } from '../../../../../shared/services/utils/utils.service';
-import { IN_OUT_TEMPLATE_ANIMATION } from '../../../../../shared/shared-index';
+import { IInterest } from '../../../../../core';
+import { IAnimationServiceResponse, IN_OUT_TEMPLATE_ANIMATION, UtilsService } from '../../../../../shared';
+import { AnimationsService } from '../../../../../shared/services/animations/animations.service';
 
 const getMinWidthByWindowInnerWidth = (): '100px' | '50px' => {
   return window.innerWidth > 840 ? '100px' : '50px';

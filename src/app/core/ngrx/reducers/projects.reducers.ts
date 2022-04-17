@@ -1,6 +1,6 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { Action, createReducer, on } from '@ngrx/store';
-import { IProject } from '../../interfaces/models/project.interface';
+import { IProject } from '../../interfaces/models/v0/project.interface';
 import * as ProjectsActions from '../actions/projects.actions';
 
 /**

@@ -1,9 +1,8 @@
 import { AfterViewChecked, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { IAnimationServiceResponse } from '../../../../../../core/core-index';
-import { IInterest } from '../../../../../../core/interfaces/models/interest.interface';
-import { AnimationsService } from '../../../../../../core/services/animations/animations.service';
-import { IN_OUT_TEMPLATE_ANIMATION } from '../../../../../../shared/shared-index';
+import { IInterest } from '../../../../../../core';
+import { IAnimationServiceResponse, IN_OUT_TEMPLATE_ANIMATION } from '../../../../../../shared';
+import { AnimationsService } from '../../../../../../shared/services/animations/animations.service';
 
 @Component({
   selector: 'app-vertical-accordion-item',

@@ -1,6 +1,6 @@
 import { Action, createReducer, on } from '@ngrx/store';
-import { IContact } from '../../interfaces/contact.interface';
-import { IImage } from '../../interfaces/image.interface';
+import { IContact } from '../../interfaces/models/commons/contact.interface';
+import { IImage } from '../../interfaces/models/commons/image.interface';
 import * as CvInfosActions from '../actions/cv-infos.actions';
 
 export interface CvInfosState {

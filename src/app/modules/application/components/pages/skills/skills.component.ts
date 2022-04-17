@@ -1,7 +1,6 @@
 import { AfterViewChecked, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, of, tap } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { partialIsoDatePattern } from '../../../../../core/constants/patterns.constant';
 import {
   EXPERTISE_LEVEL_LABEL,
   IExperience,
@@ -11,7 +10,8 @@ import {
   ITag,
   PRIORITY_LABEL,
   WorldCloudOptions,
-} from '../../../../../core/core-index';
+} from '../../../../../core';
+import { partialIsoDatePattern } from '../../../../../core/constants/patterns.constant';
 import {
   selectAllCompetences,
   selectCompetencesLoaded,
@@ -21,7 +21,7 @@ import { selectAllFormations } from '../../../../../core/ngrx/selectors/formatio
 import { selectAllProjects } from '../../../../../core/ngrx/selectors/projects.selectors';
 import { selectAllTags } from '../../../../../core/ngrx/selectors/tags.selectors';
 import { DayJsService } from '../../../../../core/services/dayjs/dayjs.service';
-import { DataService, UtilsService } from '../../../../../shared/shared-index';
+import { DataService, UtilsService } from '../../../../../shared';
 
 /**
  * Allows to use WordCloud js library

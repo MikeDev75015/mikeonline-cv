@@ -14,7 +14,7 @@
   >
     <ng-template let-item pTemplate="item">
       <div class="fbc w100 pick-list-item-wrapped">
-        <span>{{ item[propertyToDisplay] }}</span>
+        <span>{{ propertyToDisplay ? item[propertyToDisplay] : item }}</span>
       </div>
     </ng-template>
   </p-pickList>

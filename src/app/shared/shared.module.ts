@@ -24,7 +24,7 @@ import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 import {
   DynamicComponentLoaderDirective,
-} from '../core/directives/dynamic-component-loader/dynamic-component-loader.directive';
+} from './directives/dynamic-component-loader/dynamic-component-loader.directive';
 import { DateFormatPipe } from './pipes/date-format.pipe';
 
 const primeNgModules: any[] = [

@@ -1,6 +1,6 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { Action, createReducer, on } from '@ngrx/store';
-import { ITag } from '../../interfaces/models/tag.interface';
+import { ITag } from '../../interfaces/models/v0/tag.interface';
 import * as TagsActions from '../actions/tags.actions';
 
 /**

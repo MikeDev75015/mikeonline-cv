@@ -4,9 +4,9 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MockComponent } from 'ng2-mock-component';
 import { lastValueFrom, of } from 'rxjs';
-import { changeDetectorRefMock } from '../../../../../__mocks__/services/change-detector-ref.mock';
-import { dataServiceMock } from '../../../../../__mocks__/services/data-service.mock';
-import { DataService } from '../../../../../shared/shared-index';
+import { changeDetectorRefMock } from '../../../../../../../__mocks__/services/change-detector-ref.mock';
+import { dataServiceMock } from '../../../../../../../__mocks__/services/data-service.mock';
+import { DataService } from '../../../../../shared';
 
 import { InterestsComponent } from './interests.component';
 

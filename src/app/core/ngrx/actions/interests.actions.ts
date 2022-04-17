@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { IInterest } from '../../interfaces/models/interest.interface';
+import { IInterest } from '../../interfaces/models/v0/interest.interface';
 
 /**
  * Fetch Interests

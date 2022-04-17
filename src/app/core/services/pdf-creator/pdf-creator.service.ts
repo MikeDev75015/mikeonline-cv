@@ -1,14 +1,14 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 import * as pdfMake from 'pdfmake/build/pdfmake';
-import { UtilsService } from '../../../shared/services/utils/utils.service';
-import { PdfDefinition } from '../../classes/pdf-definition.class';
+import { UtilsService } from '../../../shared';
 import { PDF_CV_CREDITS, PDF_DEFAULT_FOOTER, PDF_DEFAULT_HEADER } from '../../constants/pdf.constant';
-import { ICvInfos } from '../../interfaces/models/cv-infos.interface';
-import { IExperience } from '../../interfaces/models/experience.interface';
-import { IFormation } from '../../interfaces/models/formation.interface';
-import { IInterest } from '../../interfaces/models/interest.interface';
-import { IProject } from '../../interfaces/models/project.interface';
+import { ICvInfos } from '../../interfaces/models/v0/cv-infos.interface';
+import { IExperience } from '../../interfaces/models/v0/experience.interface';
+import { IFormation } from '../../interfaces/models/v0/formation.interface';
+import { IInterest } from '../../interfaces/models/v0/interest.interface';
+import { IProject } from '../../interfaces/models/v0/project.interface';
 import { DayJsService } from '../dayjs/dayjs.service';
+import { PdfDefinition } from './classes/pdf-definition.class';
 
 export interface IPdfColumn {
   width: string | number; // '*', 'auto', '%' or numeric value

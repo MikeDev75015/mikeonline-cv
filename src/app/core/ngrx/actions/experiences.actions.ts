@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { IExperience } from '../../interfaces/models/experience.interface';
+import { IExperience } from '../../interfaces/models/v0/experience.interface';
 
 /**
  * Fetch Experiences

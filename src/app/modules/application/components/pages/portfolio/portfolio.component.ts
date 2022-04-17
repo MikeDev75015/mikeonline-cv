@@ -2,9 +2,9 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { Component, OnInit } from '@angular/core';
 import { Observable, of, tap } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { IProject, ITag } from '../../../../../core/core-index';
+import { IProject, ITag } from '../../../../../core';
 import { selectAllProjects, selectProjectsLoaded } from '../../../../../core/ngrx/selectors/projects.selectors';
-import { DataService, UtilsService } from '../../../../../shared/shared-index';
+import { DataService, UtilsService } from '../../../../../shared';
 
 /**
  * The component of the portfolio page.

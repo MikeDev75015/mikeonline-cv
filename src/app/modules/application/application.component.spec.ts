@@ -4,16 +4,15 @@ import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 import { MockComponent } from 'ng2-mock-component';
 import { of } from 'rxjs';
-import { animationServiceMock } from '../../__mocks__/services/animation-service.mock';
-import { contactOpenCloseServiceMock } from '../../__mocks__/services/contact-open-close-service.mock';
-import { dataServiceMock } from '../../__mocks__/services/data-service.mock';
-import { storeMock } from '../../__mocks__/services/store.mock';
-import { utilsServiceMock } from '../../__mocks__/services/utils-service.mock';
+import { animationServiceMock } from '../../../../__mocks__/services/animation-service.mock';
+import { contactOpenCloseServiceMock } from '../../../../__mocks__/services/contact-open-close-service.mock';
+import { dataServiceMock } from '../../../../__mocks__/services/data-service.mock';
+import { storeMock } from '../../../../__mocks__/services/store.mock';
+import { utilsServiceMock } from '../../../../__mocks__/services/utils-service.mock';
 import * as ApplicationActions from '../../core/ngrx/actions/application.actions';
-import { AnimationsService } from '../../core/services/animations/animations.service';
 import { ContactOpenCloseService } from '../../core/services/contact-open-close/contact-open-close.service';
-import { DataService } from '../../shared/services/data/data.service';
-import { UtilsService } from '../../shared/services/utils/utils.service';
+import { DataService, UtilsService } from '../../shared';
+import { AnimationsService } from '../../shared/services/animations/animations.service';
 
 import { ApplicationComponent } from './application.component';
 

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IExperience } from '../../../core/interfaces/models/experience.interface';
-import { IFormation } from '../../../core/interfaces/models/formation.interface';
+import { IExperience, IFormation } from '../../../core';
 
 @Injectable({
   providedIn: 'root',

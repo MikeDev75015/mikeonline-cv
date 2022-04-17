@@ -1,6 +1,6 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import { AlertModule } from '../../../../../core/core-index';
-import { DataService } from '../../../../../shared/services/data/data.service';
+import { AlertModule } from '../../../../../core';
+import { DataService } from '../../../../../shared';
 
 import {VerticalAccordionComponent} from './vertical-accordion.component';
 import {MockComponent} from 'ng2-mock-component';

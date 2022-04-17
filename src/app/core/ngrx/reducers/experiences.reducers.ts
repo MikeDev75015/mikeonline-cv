@@ -1,6 +1,6 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { Action, createReducer, on } from '@ngrx/store';
-import { IExperience } from '../../interfaces/models/experience.interface';
+import { IExperience } from '../../interfaces/models/v0/experience.interface';
 import * as ExperiencesActions from '../actions/experiences.actions';
 
 /**
