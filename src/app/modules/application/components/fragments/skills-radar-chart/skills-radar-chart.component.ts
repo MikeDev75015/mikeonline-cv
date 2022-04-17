@@ -1,11 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { IExperience, IFormation, IProject, ISkill } from '../../../../../core';
+import { ExperienceV1 } from '../../../../../core/interfaces/models/v1/experience.interface';
+import { FormationV1 } from '../../../../../core/interfaces/models/v1/formation.interface';
+import { ProjectV1 } from '../../../../../core/interfaces/models/v1/project.interface';
+import { SkillV1 } from '../../../../../core/interfaces/models/v1/skill.interface';
 import { selectAllCompetences } from '../../../../../core/ngrx/selectors/competences.selectors';
 import { selectAllExperiences } from '../../../../../core/ngrx/selectors/experiences.selectors';
 import { selectAllFormations } from '../../../../../core/ngrx/selectors/formations.selectors';
 import { selectAllProjects } from '../../../../../core/ngrx/selectors/projects.selectors';
-import { UtilsService, DataService } from '../../../../../shared';
+import { DataService, UtilsService } from '../../../../../shared';
 import { RadarConfig } from './models/radar-config.interface';
 import { DataSets, RadarData } from './models/radar-data.interface';
 import { RadarConfigService } from './services/radar-config/radar-config.service';
@@ -164,18 +167,19 @@ export class SkillsRadarChartComponent implements OnInit, OnDestroy {
 
   private async initializeRadarData(): Promise<void> {
     const [skills, experiences, formations, projects] = await Promise.all([
-      this.dataService.getStoreData<ISkill[]>({ selector: selectAllCompetences, defaultValue: [] }),
-      this.dataService.getStoreData<IExperience[]>({ selector: selectAllExperiences, defaultValue: [] }),
-      this.dataService.getStoreData<IFormation[]>({ selector: selectAllFormations, defaultValue: [] }),
-      this.dataService.getStoreData<IProject[]>({ selector: selectAllProjects, defaultValue: [] }),
+      this.dataService.getStoreData<SkillV1[]>({ selector: selectAllCompetences, defaultValue: [] }),
+      this.dataService.getStoreData<ExperienceV1[]>({ selector: selectAllExperiences, defaultValue: [] }),
+      this.dataService.getStoreData<FormationV1[]>({ selector: selectAllFormations, defaultValue: [] }),
+      this.dataService.getStoreData<ProjectV1[]>({ selector: selectAllProjects, defaultValue: [] }),
     ]);
 
     let dataList = skills
       .filter((skill) => ['Angular', 'Nest.js', 'Node.js', 'MongoDb'].includes(skill.name))
       .map((skill) => {
-        const totalExperiences = experiences.filter((experience) => experience.tagIdList.includes(skill.tagIdList[0])).length;
-        const totalFormations = formations.filter((formation) => formation.tagIdList.includes(skill.tagIdList[0])).length;
-        const totalProjects = projects.filter((project) => project.tagIdList.includes(skill.tagIdList[0])).length;
+        const tagId = skill.tagList[0].id;
+        const totalExperiences = experiences.filter((experience) => experience.tagList.find((tag) => tag.id === tagId)).length;
+        const totalFormations = formations.filter((formation) => formation.tagList.find((tag) => tag.id === tagId)).length;
+        const totalProjects = projects.filter((project) => project.tagList.find((tag) => tag.id === tagId)).length;
 
         return {
           name: skill.name,

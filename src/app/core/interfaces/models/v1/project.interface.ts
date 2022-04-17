@@ -22,5 +22,5 @@ export interface ProjectV1 {
 
   detailList: IDetail[];
 
-  tagList?: TagV1[];
+  tagList: TagV1[];
 }

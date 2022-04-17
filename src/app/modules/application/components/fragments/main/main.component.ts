@@ -10,7 +10,7 @@ import { ExperiencesComponent } from '../../pages/experiences/experiences.compon
 import { FormationsComponent } from '../../pages/formations/formations.component';
 import { HomeComponent } from '../../pages/home/home.component';
 import { InterestsComponent } from '../../pages/interests/interests.component';
-import { PortfolioComponent } from '../../pages/portfolio/portfolio.component';
+import { ProjectsComponent } from '../../pages/projects/projects.component';
 import { SkillsComponent } from '../../pages/skills/skills.component';
 
 @Component({
@@ -58,7 +58,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
     SkillsComponent,
     ExperiencesComponent,
     FormationsComponent,
-    PortfolioComponent,
+    ProjectsComponent,
     InterestsComponent,
   ];
 

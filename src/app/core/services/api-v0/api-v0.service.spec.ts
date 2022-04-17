@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientService } from '../http-client/http-client.service';
 
-import { ApiV0Service } from './api-v0.service';
+import { ApiService } from './api.service';
 
 const httpClientServiceMock = { get: jest.fn() };
 
 describe('ApiV0Service', () => {
-  let service: ApiV0Service;
+  let service: ApiService;
   let httpClientServiceGetSpy: jest.SpyInstance<any, any>;
 
   beforeEach(async () => {
@@ -16,7 +16,7 @@ describe('ApiV0Service', () => {
       ]
     });
 
-    service = TestBed.inject(ApiV0Service);
+    service = TestBed.inject(ApiService);
 
     httpClientServiceGetSpy = jest.spyOn(httpClientServiceMock, 'get');
   });

@@ -6,17 +6,18 @@
 >
   <div class="fsc column w100" aria-labelledby="skills content">
     <div class="w90 fcc" id="wc_canvas" style="min-height: 200px; height: auto;"></div>
-    <p *ngIf="selectedKeyword || defaultText" style="margin-top: 50px !important;" class="fcc chip">{{ selectedKeyword || defaultText }}</p><br>
+    <p *ngIf="selectedKeyword || defaultText" class="fcc chip"
+       style="margin-top: 50px !important;">{{ selectedKeyword || defaultText }}</p><br>
 
-    <ng-container *ngIf="skillList">
-      <div *ngFor="let comp of skillList" class="fsc column w100 skill-details">
+    <ng-container *ngIf="knobSkillList">
+      <div *ngFor="let knobSkill of knobSkillList" class="fsc column w100 skill-details">
         <div class="fce w100">
 
           <div class="fcc column" title="Années d'expérience">
             <p-knob
-              [(ngModel)]="comp.experienceYears.value <= 0 ? 0.5 : comp.experienceYears.value"
-              [max]="comp.experienceYears.value <= 5 ? 5 : comp.experienceYears.value"
-              [min]="0" [size]="125" [valueTemplate]="comp.experienceYears.text"
+              [(ngModel)]="knobSkill.experienceYears.value <= 0 ? 0.5 : knobSkill.experienceYears.value"
+              [max]="knobSkill.experienceYears.value <= 5 ? 5 : knobSkill.experienceYears.value"
+              [min]="0" [size]="125" [valueTemplate]="knobSkill.experienceYears.text"
               rangeColor="#DDDDDD"
               [strokeWidth]="15"
               textColor="rgba(2, 72, 115, 0.7)"
@@ -27,9 +28,9 @@
 
           <div class="fcc column" title="Niveau d'expertise">
             <p-knob
-              [(ngModel)]="comp.expertiseLevel"
+              [(ngModel)]="knobSkill.expertiseLevel"
               [max]="5"
-              [min]="0" [size]="150" [valueTemplate]="getExpertiseLevelLabel(comp.expertiseLevel)"
+              [min]="0" [size]="150" [valueTemplate]="getExpertiseLevelLabel(knobSkill.expertiseLevel)"
               rangeColor="#DDDDDD"
               [strokeWidth]="15"
               textColor="rgba(2, 72, 115, 0.7)"
@@ -40,9 +41,9 @@
 
           <div class="fcc column" title="Intérêt">
             <p-knob
-              [(ngModel)]="comp.priority"
+              [(ngModel)]="knobSkill.priority"
               [max]="3"
-              [min]="0" [size]="125" [valueTemplate]="getPriorityLabel(comp.priority)"
+              [min]="0" [size]="125" [valueTemplate]="getPriorityLabel(knobSkill.priority)"
               rangeColor="#DDDDDD"
               [strokeWidth]="15"
               textColor="rgba(2, 72, 115, 0.7)"
@@ -60,7 +61,7 @@
       *ngIf="
     (experienceList && experienceList.length) ||
     (formationList && formationList.length) ||
-    (portfolioList && portfolioList.length)
+    (projectItemList && projectItemList.length)
   ">
 
       <mat-expansion-panel
@@ -104,20 +105,20 @@
       </mat-expansion-panel>
 
       <mat-expansion-panel
-        *ngIf="portfolioList && portfolioList.length"
+        *ngIf="projectItemList && projectItemList.length"
         (opened)="projectsPanelOpenState = true"
         (closed)="projectsPanelOpenState = false">
         <mat-expansion-panel-header [ngClass]="{'closed-panel': !projectsPanelOpenState}">
           <mat-panel-title [ngStyle]="{'color': projectsPanelOpenState ? '#024873' : '#555'}">
-            {{ portfolioList.length + ' projet' + pluralize(portfolioList.length) +
-          ' réalisé' + pluralize(portfolioList.length) }}
+            {{ projectItemList.length + ' projet' + pluralize(projectItemList.length) +
+          ' réalisé' + pluralize(projectItemList.length) }}
           </mat-panel-title>
         </mat-expansion-panel-header>
         <div class="pf_flip w100 fcc">
           <app-project-item
-            *ngFor="let siteDemo of portfolioList"
+            *ngFor="let projectItem of projectItemList"
             class="app-portfolio-item"
-            [project]="siteDemo"
+            [project]="projectItem"
           ></app-project-item>
         </div>
       </mat-expansion-panel>

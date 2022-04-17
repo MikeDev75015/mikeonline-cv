@@ -4,8 +4,8 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { mergeMap, tap } from 'rxjs/operators';
-import { ApiV0Service, TagsService } from '../../../shared';
-import { IExperience } from '../../index';
+import { ApiService, TagsService } from '../../../shared';
+import { ExperienceV1 } from '../../interfaces/models/v1/experience.interface';
 import { ExperiencesActions } from '../ngrx-index';
 
 /**
@@ -18,21 +18,14 @@ export class ExperiencesEffects {
    */
   fetchExperiences$ = createEffect(() => this.actions$.pipe(
     ofType(ExperiencesActions.fetchExperiences),
-    mergeMap(() => this.apiV0Service.getData<IExperience[]>('experiences')),
+    mergeMap(() => this.apiV0Service.getData<ExperienceV1[]>('experiences')),
     tap((experienceList) => {
       if (!experienceList || !experienceList.length) {
         this.store.dispatch(ExperiencesActions.fetchExperiencesFailure());
         return;
       }
 
-      this.tagsService.getAllTags().then((allTags) => {
-        this.store.dispatch(ExperiencesActions.fetchExperiencesSuccess({
-          experienceList: experienceList.map((experience) => ({
-            ...experience,
-            tagList: this.tagsService.getTagsByIds(experience.tagIdList, allTags),
-          })),
-        }));
-      });
+      this.store.dispatch(ExperiencesActions.fetchExperiencesSuccess({ experienceList }));
     }),
   ), { dispatch: false });
 
@@ -56,7 +49,7 @@ export class ExperiencesEffects {
   constructor(
     private readonly actions$: Actions,
     private readonly store: Store,
-    private readonly apiV0Service: ApiV0Service,
+    private readonly apiV0Service: ApiService,
     private readonly tagsService: TagsService,
   ) {
   }

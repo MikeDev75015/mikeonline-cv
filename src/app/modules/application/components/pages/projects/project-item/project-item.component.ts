@@ -1,19 +1,21 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { IProject } from '../../../../../../core';
 import { UtilsService } from '../../../../../../shared';
+import { ProjectItem } from '../../../../interfaces/project-item.interface';
 
 @Component({
   selector: 'app-project-item',
   templateUrl: './project-item.component.html',
-  styleUrls: ['./project-item.component.scss']
+  styleUrls: ['./project-item.component.scss'],
 })
 export class ProjectItemComponent implements OnInit, OnDestroy {
   mobileView = false;
-  @Input() project: IProject | undefined;
+
+  @Input() project: ProjectItem | undefined;
 
   constructor(
     private readonly utilsService: UtilsService,
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.mobileView = window.innerWidth <= 840;

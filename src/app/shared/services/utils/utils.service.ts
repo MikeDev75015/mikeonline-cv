@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { lastValueFrom } from 'rxjs';
 import { partialIsoDatePattern } from '../../../core/constants/patterns.constant';
-import { ITag } from '../../../core';
 import { IShareData } from '../../../core/interfaces/models/commons/share-data.interface';
+import { TagV1 } from '../../../core/interfaces/models/v1/tag.interface';
 import { AlertService } from '../../../core/modules/alert/services/alert.service';
 import { DayJsService } from '../../../core/services/dayjs/dayjs.service';
 import { ClipboardService } from '../clipboard/clipboard.service';
@@ -128,7 +128,7 @@ export class UtilsService {
     ? Math.round(+pixels.replace('px', ''))
     : +pixels.replace('px', '');
 
-  public initTechnoListWithTagList(tagList: ITag[], full = false): string[] {
+  public initTechnoListWithTagList(tagList: TagV1[], full = false): string[] {
     let technoList = tagList.map((tag) => tag.name);
 
     if (technoList.length > 6 && !full) {

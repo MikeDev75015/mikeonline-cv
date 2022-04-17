@@ -1,19 +1,19 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { Action, createReducer, on } from '@ngrx/store';
-import { IInterest } from '../../interfaces/models/v0/interest.interface';
+import { InterestV1 } from '../../interfaces/models/v1/interest.interface';
 import * as InterestsActions from '../actions/interests.actions';
 
 /**
  * Interests State
  */
-export interface InterestsState extends EntityState<IInterest> {
+export interface InterestsState extends EntityState<InterestV1> {
   loaded: boolean;
 }
 
 /**
  * Interests Adapter
  */
-export const adapter: EntityAdapter<IInterest> = createEntityAdapter<IInterest>();
+export const adapter: EntityAdapter<InterestV1> = createEntityAdapter<InterestV1>();
 
 /**
  * Interests Initial State

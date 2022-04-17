@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { lastValueFrom, take } from 'rxjs';
-import { ITag } from '../../../core';
+import { TagV1 } from '../../../core/interfaces/models/v1/tag.interface';
 import { selectAllTags } from '../../../core/ngrx/selectors/tags.selectors';
 
 @Injectable({
@@ -13,17 +13,17 @@ export class TagsService {
   ) {
   }
 
-  public async getAllTags(): Promise<ITag[]> {
+  public async getAllTags(): Promise<TagV1[]> {
     const allTags = await lastValueFrom(this.store.select(selectAllTags).pipe(take(1)), { defaultValue: [] });
     return allTags || [];
   }
 
-  public getTagsByIds(tagIdList: number[], allTags: ITag[]): ITag[] {
+  public getTagsByIds(tagIdList: string[], allTags: TagV1[]): TagV1[] {
     return tagIdList.map((tagId) => allTags.find((tag) => tag.id === tagId)).filter((tag, i) => {
       if (!tag) {
         console.warn(`Unknown tag id found: ${tagIdList[i]} at position ${i}.`);
       }
       return !!tag;
-    }) as ITag[];
+    }) as TagV1[];
   }
 }

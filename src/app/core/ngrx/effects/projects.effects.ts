@@ -4,8 +4,8 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { mergeMap, tap } from 'rxjs/operators';
-import { ApiV0Service, TagsService } from '../../../shared';
-import { IProject } from '../../index';
+import { ApiService, TagsService } from '../../../shared';
+import { ProjectV1 } from '../../interfaces/models/v1/project.interface';
 import { ProjectsActions } from '../ngrx-index';
 
 /**
@@ -18,21 +18,14 @@ export class ProjectsEffects {
    */
   fetchProjects$ = createEffect(() => this.actions$.pipe(
     ofType(ProjectsActions.fetchProjects),
-    mergeMap(() => this.apiV0Service.getData<IProject[]>('projects')),
+    mergeMap(() => this.apiV0Service.getData<ProjectV1[]>('projects')),
     tap((projectList) => {
       if (!projectList || !projectList.length) {
         this.store.dispatch(ProjectsActions.fetchProjectsFailure());
         return;
       }
 
-      this.tagsService.getAllTags().then((allTags) => {
-        this.store.dispatch(ProjectsActions.fetchProjectsSuccess({
-          projectList: projectList.map((project) => ({
-            ...project,
-            tagList: this.tagsService.getTagsByIds(project.tagIdList, allTags),
-          })),
-        }));
-      });
+      this.store.dispatch(ProjectsActions.fetchProjectsSuccess({ projectList }));
     }),
   ), { dispatch: false });
 
@@ -56,7 +49,7 @@ export class ProjectsEffects {
   constructor(
     private readonly actions$: Actions,
     private readonly store: Store,
-    private readonly apiV0Service: ApiV0Service,
+    private readonly apiV0Service: ApiService,
     private readonly tagsService: TagsService,
   ) {
   }

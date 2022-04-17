@@ -3,7 +3,7 @@ import { Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { IInterest } from '../../../../../core';
 import { selectAllInterests, selectInterestsLoaded } from '../../../../../core/ngrx/selectors/interests.selectors';
-import { DataService } from '../../../../../shared';
+import { DataService, UtilsService } from '../../../../../shared';
 
 /**
  * The component of the interests page.
@@ -42,10 +42,12 @@ export class InterestsComponent implements OnInit, AfterContentInit {
     this.isLoadingData$ = this.dataService.isDataLoaded(selectInterestsLoaded).pipe(
       tap(async (loaded) => {
         if (loaded) {
-          this.interestList = await this.dataService.getStoreData<IInterest[]>({
+          const unsortedList = await this.dataService.getStoreData<IInterest[]>({
             selector: selectAllInterests,
             defaultValue: [],
           });
+
+          this.interestList = UtilsService.sortObjectList<IInterest>(unsortedList, 'asc', 'position', 'number');
         }
       }),
       map((loaded) => !loaded),

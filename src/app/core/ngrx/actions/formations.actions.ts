@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { IFormation } from '../../interfaces/models/v0/formation.interface';
+import { FormationV1 } from '../../interfaces/models/v1/formation.interface';
 
 /**
  * Fetch Formations
@@ -15,5 +15,5 @@ export const fetchFormationsFailure = createAction('[Formations] Fetch Formation
  * Fetch Formations Success
  */
 export const fetchFormationsSuccess = createAction(
-  '[Formations] Fetch Formations Success', props<{ formationList: IFormation[] }>(),
+  '[Formations] Fetch Formations Success', props<{ formationList: FormationV1[] }>(),
 );

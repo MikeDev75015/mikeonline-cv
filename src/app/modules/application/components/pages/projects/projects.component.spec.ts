@@ -16,11 +16,11 @@ import {
 import { AlertModule, IProject } from '../../../../../core';
 import { DataService, UtilsService } from '../../../../../shared';
 
-import { PortfolioComponent } from './portfolio.component';
+import { ProjectsComponent } from './projects.component';
 
 describe('PortfolioComponent', () => {
-  let component: PortfolioComponent;
-  let fixture: ComponentFixture<PortfolioComponent>;
+  let component: ProjectsComponent;
+  let fixture: ComponentFixture<ProjectsComponent>;
   const isDataLoadedSpy = jest.spyOn(dataServiceMock, 'isDataLoaded');
   const getStoreDataSpy = jest.spyOn(dataServiceMock, 'getStoreData');
   const sortObjectListSpy = jest.spyOn(UtilsService, 'sortObjectList');
@@ -32,7 +32,7 @@ describe('PortfolioComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [
-        PortfolioComponent,
+        ProjectsComponent,
         MockComponent({
           selector: 'app-portfolio-item',
           inputs: ['siteDemo'],
@@ -56,7 +56,7 @@ describe('PortfolioComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PortfolioComponent);
+    fixture = TestBed.createComponent(ProjectsComponent);
     component = fixture.componentInstance;
   });
 

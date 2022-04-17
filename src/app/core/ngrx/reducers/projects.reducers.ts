@@ -1,19 +1,19 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { Action, createReducer, on } from '@ngrx/store';
-import { IProject } from '../../interfaces/models/v0/project.interface';
+import { ProjectV1 } from '../../interfaces/models/v1/project.interface';
 import * as ProjectsActions from '../actions/projects.actions';
 
 /**
  * Projects State
  */
-export interface ProjectsState extends EntityState<IProject> {
+export interface ProjectsState extends EntityState<ProjectV1> {
   loaded: boolean;
 }
 
 /**
  * Projects Adapter
  */
-export const adapter: EntityAdapter<IProject> = createEntityAdapter<IProject>();
+export const adapter: EntityAdapter<ProjectV1> = createEntityAdapter<ProjectV1>();
 
 /**
  * Projects Initial State

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { IFormation } from '../../../../../core';
+import { FormationV1 } from '../../../../../core/interfaces/models/v1/formation.interface';
 import { selectAllFormations, selectFormationsLoaded } from '../../../../../core/ngrx/selectors/formations.selectors';
 import { DataService, UtilsService } from '../../../../../shared';
 
@@ -21,7 +21,7 @@ export class FormationsComponent implements OnInit {
   /**
    * Contains the formations loaded.
    */
-  public formationList: any[] | undefined;
+  public formationList: FormationV1[] | undefined;
 
   /**
    * @ignore
@@ -41,13 +41,13 @@ export class FormationsComponent implements OnInit {
     this.isLoadingData$ = this.dataService.isDataLoaded(selectFormationsLoaded).pipe(
       tap(async (loaded) => {
         if (loaded) {
-          const unsortedList = await this.dataService.getStoreData<IFormation[]>({
+          const unsortedList = await this.dataService.getStoreData<FormationV1[]>({
             selector: selectAllFormations,
             defaultValue: [],
           });
 
-          this.formationList = UtilsService.sortObjectList<IFormation>(
-            UtilsService.addMissingEndDate<IFormation>(unsortedList),
+          this.formationList = UtilsService.sortObjectList<FormationV1>(
+            UtilsService.addMissingEndDate<FormationV1>(unsortedList),
             'desc', 'endDate', 'date',
           );
         }

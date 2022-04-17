@@ -45,8 +45,8 @@ import {
 import { FormationsComponent } from './components/pages/formations/formations.component';
 import { HomeComponent } from './components/pages/home/home.component';
 import { InterestsComponent } from './components/pages/interests/interests.component';
-import { ProjectItemComponent } from './components/pages/portfolio/portfolio-item/project-item.component';
-import { PortfolioComponent } from './components/pages/portfolio/portfolio.component';
+import { ProjectItemComponent } from './components/pages/projects/project-item/project-item.component';
+import { ProjectsComponent } from './components/pages/projects/projects.component';
 import { SkillsComponent } from './components/pages/skills/skills.component';
 import { PageLayoutComponent } from './layouts/page-layout/page-layout.component';
 
@@ -67,7 +67,7 @@ import { PageLayoutComponent } from './layouts/page-layout/page-layout.component
     SkillsComponent,
     ExperiencesComponent,
     FormationsComponent,
-    PortfolioComponent,
+    ProjectsComponent,
     InterestsComponent,
 
     ItemComponent,
@@ -109,7 +109,7 @@ import { PageLayoutComponent } from './layouts/page-layout/page-layout.component
     SkillsComponent,
     ExperiencesComponent,
     FormationsComponent,
-    PortfolioComponent,
+    ProjectsComponent,
     InterestsComponent,
   ],
 })

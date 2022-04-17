@@ -12,7 +12,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
 
   private handleResponseError(error: HttpErrorResponse) {
     if (!error || error.status === 0) {
-      console.warn('Serveur injoignable !');
+      console.debug('Serveur injoignable !');
       console.debug(error);
       return EMPTY;
     }

@@ -1,19 +1,19 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { Action, createReducer, on } from '@ngrx/store';
-import { IExperience } from '../../interfaces/models/v0/experience.interface';
+import { ExperienceV1 } from '../../interfaces/models/v1/experience.interface';
 import * as ExperiencesActions from '../actions/experiences.actions';
 
 /**
  * Experiences State
  */
-export interface ExperiencesState extends EntityState<IExperience> {
+export interface ExperiencesState extends EntityState<ExperienceV1> {
   loaded: boolean;
 }
 
 /**
  * Experiences Adapter
  */
-export const adapter: EntityAdapter<IExperience> = createEntityAdapter<IExperience>();
+export const adapter: EntityAdapter<ExperienceV1> = createEntityAdapter<ExperienceV1>();
 
 /**
  * Experiences Initial State

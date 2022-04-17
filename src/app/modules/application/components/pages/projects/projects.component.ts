@@ -2,16 +2,17 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { Component, OnInit } from '@angular/core';
 import { Observable, of, tap } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { IProject, ITag } from '../../../../../core';
+import { ProjectV1 } from '../../../../../core/interfaces/models/v1/project.interface';
 import { selectAllProjects, selectProjectsLoaded } from '../../../../../core/ngrx/selectors/projects.selectors';
 import { DataService, UtilsService } from '../../../../../shared';
+import { ProjectItem } from '../../../interfaces/project-item.interface';
 
 /**
  * The component of the portfolio page.
  */
 @Component({
-  selector: 'app-portfolio',
-  templateUrl: './portfolio.component.html',
+  selector: 'app-projects',
+  templateUrl: './projects.component.html',
   animations: [
     trigger('showHideBackgroundImage', [
       state('show', style({
@@ -29,7 +30,7 @@ import { DataService, UtilsService } from '../../../../../shared';
     ]),
   ],
 })
-export class PortfolioComponent implements OnInit {
+export class ProjectsComponent implements OnInit {
   /**
    * An observable allowing to initialize the page when data are loaded.
    */
@@ -38,7 +39,7 @@ export class PortfolioComponent implements OnInit {
   /**
    * Contains the projects loaded.
    */
-  public projectList: IProject[] = [];
+  public projectList: ProjectItem[] = [];
 
   /**
    * A boolean to start/stop animations that show/hide the background image of the project on hover.
@@ -82,17 +83,17 @@ export class PortfolioComponent implements OnInit {
     this.isLoadingData$ = this.dataService.isDataLoaded(selectProjectsLoaded).pipe(
       tap(async (loaded) => {
         if (loaded) {
-          const unsortedList = await this.dataService.getStoreData<IProject[]>({
+          const unsortedList = await this.dataService.getStoreData<ProjectV1[]>({
             selector: selectAllProjects,
             defaultValue: [],
           });
 
-          const listWithTechnoName: IProject[] = unsortedList.map(s => ({
+          const listWithTechnoName = unsortedList.map(s => ({
             ...s,
-            technoList: this.utilsService.initTechnoListWithTagList(s.tagList as ITag[]),
-          }));
+            technoList: this.utilsService.initTechnoListWithTagList(s.tagList),
+          }) as ProjectItem);
 
-          this.projectList = UtilsService.sortObjectList<IProject>(listWithTechnoName, 'asc', 'position', 'number');
+          this.projectList = UtilsService.sortObjectList<ProjectItem>(listWithTechnoName, 'asc', 'position', 'number');
         }
       }),
       map((loaded) => !loaded),
@@ -103,7 +104,7 @@ export class PortfolioComponent implements OnInit {
    * Displays the project background image
    * @param project
    */
-  public onLoadBackgroundImage(project: IProject): void {
+  public onLoadBackgroundImage(project: ProjectV1): void {
     this.onRemoveBackgroundImage();
 
     this.timeoutCreated = setTimeout(() => {

@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { IInterest } from '../../interfaces/models/v0/interest.interface';
+import { InterestV1 } from '../../interfaces/models/v1/interest.interface';
 
 /**
  * Fetch Interests
@@ -15,5 +15,5 @@ export const fetchInterestsFailure = createAction('[Interests] Fetch Interests F
  * Fetch Interests Success
  */
 export const fetchInterestsSuccess = createAction(
-  '[Interests] Fetch Interests Success', props<{ interestList: IInterest[] }>(),
+  '[Interests] Fetch Interests Success', props<{ interestList: InterestV1[] }>(),
 );

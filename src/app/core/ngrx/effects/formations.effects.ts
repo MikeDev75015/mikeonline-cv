@@ -4,8 +4,8 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { mergeMap, tap } from 'rxjs/operators';
-import { ApiV0Service, TagsService } from '../../../shared';
-import { IFormation } from '../../index';
+import { ApiService, TagsService } from '../../../shared';
+import { FormationV1 } from '../../interfaces/models/v1/formation.interface';
 import { FormationsActions } from '../ngrx-index';
 
 /**
@@ -18,23 +18,14 @@ export class FormationsEffects {
    */
   fetchFormations$ = createEffect(() => this.actions$.pipe(
     ofType(FormationsActions.fetchFormations),
-    mergeMap(() => this.apiV0Service.getData<IFormation[]>('formations')),
+    mergeMap(() => this.apiV0Service.getData<FormationV1[]>('formations')),
     tap((formationList) => {
       if (!formationList || !formationList.length) {
         this.store.dispatch(FormationsActions.fetchFormationsFailure());
         return;
       }
 
-      this.tagsService.getAllTags().then((allTags) => {
-        const listWithTags = formationList.map((formation) => ({
-          ...formation,
-          tagList: this.tagsService.getTagsByIds(formation.tagIdList, allTags),
-        }));
-
-        this.store.dispatch(FormationsActions.fetchFormationsSuccess({
-          formationList: listWithTags,
-        }));
-      });
+      this.store.dispatch(FormationsActions.fetchFormationsSuccess({ formationList }));
     }),
   ), { dispatch: false });
 
@@ -58,7 +49,7 @@ export class FormationsEffects {
   constructor(
     private readonly actions$: Actions,
     private readonly store: Store,
-    private readonly apiV0Service: ApiV0Service,
+    private readonly apiV0Service: ApiService,
     private readonly tagsService: TagsService,
   ) {
   }

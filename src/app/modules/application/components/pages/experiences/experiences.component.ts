@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { IExperience } from '../../../../../core';
+import { ExperienceV1 } from '../../../../../core/interfaces/models/v1/experience.interface';
 import {
   selectAllExperiences,
   selectExperiencesLoaded,
@@ -24,7 +24,7 @@ export class ExperiencesComponent implements OnInit {
   /**
    * Contains the experiences loaded.
    */
-  public experienceList: IExperience[] | undefined;
+  public experienceList: ExperienceV1[] | undefined;
 
   /**
    * @ignore
@@ -43,11 +43,11 @@ export class ExperiencesComponent implements OnInit {
     this.isLoadingData$ = this.dataService.isDataLoaded(selectExperiencesLoaded).pipe(
       tap(async (loaded) => {
         if (loaded) {
-          const unsortedList = await this.dataService.getStoreData<IExperience[]>({
+          const unsortedList = await this.dataService.getStoreData<ExperienceV1[]>({
             selector: selectAllExperiences, defaultValue: [],
           });
 
-          this.experienceList = UtilsService.sortObjectList<IExperience>(
+          this.experienceList = UtilsService.sortObjectList<ExperienceV1>(
             unsortedList, 'desc', 'beginDate', 'date',
           );
         }

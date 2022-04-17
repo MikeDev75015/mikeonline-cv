@@ -1,6 +1,10 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ICvInfos, IExperience, IFormation, IInterest, IProject, ITag } from '../../../../../../core';
+import { CvInfosV1 } from '../../../../../../core/interfaces/models/v1/cv-infos.interface';
+import { ExperienceV1 } from '../../../../../../core/interfaces/models/v1/experience.interface';
+import { FormationV1 } from '../../../../../../core/interfaces/models/v1/formation.interface';
+import { InterestV1 } from '../../../../../../core/interfaces/models/v1/interest.interface';
+import { ProjectV1 } from '../../../../../../core/interfaces/models/v1/project.interface';
 import { selectCvInfos } from '../../../../../../core/ngrx/selectors/cv-infos.selectors';
 import { selectAllExperiences } from '../../../../../../core/ngrx/selectors/experiences.selectors';
 import { selectAllFormations } from '../../../../../../core/ngrx/selectors/formations.selectors';
@@ -8,6 +12,7 @@ import { selectAllInterests } from '../../../../../../core/ngrx/selectors/intere
 import { selectAllProjects } from '../../../../../../core/ngrx/selectors/projects.selectors';
 import { PdfCreatorService } from '../../../../../../core/services/pdf-creator/pdf-creator.service';
 import { DataService, UtilsService } from '../../../../../../shared';
+import { ProjectItem } from '../../../../interfaces/project-item.interface';
 
 @Component({
   selector: 'app-left-footer',
@@ -35,13 +40,13 @@ export class LeftFooterComponent implements OnInit, OnDestroy {
     const cvInfos = await this.dataService.getStoreData({
       selector: selectCvInfos,
       defaultValue: undefined,
-    }) as ICvInfos;
+    }) as CvInfosV1;
 
     let
-      experiences: IExperience[] = [],
-      formations: IFormation[] = [],
-      projects: IProject[] = [],
-      interests: IInterest[] = [];
+      experiences: ExperienceV1[] = [],
+      formations: FormationV1[] = [],
+      projects: ProjectV1[] = [],
+      interests: InterestV1[] = [];
 
     const allList = await Promise.all([
       { list: experiences, selector: selectAllExperiences },
@@ -55,10 +60,10 @@ export class LeftFooterComponent implements OnInit, OnDestroy {
       });
     }));
 
-    experiences = allList[0] as IExperience[];
-    formations = allList[1] as IFormation[];
-    projects = UtilsService.sortObjectList<IProject>(allList[2] as IProject[], 'asc', 'position', 'number');
-    interests = allList[3] as IInterest[];
+    experiences = allList[0] as ExperienceV1[];
+    formations = allList[1] as FormationV1[];
+    projects = UtilsService.sortObjectList<ProjectV1>(allList[2] as ProjectV1[], 'asc', 'position', 'number');
+    interests = UtilsService.sortObjectList<InterestV1>(allList[3] as InterestV1[], 'asc', 'position', 'number');
 
     const summary = await this.dataService.getSummary();
 
@@ -74,8 +79,8 @@ export class LeftFooterComponent implements OnInit, OnDestroy {
         projectList: projects.map(
           proj => ({
             ...proj,
-            technoList: this.utilsService.initTechnoListWithTagList(proj.tagList as ITag[], true),
-          }),
+            technoList: this.utilsService.initTechnoListWithTagList(proj.tagList, true),
+          }) as ProjectItem,
         ),
         interestList: interests,
         competenceList: summary,
@@ -97,7 +102,7 @@ export class LeftFooterComponent implements OnInit, OnDestroy {
         }
 
         this.isLoadingData = false;
-      })
+      }),
     );
   }
 }

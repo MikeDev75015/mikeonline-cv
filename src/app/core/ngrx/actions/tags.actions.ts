@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { ITag } from '../../interfaces/models/v0/tag.interface';
+import { TagV1 } from '../../interfaces/models/v1/tag.interface';
 
 /**
  * Fetch Tags
@@ -15,5 +15,5 @@ export const fetchTagsFailure = createAction('[Tags] Fetch Tags Failure');
  * Fetch Tags Success
  */
 export const fetchTagsSuccess = createAction(
-  '[Tags] Fetch Tags Success', props<{ tagList: ITag[] }>(),
+  '[Tags] Fetch Tags Success', props<{ tagList: TagV1[] }>(),
 );

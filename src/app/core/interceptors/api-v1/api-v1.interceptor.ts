@@ -16,7 +16,7 @@ import { UserV1 } from '../../interfaces/models/v1/user.interface';
 @Injectable()
 export class ApiV1Interceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (request.url.includes('/v1/')) {
+    if (request.url.includes('/v1/login')) {
       if (request.method === 'GET' || request.url.includes('/login')) {
         const apiPath = request.url.split('/v1/')[1];
         return this.jsonFile(apiPath as ApiV1Path, request);

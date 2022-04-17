@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { ICvInfos } from '../../interfaces/models/v0/cv-infos.interface';
+import { CvInfosV1 } from '../../interfaces/models/v1/cv-infos.interface';
 
 /**
  * load CvInfo
@@ -14,4 +14,4 @@ export const loadCvInfosFailure = createAction('[CV Infos] Load CV Infos Failure
 /**
  * load CvInfo Success
  */
-export const loadCvInfosSuccess = createAction('[CV Infos] Load CV Infos Success', props<{ cvInfos: ICvInfos; }>());
+export const loadCvInfosSuccess = createAction('[CV Infos] Load CV Infos Success', props<{ cvInfos: CvInfosV1; }>());

@@ -4,8 +4,8 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { map, mergeMap, tap } from 'rxjs/operators';
-import { ApiV0Service } from '../../../shared';
-import { IInterest } from '../../index';
+import { ApiService } from '../../../shared';
+import { InterestV1 } from '../../interfaces/models/v1/interest.interface';
 import { InterestsActions } from '../ngrx-index';
 
 /**
@@ -18,7 +18,7 @@ export class InterestsEffects {
    */
   fetchInterests$ = createEffect(() => this.actions$.pipe(
     ofType(InterestsActions.fetchInterests),
-    mergeMap(() => this.apiV0Service.getData<IInterest[]>('interests')),
+    mergeMap(() => this.apiV0Service.getData<InterestV1[]>('interests')),
     map((interestList) => {
       if (!interestList || !interestList.length) {
         return InterestsActions.fetchInterestsFailure();
@@ -47,7 +47,7 @@ export class InterestsEffects {
   constructor(
     private readonly actions$: Actions,
     private readonly store: Store,
-    private readonly apiV0Service: ApiV0Service,
+    private readonly apiV0Service: ApiService,
   ) {
   }
 }

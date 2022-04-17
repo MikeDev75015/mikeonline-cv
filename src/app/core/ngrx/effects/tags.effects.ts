@@ -4,11 +4,16 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { map, mergeMap, tap } from 'rxjs/operators';
+import { ApiService } from '../../../shared';
+import { TagV1 } from '../../interfaces/models/v1/tag.interface';
 import {
-  CompetencesActions, InterestsActions, TagsActions, ExperiencesActions, FormationsActions, ProjectsActions,
+  CompetencesActions,
+  ExperiencesActions,
+  FormationsActions,
+  InterestsActions,
+  ProjectsActions,
+  TagsActions,
 } from '../ngrx-index';
-import { ITag } from '../../index';
-import { ApiV0Service } from '../../../shared';
 
 /**
  * Effects for tags actions
@@ -20,7 +25,7 @@ export class TagsEffects {
    */
   fetchTags$ = createEffect(() => this.actions$.pipe(
     ofType(TagsActions.fetchTags),
-    mergeMap(() => this.apiV0Service.getData<ITag[]>('tags')),
+    mergeMap(() => this.apiV0Service.getData<TagV1[]>('tags')),
     map((tagList) => {
       if (!tagList || !tagList.length) {
         return TagsActions.fetchTagsFailure();
@@ -63,7 +68,7 @@ export class TagsEffects {
   constructor(
     private readonly actions$: Actions,
     private readonly store: Store,
-    private readonly apiV0Service: ApiV0Service,
+    private readonly apiV0Service: ApiService,
   ) {
   }
 }

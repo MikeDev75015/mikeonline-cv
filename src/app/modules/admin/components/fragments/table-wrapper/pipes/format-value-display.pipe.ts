@@ -47,6 +47,8 @@ export class FormatValueDisplayPipe implements PipeTransform {
         return value ? 'Oui' : 'Non';
       case 'certificate':
         return value ? 'Oui' : 'Non';
+      case 'position':
+        return value + 1;
 
       default:
         return value;

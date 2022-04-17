@@ -1,19 +1,19 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { Action, createReducer, on } from '@ngrx/store';
-import { ITag } from '../../interfaces/models/v0/tag.interface';
+import { TagV1 } from '../../interfaces/models/v1/tag.interface';
 import * as TagsActions from '../actions/tags.actions';
 
 /**
  * Tags State
  */
-export interface TagsState extends EntityState<ITag> {
-  selectedTagId?: number;
+export interface TagsState extends EntityState<TagV1> {
+  selectedTagId?: string;
 }
 
 /**
  * Tags Adapter
  */
-export const adapter: EntityAdapter<ITag> = createEntityAdapter<ITag>();
+export const adapter: EntityAdapter<TagV1> = createEntityAdapter<TagV1>();
 
 /**
  * Tags Initial State

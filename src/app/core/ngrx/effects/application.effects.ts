@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { map, tap } from 'rxjs/operators';
-import { ApiV0Service } from '../../../shared';
+import { ApiService } from '../../../shared';
 import { ApplicationActions, CvInfosActions } from '../ngrx-index';
 
 /**
@@ -39,7 +39,7 @@ export class ApplicationEffects {
   constructor(
     private readonly actions$: Actions,
     private readonly store: Store,
-    private readonly apiV0Service: ApiV0Service,
+    private readonly apiV0Service: ApiService,
   ) {
   }
 }

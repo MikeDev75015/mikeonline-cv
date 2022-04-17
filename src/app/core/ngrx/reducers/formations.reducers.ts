@@ -1,19 +1,19 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { Action, createReducer, on } from '@ngrx/store';
-import { IFormation } from '../../interfaces/models/v0/formation.interface';
+import { FormationV1 } from '../../interfaces/models/v1/formation.interface';
 import * as FormationsActions from '../actions/formations.actions';
 
 /**
  * Formations State
  */
-export interface FormationsState extends EntityState<IFormation> {
+export interface FormationsState extends EntityState<FormationV1> {
   loaded: boolean;
 }
 
 /**
  * Formations Adapter
  */
-export const adapter: EntityAdapter<IFormation> = createEntityAdapter<IFormation>();
+export const adapter: EntityAdapter<FormationV1> = createEntityAdapter<FormationV1>();
 
 /**
  * Formations Initial State

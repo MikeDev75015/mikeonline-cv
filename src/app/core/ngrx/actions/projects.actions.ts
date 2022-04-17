@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { IProject } from '../../interfaces/models/v0/project.interface';
+import { ProjectV1 } from '../../interfaces/models/v1/project.interface';
 
 /**
  * Fetch Projects
@@ -15,5 +15,5 @@ export const fetchProjectsFailure = createAction('[Projects] Fetch Projects Fail
  * Fetch Projects Success
  */
 export const fetchProjectsSuccess = createAction(
-  '[Projects] Fetch Projects Success', props<{ projectList: IProject[] }>(),
+  '[Projects] Fetch Projects Success', props<{ projectList: ProjectV1[] }>(),
 );

@@ -1,6 +1,7 @@
 import { AfterViewChecked, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { IExperience, IFormation } from '../../../../../core';
+import { ExperienceV1 } from '../../../../../core/interfaces/models/v1/experience.interface';
+import { FormationV1 } from '../../../../../core/interfaces/models/v1/formation.interface';
 import { IAnimationServiceResponse, IN_OUT_TEMPLATE_ANIMATION, UtilsService } from '../../../../../shared';
 import { AnimationsService } from '../../../../../shared/services/animations/animations.service';
 import { TemplatesService } from '../../../../../shared/services/templates/templates.service';
@@ -23,7 +24,7 @@ import { TemplatesService } from '../../../../../shared/services/templates/templ
   ],
 })
 export class ItemComponent implements OnInit, OnChanges, OnDestroy, AfterViewChecked {
-  @Input() itemData: IExperience | IFormation | undefined;
+  @Input() itemData: ExperienceV1 | FormationV1 | undefined;
 
   @Input() index = -1;
 

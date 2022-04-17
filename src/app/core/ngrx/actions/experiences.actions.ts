@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { IExperience } from '../../interfaces/models/v0/experience.interface';
+import { ExperienceV1 } from '../../interfaces/models/v1/experience.interface';
 
 /**
  * Fetch Experiences
@@ -15,5 +15,5 @@ export const fetchExperiencesFailure = createAction('[Experiences] Fetch Experie
  * Fetch Experiences Success
  */
 export const fetchExperiencesSuccess = createAction(
-  '[Experiences] Fetch Experiences Success', props<{ experienceList: IExperience[] }>(),
+  '[Experiences] Fetch Experiences Success', props<{ experienceList: ExperienceV1[] }>(),
 );
