@@ -1,4 +1,4 @@
-<div class="fbs w100">
+<div class="fbc w100 admin-layout-header">
   <p-tabMenu [model]="leftItems" styleClass="admin-tab-menu">
     <ng-template let-item pTemplate="item">
       <span *ngIf="item.label">{{ item.label }}</span>
@@ -10,7 +10,7 @@
     <div class="fcc">
       <span>Thème :</span>&nbsp;
       <app-dropdown-wrapper
-        (selectedValueChange)="onSelectedThemeChange()" [(selectedValue)]="selectedTheme"
+        (selectedValueChange)="onSelectedThemeChange($event)" [(selectedValue)]="selectedTheme"
         [inlineStyle]="{'margin-right': '10px'}"
         [scrollHeight]="'80vh'" [stringList]="themeList"
       ></app-dropdown-wrapper>

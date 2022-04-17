@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { MenuItem } from 'primeng/api';
 import { STORAGE_KEYS } from '../../../../core/constants/storage-keys.constant';
-import { IUser } from '../../../../core/interfaces/models/user.interface';
+import { UserV1 } from '../../../../core/interfaces/models/v1/user.interface';
 import { logoutUser } from '../../../../core/ngrx/actions/auth.actions';
 import { StorageService } from '../../../../core/services/storage/storage.service';
 import { ThemingService } from '../../../../core/services/theming/theming.service';
@@ -18,6 +18,7 @@ interface ExtendedMenuItem extends MenuItem {
 })
 export class AdminLayoutComponent implements OnInit {
   public readonly leftItems: ExtendedMenuItem[] = [
+    { label: 'Infos CV', routerLink: '/admin/cv-infos' },
     { label: 'Tags', routerLink: '/admin/tags' },
     { label: 'Skills', routerLink: '/admin/skills' },
     { label: 'Expériences', routerLink: '/admin/experiences' },
@@ -32,7 +33,7 @@ export class AdminLayoutComponent implements OnInit {
 
   public readonly themeList = this.themingService.getThemeList();
 
-  public currentUser: IUser | undefined;
+  public currentUser: UserV1 | undefined;
 
   public selectedTheme = '';
 
@@ -43,7 +44,7 @@ export class AdminLayoutComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const userSession = StorageService.getItem<IUser>('sessionStorage', STORAGE_KEYS['user']);
+    const userSession = StorageService.getItem<UserV1>('sessionStorage', STORAGE_KEYS['user']);
     if (!userSession) {
       return;
     }
@@ -53,7 +54,8 @@ export class AdminLayoutComponent implements OnInit {
     this.selectedTheme = this.themingService.getThemeName();
   }
 
-  public onSelectedThemeChange(): void {
+  public onSelectedThemeChange(selectedValue: any): void {
+    this.selectedTheme = selectedValue;
     this.themingService.setTheme(this.selectedTheme);
   }
 }

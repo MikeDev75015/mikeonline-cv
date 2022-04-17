@@ -14,6 +14,7 @@ import { InputWrapperComponent } from './components/fragments/input-wrapper/inpu
 import { PickListWrapperComponent } from './components/fragments/pick-list-wrapper/pick-list-wrapper.component';
 import { FormatValueDisplayPipe } from './components/fragments/table-wrapper/pipes/format-value-display.pipe';
 import { TableWrapperComponent } from './components/fragments/table-wrapper/table-wrapper.component';
+import { AdminCvInfosComponent } from './components/pages/admin-cv-infos/admin-cv-infos.component';
 import { AdminExperiencesComponent } from './components/pages/admin-experiences/admin-experiences.component';
 import { AdminFormationsComponent } from './components/pages/admin-formations/admin-formations.component';
 import { AdminInterestsComponent } from './components/pages/admin-interests/admin-interests.component';
@@ -49,6 +50,7 @@ const primeNgModule: any[] = [
     PickListWrapperComponent,
 
     FormatValueDisplayPipe,
+    AdminCvInfosComponent,
   ],
   imports: [
     CommonModule,

@@ -1,0 +1,32 @@
+.admin-layout-header {
+  z-index: 100000;
+  position: sticky;
+  top: 0;
+  background: var(--primary-color);
+  color: var(--primary-color-text);
+
+  .admin-tab-menu {
+    .p-tabmenu-nav {
+      background: var(--primary-color);
+      color: var(--primary-color-text);
+      border: none;
+    }
+
+    .p-menuitem-link.p-menuitem-link-active {
+      background: var(--primary-color-text) !important;
+      color: var(--primary-color) !important;
+      font-weight: 500 !important;
+    }
+
+    .p-menuitem-link {
+      background: var(--primary-color) !important;
+      color: var(--primary-color-text) !important;
+      font-weight: 500 !important;
+      display: flex;
+      align-content: center;
+      padding: 0 20px !important;
+      border: none !important;
+      height: 40px;
+    }
+  }
+}

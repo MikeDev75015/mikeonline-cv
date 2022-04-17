@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AdminCvInfosComponent } from './components/pages/admin-cv-infos/admin-cv-infos.component';
 import { AdminExperiencesComponent } from './components/pages/admin-experiences/admin-experiences.component';
 import { AdminFormationsComponent } from './components/pages/admin-formations/admin-formations.component';
 import { AdminInterestsComponent } from './components/pages/admin-interests/admin-interests.component';
@@ -22,8 +23,12 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'tags',
+        redirectTo: 'cv-infos',
         pathMatch: 'full',
+      },
+      {
+        path: 'cv-infos',
+        component: AdminCvInfosComponent,
       },
       {
         path: 'tags',
