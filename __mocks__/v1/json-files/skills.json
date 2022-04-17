@@ -1,0 +1,676 @@
+[
+  {
+    "id": "853XIdh3BVSXtr5qTvoG4",
+    "detailList": [],
+    "expertiseLevel": 3,
+    "name": "Event Sourcing",
+    "priority": 2,
+    "startDate": "2020-04",
+    "tagIdList": [
+      "0dRIQBoE5CYDQGtTY__qq"
+    ]
+  },
+  {
+    "id": "HKqHt4mDr_61I9RelYDSz",
+    "detailList": [],
+    "expertiseLevel": 3,
+    "name": "BitBucket",
+    "priority": 2,
+    "startDate": "2020-04",
+    "tagIdList": [
+      "T8al_OPSjfRa_LwXAoiwl"
+    ]
+  },
+  {
+    "id": "xuTgMxl9y4qZs4Tfw0Pfj",
+    "detailList": [],
+    "expertiseLevel": 3,
+    "name": "AWS Cloud",
+    "priority": 2,
+    "startDate": "2020-09",
+    "tagIdList": [
+      "6Po-kap13QMjJoIEpfAuZ"
+    ]
+  },
+  {
+    "id": "MYsT7wIFjOxVQErYuL5kK",
+    "detailList": [],
+    "expertiseLevel": 3,
+    "name": "Compodoc",
+    "priority": 3,
+    "startDate": "2020-07",
+    "tagIdList": [
+      "eYCNwDqOjHBTvSccK73ea"
+    ]
+  },
+  {
+    "id": "FsKkZqYFByWzo43fiZQfG",
+    "detailList": [],
+    "expertiseLevel": 3,
+    "name": "Angular Material",
+    "priority": 2,
+    "startDate": "2019-03",
+    "tagIdList": [
+      "afEJxrzj8c3z1FlMZrye1"
+    ]
+  },
+  {
+    "id": "IZmveHfuvkNx16CMhLhc_",
+    "detailList": [],
+    "expertiseLevel": 5,
+    "name": "JavaScript",
+    "priority": 3,
+    "startDate": "2003-01",
+    "tagIdList": [
+      "uxIRFWoVGW_nIl0IbLMkX"
+    ]
+  },
+  {
+    "id": "E2M8D8t0jH-Wl801Jij5x",
+    "detailList": [],
+    "expertiseLevel": 2,
+    "name": "Fastify",
+    "priority": 2,
+    "startDate": "2020-04",
+    "tagIdList": [
+      "FyNgc-wriez7RWC-GFfVs"
+    ]
+  },
+  {
+    "id": "ULsokejRjbGj1ffzMZxAK",
+    "detailList": [],
+    "expertiseLevel": 3,
+    "name": "GitHub",
+    "priority": 2,
+    "startDate": "2017-03",
+    "tagIdList": [
+      "tChxhze77h-SdFZdj6ucW"
+    ]
+  },
+  {
+    "id": "nt1f8nXnye3BBVyXHOddm",
+    "detailList": [],
+    "expertiseLevel": 4,
+    "name": "Socket.io",
+    "priority": 3,
+    "startDate": "2018-11",
+    "tagIdList": [
+      "y2ARakGdc9jkYM3JPSnTd"
+    ]
+  },
+  {
+    "id": "G4Cb7cv-YLYttn1XZcrah",
+    "detailList": [],
+    "expertiseLevel": 3,
+    "name": "Jwt",
+    "priority": 2,
+    "startDate": "2019-01",
+    "tagIdList": [
+      "QtfQ8MTA8tpU_uZd54Qoe"
+    ]
+  },
+  {
+    "id": "ScDzaNz8WRMwDVhNqhgT1",
+    "detailList": [],
+    "expertiseLevel": 4,
+    "name": "Flash Professional",
+    "priority": 1,
+    "startDate": "2003-01",
+    "tagIdList": [
+      "T5_8oZjJ5l1Ose1BAsbck"
+    ]
+  },
+  {
+    "id": "VJ7iR1vJ9H5veTzyrr_Aq",
+    "detailList": [],
+    "expertiseLevel": 3,
+    "name": "Microservices",
+    "priority": 2,
+    "startDate": "2020-04",
+    "tagIdList": [
+      "Il3KCkyWCZYZ1Eo_JjgxG"
+    ]
+  },
+  {
+    "id": "sDIVh7P_TBsctZEJwYiu1",
+    "detailList": [],
+    "expertiseLevel": 4,
+    "name": "Stuart",
+    "priority": 1,
+    "startDate": "2019-01",
+    "tagIdList": [
+      "Y_XMgb-rRdzgXv6lV4eus"
+    ]
+  },
+  {
+    "id": "YD4FBh31ayEmKN2ecfD7k",
+    "detailList": [],
+    "expertiseLevel": 4,
+    "name": "CircleCI",
+    "priority": 3,
+    "startDate": "2021-01",
+    "tagIdList": [
+      "qhJbDWvKyy8IcP2S8gBCY"
+    ]
+  },
+  {
+    "id": "gRxBhj7arf5Gk6rr5sBeX",
+    "detailList": [],
+    "expertiseLevel": 3,
+    "name": "FireBase",
+    "priority": 2,
+    "startDate": "2018-12",
+    "tagIdList": [
+      "3XiDX2mfE9FPgoUMlMQtc"
+    ]
+  },
+  {
+    "id": "GcVZfYBV99HkYRPoozrds",
+    "detailList": [],
+    "expertiseLevel": 3,
+    "name": "Pdf",
+    "priority": 1,
+    "startDate": "2021-02",
+    "tagIdList": [
+      "tRc1HIwkBiPGcv8DFJ3ti"
+    ]
+  },
+  {
+    "id": "r_9ahRROur3KWJfO2f8pD",
+    "detailList": [],
+    "expertiseLevel": 3,
+    "name": "Photoshop",
+    "priority": 1,
+    "startDate": "2003-01",
+    "tagIdList": [
+      "-WxV0W3g-56x0PPUv1sPT"
+    ]
+  },
+  {
+    "id": "3DcJnucBK-Ch_Gvv1NqnC",
+    "detailList": [],
+    "expertiseLevel": 4,
+    "name": "Jest",
+    "priority": 3,
+    "startDate": "2019-01",
+    "tagIdList": [
+      "S9iBwSuz4aIScFrIHllcG"
+    ]
+  },
+  {
+    "id": "yzZBpwARpbJeY4p3hqLQ0",
+    "detailList": [],
+    "expertiseLevel": 3,
+    "name": "Jira",
+    "priority": 2,
+    "startDate": "2020-04",
+    "tagIdList": [
+      "hWw7Lg0qMFGJtOuSySw5J"
+    ]
+  },
+  {
+    "id": "mswbqgbSMCda5z48L5KW1",
+    "detailList": [],
+    "expertiseLevel": 4,
+    "name": "Progressive Web App",
+    "priority": 3,
+    "startDate": "2020-01",
+    "tagIdList": [
+      "K1D0ftmMkLhFHgFuxfrRO"
+    ]
+  },
+  {
+    "id": "0JcLpywSteDT5_A-lbt7A",
+    "detailList": [],
+    "expertiseLevel": 4,
+    "name": "jQuery",
+    "priority": 1,
+    "startDate": "2016-09",
+    "tagIdList": [
+      "jldY670FZCPQWIE-8l0nl"
+    ]
+  },
+  {
+    "id": "wF2ww7ofZT6XpYoCQ5kub",
+    "detailList": [],
+    "expertiseLevel": 4,
+    "name": "DevOps",
+    "priority": 3,
+    "startDate": "2021-01",
+    "tagIdList": [
+      "W0_iTSYrm2kFsA2biEIm0"
+    ]
+  },
+  {
+    "id": "4UvNY6TwR4hYZKP8QcVGf",
+    "detailList": [],
+    "expertiseLevel": 4,
+    "name": "React.js",
+    "priority": 2,
+    "startDate": "2019-01",
+    "tagIdList": [
+      "RrE2mZ4pcm4ivslqmoURs"
+    ]
+  },
+  {
+    "id": "1KYrQR5ga5RrE0zi0iUM6",
+    "detailList": [],
+    "expertiseLevel": 2,
+    "name": "SASS",
+    "priority": 1,
+    "startDate": "2018-09",
+    "tagIdList": [
+      "s8JdQNU_bPMHPGcyYZLpB"
+    ]
+  },
+  {
+    "id": "4JQ1jxWd9atuUTomg_q_S",
+    "detailList": [],
+    "expertiseLevel": 4,
+    "name": "Express",
+    "priority": 2,
+    "startDate": "2019-01",
+    "tagIdList": [
+      "_yF6FaIz50KJDSh4ibKfb"
+    ]
+  },
+  {
+    "id": "C2GFIPacRtc07gj5HJZS6",
+    "detailList": [],
+    "expertiseLevel": 2,
+    "name": "PowerPoint",
+    "priority": 1,
+    "startDate": "2003-01",
+    "tagIdList": [
+      "P_TqPMNksRwhzx8OoeUzW"
+    ]
+  },
+  {
+    "id": "VgBTiwTCfQMZCqW9tcfo0",
+    "detailList": [],
+    "expertiseLevel": 3,
+    "name": "Heroku",
+    "priority": 2,
+    "startDate": "2018-12",
+    "tagIdList": [
+      "WOUidIPPOYgxvmy1qreQ6"
+    ]
+  },
+  {
+    "id": "qSxRBaAORFBdoOtp-ax-g",
+    "detailList": [],
+    "expertiseLevel": 4,
+    "name": "Html",
+    "priority": 1,
+    "startDate": "2003-01",
+    "tagIdList": [
+      "Bm7bNuBIXyCF_2RNa343d"
+    ]
+  },
+  {
+    "id": "WV5PcMczm9pDMTqsIwHqq",
+    "detailList": [],
+    "expertiseLevel": 4,
+    "name": "Node.js",
+    "priority": 3,
+    "startDate": "2018-11",
+    "tagIdList": [
+      "I36-2fMrisZv26RuVyuSq"
+    ]
+  },
+  {
+    "id": "DaT7OqTkF8qiztE2TFObp",
+    "detailList": [],
+    "expertiseLevel": 4,
+    "name": "Swagger",
+    "priority": 3,
+    "startDate": "2020-04",
+    "tagIdList": [
+      "B91swit472Gs06NXalvSS"
+    ]
+  },
+  {
+    "id": "wSbwsnWR256ctszngO_7p",
+    "detailList": [],
+    "expertiseLevel": 3,
+    "name": "Google Analytics",
+    "priority": 1,
+    "startDate": "2018-09",
+    "tagIdList": [
+      "uy2akkEHMhhB3hwYd0M0t"
+    ]
+  },
+  {
+    "id": "dGjN1leY4Ra23pjo7LX4z",
+    "detailList": [],
+    "expertiseLevel": 3,
+    "name": "Word",
+    "priority": 1,
+    "startDate": "2003-01",
+    "tagIdList": [
+      "ktShhKnIy4jNlyTdX-NlO"
+    ]
+  },
+  {
+    "id": "2mH23c9yl-Grls0F3UQaM",
+    "detailList": [],
+    "expertiseLevel": 4,
+    "name": "Angular",
+    "priority": 3,
+    "startDate": "2018-11",
+    "tagIdList": [
+      "0uwfbwoj7sNhLCGvLS4Uq",
+      "VEUVm1vODwwhG0BhomLHK",
+      "clk6mnDgBUxK92dSl6D_B",
+      "gH73FIaGoHjPwbdPrQ-2w"
+    ]
+  },
+  {
+    "id": "VCOOrYbisVXkxiD_2Xhll",
+    "detailList": [],
+    "expertiseLevel": 4,
+    "name": "MongoDb",
+    "priority": 3,
+    "startDate": "2018-11",
+    "tagIdList": [
+      "MFWCsn8JefDeDrDZI2yva"
+    ]
+  },
+  {
+    "id": "exT5RRXlwhHbCSy1uKTvG",
+    "detailList": [],
+    "expertiseLevel": 4,
+    "name": "Mongoose",
+    "priority": 3,
+    "startDate": "2019-01",
+    "tagIdList": [
+      "PXz6EHoyIbd7FylhD_-tD"
+    ]
+  },
+  {
+    "id": "A0JAtNW7pCBRNki--S8rN",
+    "detailList": [],
+    "expertiseLevel": 2,
+    "name": "Vue.js",
+    "priority": 2,
+    "startDate": "2021-01",
+    "tagIdList": [
+      "dl_tZzAIWjnL9gHKN5J0C"
+    ]
+  },
+  {
+    "id": "snxbirZP_W16cMaJqUufw",
+    "detailList": [],
+    "expertiseLevel": 4,
+    "name": "Netlify",
+    "priority": 2,
+    "startDate": "2019-01",
+    "tagIdList": [
+      "ii0LcCYwYAKZT84ohbUVH"
+    ]
+  },
+  {
+    "id": "ifZYs0CceLuF1xNni-Z1c",
+    "detailList": [],
+    "expertiseLevel": 2,
+    "name": "Vuex",
+    "priority": 2,
+    "startDate": "2021-01",
+    "tagIdList": [
+      "0I4E7pWn0lzbCal2VIA1e"
+    ]
+  },
+  {
+    "id": "ArM0KYNsiSfUYQvlqUJD8",
+    "detailList": [],
+    "expertiseLevel": 4,
+    "name": "Php",
+    "priority": 1,
+    "startDate": "2010-01",
+    "tagIdList": [
+      "Yg4lL0e8_ArSeYGEs7QCO"
+    ]
+  },
+  {
+    "id": "D2d5K39Jc4MI7B84Dk_OU",
+    "detailList": [],
+    "expertiseLevel": 4,
+    "name": "Stripe",
+    "priority": 1,
+    "startDate": "2019-01",
+    "tagIdList": [
+      "mkMXTwYybqeH0HAR0heTT"
+    ]
+  },
+  {
+    "id": "qAP3oPzkvoPHA7ybrKGxH",
+    "detailList": [],
+    "expertiseLevel": 4,
+    "name": "Css",
+    "priority": 2,
+    "startDate": "2011-02",
+    "tagIdList": [
+      "KCvpWBLkU0vIgTkL513Z6"
+    ]
+  },
+  {
+    "id": "DR-SoHb6n8Yxm95gnTDlW",
+    "detailList": [],
+    "expertiseLevel": 4,
+    "name": "Ionic 5",
+    "priority": 2,
+    "startDate": "2019-10",
+    "tagIdList": [
+      "nfmkqcssNugd7B38DfvHD"
+    ]
+  },
+  {
+    "id": "BATfliRSyt96JUv2tnXaz",
+    "detailList": [],
+    "expertiseLevel": 3,
+    "name": "i18n",
+    "priority": 2,
+    "startDate": "2020-04",
+    "tagIdList": [
+      "rO7K2GEdc3gkvmbociIbD"
+    ]
+  },
+  {
+    "id": "Te7VfqxiEPYQe0XfaO7y-",
+    "detailList": [],
+    "expertiseLevel": 3,
+    "name": "MySQL",
+    "priority": 1,
+    "startDate": "2010-01",
+    "tagIdList": [
+      "vDRuus3Uwug4FLFvq-ySk"
+    ]
+  },
+  {
+    "id": "YeVcGhM8tpovrQyuys0bW",
+    "detailList": [],
+    "expertiseLevel": 4,
+    "name": "NGRX",
+    "priority": 3,
+    "startDate": "2020-04",
+    "tagIdList": [
+      "SS2i3JJpp-GYDVUaG1d4F"
+    ]
+  },
+  {
+    "id": "x4pq6n3D5xgRuYJuyqZR3",
+    "detailList": [],
+    "expertiseLevel": 4,
+    "name": "Nest.js",
+    "priority": 3,
+    "startDate": "2020-04",
+    "tagIdList": [
+      "codpIY3PA9LDFxay8I6pa"
+    ]
+  },
+  {
+    "id": "PK81aq7pP3lEY0PJiZcoN",
+    "detailList": [],
+    "expertiseLevel": 3,
+    "name": "Pixel FB",
+    "priority": 1,
+    "startDate": "2019-01",
+    "tagIdList": [
+      "0bf06l5gLmnaj9yV7GT3-"
+    ]
+  },
+  {
+    "id": "zcBzDl6EYnCrYeV2QAxbJ",
+    "detailList": [],
+    "expertiseLevel": 2,
+    "name": "SEO",
+    "priority": 1,
+    "startDate": "2018-10",
+    "tagIdList": [
+      "X6N_xhU8l4o5gFQONqm6D"
+    ]
+  },
+  {
+    "id": "GLF6uk0NP8NTzGjDNJTzp",
+    "detailList": [],
+    "expertiseLevel": 4,
+    "name": "TypeScript",
+    "priority": 3,
+    "startDate": "2018-10",
+    "tagIdList": [
+      "dNTi9nyMs0yrp9-N9HxwJ"
+    ]
+  },
+  {
+    "id": "HeNpZbPBZTXDjv2dl4wEi",
+    "detailList": [],
+    "expertiseLevel": 4,
+    "name": "Css 3",
+    "priority": 3,
+    "startDate": "2014-01",
+    "tagIdList": [
+      "xsvZoMPuVoyxOvG6lGHXq"
+    ]
+  },
+  {
+    "id": "0BDnsJIVCGKS7RGH09ZRs",
+    "detailList": [],
+    "expertiseLevel": 3,
+    "name": "Deliver.ee",
+    "priority": 1,
+    "startDate": "2019-11",
+    "tagIdList": [
+      "hRT0CAesDa0X9hrB-Tkhk"
+    ]
+  },
+  {
+    "id": "M9T6Iy8SturjD54iDopDy",
+    "detailList": [],
+    "expertiseLevel": 4,
+    "name": "Google Tag Manager",
+    "priority": 1,
+    "startDate": "2018-09",
+    "tagIdList": [
+      "mZm6ksUgumkASzBo6QFai"
+    ]
+  },
+  {
+    "id": "0VWM1Si4ULKYCvBzWxmXw",
+    "detailList": [],
+    "expertiseLevel": 3,
+    "name": "Docker",
+    "priority": 3,
+    "startDate": "2021-01",
+    "tagIdList": [
+      "tIlNeP8LNExF6r2zYMT2y"
+    ]
+  },
+  {
+    "id": "pLWg0vTJxxX0ztkM71bsl",
+    "detailList": [],
+    "expertiseLevel": 1,
+    "name": "WordPress",
+    "priority": 1,
+    "startDate": "2017-11",
+    "tagIdList": [
+      "7xIcYp9myRANVSuNtRKPc"
+    ]
+  },
+  {
+    "id": "C_hunoxLsIGwQaW7lt_Rp",
+    "detailList": [],
+    "expertiseLevel": 3,
+    "name": "Bootstrap",
+    "priority": 1,
+    "startDate": "2018-10",
+    "tagIdList": [
+      "A70LbKGEHe7dMA9aHoqWi"
+    ]
+  },
+  {
+    "id": "KgAD9t4q3pWs95xDlVeLe",
+    "detailList": [],
+    "expertiseLevel": 3,
+    "name": "CQRS",
+    "priority": 2,
+    "startDate": "2020-04",
+    "tagIdList": [
+      "DQqWk5b5XdnFzb8LMxQVG"
+    ]
+  },
+  {
+    "id": "pgFymT-FiHx2CJNtQxppw",
+    "detailList": [],
+    "expertiseLevel": 2,
+    "name": "CALMS",
+    "priority": 1,
+    "startDate": "2021-01",
+    "tagIdList": [
+      "AZPxBPGNBr_G6899ysExf"
+    ]
+  },
+  {
+    "id": "eewec0xXQoFTWH0Q7p9S3",
+    "detailList": [],
+    "expertiseLevel": 4,
+    "name": "Html 5",
+    "priority": 2,
+    "startDate": "2016-02",
+    "tagIdList": [
+      "c65M5kAUL3MZFZGdGu5un"
+    ]
+  },
+  {
+    "id": "7NsZCV_S4dmvtt3f6RsDM",
+    "detailList": [],
+    "expertiseLevel": 3,
+    "name": "Trello",
+    "priority": 2,
+    "startDate": "2019-01",
+    "tagIdList": [
+      "pJhhDy6ewSE_8RlfxAUDJ"
+    ]
+  },
+  {
+    "id": "_bYyY-1NH_e0UT8ibVbmk",
+    "detailList": [],
+    "expertiseLevel": 3,
+    "name": "Pug",
+    "priority": 1,
+    "startDate": "2018-12",
+    "tagIdList": [
+      "vq2-dqUPtKSV9diRSk81i"
+    ]
+  },
+  {
+    "detailList": [],
+    "tagIdList": [
+      "0fHbbVVOkU1kTdv0HQIFM"
+    ],
+    "name": "Cypress",
+    "expertiseLevel": 3,
+    "priority": 3,
+    "startDate": "2021-05",
+    "id": "22TG4Sumq2N2tSj6D1n-a"
+  }
+]
