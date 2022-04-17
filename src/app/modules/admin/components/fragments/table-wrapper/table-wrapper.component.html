@@ -1,5 +1,5 @@
 <!--suppress ALL -->
-<p-toast key="tableToast" position="bottom-center"></p-toast>
+<p-toast key="tableToast" position="center"></p-toast>
 
 <div class="card">
   <p-toolbar styleClass="mb-4">
@@ -33,7 +33,7 @@
   </p-toolbar>
 
   <p-table
-    #wrappedTable (onRowReorder)="onRowsReorder()" [(selection)]="selectedTableData" [columns]="columnList"
+    #wrappedTable (onRowReorder)="onRowsReorder($event)" [(selection)]="selectedTableData" [columns]="columnList"
     [globalFilterFields]="globalFilterFields" [loading]="isLoading" [paginator]="!!rowsNumber"
     [resizableColumns]="false" [rowHover]="true" [sortField]="sortField" [sortMode]="sortMode"
     [rowsPerPageOptions]="[5, 10, 15, 25, 50, 100]" [rows]="rowsNumber || tableData.length"

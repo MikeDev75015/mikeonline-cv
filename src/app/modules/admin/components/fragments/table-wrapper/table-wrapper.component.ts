@@ -74,15 +74,22 @@ export class TableWrapperComponent implements OnInit, OnChanges {
 
   async ngOnInit(): Promise<void> {
     if (this.crudEndPoint) {
-      this.tableData = await this.loadData<any[]>(this.crudEndPoint, []);
-      this.originalData = this.tableData.map((value: any) => ({ ...value }));
+      try {
+        this.tableData = await this.loadData<any[]>(this.crudEndPoint, []);
+        this.originalData = this.tableData.map((value: any) => ({ ...value }));
 
-      if (this.tableData.length > 0) {
-        this.hasExportableData = this.columnList.filter((col) => col.exportable).length > 0;
+        if (this.tableData.length > 0) {
+          this.hasExportableData = this.columnList.filter((col) => col.exportable).length > 0;
 
-        this.columnList.forEach((column) => {
-          this.initializeTableOptions(column);
-        });
+          this.columnList.forEach((column) => {
+            this.initializeTableOptions(column);
+          });
+        }
+
+      } catch (e: any) {
+        if (e.name !== 'EmptyError') {
+          console.debug(e);
+        }
       }
     }
   }
@@ -265,16 +272,30 @@ export class TableWrapperComponent implements OnInit, OnChanges {
   /**
    * onRowsReorder
    */
-  public onRowsReorder(): void {
-    if (this.tableData[0].position !== undefined) {
-      this.tableData.forEach((data, i) => {
-        data.position = i;
-        const originalData = this.originalData.find((element) => element.id === data.id);
-        if (originalData.position !== data.position) {
-          this.updateList(data, 'add-or-update', 'changedData');
-        }
-      });
-    }
+  public onRowsReorder({ dragIndex, dropIndex }: { dragIndex: number; dropIndex: number; }): void {
+    const draggedElement = this.tableData[dragIndex];
+
+    this.tableData = this.tableData.map((data, i) => {
+      let elementToUpdate: any = {};
+
+      if (data.id === draggedElement.id) {
+        elementToUpdate['position'] = dropIndex;
+
+      } else if (i < dragIndex && i >= dropIndex) {
+        elementToUpdate['position'] = i + 1;
+
+      } else if (!data.position) {
+        elementToUpdate['position'] = i;
+
+      } else {
+        return data;
+      }
+
+      elementToUpdate['id'] = data.id;
+      this.updateList(elementToUpdate, 'add-or-update', 'changedData');
+      return Object.assign({}, data, elementToUpdate);
+    });
+    console.debug('changedData after:', this.changedData);
   }
 
   /**
@@ -516,6 +537,8 @@ export class TableWrapperComponent implements OnInit, OnChanges {
         } else {
           pickListWrapperOptions.sourceList = list;
         }
+      }).catch((error) => {
+        console.debug(error);
       });
     }
   }
