@@ -4,7 +4,7 @@ import { IImage } from '../commons/image.interface';
 export interface CvInfosV1 {
   id: string;
 
-  cvType: 'full-cv' | 'partial-cv';
+  cvType: CvType;
 
   fileName: string;
 
@@ -14,5 +14,7 @@ export interface CvInfosV1 {
 
   contact: IContact;
 
-  logo: IImage;
+  logo?: IImage;
 }
+
+export type CvType = 'full-cv' | 'partial-cv';

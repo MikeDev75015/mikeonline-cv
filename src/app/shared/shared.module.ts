@@ -14,6 +14,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { KnobModule } from 'primeng/knob';
 import { MenuModule } from 'primeng/menu';
+import { MultiSelectModule } from 'primeng/multiselect';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { PasswordModule } from 'primeng/password';
 import { PickListModule } from 'primeng/picklist';
@@ -22,6 +23,8 @@ import { ScrollTopModule } from 'primeng/scrolltop';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
+import { LoadingComponent } from '../core/directives/loading/component/loading.component';
+import { LoadingDirective } from '../core/directives/loading/loading.directive';
 import {
   DynamicComponentLoaderDirective,
 } from './directives/dynamic-component-loader/dynamic-component-loader.directive';

@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { ICvInfos } from '../../../../../core';
+import { CvInfosV1 } from '../../../../../core/interfaces/models/v1/cv-infos.interface';
 import { selectAppCvInfosLoaded } from '../../../../../core/ngrx/selectors/application.selectors';
 import { selectCvInfos } from '../../../../../core/ngrx/selectors/cv-infos.selectors';
 import { DataService } from '../../../../../shared';
@@ -74,7 +74,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.headerImage = HeaderComponent.autoChargeImg();
   }
 
-  private initializeComponent(cvInfos: ICvInfos): void {
+  private initializeComponent(cvInfos: CvInfosV1): void {
     this.title = cvInfos.title;
     this.subTitle = cvInfos.technoList?.join(' - ') || '';
   }
@@ -90,7 +90,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
           selector: selectCvInfos,
           defaultValue: undefined,
         }).then((cvInfos) => {
-          this.initializeComponent(cvInfos as ICvInfos);
+          if (!cvInfos) {
+            return;
+          }
+          this.initializeComponent(cvInfos);
         });
       }),
     );

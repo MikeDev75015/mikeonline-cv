@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { IInterest } from '../../../../../core';
+import { InterestV1 } from '../../../../../core/interfaces/models/v1/interest.interface';
 import { selectAllInterests, selectInterestsLoaded } from '../../../../../core/ngrx/selectors/interests.selectors';
 import { DataService, UtilsService } from '../../../../../shared';
 
@@ -22,7 +22,7 @@ export class InterestsComponent implements OnInit, AfterContentInit {
   /**
    * Contains the interests loaded.
    */
-  public interestList: IInterest[] | undefined;
+  public interestList: InterestV1[] | undefined;
 
   /**
    * @ignore
@@ -42,12 +42,12 @@ export class InterestsComponent implements OnInit, AfterContentInit {
     this.isLoadingData$ = this.dataService.isDataLoaded(selectInterestsLoaded).pipe(
       tap(async (loaded) => {
         if (loaded) {
-          const unsortedList = await this.dataService.getStoreData<IInterest[]>({
+          const unsortedList = await this.dataService.getStoreData<InterestV1[]>({
             selector: selectAllInterests,
             defaultValue: [],
           });
 
-          this.interestList = UtilsService.sortObjectList<IInterest>(unsortedList, 'asc', 'position', 'number');
+          this.interestList = UtilsService.sortObjectList<InterestV1>(unsortedList, 'asc', 'position', 'number');
         }
       }),
       map((loaded) => !loaded),

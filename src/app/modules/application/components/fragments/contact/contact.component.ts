@@ -1,8 +1,9 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { APP_CREDITS, IContact, ICvInfos, IWebLink } from '../../../../../core';
+import { APP_CREDITS, IContact, IWebLink } from '../../../../../core';
 import { IShareData } from '../../../../../core/interfaces/models/commons/share-data.interface';
+import { CvInfosV1 } from '../../../../../core/interfaces/models/v1/cv-infos.interface';
 import { selectAppCvInfosLoaded } from '../../../../../core/ngrx/selectors/application.selectors';
 import { selectCvInfos } from '../../../../../core/ngrx/selectors/cv-infos.selectors';
 import { ContactOpenCloseService } from '../../../../../core/services/contact-open-close/contact-open-close.service';
@@ -96,7 +97,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             selector: selectCvInfos,
             defaultValue: undefined,
           }).then((cvInfosSubscribed) => {
-            this.initializeComponent(cvInfosSubscribed as ICvInfos);
+            this.initializeComponent(cvInfosSubscribed as CvInfosV1);
           });
         }),
       );
@@ -170,7 +171,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     await this.utilsService.share(shareData);
   }
 
-  private initializeComponent(cvInfos: ICvInfos): void {
+  private initializeComponent(cvInfos: CvInfosV1): void {
     this.contact = cvInfos.contact;
     this.webLinkList = this.contact?.webLinkList || [];
   }
