@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { EXPERTISE_LEVEL_DROPDOWN_LIST, PRIORITY_DROPDOWN_LIST } from '../../../../../core/constants/common.constant';
-import { DEFAULT_TABLE_COLUMNS_CONFIG } from '../../../constants/common.config';
-import { FormFields } from '../../fragments/form-wrapper/interfaces/form-fields.interface';
+import { DEFAULT_DATA_GENERATORS } from '../../../constants/common-data-converters.config';
+import { DEFAULT_FORM_FIELDS_CONFIG } from '../../../constants/common-formFields.config';
+import { DEFAULT_TABLE_COLUMNS_CONFIG } from '../../../constants/common-table-columns.config';
+import { FormField } from '../../fragments/form-wrapper/interfaces/form-field.interface';
 import { TableColumn } from '../../fragments/table-wrapper/interfaces/table-column.interface';
 
 @Component({
@@ -11,17 +13,27 @@ import { TableColumn } from '../../fragments/table-wrapper/interfaces/table-colu
 export class AdminSkillsComponent implements OnInit {
   public columnList: TableColumn[] = [];
 
-  public formFields: FormFields[] | undefined;
+  public formFields: FormField[] | undefined;
 
   public crudEndPoint = '/v1/skills';
 
   public exportCsvFileName = 'Mes Compétences';
 
-  public queryAdapter = DEFAULT_TABLE_COLUMNS_CONFIG.tagListQueryAdapter;
+  public dataGenerator = (data: any) => {
+    if (!data) {
+      return;
+    }
+
+    if (data.tagList) {
+      data = DEFAULT_DATA_GENERATORS.tagListGenerator({ ...data });
+    }
+
+    return data;
+  };
 
   async ngOnInit(): Promise<void> {
     this.columnList = [
-      DEFAULT_TABLE_COLUMNS_CONFIG.name,
+      { ...DEFAULT_TABLE_COLUMNS_CONFIG['name'], sortField: true },
       {
         field: 'expertiseLevel', header: 'Niveau d\'expertise',
         sortable: true, exportable: true, editable: true,
@@ -33,27 +45,24 @@ export class AdminSkillsComponent implements OnInit {
         editable: true, inputType: 'dropdown', dropdownWrapperOptions: { list: PRIORITY_DROPDOWN_LIST },
         style: 'width: 160px; min-width: 160px; max-width: 160px;',
       },
-      DEFAULT_TABLE_COLUMNS_CONFIG.startDate,
-      DEFAULT_TABLE_COLUMNS_CONFIG.tagList,
+      DEFAULT_TABLE_COLUMNS_CONFIG['startDate'],
+      DEFAULT_TABLE_COLUMNS_CONFIG['tagList'],
     ];
 
     if (this.crudEndPoint) {
       this.formFields = [
-        { field: 'name', fieldLabel: 'Nom', inputType: 'text' },
+        { field: 'name', inputLabel: 'Nom', inputType: 'text', defaultValue: '' },
         {
-          field: 'expertiseLevel', fieldLabel: 'Niveau d\'expertise',
+          field: 'expertiseLevel', inputLabel: 'Niveau d\'expertise', defaultValue: 1,
           inputType: 'dropdown', dropdownWrapperOptions: { list: EXPERTISE_LEVEL_DROPDOWN_LIST },
         },
         {
-          field: 'priority', fieldLabel: 'Priorité',
+          field: 'priority', inputLabel: 'Priorité', defaultValue: 1,
           inputType: 'dropdown', dropdownWrapperOptions: { list: PRIORITY_DROPDOWN_LIST },
         },
-        { field: 'startDate', fieldLabel: 'Date de début', inputType: 'text' },
+        { field: 'startDate', inputLabel: 'Date de début', inputType: 'text', defaultValue: '' },
+        DEFAULT_FORM_FIELDS_CONFIG['tagList'][0],
       ];
     }
-  }
-
-  public onTableDataChanges(event: any[]): void {
-    console.debug('AdminSkillsComponent onTableDataChanges:', event);
   }
 }

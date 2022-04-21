@@ -1,11 +1,32 @@
-<div class="fcc column w100 form-wrapper-container">
+<div *ngIf="isInitialized" class="fcc column w100 form-wrapper-container">
 
-  <div *ngFor="let element of formFields" class="fbc w100 form-wrapper-field">
-    <label>{{ element.fieldLabel }}&nbsp;:</label>
+  <div
+    *ngFor="let element of formFields" [ngClass]="{
+      fbc: !element.childFormFields || !element.childFormFields.length,
+      'form-wrapper-field': !element.childFormFields || !element.childFormFields.length,
+      fss: element.childFormFields && element.childFormFields.length,
+      column: element.childFormFields && element.childFormFields.length,
+      'form-wrapper-section': element.childFormFields && element.childFormFields.length,
+      'list-section': element.isList
+    }"
+    class="w100"
+  >
+    <label
+      [ngClass]="{
+        w30: !element.childFormFields || !element.childFormFields.length,
+        w100: element.childFormFields && element.childFormFields.length,
+      'form-wrapper-section-title': element.childFormFields && element.childFormFields.length
+      }"
+    >
+      {{ element.inputLabel }}
+      <span *ngIf="!element.childFormFields || !element.childFormFields.length">&nbsp;:</span>
+    </label>
 
-    <ng-container *ngIf="element.inputType !== 'dropdown'">
+    <ng-container
+      *ngIf="element.inputType !== 'form' && element.inputType !== 'dropdown' && element.inputType !== 'multiselect'"
+    >
       <app-input-wrapper
-        (valueChange)="onValueChange(element.field, $event)" [(value)]="formValue[element.field]"
+        (valueChange)="onValueChange(element.field, $event)" [(value)]="formValues[element.field]"
         [checkboxOptions]="element.inputCheckboxOptions
         ? {label: element.inputCheckboxOptions.label, labelPlacement: element.inputCheckboxOptions.labelPlacement}
         : {}"
@@ -24,14 +45,74 @@
     <ng-container *ngIf="element.inputType === 'dropdown' && element.dropdownWrapperOptions">
       <app-dropdown-wrapper
         (selectedValueChange)="onValueChange(element.field, $event)"
-        [(selectedValue)]="formValue[element.field]" [list]="element.dropdownWrapperOptions.list"
-        [name]="element.inputName || ''"
-        [placeholder]="element.inputPlaceholder || ''"
-        [scrollHeight]="element.dropdownWrapperOptions.scrollHeight || ''"
-        [title]="element.inputTitle || ''" inlineClass="form-wrapper-dropdown"
+        [(selectedValue)]="formValues[element.field]" [list]="element.dropdownWrapperOptions.list"
+        [name]="element.inputName || ''" [placeholder]="element.inputPlaceholder || ''"
+        [scrollHeight]="element.dropdownWrapperOptions.scrollHeight || ''" [title]="element.inputTitle || ''"
+        class="w100" inlineClass="form-wrapper-dropdown"
       ></app-dropdown-wrapper>
+    </ng-container>
+
+    <ng-container *ngIf="element.inputType === 'multiselect' && element.multiSelectWrapperOptions">
+      <app-multi-select-wrapper
+        (selectedValuesChange)="onValueChange(element.field, $event)" [(selectedValues)]="formValues[element.field]"
+        [defaultLabel]="element.multiSelectWrapperOptions.defaultLabel || ''"
+        [list]="element.multiSelectWrapperOptions.list"
+        [pTooltip]="formValues[element.field].length + ' sélectionné(s)'" [placeholder]="element.inputPlaceholder || ''"
+        [scrollHeight]="element.multiSelectWrapperOptions.scrollHeight || '200px'"
+        [selectionLimit]="element.multiSelectWrapperOptions.selectionLimit"
+        [title]="element.inputTitle || ''" class="w100 app-multi-select-wrapper"
+        inlineClass="form-wrapper-multi-select" tooltipPosition="top"
+      ></app-multi-select-wrapper>
+    </ng-container>
+
+    <ng-container *ngIf="element.inputType === 'form' && element.childFormFields && element.childFormFields.length">
+
+      <!-- multiple -->
+      <div *ngIf="element.isList" class="fss column w100">
+        <ng-container *ngFor="let subElement of formValues[element.field]; let i = index">
+          <div class="fas w100">
+            <app-form-wrapper
+              (formValuesChange)="onSubFormValueChange(element.field, $event, i)"
+              [class]="'w90 child-form child-form-' + i" [formFields]="element.childFormFields"
+              [formValues]="subElement" [isChildForm]="true"
+            ></app-form-wrapper>
+
+            <button
+              (click)="onRemoveElement(i, formValues[element.field])" class="p-button-text form-wrapper-section-button"
+              icon="pi pi-minus" pButton
+              pRipple
+              pTooltip="Supprimer cet élément" tooltipPosition="left"
+            ></button>
+          </div>
+        </ng-container>
+
+        <div class="fec w100 form-wrapper-section-buttons-container">
+          <button
+            (click)="onAddElement(element.field, formValues[element.field])"
+            class="p-button-text form-wrapper-section-button" icon="pi pi-plus" pButton
+            pRipple
+            pTooltip="Ajouter un élément" tooltipPosition="left"
+          ></button>
+        </div>
+      </div>
+
+      <!-- single -->
+      <app-form-wrapper
+        (formValuesChange)="onSubFormValueChange(element.field, $event)" *ngIf="!element.isList"
+        [formFields]="element.childFormFields" [formValues]="formValues[element.field]"
+        [isChildForm]="true" class="w100 child-form"
+      ></app-form-wrapper>
+
     </ng-container>
 
   </div>
 
+  <div *ngIf="displayFormButtons" class="fcc w100 form-buttons-wrapped">
+    <button
+      (click)="onCloseForm()" class="p-button-text" icon="pi pi-times" label="Annuler" pButton pRipple
+    ></button>
+    <button
+      (click)="onSaveData()" class="p-button-text" icon="pi pi-check" label="Enregistrer" pButton pRipple
+    ></button>
+  </div>
 </div>

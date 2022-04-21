@@ -17,13 +17,20 @@ export class HttpErrorInterceptor implements HttpInterceptor {
     );
   }
 
-  private handleResponseError(error: HttpErrorResponse) {
-    if (!error || error.status === 0) {
-      console.debug('Serveur injoignable !');
-      console.debug(error);
-      return EMPTY;
+  private handleResponseError(httpErrorResponse: HttpErrorResponse): Observable<HttpEvent<any>> {
+    if (!httpErrorResponse || httpErrorResponse.status === 0) {
+      this.redirectToMaintenancePage(httpErrorResponse);
+      // return EMPTY;
     }
 
-    return throwError(() => error);
+    ErrorMessageService.sendMessage(httpErrorResponse.error.message);
+
+    return throwError(() => httpErrorResponse);
+  }
+
+  private redirectToMaintenancePage(error: any): void {
+    this.router.navigate(['/maintenance']).finally(() => {
+      console.debug(error);
+    });
   }
 }

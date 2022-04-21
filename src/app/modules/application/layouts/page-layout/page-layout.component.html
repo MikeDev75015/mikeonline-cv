@@ -1,6 +1,9 @@
+<p-toast key="applicationError" position="center"></p-toast>
+
 <ng-container *appLoading="isLoadingData$ | async">
   <section
-    [id]="sectionId" class="fsc column w100" [ngClass]="{'scrollable-section': scrollSection}" aria-labelledby="page section">
+    [id]="sectionId" class="fsc column w100" [ngClass]="{'scrollable-section': scrollSection}"
+    aria-labelledby="page section">
 
     <h3 *ngIf="pageTitle" class="animated-background">
       <span>

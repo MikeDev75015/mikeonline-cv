@@ -8,8 +8,13 @@ export const APP_CREDITS = {
   fullName: 'Mickaël NODANCHE',
   title: 'Développeur FullStack TS CV en ligne',
   subTitle: 'Angular 2+, Nest.js, Node.js',
-  webAppUrl: 'https://cv-mikeonline.web.app'
+  webAppUrl: 'https://cv-mikeonline.web.app',
 };
+
+export const CV_TYPE_DROPDOWN_LIST: DropdownOption[] = [
+  { label: 'Complet', value: 'full-cv' },
+  { label: 'Partiel', value: 'partial-cv' },
+];
 
 export const JOB_TYPE_DROPDOWN_LIST: DropdownOption[] = [
   { label: 'Freelance', value: 0 },

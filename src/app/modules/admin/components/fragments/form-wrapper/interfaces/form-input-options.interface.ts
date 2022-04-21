@@ -3,11 +3,14 @@ import { DropdownWrapperOptions } from '../../dropdown-wrapper/interfaces/dropdo
 import { InputWrapperCheckboxOptions } from '../../input-wrapper/interfaces/checkbox-options.interface';
 import { InputWrapperNumberOptions } from '../../input-wrapper/interfaces/number-options.interface';
 import { InputWrapperTextareaOptions } from '../../input-wrapper/interfaces/textarea-options.interface';
+import {
+  MultiSelectWrapperOptions,
+} from '../../multi-select-wrapper/interfaces/multi-select-wrapper-options.interfaces';
 
 export interface FormInputOptions {
-  inputType: InputWrapperType;
+  inputLabel: string;
 
-  fieldLabel: string;
+  inputType: InputWrapperType;
 
   inputName?: string;
 
@@ -22,4 +25,6 @@ export interface FormInputOptions {
   inputCheckboxOptions?: InputWrapperCheckboxOptions;
 
   dropdownWrapperOptions?: DropdownWrapperOptions;
+
+  multiSelectWrapperOptions?: MultiSelectWrapperOptions;
 }

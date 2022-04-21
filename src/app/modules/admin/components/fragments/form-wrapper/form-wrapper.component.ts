@@ -1,26 +1,81 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormFields } from './interfaces/form-fields.interface';
+import { FormWrapperService } from '../table-wrapper/services/form/form-wrapper.service';
+import { FormField } from './interfaces/form-field.interface';
 
 @Component({
   selector: 'app-form-wrapper',
   templateUrl: './form-wrapper.component.html',
-  styleUrls: ['./form-wrapper.component.scss'],
 })
 export class FormWrapperComponent implements OnInit {
-  @Input() formFields: FormFields[] | undefined;
+  @Input() formFields: FormField[] | undefined;
 
-  @Input() formValue: any = {};
+  @Input() displayFormButtons = false;
 
-  @Output() formValueChange = new EventEmitter<any>();
+  @Input() isChildForm = false;
+
+  @Input() formValues: any = {};
+
+  @Output() formValuesChange = new EventEmitter<any>();
+
+  @Output() closeForm = new EventEmitter<any>();
+
+  public isInitialized = false;
+
+  private initialValues: any = {};
+
+  constructor(
+    private readonly formWrapperService: FormWrapperService,
+  ) {
+  }
 
   ngOnInit(): void {
-    if (!this.formFields || !this.formFields.length) {
+    if (!this.formFields || !this.formFields.length || !this.formValues) {
       throw new Error('Cannot initialize form, no valid config found!');
     }
+
+    this.initialValues = { ...this.formValues };
+    if (!this.isChildForm) {
+      this.formValues = this.formWrapperService.initializeFormValues(this.formFields, { ...this.formValues });
+    }
+    console.debug('formValues:', this.formValues);
+
+    this.isInitialized = true;
+  }
+
+  public onCloseForm(): void {
+    this.closeForm.emit();
+  }
+
+  public onSaveData(): void {
+    console.debug('onSaveData:', this.formValues);
+    this.closeForm.emit(this.formValues);
+  }
+
+  public onAddElement(field: string, actualValue: any[]): void {
+    if (!this.formFields || !field) {
+      throw new Error('Invalid state, cannot find form element!');
+    }
+
+    const formElement = this.formWrapperService.findFormElement(field, this.formFields);
+    const newElement = this.formWrapperService.getNewElement(formElement.childFormFields as FormField[]);
+
+    actualValue.push(newElement);
+  }
+
+  public onRemoveElement(index: number, actualValue: any[]): void {
+    actualValue.splice(index, 1);
   }
 
   public onValueChange(field: string, value: any): void {
-    this.formValue[field] = value;
-    this.formValueChange.emit(this.formValue);
+    this.formValues[field] = value;
+    this.formValuesChange.emit(this.formValues);
+  }
+
+  public onSubFormValueChange(field: string, value: any, index?: number): void {
+    if (index !== undefined) {
+      this.formValues[field][index] = value;
+    } else {
+      this.formValues[field] = value;
+    }
   }
 }

@@ -6,11 +6,13 @@
   <p-pickList
     #pickListWrapped [dragdrop]="dragdrop" [filterBy]="filterBy" [showSourceControls]="showSourceControls"
     [showSourceFilter]="showSourceFilter" [showTargetControls]="showTargetControls"
-    [showTargetFilter]="showTargetFilter"
-    [sourceFilterPlaceholder]="sourceFilterPlaceholder" [sourceHeader]="sourceHeader"
-    [source]="availableList" [stripedRows]="stripedRows"
-    [styleClass]="inlineClass || ''" [targetFilterPlaceholder]="targetFilterPlaceholder" [targetHeader]="targetHeader"
+    [showTargetFilter]="showTargetFilter" [sourceFilterPlaceholder]="sourceFilterPlaceholder"
+    [sourceHeader]="availableList.length + ' ' + sourceHeader" [source]="availableList" [stripedRows]="stripedRows"
+    [styleClass]="inlineClass || ''"
+    [targetFilterPlaceholder]="targetFilterPlaceholder"
+    [targetHeader]="targetHeader + (selectionLimit ? ' (' + selectionLimit + ' maximum)' : '')"
     [target]="selectedList"
+
   >
     <ng-template let-item pTemplate="item">
       <div class="fbc w100 pick-list-item-wrapped">
@@ -25,6 +27,7 @@
     ></button>
     <button
       (click)="onSaveData()" class="p-button-text" icon="pi pi-check" label="Enregistrer" pButton pRipple
+      [disabled]="selectionLimit ? selectedList.length > selectionLimit : false"
     ></button>
   </div>
 </div>

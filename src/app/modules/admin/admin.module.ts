@@ -11,6 +11,9 @@ import { InputPasswordComponent } from './components/fragments/input-wrapper/inp
 import { InputTextComponent } from './components/fragments/input-wrapper/input-text/input-text.component';
 import { InputTextareaComponent } from './components/fragments/input-wrapper/input-textarea/input-textarea.component';
 import { InputWrapperComponent } from './components/fragments/input-wrapper/input-wrapper.component';
+import {
+  MultiSelectWrapperComponent,
+} from './components/fragments/multi-select-wrapper/multi-select-wrapper.component';
 import { PickListWrapperComponent } from './components/fragments/pick-list-wrapper/pick-list-wrapper.component';
 import { FormatValueDisplayPipe } from './components/fragments/table-wrapper/pipes/format-value-display.pipe';
 import { TableWrapperComponent } from './components/fragments/table-wrapper/table-wrapper.component';
@@ -51,6 +54,7 @@ const primeNgModule: any[] = [
 
     FormatValueDisplayPipe,
     AdminCvInfosComponent,
+    MultiSelectWrapperComponent,
   ],
   imports: [
     CommonModule,

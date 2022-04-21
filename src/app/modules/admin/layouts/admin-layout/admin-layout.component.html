@@ -1,31 +1,31 @@
-<div class="fbc w100 admin-layout-header">
-  <p-tabMenu [model]="leftItems" styleClass="admin-tab-menu">
-    <ng-template let-item pTemplate="item">
-      <span *ngIf="item.label">{{ item.label }}</span>
-      <mat-icon *ngIf="item.matIcon">{{ item.matIcon }}</mat-icon>
-    </ng-template>
-  </p-tabMenu>
+<p-toast key="applicationError" position="center"></p-toast>
 
-  <div class="fec">
-    <div class="fcc">
-      <span>Thème :</span>&nbsp;
-      <app-dropdown-wrapper
-        (selectedValueChange)="onSelectedThemeChange($event)" [(selectedValue)]="selectedTheme"
-        [inlineStyle]="{'margin-right': '10px'}"
-        [scrollHeight]="'80vh'" [stringList]="themeList"
-      ></app-dropdown-wrapper>
+<ng-container *appLoading="!currentUser">
+  <div *ngIf="leftItems" class="fbc w100 admin-layout-header">
+    <p-tabMenu [model]="leftItems" styleClass="admin-tab-menu"></p-tabMenu>
+
+    <div class="fec">
+      <div class="fcc">
+        <span>Thème :</span>&nbsp;
+        <app-dropdown-wrapper
+          (selectedValueChange)="onSelectedThemeChange($event)" [(selectedValue)]="selectedTheme"
+          [inlineStyle]="{'margin-right': '10px'}"
+          [scrollHeight]="'80vh'" [stringList]="themeList"
+        ></app-dropdown-wrapper>
+      </div>
+
+      <ng-container *ngIf="currentUser">
+      <span [pTooltip]="currentUser.role" style="margin-right: 10px;" tooltipPosition="bottom">
+        Utilisateur: {{ currentUser.name }}
+      </span>
+
+        <button (click)="menu.toggle($event)" pButton type="button">
+          <mat-icon>menu</mat-icon>
+        </button>
+        <p-menu #menu [model]="rightItems" [popup]="true"></p-menu>
+      </ng-container>
     </div>
-
-    <span
-      *ngIf="currentUser" [pTooltip]="currentUser.role"
-      style="margin-right: 10px;" tooltipPosition="bottom"
-    >Utilisateur: {{ currentUser.name }}</span>
-
-    <button (click)="menu.toggle($event)" pButton type="button">
-      <mat-icon>logout</mat-icon>
-    </button>
-    <p-menu #menu [model]="rightItems" [popup]="true"></p-menu>
   </div>
-</div>
 
-<router-outlet></router-outlet>
+  <router-outlet></router-outlet>
+</ng-container>

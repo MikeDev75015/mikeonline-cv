@@ -16,6 +16,7 @@
       background: var(--primary-color-text) !important;
       color: var(--primary-color) !important;
       font-weight: 500 !important;
+      pointer-events: none;
     }
 
     .p-menuitem-link {

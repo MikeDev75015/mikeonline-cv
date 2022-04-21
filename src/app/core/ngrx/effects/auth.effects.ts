@@ -27,12 +27,21 @@ export class AuthEffects {
       }
       return AuthActions.loginUserSuccess({ accessToken });
     }),
+    catchError(() => of(AuthActions.loginUserFailure())),
   ));
 
   loginUserSuccess$ = createEffect(() => this.actions$.pipe(
     ofType(AuthActions.loginUserSuccess),
-    tap(async ({ user }) => {
-      await this.router.navigate(['/admin']);
+    tap(({ accessToken }) => {
+      StorageService.setItem('localStorage', STORAGE_KEYS.accessToken, accessToken);
+    }),
+    map(() => AuthActions.getUser())),
+  );
+
+  loginUserFailure$ = createEffect(() => this.actions$.pipe(
+    ofType(AuthActions.loginUserFailure),
+    tap(() => {
+      this.cleanStorageAccessToken();
     }),
   ), { dispatch: false });
 
@@ -79,7 +88,7 @@ export class AuthEffects {
   getUserFailure$ = createEffect(() => this.actions$.pipe(
     ofType(AuthActions.getUserFailure),
     tap(() => {
-      console.warn('loginUserFailure$ error: User not found!');
+      this.cleanStorageAccessToken(true);
     }),
   ), { dispatch: false });
 
@@ -93,8 +102,8 @@ export class AuthEffects {
   constructor(
     private readonly actions$: Actions,
     private readonly store: Store,
-    private readonly authService: AuthService,
     private readonly router: Router,
+    private readonly authService: AuthService,
   ) {
   }
 

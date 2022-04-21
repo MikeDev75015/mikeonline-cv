@@ -45,7 +45,6 @@ export class InputCheckboxComponent implements OnInit, AfterViewInit {
 
   public onValueChange(value: any): void {
     this.value = value;
-    console.debug('InputCheckboxComponent onValueChange', this.value);
     this.valueChange.emit(this.value);
   }
 }

@@ -1,10 +1,10 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { ITag } from '../../../../../../core';
 import {
   EXPERTISE_LEVEL_DROPDOWN_LIST,
   JOB_TYPE_DROPDOWN_LIST,
   PRIORITY_DROPDOWN_LIST,
 } from '../../../../../../core/constants/common.constant';
+import { TagV1 } from '../../../../../../core/interfaces/models/v1/tag.interface';
 import { DayJsService } from '../../../../../../core/services/dayjs/dayjs.service';
 import { DropdownOption } from '../../dropdown-wrapper/interfaces/dropdown-option.interface';
 
@@ -28,7 +28,7 @@ export class FormatValueDisplayPipe implements PipeTransform {
       case 'contact':
         return FormatValueDisplayPipe.displayContactInLine(value, lineEnding, incompressibleSpace);
       case 'tagList':
-        return (value as ITag[]).map((tag) => tag.name).join(', ');
+        return (value as TagV1[]).map((tag) => tag.name).join(', ');
       case 'beginDate':
         return DayJsService.getDate(value, 'MM/YYYY');
       case 'startDate':

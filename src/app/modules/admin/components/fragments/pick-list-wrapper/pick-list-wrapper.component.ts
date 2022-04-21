@@ -35,6 +35,8 @@ export class PickListWrapperComponent implements OnInit {
 
   @Input() stripedRows = true;
 
+  @Input() selectionLimit?: number;
+
   @Input() sourceList: any[] = [];
 
   @Input() targetList: any[] = [];

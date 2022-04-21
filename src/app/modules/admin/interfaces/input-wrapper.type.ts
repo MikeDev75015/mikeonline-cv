@@ -3,4 +3,6 @@ export type InputWrapperType = 'text'
   | 'number'
   | 'textarea'
   | 'dropdown'
-  | 'checkbox';
+  | 'multiselect'
+  | 'checkbox'
+  | 'form';

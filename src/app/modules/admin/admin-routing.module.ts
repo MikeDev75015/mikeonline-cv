@@ -8,8 +8,8 @@ import { AdminProjectsComponent } from './components/pages/admin-projects/admin-
 import { AdminSkillsComponent } from './components/pages/admin-skills/admin-skills.component';
 import { AdminTagsComponent } from './components/pages/admin-tags/admin-tags.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
+import { AuthGuard } from './guards/auth-guard/auth.guard';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
-import { AuthGuard } from './services/auth-guard/auth.guard';
 
 const routes: Routes = [
   {

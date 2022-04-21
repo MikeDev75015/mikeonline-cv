@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { MessageService } from 'primeng/api';
 import { Observable, of } from 'rxjs';
 
 /**
@@ -8,6 +9,7 @@ import { Observable, of } from 'rxjs';
 @Component({
   selector: 'app-page-layout',
   templateUrl: './page-layout.component.html',
+  providers: [MessageService],
 })
 export class PageLayoutComponent implements OnInit {
   @Input() isLoadingData$: Observable<boolean> = of(true);

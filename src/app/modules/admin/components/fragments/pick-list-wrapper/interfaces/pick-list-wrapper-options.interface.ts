@@ -36,4 +36,6 @@ export interface PickListWrapperOptions {
   inlineClass?: string;
 
   inlineStyle?: { [key: string]: any };
+
+  selectionLimit?: number;
 }

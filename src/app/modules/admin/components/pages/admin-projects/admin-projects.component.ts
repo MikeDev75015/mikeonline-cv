@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { DEFAULT_TABLE_COLUMNS_CONFIG } from '../../../constants/common.config';
-import { FormFields } from '../../fragments/form-wrapper/interfaces/form-fields.interface';
+import { DEFAULT_FORM_FIELDS_CONFIG } from '../../../constants/common-formFields.config';
+import { DEFAULT_TABLE_COLUMNS_CONFIG } from '../../../constants/common-table-columns.config';
+import { FormField } from '../../fragments/form-wrapper/interfaces/form-field.interface';
 import { TableColumn } from '../../fragments/table-wrapper/interfaces/table-column.interface';
 
 @Component({
@@ -10,13 +11,21 @@ import { TableColumn } from '../../fragments/table-wrapper/interfaces/table-colu
 export class AdminProjectsComponent implements OnInit {
   public columnList: TableColumn[] = [];
 
-  public formFields: FormFields[] | undefined;
+  public formFields: FormField[] | undefined;
 
   public crudEndPoint = '/v1/projects';
 
   public exportCsvFileName = 'Mes Projets';
 
-  public queryAdapter = DEFAULT_TABLE_COLUMNS_CONFIG.tagListQueryAdapter;
+  public dataGenerator = (data: any) => {
+    if (!data.tagList) {
+      return data;
+    }
+    const tagIdList = data.tagList.map((tag: any) => tag.id);
+    const { tagList, ...adaptedData } = data;
+    adaptedData['tagIdList'] = tagIdList;
+    return adaptedData;
+  };
 
   async ngOnInit(): Promise<void> {
     this.columnList = [
@@ -36,26 +45,23 @@ export class AdminProjectsComponent implements OnInit {
         inputType: 'textarea', inputTextareaOptions: { rows: 3 },
         style: 'width: 10%; min-width: 150px;',
       },
-      {
-        field: 'position', header: 'Position', sortField: true,
-        sortable: true, editable: true,
-        inputType: 'number', inputNumberOptions: { min: 0 },
-        style: 'width: 10%; min-width: 90px; max-width: 120px;',
-      },
-      DEFAULT_TABLE_COLUMNS_CONFIG.tagList,
+      { ...DEFAULT_TABLE_COLUMNS_CONFIG['position'], sortField: true },
+      DEFAULT_TABLE_COLUMNS_CONFIG['tagList'],
     ];
 
     if (this.crudEndPoint) {
       this.formFields = [
-        { field: 'title', fieldLabel: 'Titre', inputType: 'text' },
-        { field: 'subTitle', fieldLabel: 'Sous-titre', inputType: 'text' },
-        { field: 'description', fieldLabel: 'Description', inputType: 'textarea', inputTextareaOptions: { rows: 3 } },
-        { field: 'subTitle', fieldLabel: 'Sous-titre', inputType: 'number', inputNumberOptions: { min: 0 } },
+        DEFAULT_FORM_FIELDS_CONFIG['title'][0],
+        DEFAULT_FORM_FIELDS_CONFIG['subTitle'][0],
+        DEFAULT_FORM_FIELDS_CONFIG['createdDate'][0],
+        DEFAULT_FORM_FIELDS_CONFIG['tagList'][0],
+        DEFAULT_FORM_FIELDS_CONFIG['description'][0],
+        DEFAULT_FORM_FIELDS_CONFIG['link'][0],
+        {
+          field: 'pictureList', inputLabel: 'Les images', inputType: 'form', defaultValue: [], isList: true,
+          childFormFields: DEFAULT_FORM_FIELDS_CONFIG['image'],
+        },
       ];
     }
-  }
-
-  public onTableDataChanges(event: any[]): void {
-    console.debug('AdminProjectsComponent onTableDataChanges:', event);
   }
 }

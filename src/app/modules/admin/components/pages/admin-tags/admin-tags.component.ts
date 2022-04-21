@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { DEFAULT_TABLE_COLUMNS_CONFIG } from '../../../constants/common.config';
-import { FormFields } from '../../fragments/form-wrapper/interfaces/form-fields.interface';
+import { DEFAULT_TABLE_COLUMNS_CONFIG } from '../../../constants/common-table-columns.config';
+import { FormField } from '../../fragments/form-wrapper/interfaces/form-field.interface';
 import { TableColumn } from '../../fragments/table-wrapper/interfaces/table-column.interface';
 
 @Component({
@@ -10,7 +10,7 @@ import { TableColumn } from '../../fragments/table-wrapper/interfaces/table-colu
 export class AdminTagsComponent implements OnInit {
   public columnList: TableColumn[] = [];
 
-  public formFields: FormFields[] | undefined;
+  public formFields: FormField[] | undefined;
 
   public crudEndPoint = '/v1/tags';
 
@@ -18,7 +18,7 @@ export class AdminTagsComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.columnList = [
-      DEFAULT_TABLE_COLUMNS_CONFIG.name,
+      { ...DEFAULT_TABLE_COLUMNS_CONFIG['name'], sortField: true },
       {
         field: 'weight', header: 'Poids', globalFilterField: true, sortable: true, editable: true,
         inputType: 'number', inputNumberOptions: { min: 0.1, max: 9.9, step: 0.1 },
@@ -28,16 +28,12 @@ export class AdminTagsComponent implements OnInit {
 
     if (this.crudEndPoint) {
       this.formFields = [
-        { field: 'name', fieldLabel: 'Nom', inputType: 'text' },
+        { field: 'name', inputLabel: 'Nom', inputType: 'text', defaultValue: '' },
         {
-          field: 'weight', fieldLabel: 'Poids',
+          field: 'weight', inputLabel: 'Poids', defaultValue: 1,
           inputType: 'number', inputNumberOptions: { min: 0.1, max: 9.9, step: 0.1 },
         },
       ];
     }
-  }
-
-  public onTableDataChanges(event: any[]): void {
-    console.debug('AdminTagsComponent onTableDataChanges:', event);
   }
 }

@@ -1,0 +1,68 @@
+.form-wrapper-container {
+  padding-bottom: 20px;
+
+  .child-form {
+    margin-top: 20px;
+  }
+
+  app-input-wrapper {
+    width: 100%;
+  }
+
+  .form-wrapper-field {
+    margin-top: 10px;
+  }
+
+  .form-wrapper-field:first-of-type {
+    margin-top: 0;
+  }
+
+  .form-wrapper-section {
+    margin-top: 20px;
+
+    label {
+      font-weight: 500;
+    }
+
+    label.form-wrapper-section-title {
+      font-weight: bold;
+    }
+  }
+
+  .form-wrapper-section.list-section {
+    border-bottom: 1px solid #CCC;
+  }
+
+  .form-wrapper-section-buttons-container {
+    margin-top: 10px;
+  }
+
+  .form-wrapper-section-button {
+    margin-top: 25px;
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+  }
+
+  .form-wrapper-section-button.minus {
+  }
+
+  .form-buttons-wrapped {
+    // margin-top: 20px;
+    position: sticky;
+    bottom: 0;
+    height: 80px;
+    background: var(--surface-f);
+    opacity: 0.8;
+  }
+}
+
+.child-form > .form-wrapper-container {
+  padding: 0 10px;
+  opacity: 0.9;
+}
+
+.app-multi-select-wrapper {
+  max-width: 100%;
+  overflow: hidden;
+}

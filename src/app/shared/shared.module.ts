@@ -50,6 +50,7 @@ const primeNgModules: any[] = [
   CheckboxModule,
   OverlayPanelModule,
   PickListModule,
+  MultiSelectModule,
 ];
 
 @NgModule({

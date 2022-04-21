@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { MenuItem } from 'primeng/api';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { select, Store } from '@ngrx/store';
+import { MenuItem, MessageService } from 'primeng/api';
+import { Subscription } from 'rxjs';
 import { STORAGE_KEYS } from '../../../../core/constants/storage-keys.constant';
 import { UserV1 } from '../../../../core/interfaces/models/v1/user.interface';
-import { logoutUser } from '../../../../core/ngrx/actions/auth.actions';
+import { AuthActions } from '../../../../core/ngrx/ngrx-index';
+import { selectCurrentUser } from '../../../../core/ngrx/selectors/auth.selectors';
 import { StorageService } from '../../../../core/services/storage/storage.service';
 import { ThemingService } from '../../../../core/services/theming/theming.service';
 
@@ -16,42 +19,112 @@ interface ExtendedMenuItem extends MenuItem {
   templateUrl: './admin-layout.component.html',
   providers: [ThemingService, MessageService],
 })
-export class AdminLayoutComponent implements OnInit {
-  public readonly leftItems: ExtendedMenuItem[] = [
-    { label: 'Infos CV', routerLink: '/admin/cv-infos' },
-    { label: 'Tags', routerLink: '/admin/tags' },
-    { label: 'Skills', routerLink: '/admin/skills' },
-    { label: 'Expériences', routerLink: '/admin/experiences' },
-    { label: 'Formations', routerLink: '/admin/formations' },
-    { label: 'Projets', routerLink: '/admin/projects' },
-    { label: 'Centre d\'Intérêts', routerLink: '/admin/interests' },
-  ];
-
-  public readonly rightItems: ExtendedMenuItem[] = [
-    { label: 'Se déconnecter', command: () => this.store.dispatch(logoutUser()) },
-  ];
-
+export class AdminLayoutComponent implements OnInit, OnDestroy {
   public readonly themeList = this.themingService.getThemeList();
+
+  public leftItems: ExtendedMenuItem[] = [];
+
+  public rightItems: ExtendedMenuItem[] = [];
 
   public currentUser: UserV1 | undefined;
 
+  public activeItem: ExtendedMenuItem | undefined;
+
   public selectedTheme = '';
+
+  private readonly subscriptionList: Subscription[] = [];
 
   constructor(
     private readonly store: Store,
+    private readonly router: Router,
     private readonly themingService: ThemingService,
   ) {
   }
 
-  ngOnInit(): void {
-    const userSession = StorageService.getItem<UserV1>('sessionStorage', STORAGE_KEYS['user']);
-    if (!userSession) {
+  private static getStorageActiveItem(): ExtendedMenuItem {
+    return StorageService.getItem('sessionStorage', STORAGE_KEYS.activeItem);
+  }
+
+  private static setStorageActiveItem(activeItem: ExtendedMenuItem): void {
+    StorageService.setItem('sessionStorage', STORAGE_KEYS.activeItem, activeItem);
+  }
+
+  private static removeActiveItemFromStorage(): void {
+    StorageService.removeItem('sessionStorage', STORAGE_KEYS.activeItem);
+  }
+
+  async ngOnInit(): Promise<void> {
+    this.subscriptionList.push(
+      this.store.pipe(select(selectCurrentUser)).subscribe({
+        next: (currentUser) => {
+          if (currentUser) {
+            this.currentUser = currentUser;
+          }
+        },
+      }),
+    );
+
+    this.selectedTheme = this.themingService.getThemeName();
+
+    this.leftItems = [
+      {
+        label: 'Infos CV', routerLink: '/admin/cv-infos', command: (event: any) => {
+          AdminLayoutComponent.setStorageActiveItem(event.item);
+        },
+      },
+      {
+        label: 'Tags', routerLink: '/admin/tags', command: (event: any) => {
+          AdminLayoutComponent.setStorageActiveItem(event.item);
+        },
+      },
+      {
+        label: 'Compétences', routerLink: '/admin/skills', command: (event: any) => {
+          AdminLayoutComponent.setStorageActiveItem(event.item);
+        },
+      },
+      {
+        label: 'Expériences', routerLink: '/admin/experiences', command: (event: any) => {
+          AdminLayoutComponent.setStorageActiveItem(event.item);
+        },
+      },
+      {
+        label: 'Formations', routerLink: '/admin/formations', command: (event: any) => {
+          AdminLayoutComponent.setStorageActiveItem(event.item);
+        },
+      },
+      {
+        label: 'Projets', routerLink: '/admin/projects', command: (event: any) => {
+          AdminLayoutComponent.setStorageActiveItem(event.item);
+        },
+      },
+      {
+        label: 'Centre d\'Intérêts', routerLink: '/admin/interests', command: (event: any) => {
+          AdminLayoutComponent.setStorageActiveItem(event.item);
+        },
+      },
+    ];
+
+    this.rightItems = [
+      { label: 'Voir le site', routerLink: '/' },
+      {
+        label: 'Se déconnecter', matIcon: 'logout',
+        command: () => {
+          AdminLayoutComponent.removeActiveItemFromStorage();
+          this.store.dispatch(AuthActions.logoutUser());
+        },
+      },
+    ];
+
+    this.activeItem = AdminLayoutComponent.getStorageActiveItem();
+    if (!this.activeItem) {
       return;
     }
 
-    this.currentUser = userSession;
+    await this.router.navigate([this.activeItem.routerLink]);
+  }
 
-    this.selectedTheme = this.themingService.getThemeName();
+  ngOnDestroy(): void {
+    this.subscriptionList.forEach((s) => s.unsubscribe());
   }
 
   public onSelectedThemeChange(selectedValue: any): void {

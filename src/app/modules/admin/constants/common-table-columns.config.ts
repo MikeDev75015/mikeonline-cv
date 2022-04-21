@@ -1,12 +1,14 @@
-export const DEFAULT_TABLE_COLUMNS_CONFIG = {
+import { TableColumn } from '../components/fragments/table-wrapper/interfaces/table-column.interface';
+
+export const DEFAULT_TABLE_COLUMNS_CONFIG: { [key: string]: TableColumn; } = {
   name: {
-    field: 'name', header: 'Nom', sortField: true, globalFilterField: true,
+    field: 'name', header: 'Nom', globalFilterField: true,
     sortable: true, exportable: true, editable: true,
     style: 'width: 30%; min-width: 300px;',
   },
   title: {
     field: 'title', header: 'Titre', globalFilterField: true, editable: true, exportable: true,
-    style: 'width: 30%; min-width: 300px;',
+    style: 'width: 30%; min-width: 200px;',
   },
   startDate: {
     field: 'startDate', header: 'Date de début', sortable: true, exportable: true, editable: true,
@@ -25,7 +27,7 @@ export const DEFAULT_TABLE_COLUMNS_CONFIG = {
   society: {
     field: 'society', header: 'Société', globalFilterField: true,
     sortable: true, editable: true, exportable: true,
-    style: 'width: 10%; min-width: 150px; max-width: 200px;',
+    style: 'width: 10%; min-width: 190px; max-width: 200px;',
   },
   place: {
     field: 'place', header: 'Lieu', globalFilterField: true,
@@ -34,7 +36,7 @@ export const DEFAULT_TABLE_COLUMNS_CONFIG = {
   },
   tagList: {
     field: 'tagList', header: 'Liste des tags', exportable: true,
-    overlayPanel: true, pickListWrapperOptions: {
+    pickListWrapperOptions: {
       sourceListEndPoint: '/v1/tags', propertyToDisplay: 'name',
       inlineStyle: { width: '100%' }, inlineClass: 'table-tag-list-pickList',
       sourceHeader: 'Disponible(s)', targetHeader: 'Sélection', showSourceFilter: true,
@@ -42,14 +44,8 @@ export const DEFAULT_TABLE_COLUMNS_CONFIG = {
     },
     style: 'width: 20%; min-width: 250px; cursor: pointer;',
   },
-  tagListQueryAdapter: (data: any) => {
-    if (!data.tagList) {
-      return data;
-    }
-
-    const tagIdList = data.tagList.map((tag: any) => tag.id);
-    const { tagList, ...adaptedData } = data;
-    adaptedData['tagIdList'] = tagIdList;
-    return adaptedData;
+  position: {
+    field: 'position', header: 'Position', sortable: true,
+    style: 'width: 10%; min-width: 90px; max-width: 120px;',
   },
 };

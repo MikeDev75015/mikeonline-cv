@@ -6,12 +6,16 @@ import { Table } from 'primeng/table';
 import { lastValueFrom } from 'rxjs';
 import { ApiResponsePayload } from '../../../../../core/interfaces/api/api-response.payload';
 import { MessageSeverity } from '../../../../../core/interfaces/types/message-severity.type';
+import { DayJsService } from '../../../../../core/services/dayjs/dayjs.service';
 import { UtilsService } from '../../../../../shared';
-import { FormFields } from '../form-wrapper/interfaces/form-fields.interface';
+import { FormField } from '../form-wrapper/interfaces/form-field.interface';
+import { MultiSelectWrapperOptions } from '../multi-select-wrapper/interfaces/multi-select-wrapper-options.interfaces';
 import { SEVERITY_MESSAGE_SUMMARY } from './constants/common.constant';
+import { ERROR_MESSAGES } from './constants/error-messages.constant';
 import { TableColumn } from './interfaces/table-column.interface';
 import { FormatValueDisplayPipe } from './pipes/format-value-display.pipe';
-import { CrudService } from './services/crud.service';
+import { CrudService } from './services/crud/crud.service';
+import { FormWrapperService } from './services/form/form-wrapper.service';
 
 @Component({
   selector: 'app-table-wrapper',
@@ -23,17 +27,15 @@ export class TableWrapperComponent implements OnInit, OnChanges {
 
   @Input() columnList: TableColumn[] = [];
 
-  @Input() rowsNumber: number | undefined;
-
   @Input() scrollHeight = '80vh';
 
-  @Input() reorderableRows = false;
+  @Input() rowsReorderable = false;
 
   @Input() crudEndPoint = '';
 
   @Input() exportCsvFileName: string | undefined;
 
-  @Input() formFields: FormFields[] | undefined;
+  @Input() formFields: FormField[] | undefined;
 
   @Input() dataAdapter?: (data: any) => any;
 
@@ -68,6 +70,7 @@ export class TableWrapperComponent implements OnInit, OnChanges {
   constructor(
     private readonly messageService: MessageService,
     private readonly confirmationService: ConfirmationService,
+    private readonly formWrapperService: FormWrapperService,
     private readonly crudService: CrudService,
   ) {
   }
@@ -82,7 +85,9 @@ export class TableWrapperComponent implements OnInit, OnChanges {
           this.hasExportableData = this.columnList.filter((col) => col.exportable).length > 0;
 
           this.columnList.forEach((column) => {
-            this.initializeTableOptions(column);
+            this.initializeDefaultSortField(column);
+            this.initializeGlobalFilter(column);
+            this.initializePickList(column);
           });
         }
 
@@ -104,28 +109,42 @@ export class TableWrapperComponent implements OnInit, OnChanges {
   /**
    * onCloseDialog
    */
-  public onCloseDialog(): void {
-    this.showFormDialog = false;
+  public onDialogCloseAction(): void {
     this.formValues = {};
+    this.showFormDialog = false;
   }
 
   /**
    * onOpenDialog
    */
-  public onOpenDialog(): void {
-    this.formValues = {};
-    this.initializeFormWrapperValues();
+  public async onOpenDialog(rowData?: { [key: string]: any; }): Promise<void> {
+    if (!this.formFields) {
+      throw new Error(ERROR_MESSAGES.invalidFormFields);
+    }
+
+    const listToLoad: Promise<void>[] = [];
+    this.addToMultiSelectListToLoad(this.formFields, listToLoad);
+
+    await Promise.all(listToLoad);
+
+    this.formValues = rowData || {};
     this.showFormDialog = true;
   }
 
   /**
-   * onEditRow
+   * onDuplicateRow
    * @param rowData
+   * @param rowIndex
+   * @param wrappedTable
    */
-  public onEditRow(rowData: { [key: string]: any; }): void {
-    this.formValues = { ...rowData };
-    this.initializeFormWrapperValues({ ...rowData });
-    this.showFormDialog = true;
+  public onDuplicateRow(rowData: { [key: string]: any; }, rowIndex: number, wrappedTable: Table): void {
+    const { id, position, ...newRow } = rowData;
+    const newItem = { ...newRow, id: 'duplicatedAt' + DayJsService.getDate(undefined) };
+
+    this.tableData.splice(rowIndex + 1, 0, newItem);
+    wrappedTable.value = this.tableData;
+
+    this.updateList(newItem, 'add-or-update', 'changedData');
   }
 
   /**
@@ -134,32 +153,43 @@ export class TableWrapperComponent implements OnInit, OnChanges {
    */
   public onFormValueChange(formValues: any): void {
     this.formValues = formValues;
+    console.debug('onFormValueChange:', this.formValues);
   }
 
   /**
    * onSaveDialogData
    */
-  public async onSaveDialogData(): Promise<void> {
+  public async onDialogSaveAction(): Promise<void> {
+    if (!this.formFields) {
+      throw new Error(ERROR_MESSAGES.invalidFormFields);
+    }
+
+    const editMode = !!this.formValues.id;
+
     try {
       this.isLoading = true;
 
-      const data = this.dataAdapter ? this.dataAdapter(this.formValues) : this.formValues;
+      let data = this.formWrapperService.convertFormValues(this.formFields, this.formValues);
+      if (this.dataGenerator) {
+        data = this.dataGenerator({ ...data });
+      }
+      console.debug('onDialogSaveAction:', data);
 
-      const response: any = this.formValues.id
+      const response: any = editMode
         ? await lastValueFrom(this.crudService.put<any>(this.crudEndPoint, { data }))
         : await lastValueFrom(this.crudService.post<any>(this.crudEndPoint, { data }));
 
       if (!response || !response.id) {
-        console.debug('onSaveDialogData respone:', response);
-        this.displayMessage(response?.message || 'Erreur serveur !', 'error');
+        console.debug('onSaveDialogData response:', response);
+        this.displayMessage(response?.message || ERROR_MESSAGES.server, 'error');
         return;
       }
 
       this.updateList(this.formValues, 'remove', 'changedData');
-      this.onCloseDialog();
+      this.onDialogCloseAction();
 
       this.displayMessage(
-        this.formValues.id ? 'Elément bien mis à jour !' : 'Elément créé avec succès !', 'success',
+        editMode ? 'Elément bien mis à jour !' : 'Elément créé avec succès !', 'success',
       );
 
       this.tableData = await this.loadData<any[]>(this.crudEndPoint, []);
@@ -168,7 +198,7 @@ export class TableWrapperComponent implements OnInit, OnChanges {
     } catch (e: any) {
       console.debug(e);
       this.displayMessage(
-        this.formValues.id ? 'Elément non mis à jour !' : 'Elément non créé !', 'error',
+        editMode ? 'Elément non mis à jour !' : 'Elément non créé !', 'error',
       );
 
     } finally {
@@ -295,7 +325,6 @@ export class TableWrapperComponent implements OnInit, OnChanges {
       this.updateList(elementToUpdate, 'add-or-update', 'changedData');
       return Object.assign({}, data, elementToUpdate);
     });
-    console.debug('changedData after:', this.changedData);
   }
 
   /**
@@ -305,13 +334,25 @@ export class TableWrapperComponent implements OnInit, OnChanges {
    * @param value
    */
   public onCellValueChange(elementId: string, col: TableColumn, value: any): void {
-    const originalData = this.originalData.find((element) => element.id === elementId);
+    let dataToCompare = this.originalData.find((element: any) => element.id === elementId);
+    if (!dataToCompare) {
+      dataToCompare = this.changedData.find((element: any) => element.id === elementId);
+    }
+
+    if (!dataToCompare) {
+      throw new Error('No data found to compare!');
+    }
 
     let dataToUpdate: { [key: string]: any; } = { id: elementId };
-    if ((col.inputType === 'number' || typeof originalData[col.field] === 'number') && originalData[col.field] !== +value) {
+    if (
+      (
+        col.inputType === 'number'
+        || (dataToCompare[col.field] && typeof dataToCompare[col.field] === 'number')
+      ) && dataToCompare[col.field] !== +value
+    ) {
       dataToUpdate[col.field] = +value;
 
-    } else if (originalData[col.field] !== value) {
+    } else if (dataToCompare[col.field] !== value) {
       dataToUpdate[col.field] = value;
     }
 
@@ -396,6 +437,48 @@ export class TableWrapperComponent implements OnInit, OnChanges {
   }
 
   /**
+   * onOpenFormOverlayPanel
+   * @param op
+   * @param col
+   * @param e
+   */
+  public onOpenFormOverlayPanel(op: OverlayPanel, col: TableColumn, e: MouseEvent): void {
+    if (!col || !col.formFields) {
+      this.displayMessage(
+        'Impossible d\'éditer ce champ, les options de configuration sont invalides.', 'error',
+      );
+      return;
+    }
+
+    op.toggle(e);
+  }
+
+  /**
+   * onCloseFormOverlayPanel
+   * @param op
+   * @param rowData
+   * @param col
+   * @param values
+   */
+  public onCloseFormOverlayPanel(op: OverlayPanel, rowData: any, col: TableColumn, values?: any): void {
+    op.hide();
+
+    if (!values || !col.formFields) {
+      return;
+    }
+
+    const convertedValues = this.formWrapperService.convertFormValues(col.formFields, values);
+    rowData[col.field] = convertedValues;
+
+    const dataToUpdate: { [key: string]: any; } = {
+      id: rowData.id,
+      [col.field]: convertedValues,
+    };
+
+    this.updateList(dataToUpdate, 'add-or-update', 'changedData');
+  }
+
+  /**
    * onSaveChangedData
    */
   public async onSaveChangedData(): Promise<void> {
@@ -406,14 +489,13 @@ export class TableWrapperComponent implements OnInit, OnChanges {
     try {
       this.isLoading = true;
 
-      let adaptedData: any[] = [];
-      if (this.dataAdapter) {
+      const data: any[] = this.dataGenerator
         // @ts-ignore
-        adaptedData = this.changedData.map((eachData) => this.dataAdapter(eachData));
-      }
+        ? this.changedData.map((eachData) => this.dataGenerator(eachData))
+        : this.changedData;
 
       const response: any = await lastValueFrom(this.crudService.put<any[]>(this.crudEndPoint + '/many', {
-        data: adaptedData.length ? adaptedData : this.changedData,
+        data,
       }));
 
       if (!response || !Array.isArray(response) || response.length === 0) {
@@ -422,10 +504,10 @@ export class TableWrapperComponent implements OnInit, OnChanges {
         return;
       }
 
-      const isPartialUpdate = response.filter((updated) => updated && updated.id).length < this.changedData.length;
+      const isPartialUpdate = (response.filter((updated) => updated && updated.id).length) < this.changedData.length;
 
       this.displayMessage(
-        isPartialUpdate ? 'Certains éléments n\'ont pu être mis à jour...' : 'Eléments mis à jour avec succès !',
+        isPartialUpdate ? 'Certains éléments n\'ont pu être traités...' : 'Eléments traités avec succès !',
         isPartialUpdate ? 'warn' : 'success',
       );
 
@@ -435,7 +517,7 @@ export class TableWrapperComponent implements OnInit, OnChanges {
 
     } catch (e: any) {
       console.debug(e);
-      this.displayMessage('Eléments non mis à jour !', 'error');
+      this.displayMessage('Eléments non traités !', 'error');
 
     } finally {
       this.isLoading = false;
@@ -478,37 +560,10 @@ export class TableWrapperComponent implements OnInit, OnChanges {
   }
 
   /**
-   * loadData
-   * @param endPoint
-   * @param defaultValue
-   * @private
-   */
-  private loadData<T>(endPoint: string, defaultValue: T): Promise<T> {
-    try {
-      this.isLoading = true;
-      return lastValueFrom(this.crudService.get<T>(endPoint));
-
-    } catch (e: any) {
-      console.debug(e);
-      this.displayMessage('Les données n\'ont pas pu être récupérées !', 'error');
-      return Promise.resolve(defaultValue);
-
-    } finally {
-      this.isLoading = false;
-    }
-  }
-
-  /**
-   * initializeTableOptions
+   * initializeDefaultSortField
    * @param column
    * @private
    */
-  private initializeTableOptions(column: TableColumn): void {
-    this.initializeDefaultSortField(column);
-    this.initializeGlobalFilter(column);
-    this.initializePickList(column);
-  }
-
   private initializeDefaultSortField(column: TableColumn): void {
     if (column.sortField && !this.sortField) {
       this.sortField = column.field;
@@ -517,12 +572,22 @@ export class TableWrapperComponent implements OnInit, OnChanges {
     }
   }
 
+  /**
+   * initializeGlobalFilter
+   * @param column
+   * @private
+   */
   private initializeGlobalFilter(column: TableColumn): void {
     if (column.globalFilterField) {
       this.globalFilterFields.push(column.field);
     }
   }
 
+  /**
+   * initializePickList
+   * @param column
+   * @private
+   */
   private initializePickList(column: TableColumn): void {
     if (column.pickListWrapperOptions && column.pickListWrapperOptions.sourceListEndPoint) {
       const pickListWrapperOptions = column.pickListWrapperOptions;
@@ -540,6 +605,58 @@ export class TableWrapperComponent implements OnInit, OnChanges {
       }).catch((error) => {
         console.debug(error);
       });
+    }
+  }
+
+  private addToMultiSelectListToLoad(formFields: FormField[], listToLoad: Promise<void>[]): void {
+    formFields.forEach((formField) => {
+      if (formField.multiSelectWrapperOptions && formField.multiSelectWrapperOptions.sourceListEndPoint) {
+        listToLoad.push(
+          this.initializeMultiSelect(
+            formField, formField.multiSelectWrapperOptions, formField.multiSelectWrapperOptions.sourceListEndPoint,
+          ),
+        );
+      }
+
+      if (formField.childFormFields) {
+        this.addToMultiSelectListToLoad(formField.childFormFields, listToLoad);
+      }
+    });
+  }
+
+  private async initializeMultiSelect(
+    formField: FormField, multiSelectWrapperOptions: MultiSelectWrapperOptions, sourceListEndPoint: string,
+  ): Promise<void> {
+    try {
+      const list = await this.loadData<any[]>(sourceListEndPoint, []);
+      if (!list || list.length === 0) {
+        return;
+      }
+
+      multiSelectWrapperOptions.list = multiSelectWrapperOptions.sourceAdapter(list);
+    } catch (error) {
+      console.debug('initializeMultiSelect error:', { formField, error });
+    }
+  }
+
+  /**
+   * loadData
+   * @param endPoint
+   * @param defaultValue
+   * @private
+   */
+  private loadData<T>(endPoint: string, defaultValue: any): Promise<any> {
+    try {
+      this.isLoading = true;
+      return lastValueFrom(this.crudService.get<T>(endPoint));
+
+    } catch (e: any) {
+      console.debug(e);
+      this.displayMessage('Les données n\'ont pas pu être récupérées !', 'error');
+      return Promise.resolve(defaultValue);
+
+    } finally {
+      this.isLoading = false;
     }
   }
 
@@ -568,19 +685,6 @@ export class TableWrapperComponent implements OnInit, OnChanges {
     if (list === 'changedData') {
       this.emitChanges(this.changedData);
     }
-  }
-
-  /**
-   * initializeFormWrapperValues
-   * @param rowData
-   * @private
-   */
-  private initializeFormWrapperValues(rowData: { [key: string]: any; } = {}): void {
-    this.formValues['id'] = rowData['id'];
-
-    this.formFields?.forEach((field) => {
-      this.formValues[field.field] = rowData[field.field] || '';
-    });
   }
 
   /**
