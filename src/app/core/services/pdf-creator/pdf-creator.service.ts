@@ -1,19 +1,21 @@
 import { Injectable } from '@angular/core';
 import * as pdfMake from 'pdfmake/build/pdfmake';
+import { ProjectItem } from '../../../modules/application/interfaces/project-item.interface';
 import { UtilsService } from '../../../shared';
 import { PDF_CV_CREDITS, PDF_DEFAULT_FOOTER, PDF_DEFAULT_HEADER } from '../../constants/pdf.constant';
-import { ICvInfos } from '../../interfaces/models/v0/cv-infos.interface';
-import { IExperience } from '../../interfaces/models/v0/experience.interface';
-import { IFormation } from '../../interfaces/models/v0/formation.interface';
-import { IInterest } from '../../interfaces/models/v0/interest.interface';
-import { IProject } from '../../interfaces/models/v0/project.interface';
+import { ExperienceV1 } from '../../interfaces/models/v1/experience.interface';
+import { FormationV1 } from '../../interfaces/models/v1/formation.interface';
+import { InterestV1 } from '../../interfaces/models/v1/interest.interface';
 import { DayJsService } from '../dayjs/dayjs.service';
 import { PdfDefinition } from './classes/pdf-definition.class';
+import { PdfInfosData } from './interfaces/pdf-infos-data.interface';
 
 export interface IPdfColumn {
   width: string | number; // '*', 'auto', '%' or numeric value
   text: string;
+
   fontSize?: number;
+
   style?: string;
 }
 
@@ -99,70 +101,25 @@ export class PdfCreatorService {
 
   constructor(
     private readonly utilsService: UtilsService,
-  ) {}
+  ) {
+  }
 
-  public async createDownloadablePdf(pdfInfos: ICvInfos): Promise<void> {
-    return new Promise(async resolve => {
-
-      const {fileName, contact, title, technoList, logo, cvType} = pdfInfos;
-
-      this.updatePdfContent.setHeader();
-      this.updatePdfContent.setFooter();
-
-      const headerTable: IPdfTableBundle = {
+  private static addTitle(body: any[], exp: ExperienceV1 | FormationV1, date: string): void {
+    body.push([
+      {
         layout: 'noBorders',
+        margin: [0, 20, 0, 0],
         table: {
-          headerRows: 1,
-          widths: ['*', '*'],
+          widths: ['*', 'auto'],
           body: [
             [
-              // @ts-ignore
-              {image: logo.src, width: logo.width, height: logo.height},
-              {text: 'Le ' + DayJsService.getDate(undefined, 'DD MMMM YYYY'), style: 'right'},
+              { text: exp.title, style: 'bold' },
+              { text: date, style: 'right', bold: true, color: '#555555' },
             ],
-            [
-              {text: '\n' + contact.fullName, style: 'contact'},
-              {text: title, style: 'title'},
-            ],
-            [
-              {
-                text: `Tel : ${
-                  this.utilsService.formatPhoneNumber(contact.phoneNumberPartList.parts.join(contact.phoneNumberPartList.joiner))
-                }\nMail : ${contact.emailPartList.parts.join(contact.emailPartList.joiner)}`,
-                style: 'defaultStyle'
-              },
-              {text: technoList.join(', '), style: 'subtitle'},
-            ]
-          ]
-        }
-      };
-      this.updatePdfContent.addTable(headerTable);
-
-      contact.webLinkList.forEach(wl => {
-        this.updatePdfContent.addText(
-          `${wl.name} : ${wl.url}`,
-          'link',
-          wl.url
-        );
-      });
-
-      await this.addAdditionalFields(cvType, pdfInfos.data);
-
-      // @ts-ignore
-      pdfMake.fonts = {
-        Roboto: {
-          normal: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Regular.ttf',
-          bold: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Medium.ttf',
-          italics: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Italic.ttf',
-          bolditalics: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-MediumItalic.ttf'
-        }
-      };
-
-      // @ts-ignore
-      pdfMake.createPdf(this.pdfDocument).download(fileName);
-      this.pdfDocument = PdfCreatorService.initPdf();
-      resolve();
-    });
+          ],
+        },
+      },
+    ]);
   }
 
   private static getDefaultStyle() {
@@ -243,28 +200,74 @@ export class PdfCreatorService {
     return newPdf;
   }
 
-  private static addTitle(body: any[], exp: IExperience | IFormation, date: string): void {
-    body.push([
-      {
-        layout: 'noBorders',
-        margin: [0, 20, 0, 0],
-        table: {
-          widths: ['*', 'auto'],
-          body: [
-            [
-              { text: exp.title, style: 'bold' },
-              { text: date, style: 'right', bold: true, color: '#555555' },
-            ],
-          ],
-        },
-      },
-    ]);
-  }
-
-  private static addPlace(expBody: any[], exp: IExperience | IFormation): void {
+  private static addPlace(expBody: any[], exp: ExperienceV1 | FormationV1): void {
     if (exp.place) {
       expBody.push([{ text: (exp.society ? exp.society + ' - ' : '') + exp.place, italics: true, color: '#555555' }]);
     }
+  }
+
+  public async createDownloadablePdf(pdfInfos: PdfInfosData): Promise<void> {
+    return new Promise(async resolve => {
+
+      const { fileName, contact, title, technoList, logo, cvType } = pdfInfos;
+
+      this.updatePdfContent.setHeader();
+      this.updatePdfContent.setFooter();
+
+      const headerTable: IPdfTableBundle = {
+        layout: 'noBorders',
+        table: {
+          headerRows: 1,
+          widths: ['*', '*'],
+          body: [
+            [
+              // @ts-ignore
+              { image: logo.src, width: logo.width, height: logo.height },
+              { text: 'Le ' + DayJsService.getDate(undefined, 'DD MMMM YYYY'), style: 'right' },
+            ],
+            [
+              { text: '\n' + contact.fullName, style: 'contact' },
+              { text: title, style: 'title' },
+            ],
+            [
+              {
+                text: `Tel : ${
+                  this.utilsService.formatPhoneNumber(contact.phoneNumberPartList.parts.join(contact.phoneNumberPartList.joiner))
+                }\nMail : ${contact.emailPartList.parts.join(contact.emailPartList.joiner)}`,
+                style: 'defaultStyle',
+              },
+              { text: technoList.join(', '), style: 'subtitle' },
+            ],
+          ],
+        },
+      };
+      this.updatePdfContent.addTable(headerTable);
+
+      contact.webLinkList.forEach(webLink => {
+        this.updatePdfContent.addText(
+          `${webLink.name} : ${webLink.url}`,
+          'link',
+          webLink.url,
+        );
+      });
+
+      await this.addAdditionalFields(cvType, pdfInfos.data);
+
+      // @ts-ignore
+      pdfMake.fonts = {
+        Roboto: {
+          normal: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Regular.ttf',
+          bold: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Medium.ttf',
+          italics: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Italic.ttf',
+          bolditalics: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-MediumItalic.ttf',
+        },
+      };
+
+      // @ts-ignore
+      pdfMake.createPdf(this.pdfDocument).download(fileName);
+      this.pdfDocument = PdfCreatorService.initPdf();
+      resolve();
+    });
   }
 
   private static getDateToPrint(beginDate: string, endDate?: string): string {
@@ -287,7 +290,7 @@ export class PdfCreatorService {
   }
 
   private async addAdditionalFields(type: string, data: {
-    experienceList?: IExperience[]; formationList?: IFormation[]; projectList?: IProject[]; interestList?: IInterest[];
+    experienceList?: ExperienceV1[]; formationList?: FormationV1[]; projectList?: ProjectItem[]; interestList?: InterestV1[];
   }): Promise<void> {
     if (type !== 'full-cv') {
       return;
@@ -316,7 +319,7 @@ export class PdfCreatorService {
     }
   }
 
-  private buildPdfExperiences(experienceList: IExperience[]): void {
+  private buildPdfExperiences(experienceList: ExperienceV1[]): void {
     this.updatePdfContent.addSectionTitle('Mes expériences', 'sectionTitle', '#024873');
     const expBody: any[] = [];
 
@@ -353,7 +356,7 @@ export class PdfCreatorService {
     this.updatePdfContent.addTable(expTable);
   }
 
-  private buildPdfFormations(formationList: IFormation[]): void {
+  private buildPdfFormations(formationList: FormationV1[]): void {
     this.updatePdfContent.addSectionTitle('Mes formations', 'sectionTitle', '#024873', 'before');
     const formBody: any[] = [];
 
@@ -397,7 +400,7 @@ export class PdfCreatorService {
     this.updatePdfContent.addTable(formTable);
   }
 
-  private async buildPdfProjects(projectList: IProject[]): Promise<void> {
+  private async buildPdfProjects(projectList: ProjectItem[]): Promise<void> {
     this.updatePdfContent.addSectionTitle('Mes projets',
       'sectionTitle', '#024873', 'before');
     const projBody = [];
@@ -474,15 +477,19 @@ export class PdfCreatorService {
     this.updatePdfContent.addTable(projTable);
   }
 
-  private buildPdfInterests(interestList: IInterest[]): void {
+  private buildPdfInterests(interestList: InterestV1[]): void {
     this.updatePdfContent.addSectionTitle(
       'Mes centres d\'intérêts', 'sectionTitle',
       '#024873'/*, 'before'*/);
     const intBody: any[] = [];
 
     interestList.forEach(int => {
-      intBody.push([{text: int.title.toUpperCase(), bold: true, margin: [20, 20, 20, 0]}]);
-      intBody.push([{text: int.description, link: int.link && int.link.url ? int.link.url : null, margin: [30, 0, 30, 0]}]);
+      intBody.push([{ text: int.title.toUpperCase(), bold: true, margin: [20, 20, 20, 0] }]);
+      intBody.push([{
+        text: int.description,
+        link: int.link && int.link.url ? int.link.url : null,
+        margin: [30, 0, 30, 0],
+      }]);
     });
 
     const intTable: IPdfTableBundle = {
