@@ -47,9 +47,19 @@ export class ExperiencesComponent implements OnInit {
             selector: selectAllExperiences, defaultValue: [],
           });
 
-          this.experienceList = UtilsService.sortObjectList<ExperienceV1>(
-            unsortedList, 'desc', 'beginDate', 'date',
-          );
+          const withoutEndDateList: ExperienceV1[] = [];
+          const withEndDateList: ExperienceV1[] = unsortedList.filter((experience) => {
+            if (experience.endDate) {
+              return true;
+            }
+            withoutEndDateList.push(experience);
+            return false;
+          });
+
+          this.experienceList = [
+            ...UtilsService.sortObjectList<ExperienceV1>(withoutEndDateList, 'desc', 'beginDate', 'date'),
+            ...UtilsService.sortObjectList<ExperienceV1>(withEndDateList, 'desc', 'endDate', 'date'),
+          ];
         }
       }),
       map((loaded) => !loaded),

@@ -47,6 +47,11 @@
   font-weight: 500 !important;
 }
 
+
+.mat-tab-header .mat-tab-label-active {
+  pointer-events: none;
+}
+
 .mat-expansion-panel {
   border-radius: 5px !important;
   background: #EBF2F2 !important;

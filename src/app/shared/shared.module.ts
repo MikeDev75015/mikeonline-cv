@@ -52,6 +52,8 @@ const primeNgModules: any[] = [
 @NgModule({
   declarations: [
     DateFormatPipe,
+    LoadingComponent,
+    LoadingDirective,
     DynamicComponentLoaderDirective,
   ],
   imports: [
@@ -68,6 +70,8 @@ const primeNgModules: any[] = [
     ...primeNgModules,
 
     DateFormatPipe,
+
+    LoadingDirective,
     DynamicComponentLoaderDirective,
   ],
 })

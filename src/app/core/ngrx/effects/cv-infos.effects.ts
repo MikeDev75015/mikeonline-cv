@@ -5,6 +5,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { map, mergeMap, tap } from 'rxjs/operators';
 import { ApiService } from '../../../shared';
+import { ApiV1Path } from '../../interfaces/api/api-v1-path.enum';
 import { CvInfosV1 } from '../../interfaces/models/v1/cv-infos.interface';
 import { ApplicationActions, CvInfosActions, TagsActions } from '../ngrx-index';
 
@@ -15,7 +16,7 @@ import { ApplicationActions, CvInfosActions, TagsActions } from '../ngrx-index';
 export class CvInfosEffects {
   loadCvInfos$ = createEffect(() => this.actions$.pipe(
     ofType(CvInfosActions.loadCvInfos),
-    mergeMap(() => this.apiV0Service.getData<CvInfosV1[]>('cv-infos')),
+    mergeMap(() => this.apiV0Service.getData<CvInfosV1[]>(ApiV1Path.CV_INFOS)),
     map(([cvInfos]) => {
       if (!cvInfos) {
         return CvInfosActions.loadCvInfosFailure();

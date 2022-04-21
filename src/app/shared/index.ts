@@ -13,7 +13,7 @@ export { HeaderTitleFormatPipe } from './pipes/header-title-format.pipe';
 export { IncompressibleSpacePipe } from './pipes/incompressible-space.pipe';
 
 // services
-export { ApiService } from '../core/services/api-v0/api.service';
+export { ApiService } from '../core/services/api/api.service';
 export { DataService } from './services/data/data.service';
 export { TagsService } from './services/tags/tags.service';
 export { UtilsService } from './services/utils/utils.service';

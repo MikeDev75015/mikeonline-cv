@@ -1,12 +1,6 @@
 <ng-container *ngIf="contact">
-  <ng-container
-    *ngIf="!mobileView && !heightIsTooSmall"
-    [ngTemplateOutlet]="classicViewTemplate"
-  ></ng-container>
-  <ng-container
-    *ngIf="mobileView || heightIsTooSmall"
-    [ngTemplateOutlet]="mobileViewTemplate"
-  ></ng-container>
+  <ng-container *ngIf="!mobileView && !heightIsTooSmall" [ngTemplateOutlet]="classicViewTemplate"></ng-container>
+  <ng-container *ngIf="mobileView || heightIsTooSmall" [ngTemplateOutlet]="mobileViewTemplate"></ng-container>
 </ng-container>
 
 <ng-template #classicViewTemplate>

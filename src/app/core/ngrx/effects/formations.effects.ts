@@ -5,6 +5,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { mergeMap, tap } from 'rxjs/operators';
 import { ApiService, TagsService } from '../../../shared';
+import { ApiV1Path } from '../../interfaces/api/api-v1-path.enum';
 import { FormationV1 } from '../../interfaces/models/v1/formation.interface';
 import { FormationsActions } from '../ngrx-index';
 
@@ -18,7 +19,7 @@ export class FormationsEffects {
    */
   fetchFormations$ = createEffect(() => this.actions$.pipe(
     ofType(FormationsActions.fetchFormations),
-    mergeMap(() => this.apiV0Service.getData<FormationV1[]>('formations')),
+    mergeMap(() => this.apiV0Service.getData<FormationV1[]>(ApiV1Path.FORMATIONS)),
     tap((formationList) => {
       if (!formationList || !formationList.length) {
         this.store.dispatch(FormationsActions.fetchFormationsFailure());

@@ -1,8 +1,30 @@
 
 
 .table-cell-overlay-panel {
+  top: 60px !important;
   width: 70%;
   min-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+
+  .p-overlaypanel-content {
+    padding-top: 0;
+  }
+
+  .overlay-header {
+    z-index: 1;
+    position: sticky;
+    top: 0;
+    padding: 24px 0;
+    background: var(--surface-f);
+    border-bottom: 1px solid var(--surface-0);
+
+    .overlay-title {
+      font-weight: 600;
+      font-size: 1.25rem;
+      color: var(--text-color);
+    }
+  }
 }
 
 .pick-list-wrapper-container {

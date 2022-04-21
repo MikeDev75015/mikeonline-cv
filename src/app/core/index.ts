@@ -21,14 +21,6 @@ export { IImage } from './interfaces/models/commons/image.interface';
 export { ILink } from './interfaces/models/commons/link.interface';
 export { IWebLink } from './interfaces/models/commons/web-link.interface';
 
-export { ISkill } from './interfaces/models/v0/skill.interface';
-export { IExperience } from './interfaces/models/v0/experience.interface';
-export { IFormation } from './interfaces/models/v0/formation.interface';
-export { IInterest } from './interfaces/models/v0/interest.interface';
-export { ICvInfos } from './interfaces/models/v0/cv-infos.interface';
-export { IProject } from './interfaces/models/v0/project.interface';
-export { ITag } from './interfaces/models/v0/tag.interface';
-
 // modules
 export { LoggerModule } from './modules/logger/logger.module';
 export { AlertModule } from './modules/alert/alert.module';

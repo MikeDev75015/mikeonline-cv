@@ -9,23 +9,27 @@ import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { MessageService } from 'primeng/api';
 import { environment } from '../environments/environment';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { AlertModule, LoggerModule } from './core';
 import { CoreModule } from './core/core.module';
 import { httpInterceptorProviders } from './core/interceptors';
-import { AlertModule } from './core/modules/alert/alert.module';
-import { LoggerModule } from './core/modules/logger/logger.module';
-import { ApplicationEffects } from './core/ngrx/effects/application.effects';
-import { CompetencesEffects } from './core/ngrx/effects/competences.effects';
-import { CvInfosEffects } from './core/ngrx/effects/cv-infos.effects';
-import { ExperiencesEffects } from './core/ngrx/effects/experiences.effects';
-import { FormationsEffects } from './core/ngrx/effects/formations.effects';
-import { InterestsEffects } from './core/ngrx/effects/interests.effects';
-import { ProjectsEffects } from './core/ngrx/effects/projects.effects';
-import { TagsEffects } from './core/ngrx/effects/tags.effects';
-import { AuthEffects, metaReducers, reducers } from './core/ngrx/ngrx-index';
+import {
+  ApplicationEffects,
+  AuthEffects,
+  CompetencesEffects,
+  CvInfosEffects,
+  ExperiencesEffects,
+  FormationsEffects,
+  InterestsEffects,
+  metaReducers,
+  ProjectsEffects,
+  reducers,
+  TagsEffects,
+} from './core/ngrx/ngrx-index';
 import { HttpClientService } from './core/services/http-client/http-client.service';
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -80,6 +84,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   providers: [
     environment.production ? [] : httpInterceptorProviders,
     HttpClientService,
+    MessageService,
   ],
   bootstrap: [AppComponent],
   // schemas: [NO_ERRORS_SCHEMA],

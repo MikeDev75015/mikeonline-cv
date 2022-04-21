@@ -5,6 +5,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { map, mergeMap, tap } from 'rxjs/operators';
 import { ApiService } from '../../../shared';
+import { ApiV1Path } from '../../interfaces/api/api-v1-path.enum';
 import { TagV1 } from '../../interfaces/models/v1/tag.interface';
 import {
   CompetencesActions,
@@ -25,7 +26,7 @@ export class TagsEffects {
    */
   fetchTags$ = createEffect(() => this.actions$.pipe(
     ofType(TagsActions.fetchTags),
-    mergeMap(() => this.apiV0Service.getData<TagV1[]>('tags')),
+    mergeMap(() => this.apiV0Service.getData<TagV1[]>(ApiV1Path.TAGS)),
     map((tagList) => {
       if (!tagList || !tagList.length) {
         return TagsActions.fetchTagsFailure();

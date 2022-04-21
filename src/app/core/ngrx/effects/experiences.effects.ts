@@ -5,6 +5,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { mergeMap, tap } from 'rxjs/operators';
 import { ApiService, TagsService } from '../../../shared';
+import { ApiV1Path } from '../../interfaces/api/api-v1-path.enum';
 import { ExperienceV1 } from '../../interfaces/models/v1/experience.interface';
 import { ExperiencesActions } from '../ngrx-index';
 
@@ -18,7 +19,7 @@ export class ExperiencesEffects {
    */
   fetchExperiences$ = createEffect(() => this.actions$.pipe(
     ofType(ExperiencesActions.fetchExperiences),
-    mergeMap(() => this.apiV0Service.getData<ExperienceV1[]>('experiences')),
+    mergeMap(() => this.apiV0Service.getData<ExperienceV1[]>(ApiV1Path.EXPERIENCES)),
     tap((experienceList) => {
       if (!experienceList || !experienceList.length) {
         this.store.dispatch(ExperiencesActions.fetchExperiencesFailure());

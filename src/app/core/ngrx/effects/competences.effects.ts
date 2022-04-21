@@ -5,6 +5,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { mergeMap, tap } from 'rxjs/operators';
 import { ApiService, TagsService } from '../../../shared';
+import { ApiV1Path } from '../../interfaces/api/api-v1-path.enum';
 import { SkillV1 } from '../../interfaces/models/v1/skill.interface';
 import { CompetencesActions } from '../ngrx-index';
 
@@ -18,7 +19,7 @@ export class CompetencesEffects {
    */
   fetchCompetences$ = createEffect(() => this.actions$.pipe(
     ofType(CompetencesActions.fetchCompetences),
-    mergeMap(() => this.apiV0Service.getData<SkillV1[]>('skills')),
+    mergeMap(() => this.apiV0Service.getData<SkillV1[]>(ApiV1Path.SKILLS)),
     tap((competenceList) => {
       if (!competenceList || !competenceList.length) {
         this.store.dispatch(CompetencesActions.fetchCompetencesFailure());

@@ -46,10 +46,19 @@ export class FormationsComponent implements OnInit {
             defaultValue: [],
           });
 
-          this.formationList = UtilsService.sortObjectList<FormationV1>(
-            UtilsService.addMissingEndDate<FormationV1>(unsortedList),
-            'desc', 'endDate', 'date',
-          );
+          const withoutEndDateList: FormationV1[] = [];
+          const withEndDateList: FormationV1[] = unsortedList.filter((formation) => {
+            if (formation.endDate) {
+              return true;
+            }
+            withoutEndDateList.push(formation);
+            return false;
+          });
+
+          this.formationList = [
+            ...UtilsService.sortObjectList<FormationV1>(withoutEndDateList, 'desc', 'beginDate', 'date'),
+            ...UtilsService.sortObjectList<FormationV1>(withEndDateList, 'desc', 'endDate', 'date'),
+          ];
         }
       }),
       map((loaded) => !loaded),

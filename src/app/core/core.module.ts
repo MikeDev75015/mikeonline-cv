@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule, Optional, Provider, SkipSelf } from '@angular/core';
+import { MaintenanceComponent } from './components/maintenance/maintenance.component';
 
 const importList = [
   CommonModule,
@@ -8,7 +9,9 @@ const importList = [
 const providerList: Provider[] = [];
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    MaintenanceComponent,
+  ],
   imports: [
     importList,
   ],

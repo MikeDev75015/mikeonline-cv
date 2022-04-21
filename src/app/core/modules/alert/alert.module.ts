@@ -1,9 +1,8 @@
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
-import {AlertPopupComponent} from './components/alert-popup/alert-popup.component';
-
+import { AlertPopupComponent } from './components/alert-popup/alert-popup.component';
 
 @NgModule({
   declarations: [AlertPopupComponent],
@@ -15,6 +14,7 @@ import {AlertPopupComponent} from './components/alert-popup/alert-popup.componen
     MatDialogModule,
   ],
   entryComponents: [AlertPopupComponent],
-  exports: [AlertPopupComponent]
+  exports: [AlertPopupComponent],
 })
-export class AlertModule { }
+export class AlertModule {
+}

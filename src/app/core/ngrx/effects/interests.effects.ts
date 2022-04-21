@@ -5,6 +5,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { map, mergeMap, tap } from 'rxjs/operators';
 import { ApiService } from '../../../shared';
+import { ApiV1Path } from '../../interfaces/api/api-v1-path.enum';
 import { InterestV1 } from '../../interfaces/models/v1/interest.interface';
 import { InterestsActions } from '../ngrx-index';
 
@@ -18,7 +19,7 @@ export class InterestsEffects {
    */
   fetchInterests$ = createEffect(() => this.actions$.pipe(
     ofType(InterestsActions.fetchInterests),
-    mergeMap(() => this.apiV0Service.getData<InterestV1[]>('interests')),
+    mergeMap(() => this.apiV0Service.getData<InterestV1[]>(ApiV1Path.INTERESTS)),
     map((interestList) => {
       if (!interestList || !interestList.length) {
         return InterestsActions.fetchInterestsFailure();

@@ -1,5 +1,13 @@
-<p class="fcc" [ngClass]="{'column': mobile}" style="cursor: pointer; margin-bottom: 0;" (click)="onCopyrightClick()">
-  <span>{{ credits.copyright }}</span>
-  {{ !mobile ? '&nbsp;' : '' }}
-  <span>{{ credits.owner }}</span>
-</p>
+<div class="fcc w100 h100 relative">
+  <p (click)="onCopyrightClick()" [ngClass]="{'column': mobile}" class="fcc" style="cursor: pointer; margin-bottom: 0;">
+    <span>{{ credits.copyright }}</span>
+    {{ !mobile ? '&nbsp;' : '' }}
+    <span>{{ credits.owner }}</span>
+  </p>
+
+  <button
+    *ngIf="!mobile" class="p-button-rounded p-button-text p-button-plain absolute bottom-footer-admin-button"
+    icon="pi pi-user-edit" pButton pRipple routerLink="/admin"
+    type="button"
+  ></button>
+</div>

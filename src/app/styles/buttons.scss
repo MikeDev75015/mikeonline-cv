@@ -61,3 +61,13 @@
 .btns-open-close-items:active, .btns-open-close-items:focus {
   outline: none;
 }
+
+.bottom-footer-admin-button {
+  top: 6px;
+  right: 6px;
+
+  > span {
+    color: white;
+    font-size: 30px;
+  }
+}

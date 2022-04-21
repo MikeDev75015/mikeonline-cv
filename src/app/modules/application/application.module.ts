@@ -7,8 +7,6 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTreeModule } from '@angular/material/tree';
-import { LoadingComponent } from '../../core/directives/loading/component/loading.component';
-import { LoadingDirective } from '../../core/directives/loading/loading.directive';
 import { PdfCreatorService } from '../../core/services/pdf-creator/pdf-creator.service';
 import { FirstLetterUppercasePipe, HeaderTitleFormatPipe, IncompressibleSpacePipe } from '../../shared';
 import { SharedModule } from '../../shared/shared.module';
@@ -54,9 +52,6 @@ import { PageLayoutComponent } from './layouts/page-layout/page-layout.component
   declarations: [
     ApplicationComponent,
     PageLayoutComponent,
-
-    LoadingComponent,
-    LoadingDirective,
 
     MainComponent,
     ContactComponent,

@@ -5,6 +5,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { mergeMap, tap } from 'rxjs/operators';
 import { ApiService, TagsService } from '../../../shared';
+import { ApiV1Path } from '../../interfaces/api/api-v1-path.enum';
 import { ProjectV1 } from '../../interfaces/models/v1/project.interface';
 import { ProjectsActions } from '../ngrx-index';
 
@@ -18,7 +19,7 @@ export class ProjectsEffects {
    */
   fetchProjects$ = createEffect(() => this.actions$.pipe(
     ofType(ProjectsActions.fetchProjects),
-    mergeMap(() => this.apiV0Service.getData<ProjectV1[]>('projects')),
+    mergeMap(() => this.apiV0Service.getData<ProjectV1[]>(ApiV1Path.PROJECTS)),
     tap((projectList) => {
       if (!projectList || !projectList.length) {
         this.store.dispatch(ProjectsActions.fetchProjectsFailure());

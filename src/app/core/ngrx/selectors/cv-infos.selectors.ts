@@ -1,5 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { ICvInfos } from '../../interfaces/models/v0/cv-infos.interface';
+import { CvInfosV1 } from '../../interfaces/models/v1/cv-infos.interface';
 import { CvInfosState } from '../reducers/cv-infos.reducers';
 
 const cvInfosState = createFeatureSelector<CvInfosState>('cvInfos');
@@ -9,5 +9,5 @@ const cvInfosState = createFeatureSelector<CvInfosState>('cvInfos');
  */
 export const selectCvInfos = createSelector(
   cvInfosState,
-  (state: CvInfosState) => state as ICvInfos,
+  (state: CvInfosState) => state as CvInfosV1,
 );

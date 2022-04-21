@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { IExperience, IFormation } from '../../../core';
+import { ExperienceV1 } from '../../../core/interfaces/models/v1/experience.interface';
+import { FormationV1 } from '../../../core/interfaces/models/v1/formation.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TemplatesService {
-  public static showOpenCloseButtons(element: IExperience | IFormation | undefined): boolean {
+  public static showOpenCloseButtons(element: ExperienceV1 | FormationV1 | undefined): boolean {
     if (!element || !element.detailList || !element.detailList.length) {
       return false;
     }

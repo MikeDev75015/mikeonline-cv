@@ -130,6 +130,8 @@ export class ApplicationComponent implements OnInit {
     this.updateView();
 
     this.addEventListenersToWindow();
+
+    this.store.dispatch(ApplicationActions.startAppLoading());
   }
 
   ngOnDestroy(): void {

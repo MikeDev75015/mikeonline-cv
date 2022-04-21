@@ -9,7 +9,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { IInterest } from '../../../../../core';
+import { InterestV1 } from '../../../../../core/interfaces/models/v1/interest.interface';
 import { IAnimationServiceResponse, IN_OUT_TEMPLATE_ANIMATION, UtilsService } from '../../../../../shared';
 import { AnimationsService } from '../../../../../shared/services/animations/animations.service';
 
@@ -90,7 +90,7 @@ const verticalAccordionItemMaxWidth = calculateItemMaxWidth(verticalAccordionIte
   ],
 })
 export class VerticalAccordionComponent implements OnInit, OnChanges, OnDestroy, AfterViewChecked {
-  @Input() itemList: IInterest[] | undefined;
+  @Input() itemList: InterestV1[] | undefined;
 
   @Input() verticalAccordionContainerClass = '';
 
@@ -124,7 +124,7 @@ export class VerticalAccordionComponent implements OnInit, OnChanges, OnDestroy,
   ngOnChanges(changes: SimpleChanges): void {
     if (changes && changes['itemList'] && changes['itemList'].currentValue && changes['itemList'].currentValue.length) {
       this.updateVerticalAccordionItemMinWidth();
-      this.createVerticalAccordionItemStateDictionary(this.itemList as IInterest[]);
+      this.createVerticalAccordionItemStateDictionary(changes['itemList'].currentValue);
     }
   }
 

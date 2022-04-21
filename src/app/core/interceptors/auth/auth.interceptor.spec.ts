@@ -1,16 +1,16 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ApiV1Interceptor } from './api-v1.interceptor';
+import { AuthInterceptor } from './auth.interceptor';
 
-describe('ApiV1Interceptor', () => {
+describe('AuthInterceptor', () => {
   beforeEach(() => TestBed.configureTestingModule({
     providers: [
-      ApiV1Interceptor,
+      AuthInterceptor,
     ],
   }));
 
   it('should be created', () => {
-    const interceptor: ApiV1Interceptor = TestBed.inject(ApiV1Interceptor);
+    const interceptor: AuthInterceptor = TestBed.inject(AuthInterceptor);
     expect(interceptor).toBeTruthy();
   });
 });

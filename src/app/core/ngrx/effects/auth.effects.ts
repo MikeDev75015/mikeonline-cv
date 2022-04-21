@@ -17,14 +17,13 @@ import { AuthActions } from '../ngrx-index';
 export class AuthEffects {
   loginUser$ = createEffect(() => this.actions$.pipe(
     ofType(AuthActions.loginUser),
-    mergeMap((payload) => this.authService.login(payload)),
-    map((user) => {
-      if (!user || !user.id) {
+    mergeMap((payload: LoginRequest) => this.authService.login(payload)),
+    map(({ accessToken }) => {
+      console.debug('login response:', accessToken);
+      if (!accessToken) {
         return AuthActions.loginUserFailure();
       }
-
-      StorageService.setItem('sessionStorage', STORAGE_KEYS['user'], user);
-      return AuthActions.loginUserSuccess({ user });
+      return AuthActions.loginUserSuccess({ accessToken });
     }),
   ));
 
@@ -37,14 +36,46 @@ export class AuthEffects {
 
   logoutUser$ = createEffect(() => this.actions$.pipe(
     ofType(AuthActions.logoutUser),
-    tap(async () => {
-      StorageService.removeItem('sessionStorage', STORAGE_KEYS['user']);
-      await this.router.navigate(['/admin/sign-in']);
+    mergeMap(() => this.authService.logout()),
+    map(() => AuthActions.logoutUserSuccess()),
+    catchError(() => of(AuthActions.logoutUserFailure())),
+  ));
+
+  logoutUserSuccess$ = createEffect(() => this.actions$.pipe(
+    ofType(AuthActions.logoutUserSuccess),
+    tap(() => {
+      this.cleanStorageAccessToken(true);
     }),
   ), { dispatch: false });
 
-  loginUserFailure$ = createEffect(() => this.actions$.pipe(
-    ofType(AuthActions.loginUserFailure),
+  logoutUserFailure$ = createEffect(() => this.actions$.pipe(
+    ofType(AuthActions.logoutUserFailure),
+    tap(() => {
+      this.cleanStorageAccessToken(true);
+    }),
+  ), { dispatch: false });
+
+  getUser$ = createEffect(() => this.actions$.pipe(
+    ofType(AuthActions.getUser),
+    mergeMap(() => this.authService.getUserAccount()),
+    map((user) => {
+      if (!user || !user.id) {
+        return AuthActions.getUserFailure();
+      }
+      return AuthActions.getUserSuccess({ user });
+    }),
+    catchError(() => of(AuthActions.getUserFailure())),
+  ));
+
+  getUserSuccess$ = createEffect(() => this.actions$.pipe(
+    ofType(AuthActions.getUserSuccess),
+    tap(async () => {
+      await this.router.navigate(['/admin']);
+    }),
+  ), { dispatch: false });
+
+  getUserFailure$ = createEffect(() => this.actions$.pipe(
+    ofType(AuthActions.getUserFailure),
     tap(() => {
       console.warn('loginUserFailure$ error: User not found!');
     }),
@@ -63,5 +94,16 @@ export class AuthEffects {
     private readonly authService: AuthService,
     private readonly router: Router,
   ) {
+  }
+
+  private cleanStorageAccessToken(navigateToSignInPage = false): void {
+    StorageService.removeItem('localStorage', STORAGE_KEYS.accessToken);
+    if (!navigateToSignInPage) {
+      console.debug('Access token removed!');
+      return;
+    }
+    this.router.navigate(['/admin/sign-in']).finally(() => {
+      console.debug('AuthEffects supposed to have been redirected on the sign in page!');
+    });
   }
 }

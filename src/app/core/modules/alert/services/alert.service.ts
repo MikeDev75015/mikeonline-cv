@@ -1,18 +1,19 @@
-import {Injectable} from '@angular/core';
-import {Subscription} from 'rxjs';
-import {MatDialog} from '@angular/material/dialog';
-import {AlertPopupComponent} from '../components/alert-popup/alert-popup.component';
+import { Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
+import { AlertPopupComponent } from '../components/alert-popup/alert-popup.component';
 import { DialogData } from '../interfaces/dialog-data.interface';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AlertService {
   private dialogSubscription: Subscription | undefined;
 
   constructor(
     public readonly dialog: MatDialog,
-  ) {}
+  ) {
+  }
 
   public displayAlertDialog(data: DialogData): void {
     this.dialog.open(AlertPopupComponent, {
@@ -22,7 +23,7 @@ export class AlertService {
         msg: data.msg,
         actionsList: [],
         closeBtnLabel: data.closeBtnLabel || undefined,
-      }
+      },
     });
   }
 
@@ -35,7 +36,7 @@ export class AlertService {
           msg: data.msg,
           actionsList: data.actionsList,
           closeBtnLabel: data.closeBtnLabel || undefined,
-        }
+        },
       });
 
       this.dialogSubscription = dialogRef.afterClosed().subscribe(action => {

@@ -1,6 +1,6 @@
 import { AfterViewChecked, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { IInterest } from '../../../../../../core';
+import { InterestV1 } from '../../../../../../core/interfaces/models/v1/interest.interface';
 import { IAnimationServiceResponse, IN_OUT_TEMPLATE_ANIMATION } from '../../../../../../shared';
 import { AnimationsService } from '../../../../../../shared/services/animations/animations.service';
 
@@ -20,7 +20,7 @@ import { AnimationsService } from '../../../../../../shared/services/animations/
 export class VerticalAccordionItemComponent implements OnInit, AfterViewChecked {
   @Input() lastItem = false;
 
-  @Input() itemData!: IInterest;
+  @Input() itemData!: InterestV1;
 
   @Input() itemClass = '';
 
