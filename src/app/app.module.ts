@@ -82,7 +82,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     AlertModule,
   ],
   providers: [
-    environment.production ? [] : httpInterceptorProviders,
+    httpInterceptorProviders,
     HttpClientService,
     MessageService,
   ],
