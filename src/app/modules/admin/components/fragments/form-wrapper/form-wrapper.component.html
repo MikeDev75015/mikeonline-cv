@@ -1,4 +1,4 @@
-<div *ngIf="isInitialized" class="fcc column w100 form-wrapper-container">
+<form *ngIf="isInitialized" class="fcc column w100 form-wrapper-container">
 
   <div
     *ngFor="let element of formFields" [ngClass]="{
@@ -12,6 +12,7 @@
     class="w100"
   >
     <label
+      *ngIf="element.inputLabel" data-cy="field-label"
       [ngClass]="{
         w30: !element.childFormFields || !element.childFormFields.length,
         w100: element.childFormFields && element.childFormFields.length,
@@ -27,6 +28,7 @@
     >
       <app-input-wrapper
         (valueChange)="onValueChange(element.field, $event)" [(value)]="formValues[element.field]"
+        data-cy="input-wrapper"
         [checkboxOptions]="element.inputCheckboxOptions
         ? {label: element.inputCheckboxOptions.label, labelPlacement: element.inputCheckboxOptions.labelPlacement}
         : {}"
@@ -44,7 +46,7 @@
 
     <ng-container *ngIf="element.inputType === 'dropdown' && element.dropdownWrapperOptions">
       <app-dropdown-wrapper
-        (selectedValueChange)="onValueChange(element.field, $event)"
+        (selectedValueChange)="onValueChange(element.field, $event)" data-cy="dropdown-wrapper"
         [(selectedValue)]="formValues[element.field]" [list]="element.dropdownWrapperOptions.list"
         [name]="element.inputName || ''" [placeholder]="element.inputPlaceholder || ''"
         [scrollHeight]="element.dropdownWrapperOptions.scrollHeight || ''" [title]="element.inputTitle || ''"
@@ -56,7 +58,7 @@
       <app-multi-select-wrapper
         (selectedValuesChange)="onValueChange(element.field, $event)" [(selectedValues)]="formValues[element.field]"
         [defaultLabel]="element.multiSelectWrapperOptions.defaultLabel || ''"
-        [list]="element.multiSelectWrapperOptions.list"
+        [list]="element.multiSelectWrapperOptions.list" data-cy="multi-select-wrapper"
         [pTooltip]="formValues[element.field].length + ' sélectionné(s)'" [placeholder]="element.inputPlaceholder || ''"
         [scrollHeight]="element.multiSelectWrapperOptions.scrollHeight || '200px'"
         [selectionLimit]="element.multiSelectWrapperOptions.selectionLimit"
@@ -68,7 +70,7 @@
     <ng-container *ngIf="element.inputType === 'form' && element.childFormFields && element.childFormFields.length">
 
       <!-- multiple -->
-      <div *ngIf="element.isList" class="fss column w100">
+      <div *ngIf="element.isList" class="fss column w100" data-cy="multiple-child-forms">
         <ng-container *ngFor="let subElement of formValues[element.field]; let i = index">
           <div class="fas w100">
             <app-form-wrapper
@@ -100,7 +102,7 @@
       <app-form-wrapper
         (formValuesChange)="onSubFormValueChange(element.field, $event)" *ngIf="!element.isList"
         [formFields]="element.childFormFields" [formValues]="formValues[element.field]"
-        [isChildForm]="true" class="w100 child-form"
+        [isChildForm]="true" class="w100 child-form" data-cy="single-child-form"
       ></app-form-wrapper>
 
     </ng-container>
@@ -115,4 +117,4 @@
       (click)="onSaveData()" class="p-button-text" icon="pi pi-check" label="Enregistrer" pButton pRipple
     ></button>
   </div>
-</div>
+</form>

@@ -4,14 +4,13 @@ import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { alertServiceMock } from '../../../../../__mocks__/services/alert-service.mock';
 import { httpClientMock } from '../../../../../__mocks__/services/http-client.mock';
-import { tagListMock } from '../../../../../__mocks__/v0/data/tag-list.mock';
 import { waitTimeout } from '../../../../../__mocks__/timeout.mock';
-import { IShareData } from '../../../core/interfaces/models/commons/share-data.interface';
+import tagListMock from '../../../../../__mocks__/v1/json-files/tags.json';
 import { AlertModule } from '../../../core';
+import { IShareData } from '../../../core/interfaces/models/commons/share-data.interface';
 import { AlertService } from '../../../core/modules/alert/services/alert.service';
 import { DayJsService } from '../../../core/services/dayjs/dayjs.service';
 import { ClipboardService } from '../clipboard/clipboard.service';
-
 import { UtilsService } from './utils.service';
 
 describe('UtilsService', () => {
@@ -245,19 +244,89 @@ describe('UtilsService', () => {
   describe('initTechnoListWithTagList', () => {
     it('should return a techno list', () => {
       expect(service.initTechnoListWithTagList(tagListMock.slice(0, 6))).toStrictEqual([
-        'Angular', 'AWS Cloud', 'CQRS', 'DevOps', 'Docker', 'Jest', ' ',
+        'Bootstrap', 'Jira', 'Swagger', 'Html', 'FireBase', 'Angular 2+', ' ',
       ]);
     });
 
     it('should return a limited techno list', () => {
       expect(service.initTechnoListWithTagList(tagListMock, false)).toStrictEqual([
-        'Angular', 'AWS Cloud', 'CQRS', 'DevOps', 'Docker', 'Jest', 'et 9 autres...',
+        'Bootstrap', 'Jira', 'Swagger', 'Html', 'FireBase', 'Angular 2+', 'et 65 autres...',
       ]);
     });
 
     it('should return a full techno list', () => {
       expect(service.initTechnoListWithTagList(tagListMock, true)).toStrictEqual([
-        'Angular', 'AWS Cloud', 'CQRS', 'DevOps', 'Docker', 'Jest', 'Nest.js', 'tag11', 'tag12', 'tag13', 'tag14', 'tag21', 'tag22', 'tag23', 'tag24',
+        'Bootstrap',
+        'Jira',
+        'Swagger',
+        'Html',
+        'FireBase',
+        'Angular 2+',
+        'jQuery',
+        'JavaScript',
+        'Html 5',
+        'Android Studio',
+        'TypeScript',
+        'Node.js',
+        'CALMS',
+        'CircleCI',
+        'NGRX',
+        'React.js',
+        'Jwt',
+        'Nest.js',
+        'BitBucket',
+        'Css',
+        'Google Tag Manager',
+        'Php',
+        'SEO',
+        'Pixel FB',
+        'Docker',
+        'i18n',
+        'Ionic 5',
+        'Jest',
+        'Progressive Web App',
+        'Microservices',
+        'AWS Cloud',
+        'Socket.io',
+        'Flash Professional',
+        'DevOps',
+        'Event Sourcing',
+        'Netlify',
+        'Pug',
+        'SASS',
+        'Stuart',
+        'MongoDb',
+        'Heroku',
+        'Deliver.ee',
+        'Vue.js',
+        'CQRS',
+        'Compodoc',
+        'Angular Material',
+        'MySQL',
+        'Stripe',
+        'WordPress',
+        'GitHub',
+        'GitLab',
+        'Express',
+        'Prometheus',
+        'PowerPoint',
+        'Google Analytics',
+        'NPM',
+        'Vuex',
+        'Css 3',
+        'Mongoose',
+        'Fastify',
+        'SDK manager',
+        'Photoshop',
+        'Pdf',
+        'Trello',
+        'Word',
+        'SRE',
+        'Angular 13',
+        'Cypress',
+        'PrimeNg',
+        'Angular 7',
+        'Angular 11',
       ]);
     });
   });

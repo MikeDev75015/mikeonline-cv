@@ -2,7 +2,7 @@
   "projectId": "pwv2su",
   "baseUrl": "http://localhost:4200",
   "env": {
-    "BACKEND_URL": "https://ocv-backend-cypress.tests.com",
     "SPLASH_SCREEN_DELAY": 1000
-  }
+  },
+  "fixturesFolder": "__mocks__/v1/json-files"
 }

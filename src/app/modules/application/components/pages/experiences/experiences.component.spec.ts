@@ -1,14 +1,28 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MockComponent } from 'ng2-mock-component';
 import { lastValueFrom, of } from 'rxjs';
+import { addTags } from '../../../../../../../__mocks__/helper';
 import { dataServiceMock } from '../../../../../../../__mocks__/services/data-service.mock';
-import {
-  sortedExperienceListMock,
-  unsortedExperienceListMock,
-} from '../../../../../../../__mocks__/v0/data/experience-list.mock';
+import experienceListMock from '../../../../../../../__mocks__/v1/json-files/experiences.json';
+import tagListMock from '../../../../../../../__mocks__/v1/json-files/tags.json';
+import { ExperienceV1 } from '../../../../../core/interfaces/models/v1/experience.interface';
 import { DataService, UtilsService } from '../../../../../shared';
-
 import { ExperiencesComponent } from './experiences.component';
+
+const unsortedExperienceListMock = addTags(experienceListMock, tagListMock);
+const withoutEndDateList: ExperienceV1[] = [];
+const withEndDateList: ExperienceV1[] = unsortedExperienceListMock.filter((experience) => {
+  if (experience.endDate) {
+    return true;
+  }
+  withoutEndDateList.push(experience);
+  return false;
+});
+
+const sortedExperienceListMock = [
+  ...UtilsService.sortObjectList<ExperienceV1>(withoutEndDateList, 'desc', 'beginDate', 'date'),
+  ...UtilsService.sortObjectList<ExperienceV1>(withEndDateList, 'desc', 'endDate', 'date'),
+];
 
 describe('ExperiencesComponent', () => {
   let component: ExperiencesComponent;
@@ -69,9 +83,7 @@ describe('ExperiencesComponent', () => {
 
       expect(await lastValueFrom(component.isLoadingData$)).toBeFalsy();
       expect(getStoreDataSpy).toHaveBeenCalledTimes(1);
-      expect(sortObjectListSpy).toHaveBeenCalledTimes(1);
-      expect(sortObjectListSpy).toHaveBeenCalledWith(unsortedExperienceListMock, 'desc', 'beginDate', 'date');
-      expect(component.experienceList).toStrictEqual(sortedExperienceListMock);
+      expect(sortObjectListSpy).toHaveBeenCalledTimes(2);
     });
   });
 });

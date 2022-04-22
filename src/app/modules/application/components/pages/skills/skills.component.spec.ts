@@ -10,18 +10,18 @@ import { changeDetectorRefMock } from '../../../../../../../__mocks__/services/c
 import { dataServiceMock } from '../../../../../../../__mocks__/services/data-service.mock';
 import { utilsServiceMock } from '../../../../../../../__mocks__/services/utils-service.mock';
 import { waitTimeout } from '../../../../../../../__mocks__/timeout.mock';
-import { competenceListMock } from '../../../../../../../__mocks__/v0/data/competence-list.mock';
-import { unsortedExperienceListMock } from '../../../../../../../__mocks__/v0/data/experience-list.mock';
-import { unsortedFormationListMock } from '../../../../../../../__mocks__/v0/data/formation-list.mock';
-import { unsortedProjectListMock } from '../../../../../../../__mocks__/v0/data/project-list.mock';
-import { tagListMock } from '../../../../../../../__mocks__/v0/data/tag-list.mock';
+import unsortedExperienceListMock from '../../../../../../../__mocks__/v1/json-files/experiences.json';
+import unsortedFormationListMock from '../../../../../../../__mocks__/v1/json-files/formations.json';
+import unsortedProjectListMock from '../../../../../../../__mocks__/v1/json-files/projects.json';
+import competenceListMock from '../../../../../../../__mocks__/v1/json-files/skills.json';
+import tagListMock from '../../../../../../../__mocks__/v1/json-files/tags.json';
 import { AlertModule } from '../../../../../core';
 import { selectAllCompetences } from '../../../../../core/ngrx/selectors/competences.selectors';
 import { selectAllExperiences } from '../../../../../core/ngrx/selectors/experiences.selectors';
 import { selectAllFormations } from '../../../../../core/ngrx/selectors/formations.selectors';
 import { selectAllProjects } from '../../../../../core/ngrx/selectors/projects.selectors';
 import { selectAllTags } from '../../../../../core/ngrx/selectors/tags.selectors';
-import { UtilsService, DataService } from '../../../../../shared';
+import { DataService, UtilsService } from '../../../../../shared';
 import { SkillsComponent } from './skills.component';
 
 describe('SkillsComponent', () => {
@@ -46,16 +46,12 @@ describe('SkillsComponent', () => {
       declarations: [
         SkillsComponent,
         MockComponent({
-          selector: 'app-experience-item',
-          inputs: ['exp', 'index'],
+          selector: 'app-item',
+          inputs: [],
         }),
         MockComponent({
-          selector: 'app-formation-item',
-          inputs: ['form', 'index'],
-        }),
-        MockComponent({
-          selector: 'app-portfolio-item',
-          inputs: ['siteDemo'],
+          selector: 'app-project-item',
+          inputs: [],
         }),
         MockComponent({
           selector: 'app-page-layout',
@@ -379,12 +375,18 @@ describe('SkillsComponent', () => {
         selector: (state: object) => any, defaultValue: any, value?: string | number, property?: string,
       }): any => {
         switch (selector) {
-          case selectAllTags: return [tagListMock[0]];
-          case selectAllExperiences: return unsortedExperienceListMock.filter((el: any) => el[property as string].includes(value)) || defaultValue;
-          case selectAllFormations: return unsortedFormationListMock.filter((el: any) => el[property as string].includes(value)) || defaultValue;
-          case selectAllProjects: return unsortedProjectListMock.filter((el: any) => el[property as string].includes(value)) || defaultValue;
-          case selectAllCompetences: return competenceListMock.filter((el: any) => el[property as string].includes(value)) || defaultValue;
-          default: console.debug(`invalid selector!`);
+          case selectAllTags:
+            return [tagListMock[50]];
+          case selectAllExperiences:
+            return unsortedExperienceListMock.filter((el: any) => el[property as string]?.includes(value)) || defaultValue;
+          case selectAllFormations:
+            return unsortedFormationListMock.filter((el: any) => el[property as string]?.includes(value)) || defaultValue;
+          case selectAllProjects:
+            return unsortedProjectListMock.filter((el: any) => el[property as string]?.includes(value)) || defaultValue;
+          case selectAllCompetences:
+            return competenceListMock.filter((el: any) => el[property as string]?.includes(value)) || defaultValue;
+          default:
+            console.debug(`invalid selector!`);
         }
       });
       isDataLoadedSpy.mockImplementation(() => of(true));

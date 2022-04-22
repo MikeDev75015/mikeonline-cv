@@ -1,14 +1,28 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MockComponent } from 'ng2-mock-component';
 import { lastValueFrom, of } from 'rxjs';
+import { addTags } from '../../../../../../../__mocks__/helper';
 import { dataServiceMock } from '../../../../../../../__mocks__/services/data-service.mock';
-import {
-  sortedFormationListMock,
-  unsortedFormationListMock,
-} from '../../../../../../../__mocks__/v0/data/formation-list.mock';
+import formationListMock from '../../../../../../../__mocks__/v1/json-files/formations.json';
+import tagListMock from '../../../../../../../__mocks__/v1/json-files/tags.json';
+import { FormationV1 } from '../../../../../core/interfaces/models/v1/formation.interface';
 import { DataService, UtilsService } from '../../../../../shared';
-
 import { FormationsComponent } from './formations.component';
+
+const unsortedFormationListMock = addTags(formationListMock, tagListMock);
+const withoutEndDateList: FormationV1[] = [];
+const withEndDateList: FormationV1[] = unsortedFormationListMock.filter((formation) => {
+  if (formation.endDate) {
+    return true;
+  }
+  withoutEndDateList.push(formation);
+  return false;
+});
+
+const sortedFormationListMock = [
+  ...UtilsService.sortObjectList<FormationV1>(withoutEndDateList, 'desc', 'beginDate', 'date'),
+  ...UtilsService.sortObjectList<FormationV1>(withEndDateList, 'desc', 'endDate', 'date'),
+];
 
 describe('FormationsComponent', () => {
   let component: FormationsComponent;
@@ -71,11 +85,7 @@ describe('FormationsComponent', () => {
 
       expect(await lastValueFrom(component.isLoadingData$)).toBeFalsy();
       expect(getStoreDataSpy).toHaveBeenCalledTimes(1);
-      expect(addMissingEndDateSpy).toHaveBeenCalledTimes(1);
-      expect(addMissingEndDateSpy).toHaveBeenCalledWith(unsortedFormationListMock);
-      expect(sortObjectListSpy).toHaveBeenCalledTimes(1);
-      expect(sortObjectListSpy).toHaveBeenCalledWith(unsortedFormationListMock, 'desc', 'endDate', 'date');
-      expect(component.formationList).toStrictEqual(sortedFormationListMock);
+      expect(sortObjectListSpy).toHaveBeenCalledTimes(2);
     });
   });
 });

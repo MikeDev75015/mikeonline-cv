@@ -67,9 +67,10 @@ describe('ApplicationComponent', () => {
       fixture.detectChanges();
     });
 
-    it('should dispatch ApplicationActions.appLoadingSuccess if all data is loaded', () => {
-      expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(ApplicationActions.appLoadingSuccess());
+    it('should dispatch ApplicationActions.appLoadingSuccess and ApplicationActions.startAppLoading if all data is loaded', () => {
+      expect(dispatchSpy).toHaveBeenCalledTimes(2);
+      expect(dispatchSpy).toHaveBeenNthCalledWith(1, ApplicationActions.appLoadingSuccess());
+      expect(dispatchSpy).toHaveBeenNthCalledWith(2, ApplicationActions.startAppLoading());
     });
   });
 

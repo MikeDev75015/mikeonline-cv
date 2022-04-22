@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MockComponent } from 'ng2-mock-component';
+import { DEFAULT_FORM_FIELDS_CONFIG } from '../../../constants/common-formFields.config';
 
 import { FormWrapperComponent } from './form-wrapper.component';
 
@@ -8,7 +10,16 @@ describe('FormWrapperComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [FormWrapperComponent],
+      declarations: [
+        FormWrapperComponent,
+        MockComponent({
+          selector: 'app-input-wrapper',
+          inputs: [
+            'value', 'disabled', 'name', 'placeholder', 'checkboxOptions', 'inlineClass', 'inputType', 'numberOptions',
+            'textareaOptions',
+          ],
+        }),
+      ],
     })
       .compileComponents();
   });
@@ -16,6 +27,7 @@ describe('FormWrapperComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(FormWrapperComponent);
     component = fixture.componentInstance;
+    component.formFields = DEFAULT_FORM_FIELDS_CONFIG['contact'];
     fixture.detectChanges();
   });
 

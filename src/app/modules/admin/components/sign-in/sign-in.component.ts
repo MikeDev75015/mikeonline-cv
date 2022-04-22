@@ -2,10 +2,12 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
+import { LoginRequest } from '../../../../core/interfaces/requests/login.request';
 import { MessageSeverity } from '../../../../core/interfaces/types/message-severity.type';
 import { loginUser } from '../../../../core/ngrx/actions/auth.actions';
 import { ErrorMessageService } from '../../../../core/services/error-message/error-message.service';
 import { AuthService } from '../../services/auth/auth.service';
+import { FormField } from '../fragments/form-wrapper/interfaces/form-field.interface';
 import { SEVERITY_MESSAGE_SUMMARY } from '../fragments/table-wrapper/constants/common.constant';
 
 @Component({
@@ -14,9 +16,12 @@ import { SEVERITY_MESSAGE_SUMMARY } from '../fragments/table-wrapper/constants/c
   providers: [MessageService],
 })
 export class SignInComponent implements OnInit, OnDestroy {
-  public username = '';
+  public formFields: FormField[] | undefined;
 
-  public userPassword = '';
+  public formValues: LoginRequest = {
+    username: '',
+    password: '',
+  };
 
   private readonly subscriptionList: Subscription[] = [];
 
@@ -30,9 +35,14 @@ export class SignInComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.subscriptionList.push(ErrorMessageService.onMessage().subscribe((message) => {
       if (message === 'INVALID_USERNAME_OR_PASSWORD') {
-        this.displayMessage('Le nom et/ou le mot de passe ne sont pas valides.', 'error');
+        this.displayMessage('L\'identifiant et/ou le mot de passe ne sont pas valides.', 'error');
       }
     }));
+
+    this.formFields = [
+      { field: 'username', inputLabel: '', inputType: 'text', defaultValue: '', inputPlaceholder: 'Identifiant' },
+      { field: 'password', inputLabel: '', inputType: 'password', defaultValue: '', inputPlaceholder: 'Mot de passe' },
+    ];
   }
 
   ngOnDestroy(): void {
@@ -40,16 +50,20 @@ export class SignInComponent implements OnInit, OnDestroy {
   }
 
   public onLogin(): void {
-    if (!this.username || !this.userPassword) {
+    if (!this.formValues.username || !this.formValues.password) {
       this.displayMessage('Attention aux champs vides.', 'warn');
       return;
     }
 
-    this.store.dispatch(loginUser({ username: this.username, password: this.userPassword }));
+    this.store.dispatch(loginUser(this.formValues));
   }
 
-  public onValueChange(value: string, field: 'username' | 'userPassword') {
-    this[field] = value;
+  /**
+   * onFormValueChange
+   * @param formValues
+   */
+  public onFormValueChange(formValues: LoginRequest): void {
+    this.formValues = formValues;
   }
 
   /**
@@ -61,7 +75,7 @@ export class SignInComponent implements OnInit, OnDestroy {
    */
   private displayMessage(detail: string, severity: MessageSeverity, life = 5000): void {
     this.messageService.add({
-      key: 'applicationError', summary: SEVERITY_MESSAGE_SUMMARY[severity], severity, detail, life,
+      key: 'applicationError', summary: SEVERITY_MESSAGE_SUMMARY[severity], severity, detail, life, closable: true,
     });
   }
 }

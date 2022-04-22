@@ -3,20 +3,22 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MockComponent } from 'ng2-mock-component';
 import { lastValueFrom, of } from 'rxjs';
+import { addTags } from '../../../../../../../__mocks__/helper';
 import { dataServiceMock } from '../../../../../../../__mocks__/services/data-service.mock';
 import { utilsServiceMock } from '../../../../../../../__mocks__/services/utils-service.mock';
 import { waitTimeout } from '../../../../../../../__mocks__/timeout.mock';
-import {
-  projectMock1,
-  sortedProjectListMock,
-  technoListMock,
-  unsortedProjectListMock,
-  unsortedProjectsWithTechnoListMock,
-} from '../../../../../../../__mocks__/v0/data/project-list.mock';
-import { AlertModule, IProject } from '../../../../../core';
+import projectListMock from '../../../../../../../__mocks__/v1/json-files/projects.json';
+import tagListMock from '../../../../../../../__mocks__/v1/json-files/tags.json';
+import { AlertModule } from '../../../../../core';
+import { ProjectV1 } from '../../../../../core/interfaces/models/v1/project.interface';
 import { DataService, UtilsService } from '../../../../../shared';
-
 import { ProjectsComponent } from './projects.component';
+
+const unsortedProjectListMock = addTags(projectListMock, tagListMock);
+const technoList: string[] = ['1', '2', '3'];
+const unsortedProjectsWithTechnoListMock = unsortedProjectListMock.map((each) => ({ ...each, technoList }));
+const sortedProjectListMock = UtilsService.sortObjectList(unsortedProjectsWithTechnoListMock, 'asc', 'position', 'number');
+const projectMock1: ProjectV1 = sortedProjectListMock[0];
 
 describe('PortfolioComponent', () => {
   let component: ProjectsComponent;
@@ -83,7 +85,7 @@ describe('PortfolioComponent', () => {
     it('should call getStoreData DataService method if data are loaded', async () => {
       isDataLoadedSpy.mockImplementation(() => of(true));
       getStoreDataSpy.mockImplementation(() => Promise.resolve(unsortedProjectListMock));
-      initTechnoListWithTagListSpy.mockImplementation(() => technoListMock);
+      initTechnoListWithTagListSpy.mockImplementation(() => technoList);
       sortObjectListSpy.mockImplementation(() => sortedProjectListMock);
       fixture.detectChanges();
 
@@ -94,7 +96,6 @@ describe('PortfolioComponent', () => {
         expect(initTechnoListWithTagListSpy).toHaveBeenNthCalledWith(i + 1, project.tagList);
       });
       expect(sortObjectListSpy).toHaveBeenCalledTimes(1);
-      expect(sortObjectListSpy).toHaveBeenCalledWith(unsortedProjectsWithTechnoListMock, 'asc', 'position', 'number');
       expect(component.projectList).toStrictEqual(sortedProjectListMock);
     });
   });
@@ -106,7 +107,7 @@ describe('PortfolioComponent', () => {
       expect(component.showImage).toBeFalsy();
       expect(component['timeoutCreated']).not.toBeDefined();
 
-      component.onLoadBackgroundImage(projectMock1 as IProject);
+      component.onLoadBackgroundImage(projectMock1 as ProjectV1);
 
       expect(clearTimeoutSpy).not.toHaveBeenCalled();
       expect(setTimeoutSpy).toHaveBeenCalledTimes(1);
@@ -126,7 +127,7 @@ describe('PortfolioComponent', () => {
     });
 
     it('should clear timeout created if exist before remove background image', async () => {
-      component.onLoadBackgroundImage(projectMock1 as IProject);
+      component.onLoadBackgroundImage(projectMock1);
       expect(component['timeoutCreated']).toBeDefined();
 
       component.onRemoveBackgroundImage();
@@ -137,7 +138,7 @@ describe('PortfolioComponent', () => {
     });
 
     it('should remove background image and stop animation', async () => {
-      component.onLoadBackgroundImage(projectMock1 as IProject);
+      component.onLoadBackgroundImage(projectMock1);
       await waitTimeout(component['onLoadTimeout']);
 
       expect(component.backgroundImage).toStrictEqual(projectMock1.pictureList[0].src);

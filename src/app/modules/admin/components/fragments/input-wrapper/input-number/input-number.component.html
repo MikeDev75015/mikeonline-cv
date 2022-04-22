@@ -2,6 +2,6 @@
   <input
     #inputNumberWrapped (ngModelChange)="onValueChange($event)" [(ngModel)]="value" [class]="inlineClass || ''"
     [disabled]="disabled" [ngStyle]="{width: '100%', 'max-height': inputHeight}"
-    pInputText type="number"
+    data-cy="input-number" pInputText type="number"
   />
 </div>

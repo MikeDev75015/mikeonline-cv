@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MockComponent } from 'ng2-mock-component';
 
 import { AdminCvInfosComponent } from './admin-cv-infos.component';
 
@@ -8,7 +9,13 @@ describe('AdminCvInfosComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [AdminCvInfosComponent],
+      declarations: [
+        AdminCvInfosComponent,
+        MockComponent({
+          selector: 'app-table-wrapper',
+          inputs: ['columnList', 'crudEndPoint', 'exportCsvFileName', 'formFields'],
+        }),
+      ],
     })
       .compileComponents();
   });

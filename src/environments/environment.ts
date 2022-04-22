@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  API_URL: 'http://localhost:5000',
-  // API_URL: 'https://ocv-backend-staging.herokuapp.com',
+  // API_URL: 'http://localhost:5000',
+  API_URL: 'https://ocv-backend-staging.herokuapp.com',
   // API_URL: 'https://ocv-backend.herokuapp.com',
   ACTIVATED_LOGS: true,
   APP_NAME: 'online-cv',

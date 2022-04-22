@@ -1,4 +1,4 @@
-import {interceptApiRequest} from "../common";
+import {interceptApiRequest} from "../../../common";
 
 describe('main component', () => {
   before(() => {
@@ -18,14 +18,14 @@ describe('main component', () => {
     });
   });
 
-  it('Clicking toggle menu button should be opened', () => {
-    cy.get('[aria-labelledby="toggle menu button"]').click({ waitForAnimations: false });
+  it('Clicking toggle menu button should open the menu', () => {
+    cy.get('[aria-labelledby="toggle menu button"]').click({waitForAnimations: false});
     cy.get('[aria-labelledby="mobile menu container"]').should('not.be.undefined');
   });
 
   it('Clicking skills button should display the skills page', () => {
-    cy.get('[aria-labelledby="toggle menu button"]').click({ waitForAnimations: false });
-    cy.get('[aria-labelledby="skills menu button"]').click({ waitForAnimations: false });
+    cy.get('[aria-labelledby="toggle menu button"]').click();
+    cy.get('[aria-labelledby="skills menu button"]').click({waitForAnimations: false});
 
     cy.url().should((url) => {
       expect(url).toContain('/#skills');

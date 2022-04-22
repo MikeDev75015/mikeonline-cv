@@ -1,22 +1,20 @@
-<p-toast key="applicationError" position="center"></p-toast>
+<p-toast data-cy="primeng-toast" key="applicationError" position="center"></p-toast>
 
-<div class="fcc column full-screen">
+<div class="fcc column full-screen" data-cy="content">
 
-  <app-input-wrapper
-    (valueChange)="onValueChange($event, 'username')" [(value)]="username" inputType="text"
-  ></app-input-wrapper>
+  <app-form-wrapper
+    (formValuesChange)="onFormValueChange($event)" [(formValues)]="formValues" [formFields]="formFields"
+    data-cy="form-fields" style="width: 250px;"
+  ></app-form-wrapper>
 
-  <app-input-wrapper
-    (valueChange)="onValueChange($event, 'userPassword')" [(value)]="userPassword" inputType="password"
-  ></app-input-wrapper>
-
-  <button (click)="onLogin()" class="fcc" pButton style="width: 250px; margin-top: 20px;">
+  <button (click)="onLogin()" class="fcc" data-cy="submit-button" pButton style="width: 250px; margin-top: 20px;">
     <div class="fcc w100">
       <span>Se connecter</span>
       <mat-icon style="margin-left: 10px;">login</mat-icon>
     </div>
   </button>
 
-  <a class="fcc" style="width: 250px; margin-top: 20px; text-decoration: none; color: var(--primary-color);" routerLink="/">Voir le site</a>
+  <a class="fcc" data-cy="app-button" routerLink="/"
+     style="width: 250px; margin-top: 20px; text-decoration: none; color: var(--primary-color);">Voir le site</a>
 
 </div>

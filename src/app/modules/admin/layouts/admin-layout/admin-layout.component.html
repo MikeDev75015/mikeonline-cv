@@ -1,8 +1,8 @@
-<p-toast key="applicationError" position="center"></p-toast>
+<p-toast data-cy="primeng-toast" key="applicationError" position="center"></p-toast>
 
 <ng-container *appLoading="!currentUser">
-  <div *ngIf="leftItems" class="fbc w100 admin-layout-header">
-    <p-tabMenu [model]="leftItems" styleClass="admin-tab-menu"></p-tabMenu>
+  <div *ngIf="leftItems" class="fbc w100 admin-layout-header" data-cy="admin-layout-header">
+    <p-tabMenu [model]="leftItems" data-cy="admin-tab-menu" styleClass="admin-tab-menu"></p-tabMenu>
 
     <div class="fec">
       <div class="fcc">
@@ -15,14 +15,15 @@
       </div>
 
       <ng-container *ngIf="currentUser">
-      <span [pTooltip]="currentUser.role" style="margin-right: 10px;" tooltipPosition="bottom">
+      <span [pTooltip]="currentUser.role" data-cy="current-user-name" style="margin-right: 10px;"
+            tooltipPosition="bottom">
         Utilisateur: {{ currentUser.name }}
       </span>
 
-        <button (click)="menu.toggle($event)" pButton type="button">
+        <button (click)="menu.toggle($event)" data-cy="menu-button" pButton type="button">
           <mat-icon>menu</mat-icon>
         </button>
-        <p-menu #menu [model]="rightItems" [popup]="true"></p-menu>
+        <p-menu #menu [model]="rightItems" [popup]="true" data-cy="primeng-menu"></p-menu>
       </ng-container>
     </div>
   </div>

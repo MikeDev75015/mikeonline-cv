@@ -1,5 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { Store } from '@ngrx/store';
+import { storeMock } from '../../../../../../__mocks__/services/store.mock';
 
 import { AuthGuard } from './auth.guard';
 
@@ -10,6 +12,9 @@ describe('AuthGuard', () => {
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule,
+      ],
+      providers: [
+        { provide: Store, useValue: storeMock },
       ],
     });
     guard = TestBed.inject(AuthGuard);

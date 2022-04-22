@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateModule } from '@ngx-translate/core';
+import { ToastModule } from 'primeng/toast';
 import { LoadingComponent } from '../../../../core/directives/loading/component/loading.component';
 import { LoadingDirective } from '../../../../core/directives/loading/loading.directive';
 
@@ -13,6 +14,7 @@ describe('PageLayoutComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         TranslateModule.forRoot(),
+        ToastModule,
       ],
       declarations: [
         PageLayoutComponent,

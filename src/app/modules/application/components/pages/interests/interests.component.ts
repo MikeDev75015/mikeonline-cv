@@ -47,7 +47,9 @@ export class InterestsComponent implements OnInit, AfterContentInit {
             defaultValue: [],
           });
 
-          this.interestList = UtilsService.sortObjectList<InterestV1>(unsortedList, 'asc', 'position', 'number');
+          if (unsortedList) {
+            this.interestList = UtilsService.sortObjectList<InterestV1>(unsortedList, 'asc', 'position', 'number');
+          }
         }
       }),
       map((loaded) => !loaded),

@@ -1,5 +1,11 @@
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { Store } from '@ngrx/store';
+import { TranslateModule } from '@ngx-translate/core';
+import { MockComponent } from 'ng2-mock-component';
+import { ToastModule } from 'primeng/toast';
+import { storeMock } from '../../../../../../__mocks__/services/store.mock';
 
 import { AdminLayoutComponent } from './admin-layout.component';
 
@@ -9,12 +15,24 @@ describe('AdminLayoutComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AdminLayoutComponent ],
       imports: [
+        TranslateModule.forRoot(),
         RouterTestingModule,
+        ToastModule,
       ],
+      declarations: [
+        AdminLayoutComponent,
+        MockComponent({
+          selector: 'app-loading',
+          template: '<div></div>',
+        }),
+      ],
+      providers: [
+        { provide: Store, useValue: storeMock },
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

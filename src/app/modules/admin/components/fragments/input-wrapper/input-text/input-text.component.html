@@ -1,6 +1,6 @@
 <div [ngStyle]="{width: '100%', height: inputHeight}" class="fss relative input-text-wrapped">
   <input
     #inputTextWrapped (ngModelChange)="onValueChange($event)" [(ngModel)]="value" [class]="inlineClass || ''"
-    [disabled]="disabled" [ngStyle]="{width: '100%', height: inputHeight}" pInputText type="text"
+    [disabled]="disabled" [ngStyle]="{width: '100%', height: inputHeight}" data-cy="input-text" pInputText type="text"
   />
 </div>

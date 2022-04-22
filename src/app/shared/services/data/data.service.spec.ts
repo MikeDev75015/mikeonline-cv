@@ -2,14 +2,14 @@ import { TestBed } from '@angular/core/testing';
 import { Store } from '@ngrx/store';
 import { lastValueFrom, of } from 'rxjs';
 import { storeMock } from '../../../../../__mocks__/services/store.mock';
-import { competenceListMock } from '../../../../../__mocks__/v0/data/competence-list.mock';
-import { contactMock } from '../../../../../__mocks__/v0/data/contact.mock';
-import { cvInfoMock } from '../../../../../__mocks__/v0/data/cv-info.mock';
-import { unsortedExperienceListMock } from '../../../../../__mocks__/v0/data/experience-list.mock';
-import { unsortedFormationListMock } from '../../../../../__mocks__/v0/data/formation-list.mock';
-import { unsortedProjectListMock } from '../../../../../__mocks__/v0/data/project-list.mock';
-import { tagListMock } from '../../../../../__mocks__/v0/data/tag-list.mock';
-import { ICvInfos, ITag } from '../../../core';
+import cvInfoListMock from '../../../../../__mocks__/v1/json-files/cv-infos.json';
+import unsortedExperienceListMock from '../../../../../__mocks__/v1/json-files/experiences.json';
+import unsortedFormationListMock from '../../../../../__mocks__/v1/json-files/formations.json';
+import unsortedProjectListMock from '../../../../../__mocks__/v1/json-files/projects.json';
+import competenceListMock from '../../../../../__mocks__/v1/json-files/skills.json';
+import tagListMock from '../../../../../__mocks__/v1/json-files/tags.json';
+import { CvInfosV1 } from '../../../core/interfaces/models/v1/cv-infos.interface';
+import { TagV1 } from '../../../core/interfaces/models/v1/tag.interface';
 import { ApplicationActions } from '../../../core/ngrx/ngrx-index';
 import { selectAppCvInfosLoaded } from '../../../core/ngrx/selectors/application.selectors';
 import { selectAllCompetences, selectCompetencesLoaded } from '../../../core/ngrx/selectors/competences.selectors';
@@ -21,6 +21,9 @@ import { selectAllProjects, selectProjectsLoaded } from '../../../core/ngrx/sele
 import { selectAllTags } from '../../../core/ngrx/selectors/tags.selectors';
 
 import { DataService } from './data.service';
+
+const cvInfoMock = cvInfoListMock[0];
+const contactMock = cvInfoMock.contact;
 
 describe('DataService', () => {
   let service: DataService;
@@ -52,7 +55,7 @@ describe('DataService', () => {
   describe('getStoreData', () => {
     it('should return default value if store has no data', async () => {
       storeSelectSpy.mockImplementationOnce(() => of(undefined));
-      const allTags = await service.getStoreData<ITag[]>({
+      const allTags = await service.getStoreData<TagV1[]>({
         selector: selectAllTags,
         defaultValue: [],
       });
@@ -61,7 +64,7 @@ describe('DataService', () => {
 
     it('should return a complete list if no value is provided', async () => {
       storeSelectSpy.mockImplementationOnce(() => of(tagListMock));
-      const allTags = await service.getStoreData<ITag[]>({
+      const allTags = await service.getStoreData<TagV1[]>({
         selector: selectAllTags,
         defaultValue: [],
       });
@@ -70,63 +73,63 @@ describe('DataService', () => {
 
     it('should return a partial list if a value is provided', async () => {
       storeSelectSpy.mockImplementationOnce(() => of(tagListMock));
-      const allTags = await service.getStoreData<ITag[]>({
+      const allTags = await service.getStoreData<TagV1[]>({
         selector: selectAllTags,
         defaultValue: [],
-        value: 14,
+        value: '3XiDX2mfE9FPgoUMlMQtc',
       });
-      expect(allTags).toStrictEqual([{ id: 14, name: 'tag14', times: 4, weight: 4 }]);
+      expect(allTags).toStrictEqual([{ id: '3XiDX2mfE9FPgoUMlMQtc', name: 'FireBase', weight: 1 }]);
     });
 
     it('should return a partial list if a value and a property are provided', async () => {
       storeSelectSpy.mockImplementationOnce(() => of(tagListMock));
-      const allTags = await service.getStoreData<ITag[]>({
+      const allTags = await service.getStoreData<TagV1[]>({
         selector: selectAllTags,
         defaultValue: [],
-        value: 'tag22',
-        property: 'name'
+        value: 'Angular 2+',
+        property: 'name',
       });
-      expect(allTags).toStrictEqual([{ id: 22, name: 'tag22', times: 2, weight: 2 }]);
+      expect(allTags).toStrictEqual([{ id: 'gH73FIaGoHjPwbdPrQ-2w', name: 'Angular 2+', weight: 3 }]);
     });
 
     it('should return default value if a value and a property are invalid', async () => {
       storeSelectSpy.mockImplementationOnce(() => of([undefined]));
-      const allTags = await service.getStoreData<ITag[]>({
+      const allTags = await service.getStoreData<TagV1[]>({
         selector: selectAllTags,
-        defaultValue: [{ id: 0, name: 'invalidTag', weight: 0 }],
+        defaultValue: [{ id: '0', name: 'invalidTag', weight: 0 }],
         value: 'tag0',
-        property: 'name'
+        property: 'name',
       });
-      expect(allTags).toStrictEqual([{ id: 0, name: 'invalidTag', weight: 0 }]);
+      expect(allTags).toStrictEqual([{ id: '0', name: 'invalidTag', weight: 0 }]);
       expect(consoleDebugSpy).toHaveBeenCalledTimes(1);
       expect(consoleDebugSpy).toHaveBeenCalledWith('Cannot get the expected value!', { value: 'tag0', property: 'name' });
     });
 
     it('should return a full object if no property is provided', async () => {
       storeSelectSpy.mockImplementationOnce(() => of(cvInfoMock));
-      const cvInfo = await service.getStoreData<ICvInfos>({
+      const cvInfo = await service.getStoreData<CvInfosV1>({
         selector: selectCvInfos,
-        defaultValue: {} as ICvInfos,
+        defaultValue: {} as CvInfosV1,
       });
       expect(cvInfo).toStrictEqual(cvInfoMock);
     });
 
     it('should return a value if a property is provided', async () => {
       storeSelectSpy.mockImplementationOnce(() => of(cvInfoMock));
-      const contact = await service.getStoreData<ICvInfos>({
+      const contact = await service.getStoreData<CvInfosV1>({
         selector: selectCvInfos,
-        defaultValue: { contact: {} } as ICvInfos,
-        property: 'contact'
+        defaultValue: { contact: {} } as CvInfosV1,
+        property: 'contact',
       });
       expect(contact).toStrictEqual(contactMock);
     });
 
     it('should return default value if property does not exist', async () => {
       storeSelectSpy.mockImplementationOnce(() => of(cvInfoMock));
-      const contact = await service.getStoreData<ICvInfos>({
+      const contact = await service.getStoreData<CvInfosV1>({
         selector: selectCvInfos,
-        defaultValue: {} as ICvInfos,
-        property: 'notFound'
+        defaultValue: {} as CvInfosV1,
+        property: 'notFound',
       });
       expect(contact).toStrictEqual({});
     });

@@ -41,7 +41,7 @@ describe('MainComponent', () => {
           selector: 'app-formations',
         }),
         MockComponent({
-          selector: 'app-portfolio',
+          selector: 'app-projects',
         }),
         MockComponent({
           selector: 'app-interests',

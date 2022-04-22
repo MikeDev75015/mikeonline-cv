@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
 
 import { InputTextareaComponent } from './input-textarea.component';
 
@@ -9,6 +10,9 @@ describe('InputTextareaComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [InputTextareaComponent],
+      imports: [
+        FormsModule,
+      ],
     })
       .compileComponents();
   });

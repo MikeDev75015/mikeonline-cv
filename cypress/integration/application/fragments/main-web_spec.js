@@ -1,4 +1,4 @@
-import {interceptApiRequest} from "../common";
+import {interceptApiRequest} from "../../../common";
 
 describe('main component', () => {
   before(() => {

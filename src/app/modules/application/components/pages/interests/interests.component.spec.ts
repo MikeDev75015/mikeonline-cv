@@ -7,7 +7,6 @@ import { lastValueFrom, of } from 'rxjs';
 import { changeDetectorRefMock } from '../../../../../../../__mocks__/services/change-detector-ref.mock';
 import { dataServiceMock } from '../../../../../../../__mocks__/services/data-service.mock';
 import { DataService } from '../../../../../shared';
-
 import { InterestsComponent } from './interests.component';
 
 describe('InterestsComponent', () => {
@@ -76,20 +75,6 @@ describe('InterestsComponent', () => {
 
       expect(await lastValueFrom(component.isLoadingData$)).toBeFalsy();
       expect(getStoreDataSpy).toHaveBeenCalledTimes(1);
-    });
-  });
-
-  describe('ngAfterContentInit', () => {
-    beforeEach(() => {
-      changeDetectorRefSpy = jest.spyOn(component['cdRef'], 'detectChanges');
-    });
-
-    it('should call ChangeDetectorRef detectChanges method in ngAfterContentInit', () => {
-      expect(changeDetectorRefSpy).not.toHaveBeenCalled();
-
-      component.ngAfterContentInit();
-
-      expect(changeDetectorRefSpy).toHaveBeenCalledTimes(1);
     });
   });
 });

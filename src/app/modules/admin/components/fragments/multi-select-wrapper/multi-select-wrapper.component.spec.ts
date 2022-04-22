@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 import { MultiSelectWrapperComponent } from './multi-select-wrapper.component';
 
@@ -9,6 +11,10 @@ describe('MultiSelectWrapperComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [MultiSelectWrapperComponent],
+      imports: [
+        MultiSelectModule,
+        FormsModule,
+      ],
     })
       .compileComponents();
   });
@@ -16,6 +22,7 @@ describe('MultiSelectWrapperComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(MultiSelectWrapperComponent);
     component = fixture.componentInstance;
+    component.stringList = ['1'];
     fixture.detectChanges();
   });
 

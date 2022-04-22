@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MockComponent } from 'ng2-mock-component';
 
 import { AdminExperiencesComponent } from './admin-experiences.component';
 
@@ -8,7 +9,13 @@ describe('AdminEsperiencesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AdminExperiencesComponent ]
+      declarations: [
+        AdminExperiencesComponent,
+        MockComponent({
+          selector: 'app-table-wrapper',
+          inputs: ['columnList', 'crudEndPoint', 'exportCsvFileName', 'formFields', 'dataGenerator'],
+        }),
+      ],
     })
     .compileComponents();
   });

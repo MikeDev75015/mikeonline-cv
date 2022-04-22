@@ -2,11 +2,10 @@ import { TestBed } from '@angular/core/testing';
 import { Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
 import { storeMock } from '../../../../../__mocks__/services/store.mock';
-import { tagListMock } from '../../../../../__mocks__/v0/data/tag-list.mock';
-import { ITag } from '../../../core';
+import tagListMock from '../../../../../__mocks__/v1/json-files/tags.json';
+import { TagV1 } from '../../../core/interfaces/models/v1/tag.interface';
 
 import { TagsService } from './tags.service';
-
 
 describe('TagsService', () => {
   let service: TagsService;
@@ -42,7 +41,7 @@ describe('TagsService', () => {
     });
 
     it('should return the list of tags if the store loaded them', async () => {
-      storeSelectSpy.mockImplementationOnce(() => of(tagListMock) as Observable<ITag[]>);
+      storeSelectSpy.mockImplementationOnce(() => of(tagListMock) as Observable<TagV1[]>);
 
       const allTags = await service.getAllTags();
       expect(allTags).toStrictEqual(tagListMock);
@@ -51,19 +50,19 @@ describe('TagsService', () => {
 
   describe('getTagsByIds', () => {
     it('should return found tags by their ids', () => {
-      expect(service.getTagsByIds([2, 3], tagListMock)).toStrictEqual([
-        { id: 2, name: 'AWS Cloud', times: 2, weight: 2 },
-        { id: 3, name: 'CQRS', times: 3, weight: 3 },
+      expect(service.getTagsByIds(['jldY670FZCPQWIE-8l0nl', 'c65M5kAUL3MZFZGdGu5un'], tagListMock)).toStrictEqual([
+        { id: 'jldY670FZCPQWIE-8l0nl', name: 'jQuery', weight: 0.4 },
+        { id: 'c65M5kAUL3MZFZGdGu5un', name: 'Html 5', weight: 0.5 },
       ]);
     });
 
     it('should return only valid tags found by their ids and warn for unknown reference', () => {
-      expect(service.getTagsByIds([0, 4, 8], tagListMock)).toStrictEqual([
-        { id: 4, name: 'DevOps', times: 4, weight: 4 },
+      expect(service.getTagsByIds(['jldY670FZCPQWIE-8l0nl', '10', '8'], tagListMock)).toStrictEqual([
+        { id: 'jldY670FZCPQWIE-8l0nl', name: 'jQuery', weight: 0.4 },
       ]);
 
       expect(consoleWarnSpy).toHaveBeenCalledTimes(2);
-      expect(consoleWarnSpy).toHaveBeenNthCalledWith(1, `Unknown tag id found: 0 at position 0.`);
+      expect(consoleWarnSpy).toHaveBeenNthCalledWith(1, `Unknown tag id found: 10 at position 1.`);
       expect(consoleWarnSpy).toHaveBeenNthCalledWith(2, `Unknown tag id found: 8 at position 2.`);
     });
   });
