@@ -69,6 +69,12 @@ describe('SkillsComponent', () => {
     changeDetectorRefSpy = jest.spyOn(component['cdRef'], 'detectChanges');
   });
 
+  beforeAll(() => {
+    Object.defineProperty(window, 'crypto', {
+      value: { getRandomValues: jest.fn(() => [200]) },
+    });
+  });
+
   afterEach(() => {
     jest.clearAllMocks();
   });

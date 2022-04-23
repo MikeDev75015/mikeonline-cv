@@ -314,16 +314,12 @@ export class SkillsComponent implements OnInit, OnDestroy, AfterViewChecked {
    * @private
    */
   private setWorldCloudOptions(): WorldCloudOptions {
-    const crypto = window.crypto;
-    const array = new Uint32Array(1);
-    crypto.getRandomValues(array).toString();
-
     return {
       gridSize: SkillsComponent.getGridForWidth(),
       fontFamily: 'Roboto',
-      color() {
-        return (['#555', '#024873', '#4E7F9D'])[Math.floor(crypto.getRandomValues(array).reduce((t, v) => t + v, 0) * 3)];
-      },
+      color: () => (
+        ['#555', '#024873', '#4E7F9D']
+      )[Math.floor((window.crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 3)],
       backgroundColor: 'transparent',
       rotateRatio: 0,
       classes: 'word-in-cloud',
