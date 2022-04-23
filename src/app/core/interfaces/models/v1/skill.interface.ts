@@ -1,4 +1,3 @@
-import { IDetail } from '../commons/detail.interface';
 import { ILink } from '../commons/link.interface';
 import { TagV1 } from './tag.interface';
 
@@ -19,11 +18,9 @@ export interface SkillV1 {
 
   description: string;
 
-  link: ILink;
-
-  detailList: IDetail[];
-
   tagList: TagV1[];
+
+  link: ILink;
 }
 
 type ExpertiseLevelType = 1 | 2 | 3 | 4 | 5;

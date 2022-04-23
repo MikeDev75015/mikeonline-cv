@@ -12,12 +12,12 @@ import { CvInfosV1 } from '../../../core/interfaces/models/v1/cv-infos.interface
 import { TagV1 } from '../../../core/interfaces/models/v1/tag.interface';
 import { ApplicationActions } from '../../../core/ngrx/ngrx-index';
 import { selectAppCvInfosLoaded } from '../../../core/ngrx/selectors/application.selectors';
-import { selectAllCompetences, selectCompetencesLoaded } from '../../../core/ngrx/selectors/competences.selectors';
 import { selectCvInfos } from '../../../core/ngrx/selectors/cv-infos.selectors';
 import { selectAllExperiences, selectExperiencesLoaded } from '../../../core/ngrx/selectors/experiences.selectors';
 import { selectAllFormations, selectFormationsLoaded } from '../../../core/ngrx/selectors/formations.selectors';
 import { selectInterestsLoaded } from '../../../core/ngrx/selectors/interests.selectors';
 import { selectAllProjects, selectProjectsLoaded } from '../../../core/ngrx/selectors/projects.selectors';
+import { selectAllSkills, selectSkillsLoaded } from '../../../core/ngrx/selectors/skills.selectors';
 import { selectAllTags } from '../../../core/ngrx/selectors/tags.selectors';
 
 import { DataService } from './data.service';
@@ -139,8 +139,10 @@ describe('DataService', () => {
     beforeEach(() => {
       storeSelectSpy.mockImplementation((selector: <T>(state: object) => T) => {
         switch (selector) {
-          case selectAllCompetences: return of(competenceListMock);
-          case selectAllExperiences: return of(unsortedExperienceListMock);
+          case selectAllSkills:
+            return of(competenceListMock);
+          case selectAllExperiences:
+            return of(unsortedExperienceListMock);
           case selectAllFormations: return of(unsortedFormationListMock);
           case selectAllProjects: return of(unsortedProjectListMock);
           default: return of([]);
@@ -152,7 +154,7 @@ describe('DataService', () => {
       await service.getSummary();
 
       expect(storeSelectSpy).toHaveBeenCalledTimes(4);
-      expect(storeSelectSpy).toHaveBeenNthCalledWith(1, selectAllCompetences);
+      expect(storeSelectSpy).toHaveBeenNthCalledWith(1, selectAllSkills);
       expect(storeSelectSpy).toHaveBeenNthCalledWith(2, selectAllExperiences);
       expect(storeSelectSpy).toHaveBeenNthCalledWith(3, selectAllFormations);
       expect(storeSelectSpy).toHaveBeenNthCalledWith(4, selectAllProjects);
@@ -167,7 +169,7 @@ describe('DataService', () => {
       expect(result).toBeFalsy();
       expect(storeSelectSpy).toHaveBeenCalledTimes(6);
       expect(storeSelectSpy).toHaveBeenNthCalledWith(1, selectAppCvInfosLoaded);
-      expect(storeSelectSpy).toHaveBeenNthCalledWith(2, selectCompetencesLoaded);
+      expect(storeSelectSpy).toHaveBeenNthCalledWith(2, selectSkillsLoaded);
       expect(storeSelectSpy).toHaveBeenNthCalledWith(3, selectExperiencesLoaded);
       expect(storeSelectSpy).toHaveBeenNthCalledWith(4, selectFormationsLoaded);
       expect(storeSelectSpy).toHaveBeenNthCalledWith(5, selectProjectsLoaded);

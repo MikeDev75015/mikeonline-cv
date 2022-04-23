@@ -1,4 +1,4 @@
-import {interceptApiRequest} from "../../../common";
+import {interceptApiV1Request, interceptLoginRequest} from "../../../common";
 
 describe('Sign-in page', () => {
   beforeEach(() => {
@@ -58,7 +58,8 @@ describe('Sign-in page', () => {
     });
 
     it('should log the user in and navigate to the first admin tab', () => {
-      interceptApiRequest();
+      interceptLoginRequest();
+      interceptApiV1Request();
       cy.get('[data-cy="input-text"]').type('toto');
       cy.get('[data-cy="input-password"]').type('1234');
       cy.get('[data-cy="submit-button"]').click();

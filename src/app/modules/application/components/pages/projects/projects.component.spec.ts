@@ -8,13 +8,12 @@ import { dataServiceMock } from '../../../../../../../__mocks__/services/data-se
 import { utilsServiceMock } from '../../../../../../../__mocks__/services/utils-service.mock';
 import { waitTimeout } from '../../../../../../../__mocks__/timeout.mock';
 import projectListMock from '../../../../../../../__mocks__/v1/json-files/projects.json';
-import tagListMock from '../../../../../../../__mocks__/v1/json-files/tags.json';
 import { AlertModule } from '../../../../../core';
 import { ProjectV1 } from '../../../../../core/interfaces/models/v1/project.interface';
 import { DataService, UtilsService } from '../../../../../shared';
 import { ProjectsComponent } from './projects.component';
 
-const unsortedProjectListMock = addTags(projectListMock, tagListMock);
+const unsortedProjectListMock = addTags(projectListMock);
 const technoList: string[] = ['1', '2', '3'];
 const unsortedProjectsWithTechnoListMock = unsortedProjectListMock.map((each) => ({ ...each, technoList }));
 const sortedProjectListMock = UtilsService.sortObjectList(unsortedProjectsWithTechnoListMock, 'asc', 'position', 'number');

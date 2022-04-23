@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
-import { MenuItem, MessageService } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { STORAGE_KEYS } from '../../../../core/constants/storage-keys.constant';
 import { UserV1 } from '../../../../core/interfaces/models/v1/user.interface';
@@ -9,10 +9,7 @@ import { AuthActions } from '../../../../core/ngrx/ngrx-index';
 import { selectCurrentUser } from '../../../../core/ngrx/selectors/auth.selectors';
 import { StorageService } from '../../../../core/services/storage/storage.service';
 import { ThemingService } from '../../../../core/services/theming/theming.service';
-
-interface ExtendedMenuItem extends MenuItem {
-  matIcon?: string;
-}
+import { ExtendedMenuItem } from '../../interfaces/extended-menu-item.interface';
 
 @Component({
   selector: 'app-admin-layout',
@@ -41,16 +38,8 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
   ) {
   }
 
-  private static getStorageActiveItem(): ExtendedMenuItem {
-    return StorageService.getItem('sessionStorage', STORAGE_KEYS.activeItem);
-  }
-
   private static setStorageActiveItem(activeItem: ExtendedMenuItem): void {
     StorageService.setItem('sessionStorage', STORAGE_KEYS.activeItem, activeItem);
-  }
-
-  private static removeActiveItemFromStorage(): void {
-    StorageService.removeItem('sessionStorage', STORAGE_KEYS.activeItem);
   }
 
   async ngOnInit(): Promise<void> {
@@ -109,18 +98,10 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
       {
         label: 'Se déconnecter', matIcon: 'logout',
         command: () => {
-          AdminLayoutComponent.removeActiveItemFromStorage();
           this.store.dispatch(AuthActions.logoutUser());
         },
       },
     ];
-
-    this.activeItem = AdminLayoutComponent.getStorageActiveItem();
-    if (!this.activeItem) {
-      return;
-    }
-
-    await this.router.navigate([this.activeItem.routerLink]);
   }
 
   ngOnDestroy(): void {

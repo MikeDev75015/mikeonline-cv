@@ -16,11 +16,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AlertModule, LoggerModule } from './core';
 import { CoreModule } from './core/core.module';
-import { httpInterceptorProviders } from './core/interceptors';
+import { apiV1HttpInterceptor, httpInterceptorProviders } from './core/interceptors';
 import {
   ApplicationEffects,
   AuthEffects,
-  CompetencesEffects,
   CvInfosEffects,
   ExperiencesEffects,
   FormationsEffects,
@@ -28,6 +27,7 @@ import {
   metaReducers,
   ProjectsEffects,
   reducers,
+  SkillsEffects,
   TagsEffects,
 } from './core/ngrx/ngrx-index';
 import { HttpClientService } from './core/services/http-client/http-client.service';
@@ -51,7 +51,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       ApplicationEffects,
       CvInfosEffects,
       TagsEffects,
-      CompetencesEffects,
+      SkillsEffects,
       ExperiencesEffects,
       FormationsEffects,
       ProjectsEffects,
@@ -82,12 +82,17 @@ export function HttpLoaderFactory(http: HttpClient) {
     AlertModule,
   ],
   providers: [
-    httpInterceptorProviders,
+    environment.production
+      ? httpInterceptorProviders
+      : [
+        ...httpInterceptorProviders,
+        ...apiV1HttpInterceptor,
+      ],
+
     HttpClientService,
     MessageService,
   ],
   bootstrap: [AppComponent],
-  // schemas: [NO_ERRORS_SCHEMA],
 })
 export class AppModule {
 }

@@ -8,11 +8,11 @@ import { ApiService } from '../../../shared';
 import { ApiV1Path } from '../../interfaces/api/api-v1-path.enum';
 import { TagV1 } from '../../interfaces/models/v1/tag.interface';
 import {
-  CompetencesActions,
   ExperiencesActions,
   FormationsActions,
   InterestsActions,
   ProjectsActions,
+  SkillsActions,
   TagsActions,
 } from '../ngrx-index';
 
@@ -42,7 +42,7 @@ export class TagsEffects {
   fetchTagsSuccess$ = createEffect(() => this.actions$.pipe(
     ofType(TagsActions.fetchTagsSuccess),
     tap(() => {
-      this.store.dispatch(CompetencesActions.fetchCompetences());
+      this.store.dispatch(SkillsActions.fetchSkills());
       this.store.dispatch(ExperiencesActions.fetchExperiences());
       this.store.dispatch(FormationsActions.fetchFormations());
       this.store.dispatch(ProjectsActions.fetchProjects());

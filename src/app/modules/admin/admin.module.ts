@@ -24,7 +24,7 @@ import { AdminInterestsComponent } from './components/pages/admin-interests/admi
 import { AdminProjectsComponent } from './components/pages/admin-projects/admin-projects.component';
 import { AdminSkillsComponent } from './components/pages/admin-skills/admin-skills.component';
 import { AdminTagsComponent } from './components/pages/admin-tags/admin-tags.component';
-import { SignInComponent } from './components/sign-in/sign-in.component';
+import { SignInComponent } from './components/pages/sign-in/sign-in.component';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 
 const primeNgModule: any[] = [

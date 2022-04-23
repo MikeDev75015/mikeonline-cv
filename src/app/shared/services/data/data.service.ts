@@ -9,11 +9,11 @@ import { SkillV1 } from '../../../core/interfaces/models/v1/skill.interface';
 import { TagV1 } from '../../../core/interfaces/models/v1/tag.interface';
 import { ApplicationActions } from '../../../core/ngrx/ngrx-index';
 import { selectAppCvInfosLoaded } from '../../../core/ngrx/selectors/application.selectors';
-import { selectAllCompetences, selectCompetencesLoaded } from '../../../core/ngrx/selectors/competences.selectors';
 import { selectAllExperiences, selectExperiencesLoaded } from '../../../core/ngrx/selectors/experiences.selectors';
 import { selectAllFormations, selectFormationsLoaded } from '../../../core/ngrx/selectors/formations.selectors';
 import { selectInterestsLoaded } from '../../../core/ngrx/selectors/interests.selectors';
 import { selectAllProjects, selectProjectsLoaded } from '../../../core/ngrx/selectors/projects.selectors';
+import { selectAllSkills, selectSkillsLoaded } from '../../../core/ngrx/selectors/skills.selectors';
 import { UsedTag } from '../../../modules/application/interfaces/used-tag.interface';
 
 @Injectable({
@@ -29,14 +29,19 @@ export class DataService {
   ) {
   }
 
-  private static listFilterPredicate(element: { [p: string]: any }, property: string, value: string | number): boolean {
+  private static listFilterPredicate(element: { [p: string]: any }, property: string, value: string | string[]): boolean {
     const listName = property.includes('.') ? property.split('.')[0] : property;
     const subProperty = property.includes('.') ? property.split('.')[1] : undefined;
     if (!subProperty) {
       return element[listName].includes(value);
     }
 
-    return !!element[listName].find((obj: { [p: string]: any }) => obj[subProperty] === value);
+    return !!element[listName].find((obj: { [p: string]: any }) => {
+      if ((Array.isArray(value) && value.includes(obj[subProperty])) || obj[subProperty] === value) {
+        return obj;
+      }
+      return null;
+    });
   }
 
   /**
@@ -47,7 +52,7 @@ export class DataService {
    * @param property
    */
   public async getStoreData<T>({ selector, defaultValue, value, property }: {
-    selector: (state: object) => T, defaultValue: T, value?: string | number, property?: string,
+    selector: (state: object) => T, defaultValue: T, value?: string | string[], property?: string,
   }): Promise<T> {
     const data: T = await lastValueFrom(this.store.select(selector).pipe(take(1)), { defaultValue });
     if (!data) {
@@ -77,7 +82,7 @@ export class DataService {
   public isAllDataLoaded(): Observable<boolean> {
     return combineLatest<boolean[]>([
       this.isDataLoaded(selectAppCvInfosLoaded),
-      this.isDataLoaded(selectCompetencesLoaded),
+      this.isDataLoaded(selectSkillsLoaded),
       this.isDataLoaded(selectExperiencesLoaded),
       this.isDataLoaded(selectFormationsLoaded),
       this.isDataLoaded(selectProjectsLoaded),
@@ -105,7 +110,7 @@ export class DataService {
     const usedTagList: UsedTag[] = [];
 
     const skillList = await this.getStoreData<SkillV1[]>({
-      selector: selectAllCompetences,
+      selector: selectAllSkills,
       defaultValue: [],
     });
     const experiences = await this.getStoreData<ExperienceV1[]>({

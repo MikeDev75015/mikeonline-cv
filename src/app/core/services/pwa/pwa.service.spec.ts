@@ -1,10 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { SwPush, SwUpdate, VersionEvent } from '@angular/service-worker';
 import { Subject } from 'rxjs';
+import { notificationPayloadMock } from '../../../../../__mocks__/data/notification-payload.mock';
 import { alertServiceMock } from '../../../../../__mocks__/services/alert-service.mock';
 import { swPushMock, swUpdateMock } from '../../../../../__mocks__/services/pwa-service.mock';
 import { waitTimeout } from '../../../../../__mocks__/timeout.mock';
-import { notificationPayloadMock } from '../../../../../__mocks__/v0/data/notification-payload.mock';
 import { AlertService } from '../../modules/alert/services/alert.service';
 import { PwaService } from './pwa.service';
 
@@ -56,15 +56,6 @@ describe('PwaService', () => {
   });
 
   describe('initializeServiceWorker', () => {
-    it('should warn if service worker is unavailable', () => {
-      swPushMock.isEnabled = false;
-      service.initializeServiceWorker();
-
-      expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
-      expect(consoleWarnSpy).toHaveBeenCalledWith('service worker unavailable');
-      expect(service['subscriptionList'].length).toStrictEqual(0);
-    });
-
     describe('service worker available', () => {
       beforeEach(() => {
         swPushMock.isEnabled = true;

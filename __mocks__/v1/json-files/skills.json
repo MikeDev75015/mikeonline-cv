@@ -1,7 +1,6 @@
 [
   {
     "id": "853XIdh3BVSXtr5qTvoG4",
-    "detailList": [],
     "expertiseLevel": 3,
     "name": "Event Sourcing",
     "priority": 2,
@@ -12,7 +11,6 @@
   },
   {
     "id": "HKqHt4mDr_61I9RelYDSz",
-    "detailList": [],
     "expertiseLevel": 3,
     "name": "BitBucket",
     "priority": 2,
@@ -23,7 +21,6 @@
   },
   {
     "id": "xuTgMxl9y4qZs4Tfw0Pfj",
-    "detailList": [],
     "expertiseLevel": 3,
     "name": "AWS Cloud",
     "priority": 2,
@@ -34,7 +31,6 @@
   },
   {
     "id": "MYsT7wIFjOxVQErYuL5kK",
-    "detailList": [],
     "expertiseLevel": 3,
     "name": "Compodoc",
     "priority": 3,
@@ -45,7 +41,6 @@
   },
   {
     "id": "FsKkZqYFByWzo43fiZQfG",
-    "detailList": [],
     "expertiseLevel": 3,
     "name": "Angular Material",
     "priority": 2,
@@ -56,7 +51,6 @@
   },
   {
     "id": "IZmveHfuvkNx16CMhLhc_",
-    "detailList": [],
     "expertiseLevel": 5,
     "name": "JavaScript",
     "priority": 3,
@@ -67,7 +61,6 @@
   },
   {
     "id": "E2M8D8t0jH-Wl801Jij5x",
-    "detailList": [],
     "expertiseLevel": 2,
     "name": "Fastify",
     "priority": 2,
@@ -78,7 +71,6 @@
   },
   {
     "id": "ULsokejRjbGj1ffzMZxAK",
-    "detailList": [],
     "expertiseLevel": 3,
     "name": "GitHub",
     "priority": 2,
@@ -89,7 +81,6 @@
   },
   {
     "id": "nt1f8nXnye3BBVyXHOddm",
-    "detailList": [],
     "expertiseLevel": 4,
     "name": "Socket.io",
     "priority": 3,
@@ -100,7 +91,6 @@
   },
   {
     "id": "G4Cb7cv-YLYttn1XZcrah",
-    "detailList": [],
     "expertiseLevel": 3,
     "name": "Jwt",
     "priority": 2,
@@ -111,7 +101,6 @@
   },
   {
     "id": "ScDzaNz8WRMwDVhNqhgT1",
-    "detailList": [],
     "expertiseLevel": 4,
     "name": "Flash Professional",
     "priority": 1,
@@ -122,7 +111,6 @@
   },
   {
     "id": "VJ7iR1vJ9H5veTzyrr_Aq",
-    "detailList": [],
     "expertiseLevel": 3,
     "name": "Microservices",
     "priority": 2,
@@ -133,7 +121,6 @@
   },
   {
     "id": "sDIVh7P_TBsctZEJwYiu1",
-    "detailList": [],
     "expertiseLevel": 4,
     "name": "Stuart",
     "priority": 1,
@@ -144,7 +131,6 @@
   },
   {
     "id": "YD4FBh31ayEmKN2ecfD7k",
-    "detailList": [],
     "expertiseLevel": 4,
     "name": "CircleCI",
     "priority": 3,
@@ -155,7 +141,6 @@
   },
   {
     "id": "gRxBhj7arf5Gk6rr5sBeX",
-    "detailList": [],
     "expertiseLevel": 3,
     "name": "FireBase",
     "priority": 2,
@@ -166,7 +151,6 @@
   },
   {
     "id": "GcVZfYBV99HkYRPoozrds",
-    "detailList": [],
     "expertiseLevel": 3,
     "name": "Pdf",
     "priority": 1,
@@ -177,7 +161,6 @@
   },
   {
     "id": "r_9ahRROur3KWJfO2f8pD",
-    "detailList": [],
     "expertiseLevel": 3,
     "name": "Photoshop",
     "priority": 1,
@@ -188,7 +171,6 @@
   },
   {
     "id": "3DcJnucBK-Ch_Gvv1NqnC",
-    "detailList": [],
     "expertiseLevel": 4,
     "name": "Jest",
     "priority": 3,
@@ -199,7 +181,6 @@
   },
   {
     "id": "yzZBpwARpbJeY4p3hqLQ0",
-    "detailList": [],
     "expertiseLevel": 3,
     "name": "Jira",
     "priority": 2,
@@ -210,7 +191,6 @@
   },
   {
     "id": "mswbqgbSMCda5z48L5KW1",
-    "detailList": [],
     "expertiseLevel": 4,
     "name": "Progressive Web App",
     "priority": 3,
@@ -221,7 +201,6 @@
   },
   {
     "id": "0JcLpywSteDT5_A-lbt7A",
-    "detailList": [],
     "expertiseLevel": 4,
     "name": "jQuery",
     "priority": 1,
@@ -232,7 +211,6 @@
   },
   {
     "id": "wF2ww7ofZT6XpYoCQ5kub",
-    "detailList": [],
     "expertiseLevel": 4,
     "name": "DevOps",
     "priority": 3,
@@ -243,7 +221,6 @@
   },
   {
     "id": "4UvNY6TwR4hYZKP8QcVGf",
-    "detailList": [],
     "expertiseLevel": 4,
     "name": "React.js",
     "priority": 2,
@@ -254,7 +231,6 @@
   },
   {
     "id": "1KYrQR5ga5RrE0zi0iUM6",
-    "detailList": [],
     "expertiseLevel": 2,
     "name": "SASS",
     "priority": 1,
@@ -265,7 +241,6 @@
   },
   {
     "id": "4JQ1jxWd9atuUTomg_q_S",
-    "detailList": [],
     "expertiseLevel": 4,
     "name": "Express",
     "priority": 2,
@@ -276,7 +251,6 @@
   },
   {
     "id": "C2GFIPacRtc07gj5HJZS6",
-    "detailList": [],
     "expertiseLevel": 2,
     "name": "PowerPoint",
     "priority": 1,
@@ -287,7 +261,6 @@
   },
   {
     "id": "VgBTiwTCfQMZCqW9tcfo0",
-    "detailList": [],
     "expertiseLevel": 3,
     "name": "Heroku",
     "priority": 2,
@@ -298,7 +271,6 @@
   },
   {
     "id": "qSxRBaAORFBdoOtp-ax-g",
-    "detailList": [],
     "expertiseLevel": 4,
     "name": "Html",
     "priority": 1,
@@ -309,7 +281,6 @@
   },
   {
     "id": "WV5PcMczm9pDMTqsIwHqq",
-    "detailList": [],
     "expertiseLevel": 4,
     "name": "Node.js",
     "priority": 3,
@@ -320,7 +291,6 @@
   },
   {
     "id": "DaT7OqTkF8qiztE2TFObp",
-    "detailList": [],
     "expertiseLevel": 4,
     "name": "Swagger",
     "priority": 3,
@@ -331,7 +301,6 @@
   },
   {
     "id": "wSbwsnWR256ctszngO_7p",
-    "detailList": [],
     "expertiseLevel": 3,
     "name": "Google Analytics",
     "priority": 1,
@@ -342,7 +311,6 @@
   },
   {
     "id": "dGjN1leY4Ra23pjo7LX4z",
-    "detailList": [],
     "expertiseLevel": 3,
     "name": "Word",
     "priority": 1,
@@ -353,7 +321,6 @@
   },
   {
     "id": "2mH23c9yl-Grls0F3UQaM",
-    "detailList": [],
     "expertiseLevel": 4,
     "name": "Angular",
     "priority": 3,
@@ -367,7 +334,6 @@
   },
   {
     "id": "VCOOrYbisVXkxiD_2Xhll",
-    "detailList": [],
     "expertiseLevel": 4,
     "name": "MongoDb",
     "priority": 3,
@@ -378,7 +344,6 @@
   },
   {
     "id": "exT5RRXlwhHbCSy1uKTvG",
-    "detailList": [],
     "expertiseLevel": 4,
     "name": "Mongoose",
     "priority": 3,
@@ -389,7 +354,6 @@
   },
   {
     "id": "A0JAtNW7pCBRNki--S8rN",
-    "detailList": [],
     "expertiseLevel": 2,
     "name": "Vue.js",
     "priority": 2,
@@ -400,7 +364,6 @@
   },
   {
     "id": "snxbirZP_W16cMaJqUufw",
-    "detailList": [],
     "expertiseLevel": 4,
     "name": "Netlify",
     "priority": 2,
@@ -411,7 +374,6 @@
   },
   {
     "id": "ifZYs0CceLuF1xNni-Z1c",
-    "detailList": [],
     "expertiseLevel": 2,
     "name": "Vuex",
     "priority": 2,
@@ -422,7 +384,6 @@
   },
   {
     "id": "ArM0KYNsiSfUYQvlqUJD8",
-    "detailList": [],
     "expertiseLevel": 4,
     "name": "Php",
     "priority": 1,
@@ -433,7 +394,6 @@
   },
   {
     "id": "D2d5K39Jc4MI7B84Dk_OU",
-    "detailList": [],
     "expertiseLevel": 4,
     "name": "Stripe",
     "priority": 1,
@@ -444,7 +404,6 @@
   },
   {
     "id": "qAP3oPzkvoPHA7ybrKGxH",
-    "detailList": [],
     "expertiseLevel": 4,
     "name": "Css",
     "priority": 2,
@@ -455,7 +414,6 @@
   },
   {
     "id": "DR-SoHb6n8Yxm95gnTDlW",
-    "detailList": [],
     "expertiseLevel": 4,
     "name": "Ionic 5",
     "priority": 2,
@@ -466,7 +424,6 @@
   },
   {
     "id": "BATfliRSyt96JUv2tnXaz",
-    "detailList": [],
     "expertiseLevel": 3,
     "name": "i18n",
     "priority": 2,
@@ -477,7 +434,6 @@
   },
   {
     "id": "Te7VfqxiEPYQe0XfaO7y-",
-    "detailList": [],
     "expertiseLevel": 3,
     "name": "MySQL",
     "priority": 1,
@@ -488,7 +444,6 @@
   },
   {
     "id": "YeVcGhM8tpovrQyuys0bW",
-    "detailList": [],
     "expertiseLevel": 4,
     "name": "NGRX",
     "priority": 3,
@@ -499,7 +454,6 @@
   },
   {
     "id": "x4pq6n3D5xgRuYJuyqZR3",
-    "detailList": [],
     "expertiseLevel": 4,
     "name": "Nest.js",
     "priority": 3,
@@ -510,7 +464,6 @@
   },
   {
     "id": "PK81aq7pP3lEY0PJiZcoN",
-    "detailList": [],
     "expertiseLevel": 3,
     "name": "Pixel FB",
     "priority": 1,
@@ -521,7 +474,6 @@
   },
   {
     "id": "zcBzDl6EYnCrYeV2QAxbJ",
-    "detailList": [],
     "expertiseLevel": 2,
     "name": "SEO",
     "priority": 1,
@@ -532,7 +484,6 @@
   },
   {
     "id": "GLF6uk0NP8NTzGjDNJTzp",
-    "detailList": [],
     "expertiseLevel": 4,
     "name": "TypeScript",
     "priority": 3,
@@ -543,7 +494,6 @@
   },
   {
     "id": "HeNpZbPBZTXDjv2dl4wEi",
-    "detailList": [],
     "expertiseLevel": 4,
     "name": "Css 3",
     "priority": 3,
@@ -554,7 +504,6 @@
   },
   {
     "id": "0BDnsJIVCGKS7RGH09ZRs",
-    "detailList": [],
     "expertiseLevel": 3,
     "name": "Deliver.ee",
     "priority": 1,
@@ -565,7 +514,6 @@
   },
   {
     "id": "M9T6Iy8SturjD54iDopDy",
-    "detailList": [],
     "expertiseLevel": 4,
     "name": "Google Tag Manager",
     "priority": 1,
@@ -576,7 +524,6 @@
   },
   {
     "id": "0VWM1Si4ULKYCvBzWxmXw",
-    "detailList": [],
     "expertiseLevel": 3,
     "name": "Docker",
     "priority": 3,
@@ -587,7 +534,6 @@
   },
   {
     "id": "pLWg0vTJxxX0ztkM71bsl",
-    "detailList": [],
     "expertiseLevel": 1,
     "name": "WordPress",
     "priority": 1,
@@ -598,7 +544,6 @@
   },
   {
     "id": "C_hunoxLsIGwQaW7lt_Rp",
-    "detailList": [],
     "expertiseLevel": 3,
     "name": "Bootstrap",
     "priority": 1,
@@ -609,7 +554,6 @@
   },
   {
     "id": "KgAD9t4q3pWs95xDlVeLe",
-    "detailList": [],
     "expertiseLevel": 3,
     "name": "CQRS",
     "priority": 2,
@@ -620,7 +564,6 @@
   },
   {
     "id": "pgFymT-FiHx2CJNtQxppw",
-    "detailList": [],
     "expertiseLevel": 2,
     "name": "CALMS",
     "priority": 1,
@@ -631,7 +574,6 @@
   },
   {
     "id": "eewec0xXQoFTWH0Q7p9S3",
-    "detailList": [],
     "expertiseLevel": 4,
     "name": "Html 5",
     "priority": 2,
@@ -642,7 +584,6 @@
   },
   {
     "id": "7NsZCV_S4dmvtt3f6RsDM",
-    "detailList": [],
     "expertiseLevel": 3,
     "name": "Trello",
     "priority": 2,
@@ -653,7 +594,6 @@
   },
   {
     "id": "_bYyY-1NH_e0UT8ibVbmk",
-    "detailList": [],
     "expertiseLevel": 3,
     "name": "Pug",
     "priority": 1,
@@ -663,7 +603,6 @@
     ]
   },
   {
-    "detailList": [],
     "tagIdList": [
       "0fHbbVVOkU1kTdv0HQIFM"
     ],

@@ -9,8 +9,8 @@
     <p *ngIf="selectedKeyword || defaultText" class="fcc chip"
        style="margin-top: 50px !important;">{{ selectedKeyword || defaultText }}</p><br>
 
-    <ng-container *ngIf="knobSkillList">
-      <div *ngFor="let knobSkill of knobSkillList" class="fsc column w100 skill-details">
+    <ng-container *ngIf="knobSkill">
+      <div class="fsc column w100 skill-details">
         <div class="fce w100">
 
           <div class="fcc column" title="Années d'expérience">

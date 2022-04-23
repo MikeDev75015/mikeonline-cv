@@ -16,7 +16,7 @@ export class AuthService {
   ) {
   }
 
-  public setAuthHeader(request: HttpRequest<any>, accessToken: string): HttpRequest<any> {
+  public setAuthorizationHeader(request: HttpRequest<any>, accessToken: string): HttpRequest<any> {
     return request.clone({
       setHeaders: {
         Authorization: `Bearer ${accessToken}`,
@@ -25,8 +25,9 @@ export class AuthService {
   }
 
   public login(payload: LoginRequest): Observable<{ accessToken: string; }> {
-    console.debug('login:', payload);
-    return this.httpClientService.post<{ accessToken: string; }>(`/${ApiV1Path.LOGIN}`, payload);
+    return this.httpClientService.post<{ accessToken: string; }>(`/${ApiV1Path.LOGIN}`, {
+      username: payload.username, password: payload.password,
+    });
   }
 
   public logout(): Observable<void> {
@@ -34,7 +35,6 @@ export class AuthService {
   }
 
   public getUserAccount(): Observable<UserV1> {
-    console.debug('getUserAccount');
     return this.httpClientService.get<UserV1>(`/${ApiV1Path.ACCOUNT}`);
   }
 }

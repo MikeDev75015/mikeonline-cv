@@ -49,6 +49,10 @@ commands:
     steps:
       - store_test_results:
           path: cypress/results
+      - store_artifacts:
+          path: cypress/videos
+      - store_artifacts:
+          path: cypress/screenshots
 
 jobs:
   ci-build-job:
@@ -202,17 +206,22 @@ workflows:
               ignore:
                 - master
                 - develop
+
+  ######################################### CYPRESS WORKFLOW - on cypress TAG ##########################################
+  ci-cypress-workflow:
+    when:
+      equal: [ << pipeline.git.tag >>, cypress ]
+    jobs:
       - cypress/install:
           executor: cypress-base-16-with-chrome-and-firefox
           filters:
             branches:
-              ignore:
-                - master
-                - develop
+              ignore: /.*/
+            tags:
+              only: cypress
       - cypress/run:
           name: ci-cypress-job
           requires:
-            - ci-test-job
             - cypress/install
           executor: cypress-base-16-with-chrome-and-firefox
           ci-build-id: 'testing-commit-${CIRCLE_SHA1}'
@@ -230,9 +239,9 @@ workflows:
             - cypress-post-steps
           filters:
             branches:
-              ignore:
-                - master
-                - develop
+              ignore: /.*/
+            tags:
+              only: cypress
 
   ######################################## SONAR CLOUD WORKFLOW - on sonar TAG #########################################
   ci-sonar-workflow:
@@ -249,7 +258,7 @@ workflows:
               only: sonar
 
   ##################################### DEPLOY TEST WORKFLOW - on deploy TAG ###########################################
-  ci-cd-workflow-test:
+  ci-cd-deploy-test-workflow:
     when:
       equal: [ << pipeline.git.tag >>, deploy ]
     jobs:
@@ -277,23 +286,8 @@ workflows:
             tags:
               only: deploy
 
-  ##################################### RELEASE WORKFLOW - on release TAG ##############################################
-  cd-release-workflow:
-    when:
-      equal: [ << pipeline.git.tag >>, release ]
-    jobs:
-      - cd-release-job:
-          context:
-            - GIT
-            - REPOS
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: release
-
   ##################################### STAGING WORKFLOW - only develop ################################################
-  ci-cd-workflow-staging:
+  ci-cd-deploy-staging-workflow:
     jobs:
       - ci-test-job:
           filters:
@@ -343,9 +337,9 @@ workflows:
                 - develop
       - cd-deploy-job-firebase:
           requires:
-            - ci-build-job
             - ci-test-job
             - ci-cypress-job
+            - ci-build-job
           context: FIREBASE
           hosting: cv-mikeonline-staging
           post-steps:
@@ -357,8 +351,23 @@ workflows:
               only:
                 - develop
 
-  ##################################### MASTER WORKFLOW - only master ################################################
-  ci-cd-workflow-master:
+  ##################################### RELEASE WORKFLOW - on release TAG ##############################################
+  cd-release-workflow:
+    when:
+      equal: [ << pipeline.git.tag >>, release ]
+    jobs:
+      - cd-release-job:
+          context:
+            - GIT
+            - REPOS
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: release
+
+  ####################################### MASTER WORKFLOW - only master ################################################
+  ci-master-workflow:
     jobs:
       - ci-sonar-job:
           context: OCV_SONARCLOUD
@@ -367,8 +376,8 @@ workflows:
               only:
                 - master
 
-  ################################## PRODUCTION WORKFLOW - only [version] TAG ##########################################
-  ci-cd-workflow-production:
+  ################################## DEPLOY PRODUCTION WORKFLOW - only [version] TAG ###################################
+  ci-cd-deploy-production-workflow:
     when: << pipeline.git.tag >>
     jobs:
       - ci-build-job:

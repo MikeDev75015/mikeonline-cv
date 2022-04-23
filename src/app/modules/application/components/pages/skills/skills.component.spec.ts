@@ -16,10 +16,10 @@ import unsortedProjectListMock from '../../../../../../../__mocks__/v1/json-file
 import competenceListMock from '../../../../../../../__mocks__/v1/json-files/skills.json';
 import tagListMock from '../../../../../../../__mocks__/v1/json-files/tags.json';
 import { AlertModule } from '../../../../../core';
-import { selectAllCompetences } from '../../../../../core/ngrx/selectors/competences.selectors';
 import { selectAllExperiences } from '../../../../../core/ngrx/selectors/experiences.selectors';
 import { selectAllFormations } from '../../../../../core/ngrx/selectors/formations.selectors';
 import { selectAllProjects } from '../../../../../core/ngrx/selectors/projects.selectors';
+import { selectAllSkills } from '../../../../../core/ngrx/selectors/skills.selectors';
 import { selectAllTags } from '../../../../../core/ngrx/selectors/tags.selectors';
 import { DataService, UtilsService } from '../../../../../shared';
 import { SkillsComponent } from './skills.component';
@@ -383,7 +383,7 @@ describe('SkillsComponent', () => {
             return unsortedFormationListMock.filter((el: any) => el[property as string]?.includes(value)) || defaultValue;
           case selectAllProjects:
             return unsortedProjectListMock.filter((el: any) => el[property as string]?.includes(value)) || defaultValue;
-          case selectAllCompetences:
+          case selectAllSkills:
             return competenceListMock.filter((el: any) => el[property as string]?.includes(value)) || defaultValue;
           default:
             console.debug(`invalid selector!`);

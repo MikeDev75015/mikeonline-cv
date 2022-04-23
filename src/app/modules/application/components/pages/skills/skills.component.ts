@@ -7,15 +7,10 @@ import { ExperienceV1 } from '../../../../../core/interfaces/models/v1/experienc
 import { FormationV1 } from '../../../../../core/interfaces/models/v1/formation.interface';
 import { ProjectV1 } from '../../../../../core/interfaces/models/v1/project.interface';
 import { SkillV1 } from '../../../../../core/interfaces/models/v1/skill.interface';
-import { TagV1 } from '../../../../../core/interfaces/models/v1/tag.interface';
-import {
-  selectAllCompetences,
-  selectCompetencesLoaded,
-} from '../../../../../core/ngrx/selectors/competences.selectors';
 import { selectAllExperiences } from '../../../../../core/ngrx/selectors/experiences.selectors';
 import { selectAllFormations } from '../../../../../core/ngrx/selectors/formations.selectors';
 import { selectAllProjects } from '../../../../../core/ngrx/selectors/projects.selectors';
-import { selectAllTags } from '../../../../../core/ngrx/selectors/tags.selectors';
+import { selectAllSkills, selectSkillsLoaded } from '../../../../../core/ngrx/selectors/skills.selectors';
 import { DayJsService } from '../../../../../core/services/dayjs/dayjs.service';
 import { DataService, UtilsService } from '../../../../../shared';
 import { ProjectItem } from '../../../interfaces/project-item.interface';
@@ -84,7 +79,12 @@ export class SkillsComponent implements OnInit, OnDestroy, AfterViewChecked {
   /**
    * Contains the skills loaded.
    */
-  public knobSkillList?: KnobSkill[];
+  public skillList: SkillV1[] | undefined;
+
+  /**
+   * Contains the skills adapted for the knobs.
+   */
+  public knobSkill?: KnobSkill;
 
   /**
    * Contains the related experiences found.
@@ -177,7 +177,7 @@ export class SkillsComponent implements OnInit, OnDestroy, AfterViewChecked {
    * Sets skillsLoaded to true when data are loaded.
    */
   ngOnInit(): void {
-    this.isLoadingData$ = this.dataService.isDataLoaded(selectCompetencesLoaded).pipe(
+    this.isLoadingData$ = this.dataService.isDataLoaded(selectSkillsLoaded).pipe(
       tap((loaded) => {
         this.skillsLoaded = loaded;
       }),
@@ -347,7 +347,7 @@ export class SkillsComponent implements OnInit, OnDestroy, AfterViewChecked {
     el.onclick = async (e) => {
       e.preventDefault();
       this.selectedKeyword = el.innerText;
-      await this.buildCompetencesSummary(el.innerText);
+      await this.buildSkillsSummary(el.innerText);
     };
 
     el.setAttribute('init-onclick', 'true');
@@ -385,9 +385,11 @@ export class SkillsComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.skillsDrawn = 0;
     this.timeOutToDrawn = 0;
 
-    const tagList = await this.dataService.getSummary();
-    this.wordList = tagList.map(
-      tag => ([tag.name, this.policeSize(tag.times, tag.weight)]),
+    this.skillList = await this.dataService.getStoreData({
+      selector: selectAllSkills, defaultValue: [],
+    });
+    this.wordList = this.skillList.map(
+      (skill) => ([skill.name, this.policeSize(skill.expertiseLevel, skill.priority)]),
     );
 
     window.WordCloud(wcCanvas, {
@@ -401,46 +403,37 @@ export class SkillsComponent implements OnInit, OnDestroy, AfterViewChecked {
    * @param skillName
    * @private
    */
-  private async buildCompetencesSummary(skillName: string): Promise<void> {
-    const [tag] = await this.dataService.getStoreData<TagV1[]>({
-      selector: selectAllTags,
-      defaultValue: [],
-      value: skillName,
-      property: 'name',
-    });
-    console.debug('tag', tag);
+  private async buildSkillsSummary(skillName: string): Promise<void> {
+    // @ts-ignore
+    const selectedSkill = this.skillList.find((skill) => skill.name === skillName) as SkillV1;
 
     const allRelatedList = await Promise.all([
       { list: [] as ExperienceV1[], selector: selectAllExperiences },
       { list: [] as FormationV1[], selector: selectAllFormations },
       { list: [] as ProjectV1[], selector: selectAllProjects },
-      { list: [] as SkillV1[], selector: selectAllCompetences },
     ].map((v) => {
       return this.dataService.getStoreData<typeof v.list>({
-        selector: v.selector, defaultValue: [], value: tag.id, property: 'tagList.id',
+        selector: v.selector, defaultValue: [], property: 'tagList.id',
+        value: selectedSkill.tagList.map((tag) => tag.id),
       });
     }));
-    console.debug('allRelatedList', allRelatedList);
 
     this.experienceList = allRelatedList[0] as ExperienceV1[];
     this.formationList = allRelatedList[1] as FormationV1[];
-
     this.projectItemList = allRelatedList[2].map(s => ({
       ...s,
       technoList: this.utilsService.initTechnoListWithTagList(s.tagList),
     }) as ProjectItem);
 
-    this.knobSkillList = allRelatedList[3].map((c) => {
-      const comp = c as SkillV1;
-      const compStartDate = comp.startDate.match(partialIsoDatePattern) ? comp.startDate + '-01' : comp.startDate;
-      const experienceYearsText = DayJsService.getTimeToNow(compStartDate, true);
-      return {
-        ...comp,
-        experienceYears: {
-          text: experienceYearsText,
-          value: this.utilsService.convertDateToKnobYearsValue(experienceYearsText),
-        },
-      } as KnobSkill;
-    });
+    const selectedSkillStartDate = selectedSkill.startDate.match(partialIsoDatePattern) ? selectedSkill.startDate + '-01' : selectedSkill.startDate;
+    const experienceYearsText = DayJsService.getTimeToNow(selectedSkillStartDate, true);
+
+    this.knobSkill = {
+      ...selectedSkill,
+      experienceYears: {
+        text: experienceYearsText,
+        value: this.utilsService.convertDateToKnobYearsValue(experienceYearsText),
+      },
+    };
   }
 }

@@ -2,13 +2,13 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
-import { LoginRequest } from '../../../../core/interfaces/requests/login.request';
-import { MessageSeverity } from '../../../../core/interfaces/types/message-severity.type';
-import { loginUser } from '../../../../core/ngrx/actions/auth.actions';
-import { ErrorMessageService } from '../../../../core/services/error-message/error-message.service';
-import { AuthService } from '../../services/auth/auth.service';
-import { FormField } from '../fragments/form-wrapper/interfaces/form-field.interface';
-import { SEVERITY_MESSAGE_SUMMARY } from '../fragments/table-wrapper/constants/common.constant';
+import { LoginRequest } from '../../../../../core/interfaces/requests/login.request';
+import { MessageSeverity } from '../../../../../core/interfaces/types/message-severity.type';
+import { loginUser } from '../../../../../core/ngrx/actions/auth.actions';
+import { ErrorMessageService } from '../../../../../core/services/error-message/error-message.service';
+import { AuthService } from '../../../services/auth/auth.service';
+import { FormField } from '../../fragments/form-wrapper/interfaces/form-field.interface';
+import { SEVERITY_MESSAGE_SUMMARY } from '../../fragments/table-wrapper/constants/common.constant';
 
 @Component({
   selector: 'app-sign-in',

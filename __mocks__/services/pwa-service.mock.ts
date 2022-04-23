@@ -1,6 +1,6 @@
 import { VersionEvent } from '@angular/service-worker';
 import { of } from 'rxjs';
-import { notificationPayloadMock } from '../v0/data/notification-payload.mock';
+import { notificationPayloadMock } from '../data/notification-payload.mock';
 
 export const pwaServiceMock = {
   initializeServiceWorker: jest.fn(),

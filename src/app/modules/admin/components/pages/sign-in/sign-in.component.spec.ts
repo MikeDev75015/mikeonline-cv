@@ -4,7 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Store } from '@ngrx/store';
 import { MockComponent } from 'ng2-mock-component';
 import { ToastModule } from 'primeng/toast';
-import { storeMock } from '../../../../../../__mocks__/services/store.mock';
+import { storeMock } from '../../../../../../../__mocks__/services/store.mock';
 
 import { SignInComponent } from './sign-in.component';
 

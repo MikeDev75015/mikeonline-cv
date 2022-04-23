@@ -1,8 +1,8 @@
-import {interceptApiRequest} from "../../../common";
+import {interceptApiV1Request} from "../../../common";
 
 describe('main component', () => {
   before(() => {
-    interceptApiRequest();
+    interceptApiV1Request();
   });
 
   beforeEach(() => {

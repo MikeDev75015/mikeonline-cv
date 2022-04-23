@@ -6,6 +6,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { catchError, of } from 'rxjs';
 import { map, mergeMap, tap } from 'rxjs/operators';
+import { ExtendedMenuItem } from '../../../modules/admin/interfaces/extended-menu-item.interface';
 import { AuthService } from '../../../modules/admin/services/auth/auth.service';
 import { STORAGE_KEYS } from '../../constants/storage-keys.constant';
 import { LoginRequest } from '../../interfaces/requests/login.request';
@@ -21,7 +22,6 @@ export class AuthEffects {
     ofType(AuthActions.loginUser),
     mergeMap((payload: LoginRequest) => this.authService.login(payload)),
     map(({ accessToken }) => {
-      console.debug('login response:', accessToken);
       if (!accessToken) {
         return AuthActions.loginUserFailure();
       }
@@ -81,7 +81,8 @@ export class AuthEffects {
   getUserSuccess$ = createEffect(() => this.actions$.pipe(
     ofType(AuthActions.getUserSuccess),
     tap(async () => {
-      await this.router.navigate(['/admin']);
+      const activeItem = AuthEffects.getStorageActiveItem();
+      await this.router.navigate([activeItem?.routerLink || '/admin']);
     }),
   ), { dispatch: false });
 
@@ -107,7 +108,16 @@ export class AuthEffects {
   ) {
   }
 
+  private static getStorageActiveItem(): ExtendedMenuItem {
+    return StorageService.getItem('sessionStorage', STORAGE_KEYS.activeItem);
+  }
+
+  private static removeActiveItemFromStorage(): void {
+    StorageService.removeItem('sessionStorage', STORAGE_KEYS.activeItem);
+  }
+
   private cleanStorageAccessToken(navigateToSignInPage = false): void {
+    AuthEffects.removeActiveItemFromStorage();
     StorageService.removeItem('localStorage', STORAGE_KEYS.accessToken);
     if (!navigateToSignInPage) {
       console.debug('Access token removed!');

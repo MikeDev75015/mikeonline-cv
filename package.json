@@ -7,17 +7,19 @@
     "build": "ng build",
     "build-staging": "ng build --configuration staging --output-path=dist/staging",
     "build-prod": "ng build --prod",
+    "deploy-staging-from-local": "npm run build-staging && firebase deploy --project cv-mikeonline --only hosting:cv-mikeonline-staging",
+    "deploy-prod-from-local": "npm run build-prod && firebase deploy --project cv-mikeonline --only hosting:cv-mikeonline",
     "release": "standard-version",
     "jcc": "jest --clearCache",
     "test": "jest",
     "test-coverage": "jest --coverage",
     "test:ci": "CI=true npm test -- --coverage --runInBand --testResultsProcessor=jest-sonar-reporter",
     "lint": "ng lint",
-    "sonar-test": "git tag -f sonar && git push -f upstream sonar",
     "cypress:open": "cypress open",
-    "deploy-local": "firebase deploy --project cv-mikeonline",
-    "deploy-test": "git tag -f deploy && git push -f origin deploy",
-    "deploy-prod": "git tag -f release && git push -f origin release"
+    "sonar-tag": "git tag -f sonar && git push -f upstream sonar",
+    "cypress-tag": "git tag -f cypress && git push -f origin cypress",
+    "deploy-tag": "git tag -f deploy && git push -f origin deploy",
+    "release-tag": "git tag -f release && git push -f origin release"
   },
   "private": true,
   "dependencies": {

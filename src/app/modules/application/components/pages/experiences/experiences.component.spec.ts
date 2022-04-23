@@ -4,12 +4,11 @@ import { lastValueFrom, of } from 'rxjs';
 import { addTags } from '../../../../../../../__mocks__/helper';
 import { dataServiceMock } from '../../../../../../../__mocks__/services/data-service.mock';
 import experienceListMock from '../../../../../../../__mocks__/v1/json-files/experiences.json';
-import tagListMock from '../../../../../../../__mocks__/v1/json-files/tags.json';
 import { ExperienceV1 } from '../../../../../core/interfaces/models/v1/experience.interface';
 import { DataService, UtilsService } from '../../../../../shared';
 import { ExperiencesComponent } from './experiences.component';
 
-const unsortedExperienceListMock = addTags(experienceListMock, tagListMock);
+const unsortedExperienceListMock = addTags(experienceListMock);
 const withoutEndDateList: ExperienceV1[] = [];
 const withEndDateList: ExperienceV1[] = unsortedExperienceListMock.filter((experience) => {
   if (experience.endDate) {

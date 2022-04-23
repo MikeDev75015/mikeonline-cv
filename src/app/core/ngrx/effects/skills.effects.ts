@@ -7,36 +7,36 @@ import { mergeMap, tap } from 'rxjs/operators';
 import { ApiService, TagsService } from '../../../shared';
 import { ApiV1Path } from '../../interfaces/api/api-v1-path.enum';
 import { SkillV1 } from '../../interfaces/models/v1/skill.interface';
-import { CompetencesActions } from '../ngrx-index';
+import { SkillsActions } from '../ngrx-index';
 
 /**
- * Effects for competences actions
+ * Effects for skills actions
  */
 @Injectable()
-export class CompetencesEffects {
+export class SkillsEffects {
   /**
-   * Effect for the fetchCompetences action
+   * Effect for the fetchSkills action
    */
-  fetchCompetences$ = createEffect(() => this.actions$.pipe(
-    ofType(CompetencesActions.fetchCompetences),
+  fetchSkills$ = createEffect(() => this.actions$.pipe(
+    ofType(SkillsActions.fetchSkills),
     mergeMap(() => this.apiV0Service.getData<SkillV1[]>(ApiV1Path.SKILLS)),
-    tap((competenceList) => {
-      if (!competenceList || !competenceList.length) {
-        this.store.dispatch(CompetencesActions.fetchCompetencesFailure());
+    tap((skillList) => {
+      if (!skillList || !skillList.length) {
+        this.store.dispatch(SkillsActions.fetchSkillsFailure());
         return;
       }
 
-      this.store.dispatch(CompetencesActions.fetchCompetencesSuccess({ competenceList }));
+      this.store.dispatch(SkillsActions.fetchSkillsSuccess({ skillList }));
     }),
   ), { dispatch: false });
 
   /**
-   * Effect for the fetchCompetencesFailure action
+   * Effect for the fetchSkillsFailure action
    */
-  fetchCompetencesFailure$ = createEffect(() => this.actions$.pipe(
-    ofType(CompetencesActions.fetchCompetencesFailure),
+  fetchSkillsFailure$ = createEffect(() => this.actions$.pipe(
+    ofType(SkillsActions.fetchSkillsFailure),
     tap(() => {
-      console.log('fetch Competences Failure');
+      console.log('fetch Skills Failure');
     }),
   ), { dispatch: false });
 

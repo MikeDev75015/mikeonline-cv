@@ -4,12 +4,11 @@ import { lastValueFrom, of } from 'rxjs';
 import { addTags } from '../../../../../../../__mocks__/helper';
 import { dataServiceMock } from '../../../../../../../__mocks__/services/data-service.mock';
 import formationListMock from '../../../../../../../__mocks__/v1/json-files/formations.json';
-import tagListMock from '../../../../../../../__mocks__/v1/json-files/tags.json';
 import { FormationV1 } from '../../../../../core/interfaces/models/v1/formation.interface';
 import { DataService, UtilsService } from '../../../../../shared';
 import { FormationsComponent } from './formations.component';
 
-const unsortedFormationListMock = addTags(formationListMock, tagListMock);
+const unsortedFormationListMock = addTags(formationListMock);
 const withoutEndDateList: FormationV1[] = [];
 const withEndDateList: FormationV1[] = unsortedFormationListMock.filter((formation) => {
   if (formation.endDate) {

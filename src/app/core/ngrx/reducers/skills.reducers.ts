@@ -1,12 +1,12 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { Action, createReducer, on } from '@ngrx/store';
 import { SkillV1 } from '../../interfaces/models/v1/skill.interface';
-import * as CompetencesActions from '../actions/competences.actions';
+import * as CompetencesActions from '../actions/skills.actions';
 
 /**
  * Competences State
  */
-export interface CompetencesState extends EntityState<SkillV1> {
+export interface SkillsState extends EntityState<SkillV1> {
   loaded: boolean;
 }
 
@@ -18,7 +18,7 @@ export const adapter: EntityAdapter<SkillV1> = createEntityAdapter<SkillV1>();
 /**
  * Competences Initial State
  */
-export const initialState: CompetencesState = adapter.getInitialState({
+export const initialState: SkillsState = adapter.getInitialState({
   loaded: false,
 });
 
@@ -27,8 +27,8 @@ export const initialState: CompetencesState = adapter.getInitialState({
  */
 const competencesReducer = createReducer(
   initialState,
-  on(CompetencesActions.fetchCompetencesSuccess, (state: CompetencesState, { competenceList }) =>({
-    ...adapter.addMany(competenceList, state),
+  on(CompetencesActions.fetchSkillsSuccess, (state: SkillsState, { skillList }) => ({
+    ...adapter.addMany(skillList, state),
     loaded: true,
   })),
 );
@@ -38,6 +38,6 @@ const competencesReducer = createReducer(
  * @param state
  * @param action
  */
-export function reducer(state: CompetencesState | undefined, action: Action): CompetencesState {
+export function reducer(state: SkillsState | undefined, action: Action): SkillsState {
   return competencesReducer(state, action);
 }

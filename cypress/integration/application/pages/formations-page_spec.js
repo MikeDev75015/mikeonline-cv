@@ -1,8 +1,8 @@
-import {interceptApiRequest} from "../../../common";
+import {interceptApiV1Request} from "../../../common";
 
 describe('Formations page', () => {
   before(() => {
-    interceptApiRequest();
+    interceptApiV1Request();
   });
 
   beforeEach(() => {
