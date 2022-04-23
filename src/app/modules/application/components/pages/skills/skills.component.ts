@@ -13,6 +13,7 @@ import { selectAllProjects } from '../../../../../core/ngrx/selectors/projects.s
 import { selectAllSkills, selectSkillsLoaded } from '../../../../../core/ngrx/selectors/skills.selectors';
 import { DayJsService } from '../../../../../core/services/dayjs/dayjs.service';
 import { DataService, UtilsService } from '../../../../../shared';
+import { TemplatesService } from '../../../../../shared/services/templates/templates.service';
 import { ProjectItem } from '../../../interfaces/project-item.interface';
 
 /**
@@ -313,11 +314,15 @@ export class SkillsComponent implements OnInit, OnDestroy, AfterViewChecked {
    * @private
    */
   private setWorldCloudOptions(): WorldCloudOptions {
+    const crypto = window.crypto;
+    const array = new Uint32Array(1);
+    crypto.getRandomValues(array).toString();
+
     return {
       gridSize: SkillsComponent.getGridForWidth(),
       fontFamily: 'Roboto',
       color() {
-        return (['#555', '#024873', '#4E7F9D'])[Math.floor(Math.random() * 3)];
+        return (['#555', '#024873', '#4E7F9D'])[Math.floor(crypto.getRandomValues(array).reduce((t, v) => t + v, 0) * 3)];
       },
       backgroundColor: 'transparent',
       rotateRatio: 0,
@@ -418,12 +423,11 @@ export class SkillsComponent implements OnInit, OnDestroy, AfterViewChecked {
       });
     }));
 
-    this.experienceList = allRelatedList[0] as ExperienceV1[];
-    this.formationList = allRelatedList[1] as FormationV1[];
-    this.projectItemList = allRelatedList[2].map(s => ({
-      ...s,
-      technoList: this.utilsService.initTechnoListWithTagList(s.tagList),
-    }) as ProjectItem);
+    this.experienceList = TemplatesService.reorderItemList<ExperienceV1>(allRelatedList[0] as ExperienceV1[]);
+    this.formationList = TemplatesService.reorderItemList<FormationV1>(allRelatedList[1] as FormationV1[]);
+    this.projectItemList = UtilsService.sortObjectList<ProjectItem>(allRelatedList[2].map(s => ({
+      ...s, technoList: this.utilsService.initTechnoListWithTagList(s.tagList),
+    }) as ProjectItem), 'asc', 'position', 'number');
 
     const selectedSkillStartDate = selectedSkill.startDate.match(partialIsoDatePattern) ? selectedSkill.startDate + '-01' : selectedSkill.startDate;
     const experienceYearsText = DayJsService.getTimeToNow(selectedSkillStartDate, true);

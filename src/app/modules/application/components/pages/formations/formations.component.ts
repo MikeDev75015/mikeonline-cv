@@ -3,7 +3,8 @@ import { Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { FormationV1 } from '../../../../../core/interfaces/models/v1/formation.interface';
 import { selectAllFormations, selectFormationsLoaded } from '../../../../../core/ngrx/selectors/formations.selectors';
-import { DataService, UtilsService } from '../../../../../shared';
+import { DataService } from '../../../../../shared';
+import { TemplatesService } from '../../../../../shared/services/templates/templates.service';
 
 /**
  * The component of the formations page.
@@ -46,19 +47,7 @@ export class FormationsComponent implements OnInit {
             defaultValue: [],
           });
 
-          const withoutEndDateList: FormationV1[] = [];
-          const withEndDateList: FormationV1[] = unsortedList.filter((formation) => {
-            if (formation.endDate) {
-              return true;
-            }
-            withoutEndDateList.push(formation);
-            return false;
-          });
-
-          this.formationList = [
-            ...UtilsService.sortObjectList<FormationV1>(withoutEndDateList, 'desc', 'beginDate', 'date'),
-            ...UtilsService.sortObjectList<FormationV1>(withEndDateList, 'desc', 'endDate', 'date'),
-          ];
+          this.formationList = TemplatesService.reorderItemList<FormationV1>(unsortedList);
         }
       }),
       map((loaded) => !loaded),

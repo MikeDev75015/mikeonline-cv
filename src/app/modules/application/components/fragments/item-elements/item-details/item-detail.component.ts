@@ -3,16 +3,17 @@ import { IDetail } from '../../../../../../core';
 import { UtilsService } from '../../../../../../shared';
 
 @Component({
-  selector: 'app-formation-item-detail',
-  templateUrl: './formation-item-detail.component.html',
-  styleUrls: ['./formation-item-detail.component.scss']
+  selector: 'app-item-detail',
+  templateUrl: './item-detail.component.html',
+  styleUrls: ['./item-detail.component.scss'],
 })
-export class FormationItemDetailComponent {
+export class ItemDetailComponent {
   @Input() detail: IDetail | undefined;
 
   constructor(
     private readonly utilsService: UtilsService,
-  ) {}
+  ) {
+  }
 
   public openUrl(url: string): void {
     this.utilsService.openURL(url);

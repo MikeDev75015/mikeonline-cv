@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ExperienceV1 } from '../../../core/interfaces/models/v1/experience.interface';
 import { FormationV1 } from '../../../core/interfaces/models/v1/formation.interface';
+import { UtilsService } from '../utils/utils.service';
 
 @Injectable({
   providedIn: 'root',
@@ -31,5 +32,21 @@ export class TemplatesService {
       return '0';
     }
     return window.innerWidth > 840 ? '50px' : '30px';
+  }
+
+  public static reorderItemList<T>(unsortedList: T[]): T[] {
+    const withoutEndDateList: T[] = [];
+    const withEndDateList: T[] = unsortedList.filter((item: any) => {
+      if (item.endDate) {
+        return true;
+      }
+      withoutEndDateList.push(item);
+      return false;
+    });
+
+    return [
+      ...UtilsService.sortObjectList<T>(withoutEndDateList, 'desc', 'beginDate', 'date'),
+      ...UtilsService.sortObjectList<T>(withEndDateList, 'desc', 'endDate', 'date'),
+    ];
   }
 }

@@ -6,7 +6,8 @@ import {
   selectAllExperiences,
   selectExperiencesLoaded,
 } from '../../../../../core/ngrx/selectors/experiences.selectors';
-import { DataService, UtilsService } from '../../../../../shared';
+import { DataService } from '../../../../../shared';
+import { TemplatesService } from '../../../../../shared/services/templates/templates.service';
 
 /**
  * The component of the experiences page.
@@ -47,19 +48,7 @@ export class ExperiencesComponent implements OnInit {
             selector: selectAllExperiences, defaultValue: [],
           });
 
-          const withoutEndDateList: ExperienceV1[] = [];
-          const withEndDateList: ExperienceV1[] = unsortedList.filter((experience) => {
-            if (experience.endDate) {
-              return true;
-            }
-            withoutEndDateList.push(experience);
-            return false;
-          });
-
-          this.experienceList = [
-            ...UtilsService.sortObjectList<ExperienceV1>(withoutEndDateList, 'desc', 'beginDate', 'date'),
-            ...UtilsService.sortObjectList<ExperienceV1>(withEndDateList, 'desc', 'endDate', 'date'),
-          ];
+          this.experienceList = TemplatesService.reorderItemList<ExperienceV1>(unsortedList);
         }
       }),
       map((loaded) => !loaded),

@@ -21,6 +21,7 @@ import { FooterComponent } from './components/fragments/footer/footer.component'
 import { LeftFooterComponent } from './components/fragments/footer/left-footer/left-footer.component';
 import { HeaderComponent } from './components/fragments/header/header.component';
 import { ItemDatesComponent } from './components/fragments/item-elements/item-dates/item-dates.component';
+import { ItemDetailComponent } from './components/fragments/item-elements/item-details/item-detail.component';
 import {
   ItemOpenCloseButtonsComponent,
 } from './components/fragments/item-elements/item-open-close-buttons/item-open-close-buttons.component';
@@ -33,13 +34,7 @@ import {
   VerticalAccordionItemComponent,
 } from './components/fragments/vertical-accordion/vertical-accordion-item/vertical-accordion-item.component';
 import { VerticalAccordionComponent } from './components/fragments/vertical-accordion/vertical-accordion.component';
-import {
-  ExperienceItemDetailComponent,
-} from './components/pages/experiences/experience-item-detail/experience-item-detail.component';
 import { ExperiencesComponent } from './components/pages/experiences/experiences.component';
-import {
-  FormationItemDetailComponent,
-} from './components/pages/formations/formation-item-detail/formation-item-detail.component';
 import { FormationsComponent } from './components/pages/formations/formations.component';
 import { HomeComponent } from './components/pages/home/home.component';
 import { InterestsComponent } from './components/pages/interests/interests.component';
@@ -69,8 +64,7 @@ import { PageLayoutComponent } from './layouts/page-layout/page-layout.component
     ItemTagListComponent,
     ItemOpenCloseButtonsComponent,
     ItemDatesComponent,
-    ExperienceItemDetailComponent,
-    FormationItemDetailComponent,
+    ItemDetailComponent,
     ProjectItemComponent,
     BottomFooterComponent,
     LeftFooterComponent,

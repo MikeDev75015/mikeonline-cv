@@ -30,6 +30,8 @@ export class ItemComponent implements OnInit, OnChanges, OnDestroy, AfterViewChe
 
   @Input() itemType: 'experienceItem' | 'formationItem' | undefined;
 
+  @Input() showDetails = false;
+
   public enableOpenCloseButtons = false;
 
   public opened = false;

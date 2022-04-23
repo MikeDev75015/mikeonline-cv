@@ -12,7 +12,7 @@
 
   <app-item-tag-list *ngIf="itemData.tagList" [tagList]="itemData.tagList"></app-item-tag-list>
 
-  <ng-container *ngIf="itemData.detailList">
+  <ng-container *ngIf="itemData.detailList && showDetails">
     <div
       class="line-body w100"
       [ngStyle]="{
@@ -28,10 +28,9 @@
         [id]="'detail-list-' + index"
         class="fss w100 column"
       >
-        <ng-container
-          [ngTemplateOutlet]="itemType === 'experienceItem' ? experienceItemDetails : formationItemDetails"
-          [ngTemplateOutletContext]="{ detailList: itemData.detailList }"
-        ></ng-container>
+        <ng-container *ngFor="let detail of itemData.detailList">
+          <app-item-detail [detail]="detail"></app-item-detail>
+        </ng-container>
       </div>
     </div>
 
@@ -41,11 +40,3 @@
     ></app-item-open-close-buttons>
   </ng-container>
 </ng-container>
-
-<ng-template #experienceItemDetails let-detailList="detailList">
-  <app-experience-item-detail *ngFor="let detail of detailList" [detail]="detail"></app-experience-item-detail>
-</ng-template>
-
-<ng-template #formationItemDetails let-detailList="detailList">
-  <app-formation-item-detail *ngFor="let detail of detailList" [detail]="detail"></app-formation-item-detail>
-</ng-template>

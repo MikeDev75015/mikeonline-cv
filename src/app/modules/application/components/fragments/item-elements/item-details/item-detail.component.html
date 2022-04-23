@@ -1,14 +1,16 @@
-<div
-  *ngIf="detail"
-  [ngClass]="{'clickable': detail.url}"
-  (click)="detail.url ? openUrl(detail.url) : null"
->
-  <h4 *ngIf="detail.title">{{ detail.title | uppercase }}</h4>
+<div *ngIf="detail">
+  <!-- title -->
+  <h4
+    (click)="detail.url ? openUrl(detail.url) : null" *ngIf="detail.title"
+    [ngClass]="{'clickable': detail.url}"
+  >{{ detail.title | uppercase }}</h4>
+
+  <!-- details -->
   <div class="fss">
     <div class="column">
       <p *ngFor="let line of detail.lineList">
 
-        <!--  subtitle line  -->
+        <!--  section title line  -->
         <span *ngIf="line.charAt(0) === '*'" class="fss" style="margin: 5px 0 2px; font-weight: 600;">
           <span>
             {{ line.replace('* ', '') }}
