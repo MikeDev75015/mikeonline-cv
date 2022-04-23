@@ -6,21 +6,14 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MockComponent } from 'ng2-mock-component';
 import { KnobModule } from 'primeng/knob';
 import { lastValueFrom, of } from 'rxjs';
+import { addTags } from '../../../../../../../__mocks__/helper';
 import { changeDetectorRefMock } from '../../../../../../../__mocks__/services/change-detector-ref.mock';
 import { dataServiceMock } from '../../../../../../../__mocks__/services/data-service.mock';
 import { utilsServiceMock } from '../../../../../../../__mocks__/services/utils-service.mock';
 import { waitTimeout } from '../../../../../../../__mocks__/timeout.mock';
-import unsortedExperienceListMock from '../../../../../../../__mocks__/v1/json-files/experiences.json';
-import unsortedFormationListMock from '../../../../../../../__mocks__/v1/json-files/formations.json';
-import unsortedProjectListMock from '../../../../../../../__mocks__/v1/json-files/projects.json';
-import competenceListMock from '../../../../../../../__mocks__/v1/json-files/skills.json';
+import skillListMock from '../../../../../../../__mocks__/v1/json-files/skills.json';
 import tagListMock from '../../../../../../../__mocks__/v1/json-files/tags.json';
 import { AlertModule } from '../../../../../core';
-import { selectAllExperiences } from '../../../../../core/ngrx/selectors/experiences.selectors';
-import { selectAllFormations } from '../../../../../core/ngrx/selectors/formations.selectors';
-import { selectAllProjects } from '../../../../../core/ngrx/selectors/projects.selectors';
-import { selectAllSkills } from '../../../../../core/ngrx/selectors/skills.selectors';
-import { selectAllTags } from '../../../../../core/ngrx/selectors/tags.selectors';
 import { DataService, UtilsService } from '../../../../../shared';
 import { SkillsComponent } from './skills.component';
 
@@ -104,7 +97,7 @@ describe('SkillsComponent', () => {
   });
 
   describe('ngOnInit', () => {
-    it('should set isLoadingData to true and competencesLoaded to false if data are not loaded', async () => {
+    it('should set isLoadingData to true and skillsLoaded to false if data are not loaded', async () => {
       isDataLoadedSpy.mockImplementationOnce(() => of(false));
       fixture.detectChanges();
 
@@ -112,7 +105,7 @@ describe('SkillsComponent', () => {
       expect(component.skillsLoaded).toBeFalsy();
     });
 
-    it('should set isLoadingData to false and competencesLoaded to true if data are loaded', async () => {
+    it('should set isLoadingData to false and skillsLoaded to true if data are loaded', async () => {
       isDataLoadedSpy.mockImplementationOnce(() => of(true));
       fixture.detectChanges();
 
@@ -203,6 +196,7 @@ describe('SkillsComponent', () => {
     });
 
     it('should add addEventListener method to canvas element if found', async () => {
+      getStoreDataSpy.mockImplementation(() => Promise.resolve(addTags(skillListMock)));
       getElementSpy.mockImplementation(() => canvasMock);
       addEventListenerSpy = jest.spyOn(canvasMock, 'addEventListener').mockImplementation(() => undefined);
       await component['initializeEvents']();
@@ -213,7 +207,7 @@ describe('SkillsComponent', () => {
       expect(addEventListenerSpy).toHaveBeenNthCalledWith(2, 'wordclouddrawn', expect.any(Function));
       expect(addEventListenerSpy).toHaveBeenNthCalledWith(3, 'wordcloudstop', expect.any(Function));
 
-      expect(component['wordList']).toHaveLength(tagListMock.length);
+      expect(component['wordList']).toHaveLength(skillListMock.length);
 
       expect(window.WordCloud).toHaveBeenCalledTimes(1);
     });
@@ -366,44 +360,6 @@ describe('SkillsComponent', () => {
 
       expect(wcElementMock.onclick).toBeDefined();
       expect(wcElementMock.getAttribute('init-onclick')).toStrictEqual('true');
-    });
-  });
-
-  describe('buildCompetencesSummary', () => {
-    beforeEach(async () => {
-      getStoreDataSpy.mockImplementation(({ selector, defaultValue, value, property }: {
-        selector: (state: object) => any, defaultValue: any, value?: string | number, property?: string,
-      }): any => {
-        switch (selector) {
-          case selectAllTags:
-            return [tagListMock[50]];
-          case selectAllExperiences:
-            return unsortedExperienceListMock.filter((el: any) => el[property as string]?.includes(value)) || defaultValue;
-          case selectAllFormations:
-            return unsortedFormationListMock.filter((el: any) => el[property as string]?.includes(value)) || defaultValue;
-          case selectAllProjects:
-            return unsortedProjectListMock.filter((el: any) => el[property as string]?.includes(value)) || defaultValue;
-          case selectAllSkills:
-            return competenceListMock.filter((el: any) => el[property as string]?.includes(value)) || defaultValue;
-          default:
-            console.debug(`invalid selector!`);
-        }
-      });
-      isDataLoadedSpy.mockImplementation(() => of(true));
-      fixture.detectChanges();
-
-      const wcElementMock = document.createElement('span');
-      wcElementMock.innerText = tagListMock[0].name;
-      component['addClickActionOnElement'](wcElementMock);
-      wcElementMock.click();
-    });
-
-    it('should set selectedKeyword with the element innerText', () => {
-      expect(component.selectedKeyword).toStrictEqual(tagListMock[0].name);
-    });
-
-    it('should call getStoreData 5 times', () => {
-      expect(getStoreDataSpy).toHaveBeenCalledTimes(5);
     });
   });
 });

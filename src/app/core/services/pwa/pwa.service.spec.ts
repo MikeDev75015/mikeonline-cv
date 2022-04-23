@@ -12,16 +12,15 @@ export type NotificationPayloadType = { action: string, notification: Notificati
 
 describe('PwaService', () => {
   let service: PwaService;
-  let consoleLogSpy: any;
-  let consoleWarnSpy: any;
+  let consoleDebugSpy: any;
   let displayConfirmDialogSpy: any;
   let windowLocationReloadSpy: any;
   let activateUpdateSpy: any;
   let notificationClickSubject = new Subject<NotificationPayloadType>();
   let versionEventSubject = new Subject<VersionEvent>();
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [],
       providers: [
         { provide: SwPush, useValue: swPushMock },
@@ -31,8 +30,7 @@ describe('PwaService', () => {
     });
     service = TestBed.inject(PwaService);
 
-    consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(() => undefined);
-    consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+    consoleDebugSpy = jest.spyOn(console, 'debug').mockImplementation(() => undefined);
     displayConfirmDialogSpy = jest.spyOn(alertServiceMock, 'displayConfirmDialog');
     activateUpdateSpy = jest.spyOn(swUpdateMock, 'activateUpdate');
 
@@ -63,12 +61,12 @@ describe('PwaService', () => {
       });
 
       it('should log notificationPayload on notification click', () => {
-        expect(consoleWarnSpy).not.toHaveBeenCalled();
+        expect(consoleDebugSpy).not.toHaveBeenCalled();
         expect(service['subscriptionList'].length).toBeGreaterThan(0);
 
         notificationClickSubject.next(notificationPayloadMock);
-        expect(consoleLogSpy).toHaveBeenCalledTimes(1);
-        expect(consoleLogSpy).toHaveBeenCalledWith('notificationPayload:', notificationPayloadMock);
+        expect(consoleDebugSpy).toHaveBeenCalledTimes(1);
+        expect(consoleDebugSpy).toHaveBeenCalledWith('notificationPayload:', notificationPayloadMock);
       });
 
       it('should do nothing on new version detected', () => {

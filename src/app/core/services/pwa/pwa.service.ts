@@ -27,7 +27,7 @@ export class PwaService implements OnDestroy {
   }
 
   public initializeServiceWorker(): void {
-    if (this.swPush.isEnabled) {
+    if (!this.swPush.isEnabled) {
       return;
     }
     this.subscriptionList.push(
