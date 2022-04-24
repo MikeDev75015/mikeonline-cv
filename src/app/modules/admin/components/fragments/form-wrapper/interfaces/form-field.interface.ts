@@ -20,6 +20,6 @@ export interface FormField extends FormInputOptions {
   childFormFields?: ChildFormField[];
 }
 
-interface ChildFormField extends FormField {
-
+export interface ChildFormField extends FormField {
+  isChild?: boolean;
 }

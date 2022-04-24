@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { EXPERTISE_LEVEL_DROPDOWN_LIST, PRIORITY_DROPDOWN_LIST } from '../../../../../core/constants/common.constant';
-import { DEFAULT_DATA_GENERATORS } from '../../../constants/common-data-converters.config';
+import { dataGeneratorListFactory } from '../../../constants/common-data-converters.config';
 import { DEFAULT_FORM_FIELDS_CONFIG } from '../../../constants/common-formFields.config';
 import { DEFAULT_TABLE_COLUMNS_CONFIG } from '../../../constants/common-table-columns.config';
 import { FormField } from '../../fragments/form-wrapper/interfaces/form-field.interface';
@@ -19,17 +19,7 @@ export class AdminSkillsComponent implements OnInit {
 
   public exportCsvFileName = 'Mes Compétences';
 
-  public dataGenerator = (data: any) => {
-    if (!data) {
-      return;
-    }
-
-    if (data.tagList) {
-      data = DEFAULT_DATA_GENERATORS.tagListGenerator({ ...data });
-    }
-
-    return data;
-  };
+  public dataGeneratorList = dataGeneratorListFactory(['tagList']);
 
   async ngOnInit(): Promise<void> {
     this.columnList = [
@@ -61,7 +51,7 @@ export class AdminSkillsComponent implements OnInit {
           inputType: 'dropdown', dropdownWrapperOptions: { list: PRIORITY_DROPDOWN_LIST },
         },
         { field: 'startDate', inputLabel: 'Date de début', inputType: 'text', defaultValue: '' },
-        DEFAULT_FORM_FIELDS_CONFIG['tagList'][0],
+        DEFAULT_FORM_FIELDS_CONFIG['tagList'],
       ];
     }
   }

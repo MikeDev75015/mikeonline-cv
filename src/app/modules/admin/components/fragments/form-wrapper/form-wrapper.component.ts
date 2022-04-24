@@ -29,8 +29,12 @@ export class FormWrapperComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (!this.formFields || !this.formFields.length || !this.formValues) {
+    if (!this.formFields || !this.formFields.length) {
       throw new Error('Cannot initialize form, no valid config found!');
+    }
+
+    if (!this.formValues) {
+      this.formValues = {};
     }
 
     this.initialValues = { ...this.formValues };

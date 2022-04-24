@@ -1,0 +1,42 @@
+export const dataColorList = [
+  {
+    backgroundColor: 'rgba(2, 72, 115, 0.1)',
+    borderColor: 'rgba(2, 72, 115, 0.5)',
+    pointBackgroundColor: '#024873',
+    pointBorderColor: '#fff',
+    pointHoverBackgroundColor: '#fff',
+    pointHoverBorderColor: '#000',
+  },
+  {
+    backgroundColor: 'rgba(85,85,85,0.1)',
+    borderColor: 'rgba(85,85,85,0.5)',
+    pointBackgroundColor: '#555555',
+    pointBorderColor: '#fff',
+    pointHoverBackgroundColor: '#fff',
+    pointHoverBorderColor: '#000',
+  },
+  {
+    backgroundColor: 'rgba(187,41,41,0.1)',
+    borderColor: 'rgba(187,41,41,0.5)',
+    pointBackgroundColor: '#bb2929',
+    pointBorderColor: '#fff',
+    pointHoverBackgroundColor: '#fff',
+    pointHoverBorderColor: '#000',
+  },
+  {
+    backgroundColor: 'rgba(75,159,15,0.1)',
+    borderColor: 'rgba(75,159,15,0.5)',
+    pointBackgroundColor: '#4b9f0f',
+    pointBorderColor: '#fff',
+    pointHoverBackgroundColor: '#fff',
+    pointHoverBorderColor: '#000',
+  },
+  {
+    backgroundColor: 'rgba(0,0,0,0.1)',
+    borderColor: 'rgba(0,0,0,0.5)',
+    pointBackgroundColor: '#000000',
+    pointBorderColor: '#fff',
+    pointHoverBackgroundColor: '#fff',
+    pointHoverBorderColor: '#000',
+  },
+];

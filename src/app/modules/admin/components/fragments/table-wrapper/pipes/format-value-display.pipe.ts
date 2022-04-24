@@ -42,7 +42,7 @@ export class FormatValueDisplayPipe implements PipeTransform {
       case 'jobType':
         return FormatValueDisplayPipe.getDropdownLabel(JOB_TYPE_DROPDOWN_LIST, value);
       case 'link':
-        return value.title + '\n' + value.url;
+        return `${value.title}\n${value.url}`;
       case 'actualJob':
         return value ? 'Oui' : 'Non';
       case 'certificate':

@@ -1,8 +1,9 @@
 import * as CryptoJS from 'crypto-js';
 
 export class EncryptionService {
-  private static key = CryptoJS.enc.Utf8.parse('4512631236589784');
-  private static iv = CryptoJS.enc.Utf8.parse('4512631236589784');
+  private static readonly key = CryptoJS.enc.Utf8.parse('4512631236589784');
+
+  private static readonly iv = CryptoJS.enc.Utf8.parse('4512631236589784');
 
   public static encryptUsingAES256(data: { [key: string]: any }): string {
     // @ts-ignore

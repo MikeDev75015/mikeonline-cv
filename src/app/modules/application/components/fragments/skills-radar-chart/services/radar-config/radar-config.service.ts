@@ -1,28 +1,30 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { RadarConfig } from '../../models/radar-config.interface';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class RadarConfigService {
-  config: RadarConfig = {
+  private config: RadarConfig = {
     theme: 'lara-light-blue',
     dark: false,
     inputStyle: 'outlined',
-    ripple: true
+    ripple: true,
   };
 
-  private configUpdate = new Subject<RadarConfig>();
+  private readonly configUpdateSubject = new Subject<RadarConfig>();
 
-  configUpdate$ = this.configUpdate.asObservable();
-
-  updateConfig(config: RadarConfig) {
-    this.config = config;
-    this.configUpdate.next(config);
+  public getConfig(): RadarConfig {
+    return this.config;
   }
 
-  getConfig() {
-    return this.config;
+  public updateConfig(config: RadarConfig): void {
+    this.config = config;
+    this.configUpdateSubject.next(config);
+  }
+
+  public onConfigChanges(): Observable<RadarConfig> {
+    return this.configUpdateSubject.asObservable();
   }
 }

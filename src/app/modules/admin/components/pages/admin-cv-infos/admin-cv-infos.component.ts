@@ -49,7 +49,7 @@ export class AdminCvInfosComponent implements OnInit {
       {
         field: 'contact', header: 'Contact', exportable: true,
         style: 'width: 320px; min-width: 320px; max-width: 320px;',
-        formFields: DEFAULT_FORM_FIELDS_CONFIG['contact'],
+        formFields: DEFAULT_FORM_FIELDS_CONFIG['contact'].childFormFields,
       },
     ];
 
@@ -60,7 +60,7 @@ export class AdminCvInfosComponent implements OnInit {
           dropdownWrapperOptions: { list: CV_TYPE_DROPDOWN_LIST },
         },
         { field: 'fileName', inputLabel: 'Nom du fichier PDF', inputType: 'text', defaultValue: '' },
-        DEFAULT_FORM_FIELDS_CONFIG['title'][0],
+        DEFAULT_FORM_FIELDS_CONFIG['title'],
         {
           field: 'technoList', inputLabel: 'Les 3 principales technos', inputType: 'multiselect', defaultValue: [],
           multiSelectWrapperOptions: {
@@ -68,14 +68,8 @@ export class AdminCvInfosComponent implements OnInit {
             sourceAdapter: (data: any[]) => data.map((each: any) => ({ label: each.name, value: each.name })),
           },
         },
-        {
-          field: 'logo', inputLabel: 'Logo', inputType: 'form', defaultValue: {},
-          childFormFields: DEFAULT_FORM_FIELDS_CONFIG['image'],
-        },
-        {
-          field: 'contact', inputLabel: 'Contact', inputType: 'form', defaultValue: {},
-          childFormFields: DEFAULT_FORM_FIELDS_CONFIG['contact'],
-        },
+        DEFAULT_FORM_FIELDS_CONFIG['logo'],
+        DEFAULT_FORM_FIELDS_CONFIG['contact'],
       ];
     }
   }

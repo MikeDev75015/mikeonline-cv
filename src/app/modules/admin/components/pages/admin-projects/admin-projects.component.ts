@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { DEFAULT_FORM_FIELDS_CONFIG } from '../../../constants/common-formFields.config';
+import { dataGeneratorListFactory } from '../../../constants/common-data-converters.config';
+import {
+  DEFAULT_CHILD_FORM_FIELDS_CONFIG,
+  DEFAULT_FORM_FIELDS_CONFIG,
+} from '../../../constants/common-formFields.config';
 import { DEFAULT_TABLE_COLUMNS_CONFIG } from '../../../constants/common-table-columns.config';
 import { FormField } from '../../fragments/form-wrapper/interfaces/form-field.interface';
 import { TableColumn } from '../../fragments/table-wrapper/interfaces/table-column.interface';
@@ -17,15 +21,7 @@ export class AdminProjectsComponent implements OnInit {
 
   public exportCsvFileName = 'Mes Projets';
 
-  public dataGenerator = (data: any) => {
-    if (!data.tagList) {
-      return data;
-    }
-    const tagIdList = data.tagList.map((tag: any) => tag.id);
-    const { tagList, ...adaptedData } = data;
-    adaptedData['tagIdList'] = tagIdList;
-    return adaptedData;
-  };
+  public dataGeneratorList = dataGeneratorListFactory(['tagList']);
 
   async ngOnInit(): Promise<void> {
     this.columnList = [
@@ -41,7 +37,7 @@ export class AdminProjectsComponent implements OnInit {
       },
       {
         field: 'description', header: 'Description', globalFilterField: true,
-        sortable: true, editable: true, exportable: true,
+        editable: true, exportable: true,
         inputType: 'textarea', inputTextareaOptions: { rows: 3 },
         style: 'width: 10%; min-width: 150px;',
       },
@@ -51,15 +47,15 @@ export class AdminProjectsComponent implements OnInit {
 
     if (this.crudEndPoint) {
       this.formFields = [
-        DEFAULT_FORM_FIELDS_CONFIG['title'][0],
-        DEFAULT_FORM_FIELDS_CONFIG['subTitle'][0],
-        DEFAULT_FORM_FIELDS_CONFIG['createdDate'][0],
-        DEFAULT_FORM_FIELDS_CONFIG['tagList'][0],
-        DEFAULT_FORM_FIELDS_CONFIG['description'][0],
-        DEFAULT_FORM_FIELDS_CONFIG['link'][0],
+        DEFAULT_FORM_FIELDS_CONFIG['title'],
+        DEFAULT_FORM_FIELDS_CONFIG['subTitle'],
+        DEFAULT_FORM_FIELDS_CONFIG['createdDate'],
+        DEFAULT_FORM_FIELDS_CONFIG['tagList'],
+        DEFAULT_FORM_FIELDS_CONFIG['description'],
+        DEFAULT_FORM_FIELDS_CONFIG['link'],
         {
           field: 'pictureList', inputLabel: 'Les images', inputType: 'form', defaultValue: [], isList: true,
-          childFormFields: DEFAULT_FORM_FIELDS_CONFIG['image'],
+          childFormFields: DEFAULT_CHILD_FORM_FIELDS_CONFIG['image'],
         },
       ];
     }

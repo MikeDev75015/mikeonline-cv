@@ -12,10 +12,15 @@ import { FormField } from '../form-wrapper/interfaces/form-field.interface';
 import { MultiSelectWrapperOptions } from '../multi-select-wrapper/interfaces/multi-select-wrapper-options.interfaces';
 import { SEVERITY_MESSAGE_SUMMARY } from './constants/common.constant';
 import { ERROR_MESSAGES } from './constants/error-messages.constant';
+import { DataConverter } from './interfaces/data-converter.interface';
 import { TableColumn } from './interfaces/table-column.interface';
 import { FormatValueDisplayPipe } from './pipes/format-value-display.pipe';
 import { CrudService } from './services/crud/crud.service';
 import { FormWrapperService } from './services/form/form-wrapper.service';
+
+const addOrUpdate = 'add-or-update';
+const rowToDeleteClass = 'table-wrapper-row-to-delete';
+const serverErrorMessage = 'Erreur serveur !';
 
 @Component({
   selector: 'app-table-wrapper',
@@ -37,9 +42,7 @@ export class TableWrapperComponent implements OnInit, OnChanges {
 
   @Input() formFields: FormField[] | undefined;
 
-  @Input() dataAdapter?: (data: any) => any;
-
-  @Input() dataGenerator?: (data: any) => any;
+  @Input() dataGeneratorList?: DataConverter[];
 
   @Output() tableDataChange = new EventEmitter<any[]>();
 
@@ -73,6 +76,14 @@ export class TableWrapperComponent implements OnInit, OnChanges {
     private readonly formWrapperService: FormWrapperService,
     private readonly crudService: CrudService,
   ) {
+  }
+
+  private static applyDataGenerator(dataGenerator: DataConverter, data: { [p: string]: any }): { [p: string]: any } {
+    const [dataKey] = Object.keys(dataGenerator);
+    return {
+      ...data,
+      [dataKey]: dataGenerator[dataKey]({ ...data }),
+    };
   }
 
   async ngOnInit(): Promise<void> {
@@ -144,7 +155,7 @@ export class TableWrapperComponent implements OnInit, OnChanges {
     this.tableData.splice(rowIndex + 1, 0, newItem);
     wrappedTable.value = this.tableData;
 
-    this.updateList(newItem, 'add-or-update', 'changedData');
+    this.updateList(newItem, addOrUpdate, 'changedData');
   }
 
   /**
@@ -170,8 +181,11 @@ export class TableWrapperComponent implements OnInit, OnChanges {
       this.isLoading = true;
 
       let data = this.formWrapperService.convertFormValues(this.formFields, this.formValues);
-      if (this.dataGenerator) {
-        data = this.dataGenerator({ ...data });
+
+      if (this.dataGeneratorList && this.dataGeneratorList.length) {
+        this.dataGeneratorList.forEach((dataGenerator) => {
+          data = TableWrapperComponent.applyDataGenerator(dataGenerator, { ...data });
+        });
       }
       console.debug('onDialogSaveAction:', data);
 
@@ -212,14 +226,14 @@ export class TableWrapperComponent implements OnInit, OnChanges {
    * @param rowElement
    */
   public onDeleteRow(elementId: string, rowElement: HTMLTableRowElement): void {
-    rowElement.classList.add('table-wrapper-row-to-delete');
+    rowElement.classList.add(rowToDeleteClass);
 
     this.confirmationService.confirm({
       message: 'Supprimer cet élément ?',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       reject: () => {
-        rowElement.classList.remove('table-wrapper-row-to-delete');
+        rowElement.classList.remove(rowToDeleteClass);
       },
       accept: async () => {
         this.selectedTableData = [];
@@ -233,7 +247,7 @@ export class TableWrapperComponent implements OnInit, OnChanges {
           if (!response || response.message !== 'SUCCESS') {
             console.debug('deleteRow response', response);
             this.displayMessage(
-              response?.details || 'Erreur serveur !', 'error',
+              response?.details || serverErrorMessage, 'error',
             );
             return;
           }
@@ -251,7 +265,7 @@ export class TableWrapperComponent implements OnInit, OnChanges {
 
         } finally {
           this.isLoading = false;
-          rowElement.classList.remove('table-wrapper-row-to-delete');
+          rowElement.classList.remove(rowToDeleteClass);
         }
       },
     });
@@ -277,7 +291,7 @@ export class TableWrapperComponent implements OnInit, OnChanges {
           if (!response || response.message !== 'SUCCESS') {
             console.debug('deleteSelectedRows response', response);
             this.displayMessage(
-              response?.details || 'Erreur serveur !', 'error',
+              response?.details || serverErrorMessage, 'error',
             );
             return;
           }
@@ -306,7 +320,7 @@ export class TableWrapperComponent implements OnInit, OnChanges {
     const draggedElement = this.tableData[dragIndex];
 
     this.tableData = this.tableData.map((data, i) => {
-      let elementToUpdate: any = {};
+      const elementToUpdate: any = {};
 
       if (data.id === draggedElement.id) {
         elementToUpdate['position'] = dropIndex;
@@ -322,7 +336,7 @@ export class TableWrapperComponent implements OnInit, OnChanges {
       }
 
       elementToUpdate['id'] = data.id;
-      this.updateList(elementToUpdate, 'add-or-update', 'changedData');
+      this.updateList(elementToUpdate, addOrUpdate, 'changedData');
       return Object.assign({}, data, elementToUpdate);
     });
   }
@@ -343,7 +357,7 @@ export class TableWrapperComponent implements OnInit, OnChanges {
       throw new Error('No data found to compare!');
     }
 
-    let dataToUpdate: { [key: string]: any; } = { id: elementId };
+    const dataToUpdate: { [key: string]: any; } = { id: elementId };
     if (
       (
         col.inputType === 'number'
@@ -357,7 +371,7 @@ export class TableWrapperComponent implements OnInit, OnChanges {
     }
 
     if (Object.keys(dataToUpdate).length > 1) {
-      this.updateList(dataToUpdate, 'add-or-update', 'changedData');
+      this.updateList(dataToUpdate, addOrUpdate, 'changedData');
     }
   }
 
@@ -426,13 +440,13 @@ export class TableWrapperComponent implements OnInit, OnChanges {
       value.map((v) => propertyToDisplay ? v[propertyToDisplay] : v),
     );
 
-    let dataToUpdate: { [key: string]: any; } = { id: rowData.id };
+    const dataToUpdate: { [key: string]: any; } = { id: rowData.id };
     if (comparableOriginalValue !== comparableValue) {
       dataToUpdate[col.field] = value;
     }
 
     if (Object.keys(dataToUpdate).length > 1) {
-      this.updateList(dataToUpdate, 'add-or-update', 'changedData');
+      this.updateList(dataToUpdate, addOrUpdate, 'changedData');
     }
   }
 
@@ -475,7 +489,7 @@ export class TableWrapperComponent implements OnInit, OnChanges {
       [col.field]: convertedValues,
     };
 
-    this.updateList(dataToUpdate, 'add-or-update', 'changedData');
+    this.updateList(dataToUpdate, addOrUpdate, 'changedData');
   }
 
   /**
@@ -489,18 +503,26 @@ export class TableWrapperComponent implements OnInit, OnChanges {
     try {
       this.isLoading = true;
 
-      const data: any[] = this.dataGenerator
-        // @ts-ignore
-        ? this.changedData.map((eachData) => this.dataGenerator(eachData))
-        : this.changedData;
+      const data: any[] = this.changedData.map((eachData: { [p: string]: any }) => {
+        let generated = { ...eachData };
+        if (this.dataGeneratorList && this.dataGeneratorList.length) {
+          this.dataGeneratorList.forEach((dataGenerator) => {
+            generated = TableWrapperComponent.applyDataGenerator(dataGenerator, { ...generated });
+          });
+        }
+        return { ...eachData, ...generated };
+      });
 
-      const response: any = await lastValueFrom(this.crudService.put<any[]>(this.crudEndPoint + '/many', {
-        data,
-      }));
+      const response: any = await lastValueFrom(this.crudService.put<any[]>(
+        this.crudEndPoint + '/many',
+        {
+          data,
+        },
+      ));
 
       if (!response || !Array.isArray(response) || response.length === 0) {
         console.debug('onSaveDialogData response:', response);
-        this.displayMessage(response?.message || 'Erreur serveur !', 'error');
+        this.displayMessage(response?.message || serverErrorMessage, 'error');
         return;
       }
 
@@ -671,14 +693,14 @@ export class TableWrapperComponent implements OnInit, OnChanges {
     const dataIndex = this[list].findIndex((element) => element.id === data.id);
 
     if (dataIndex !== -1) {
-      if (action === 'add-or-update') {
+      if (action === addOrUpdate) {
         this[list][dataIndex] = { ...this[list][dataIndex], ...data };
 
       } else if (action === 'remove') {
         this[list].splice(dataIndex, 1);
       }
 
-    } else if (action === 'add-or-update') {
+    } else if (action === addOrUpdate) {
       this[list].push({ ...data });
     }
 

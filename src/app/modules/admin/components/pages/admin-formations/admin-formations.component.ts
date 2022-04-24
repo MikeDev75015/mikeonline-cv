@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DEFAULT_DATA_GENERATORS } from '../../../constants/common-data-converters.config';
+import { dataGeneratorListFactory } from '../../../constants/common-data-converters.config';
 import { DEFAULT_FORM_FIELDS_CONFIG } from '../../../constants/common-formFields.config';
 import { DEFAULT_TABLE_COLUMNS_CONFIG } from '../../../constants/common-table-columns.config';
 import { FormField } from '../../fragments/form-wrapper/interfaces/form-field.interface';
@@ -18,17 +18,7 @@ export class AdminFormationsComponent implements OnInit {
 
   public exportCsvFileName = 'Mes Formations';
 
-  public dataGenerator = (data: any) => {
-    if (!data) {
-      return;
-    }
-
-    if (data.tagList) {
-      data = DEFAULT_DATA_GENERATORS.tagListGenerator({ ...data });
-    }
-
-    return data;
-  };
+  public dataGeneratorList = dataGeneratorListFactory(['tagList']);
 
   async ngOnInit(): Promise<void> {
     this.columnList = [
@@ -47,15 +37,15 @@ export class AdminFormationsComponent implements OnInit {
 
     if (this.crudEndPoint) {
       this.formFields = [
-        DEFAULT_FORM_FIELDS_CONFIG['title'][0],
-        DEFAULT_FORM_FIELDS_CONFIG['beginDate'][0],
-        DEFAULT_FORM_FIELDS_CONFIG['endDate'][0],
+        DEFAULT_FORM_FIELDS_CONFIG['title'],
+        DEFAULT_FORM_FIELDS_CONFIG['beginDate'],
+        DEFAULT_FORM_FIELDS_CONFIG['endDate'],
         { field: 'certificate', inputLabel: 'Certificat', inputType: 'checkbox', defaultValue: false },
-        DEFAULT_FORM_FIELDS_CONFIG['society'][0],
-        DEFAULT_FORM_FIELDS_CONFIG['place'][0],
-        DEFAULT_FORM_FIELDS_CONFIG['tagList'][0],
-        DEFAULT_FORM_FIELDS_CONFIG['detailList'][0],
-        DEFAULT_FORM_FIELDS_CONFIG['linkList'][0],
+        DEFAULT_FORM_FIELDS_CONFIG['society'],
+        DEFAULT_FORM_FIELDS_CONFIG['place'],
+        DEFAULT_FORM_FIELDS_CONFIG['tagList'],
+        DEFAULT_FORM_FIELDS_CONFIG['detailList'],
+        DEFAULT_FORM_FIELDS_CONFIG['linkList'],
       ];
     }
   }

@@ -9,6 +9,7 @@ import { selectAllFormations } from '../../../../../core/ngrx/selectors/formatio
 import { selectAllProjects } from '../../../../../core/ngrx/selectors/projects.selectors';
 import { selectAllSkills } from '../../../../../core/ngrx/selectors/skills.selectors';
 import { DataService, UtilsService } from '../../../../../shared';
+import { dataColorList } from './constants/data-color-list.constant';
 import { RadarConfig } from './models/radar-config.interface';
 import { DataSets, RadarData } from './models/radar-data.interface';
 import { RadarConfigService } from './services/radar-config/radar-config.service';
@@ -29,8 +30,8 @@ export class SkillsRadarChartComponent implements OnInit, OnDestroy {
   private readonly subscriptionList: Subscription[] = [];
 
   constructor(
-    private configService: RadarConfigService,
-    private dataService: DataService,
+    private readonly configService: RadarConfigService,
+    private readonly dataService: DataService,
   ) {
   }
 
@@ -85,54 +86,12 @@ export class SkillsRadarChartComponent implements OnInit, OnDestroy {
   }
 
   private static getDataColor(index: number): any {
-    const dataColorList = [
-      {
-        backgroundColor: 'rgba(2, 72, 115, 0.1)',
-        borderColor: 'rgba(2, 72, 115, 0.5)',
-        pointBackgroundColor: '#024873',
-        pointBorderColor: '#fff',
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: '#000',
-      },
-      {
-        backgroundColor: 'rgba(85,85,85,0.1)',
-        borderColor: 'rgba(85,85,85,0.5)',
-        pointBackgroundColor: '#555555',
-        pointBorderColor: '#fff',
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: '#000',
-      },
-      {
-        backgroundColor: 'rgba(187,41,41,0.1)',
-        borderColor: 'rgba(187,41,41,0.5)',
-        pointBackgroundColor: '#bb2929',
-        pointBorderColor: '#fff',
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: '#000',
-      },
-      {
-        backgroundColor: 'rgba(75,159,15,0.1)',
-        borderColor: 'rgba(75,159,15,0.5)',
-        pointBackgroundColor: '#4b9f0f',
-        pointBorderColor: '#fff',
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: '#000',
-      },
-      {
-        backgroundColor: 'rgba(0,0,0,0.1)',
-        borderColor: 'rgba(0,0,0,0.5)',
-        pointBackgroundColor: '#000000',
-        pointBorderColor: '#fff',
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: '#000',
-      },
-    ];
     return dataColorList[index];
   }
 
   ngOnInit(): void {
     this.subscriptionList.push(
-      this.configService.configUpdate$.subscribe((config) => {
+      this.configService.onConfigChanges().subscribe((config) => {
         this.radarConfig = config;
         this.updateChartOptions();
       }),
@@ -150,7 +109,7 @@ export class SkillsRadarChartComponent implements OnInit, OnDestroy {
 
     this.radarWidth = `${window.innerWidth - 20}px`;
 
-    this.radarConfig = this.configService.config;
+    this.radarConfig = this.configService.getConfig();
     this.updateChartOptions();
   }
 
