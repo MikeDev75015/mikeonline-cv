@@ -9,7 +9,7 @@
 /bazel-out
 /coverage
 /mochawesome-report
-/cypress/reports
+/cypress/report
 /cypress/screenshots
 /cypress/videos
 

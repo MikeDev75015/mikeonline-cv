@@ -15,7 +15,7 @@
     "test-coverage": "jest --coverage",
     "test:ci": "CI=true npm test -- --coverage --runInBand --testResultsProcessor=jest-sonar-reporter",
     "cypress": "npm run clean-reports && npm run cypress-run",
-    "clean-reports": "if exist cypress\\reports (rmdir /s /q cypress\\reports)",
+    "clean-reports": "if exist cypress\\report (rmdir /s /q cypress\\report) && if exist cypress\\videos (rmdir /s /q cypress\\videos)",
     "cypress-run": "cypress run",
     "lint": "ng lint",
     "cypress:open": "cypress open",

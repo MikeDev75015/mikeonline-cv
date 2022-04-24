@@ -45,14 +45,12 @@ commands:
       - run: git tag -f sonar && git push -f https://${SONAR_REPO_USER}:${SONAR_REPO_PASS}@bitbucket.org/${SONAR_REPO_TEAM}/${SONAR_REPO_NAME}.git sonar
 
   cypress-post-steps:
-    description: Store test results and coverage report as an artifact
+    description: Store test results and report as an artifact
     steps:
       - store_test_results:
-          path: cypress/results
+          path: cypress/reports
       - store_artifacts:
           path: cypress/videos
-      - store_artifacts:
-          path: cypress/screenshots
 
 jobs:
   ci-build-job:
