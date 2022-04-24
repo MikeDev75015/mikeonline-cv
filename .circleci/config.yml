@@ -180,7 +180,7 @@ jobs:
             git push https://${REPO_USER}:${REPO_PASS}@bitbucket.org/${REPO_TEAM}/${REPO_NAME}.git ${VERSION_NUMBER}
       - run: echo 'success'
 
-  cd-deploy-job-firebase:
+  cd-deploy-firebase-job:
     docker:
       - image: cimg/node:16.13.1
     parameters:
@@ -230,7 +230,7 @@ workflows:
           parallel: true
           record: true
           group: all-test
-          command: npx cypress run --record --key 3e7233f2-3112-46a9-b9c5-7c70dbb71f99 --parallel --group all-test
+          command: npx cypress run --reporter list --record --key 3e7233f2-3112-46a9-b9c5-7c70dbb71f99 --parallel --group all-test
           start: npm start
           wait-on: 'http://localhost:4200'
           no-workspace: true
@@ -272,7 +272,7 @@ workflows:
               ignore: /.*/
             tags:
               only: deploy
-      - cd-deploy-job-firebase:
+      - cd-deploy-firebase-job:
           requires:
             - ci-build-job
           context: FIREBASE
@@ -312,7 +312,7 @@ workflows:
           parallel: true
           record: true
           group: all-test
-          command: npx cypress run --record --key 3e7233f2-3112-46a9-b9c5-7c70dbb71f99 --parallel --group all-test
+          command: npx cypress --reporter list run --record --key 3e7233f2-3112-46a9-b9c5-7c70dbb71f99 --parallel --group all-test
           start: npm start
           wait-on: 'http://localhost:4200'
           no-workspace: true
@@ -335,10 +335,9 @@ workflows:
             branches:
               only:
                 - develop
-      - cd-deploy-job-firebase:
+      - cd-deploy-firebase-job:
+          name: cd-deploy-staging-job
           requires:
-            - ci-test-job
-            - ci-cypress-job
             - ci-build-job
           context: FIREBASE
           hosting: cv-mikeonline-staging
@@ -346,6 +345,14 @@ workflows:
             - jira/notify:
                 environment_type: staging
                 job_type: deployment
+          filters:
+            branches:
+              only:
+                - develop
+      - ci-sonar-job:
+          context: OCV_SONARCLOUD
+          requires:
+            - cd-deploy-staging-job
           filters:
             branches:
               only:
@@ -366,16 +373,6 @@ workflows:
             tags:
               only: release
 
-  ####################################### MASTER WORKFLOW - only master ################################################
-  ci-master-workflow:
-    jobs:
-      - ci-sonar-job:
-          context: OCV_SONARCLOUD
-          filters:
-            branches:
-              only:
-                - master
-
   ################################## DEPLOY PRODUCTION WORKFLOW - only [version] TAG ###################################
   ci-cd-deploy-production-workflow:
     when: << pipeline.git.tag >>
@@ -391,7 +388,8 @@ workflows:
               ignore: /.*/
             tags:
               only: /^v\d+\.\d+\.\d+$/
-      - cd-deploy-job-firebase:
+      - cd-deploy-firebase-job:
+          name: cd-deploy-production-job
           requires:
             - ci-build-job
           context: FIREBASE
