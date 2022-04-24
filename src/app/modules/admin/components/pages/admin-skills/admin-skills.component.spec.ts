@@ -12,7 +12,7 @@ describe('AdminSkillsComponent', () => {
       declarations: [AdminSkillsComponent,
         MockComponent({
           selector: 'app-table-wrapper',
-          inputs: ['columnList', 'crudEndPoint', 'exportCsvFileName', 'formFields', 'dataGenerator', 'rowsReorderable'],
+          inputs: ['columnList', 'crudEndPoint', 'exportCsvFileName', 'formFields', 'dataGeneratorList', 'rowsReorderable'],
         })],
     })
       .compileComponents();

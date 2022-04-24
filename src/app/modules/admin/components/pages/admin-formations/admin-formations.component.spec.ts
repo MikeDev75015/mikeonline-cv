@@ -13,7 +13,7 @@ describe('AdminFormationsComponent', () => {
         AdminFormationsComponent,
         MockComponent({
           selector: 'app-table-wrapper',
-          inputs: ['columnList', 'crudEndPoint', 'exportCsvFileName', 'formFields', 'dataGenerator'],
+          inputs: ['columnList', 'crudEndPoint', 'exportCsvFileName', 'formFields', 'dataGeneratorList'],
         }),
       ],
     })

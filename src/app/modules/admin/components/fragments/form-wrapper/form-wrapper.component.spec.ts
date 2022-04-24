@@ -27,7 +27,7 @@ describe('FormWrapperComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(FormWrapperComponent);
     component = fixture.componentInstance;
-    component.formFields = DEFAULT_FORM_FIELDS_CONFIG['contact'];
+    component.formFields = DEFAULT_FORM_FIELDS_CONFIG['contact'].childFormFields;
     fixture.detectChanges();
   });
 
