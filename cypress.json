@@ -1,6 +1,6 @@
 {
   "projectId": "pwv2su",
-  "baseUrl": "http://localhost:4200",
+  "baseUrl": "http://localhost:4201",
   "env": {
     "SPLASH_SCREEN_DELAY": 1000
   },

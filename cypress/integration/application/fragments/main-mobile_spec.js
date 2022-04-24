@@ -1,29 +1,27 @@
 import {interceptApiV1Request} from "../../../common";
 
 describe('Mobile main fragment', () => {
-  before(() => {
-    interceptApiV1Request();
-  });
-
   beforeEach(() => {
     cy
       .viewport(375, 667)
-      .viewport('iphone-8')
-      .visit('/');
+      .viewport('iphone-8');
   });
 
   it('should display the home page by default', () => {
+    interceptApiV1Request().visit('/');
     cy.url().should((url) => {
       expect(url).toContain('/#home');
     });
   });
 
   it('Clicking toggle menu button should open the menu', () => {
+    interceptApiV1Request().visit('/');
     cy.get('[aria-labelledby="toggle menu button"]').click({waitForAnimations: false});
     cy.get('[aria-labelledby="mobile menu container"]').should('not.be.undefined');
   });
 
   it('Clicking skills button should display the skills page', () => {
+    interceptApiV1Request().visit('/');
     cy.get('[aria-labelledby="toggle menu button"]').click();
     cy.get('[aria-labelledby="skills menu button"]').click({waitForAnimations: false});
 
@@ -35,7 +33,8 @@ describe('Mobile main fragment', () => {
   });
 
   it('Clicking experiences button should display the experiences page', () => {
-    cy.get('[aria-labelledby="toggle menu button"]').click({ waitForAnimations: false });
+    interceptApiV1Request().visit('/');
+    cy.get('[aria-labelledby="toggle menu button"]').click({waitForAnimations: false});
     cy.get('[aria-labelledby="experiences menu button"]').click({ waitForAnimations: false });
 
     cy.url().should((url) => {
@@ -46,7 +45,8 @@ describe('Mobile main fragment', () => {
   });
 
   it('Clicking formations button should display the formations page', () => {
-    cy.get('[aria-labelledby="toggle menu button"]').click({ waitForAnimations: false });
+    interceptApiV1Request().visit('/');
+    cy.get('[aria-labelledby="toggle menu button"]').click({waitForAnimations: false});
     cy.get('[aria-labelledby="formations menu button"]').click({ waitForAnimations: false });
 
     cy.url().should((url) => {
@@ -57,7 +57,8 @@ describe('Mobile main fragment', () => {
   });
 
   it('Clicking portfolio button should display the portfolio page', () => {
-    cy.get('[aria-labelledby="toggle menu button"]').click({ waitForAnimations: false });
+    interceptApiV1Request().visit('/');
+    cy.get('[aria-labelledby="toggle menu button"]').click({waitForAnimations: false});
     cy.get('[aria-labelledby="portfolio menu button"]').click({ waitForAnimations: false });
 
     cy.url().should((url) => {
@@ -68,7 +69,8 @@ describe('Mobile main fragment', () => {
   });
 
   it('Clicking interests button should display the interests page', () => {
-    cy.get('[aria-labelledby="toggle menu button"]').click({ waitForAnimations: false });
+    interceptApiV1Request().visit('/');
+    cy.get('[aria-labelledby="toggle menu button"]').click({waitForAnimations: false});
     cy.get('[aria-labelledby="interests menu button"]').click({ waitForAnimations: false });
 
     cy.url().should((url) => {
@@ -79,12 +81,16 @@ describe('Mobile main fragment', () => {
   });
 
   it('Clicking home button should display the home page', () => {
-    cy.get('[aria-labelledby="toggle menu button"]').click({ waitForAnimations: false });
-    cy.get('[aria-labelledby="interests menu button"]').click({ waitForAnimations: false });
-    cy.wait(1000);
+    interceptApiV1Request().visit('/');
+    cy.get('[aria-labelledby="toggle menu button"]').click({waitForAnimations: false});
+    cy.get('[aria-labelledby="skills menu button"]').click({waitForAnimations: false});
 
-    cy.get('[aria-labelledby="toggle menu button"]').click({ waitForAnimations: false });
-    cy.get('[aria-labelledby="home menu button"]').click({ waitForAnimations: false });
+    cy.url().should((url) => {
+      expect(url).toContain('/#skills');
+    });
+
+    cy.get('[aria-labelledby="toggle menu button"]').click({waitForAnimations: false});
+    cy.get('[aria-labelledby="home menu button"]').click({waitForAnimations: false});
 
     cy.url().should((url) => {
       expect(url).toContain('/#home');

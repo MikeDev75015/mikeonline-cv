@@ -12,7 +12,7 @@ describe('Sign-in page', () => {
       expect(url).toContain('/sign-in');
     });
 
-    cy.get('[data-cy="content"]').should('be.visible');
+    cy.get('[data-cy="sign-in content"]').should('be.visible');
     cy.get('[data-cy="form-fields"]').should('be.visible');
     cy.get('[data-cy="submit-button"]').should('be.visible');
     cy.get('[data-cy="app-button"]').should('be.visible');

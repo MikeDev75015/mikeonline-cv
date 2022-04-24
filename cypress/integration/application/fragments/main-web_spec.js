@@ -1,17 +1,8 @@
 import {interceptApiV1Request} from "../../../common";
 
 describe('Web main fragment', () => {
-  before(() => {
-    interceptApiV1Request();
-  });
-
-  beforeEach(() => {
-    cy
-      .visit('/')
-      .wait(Cypress.env('SPLASH_SCREEN_DELAY'));
-  });
-
   it('should display the home page by default', () => {
+    interceptApiV1Request().visit('/').wait(Cypress.env('SPLASH_SCREEN_DELAY'));
     cy.url().should((url) => {
       expect(url).toContain('/#home');
     });
@@ -20,7 +11,8 @@ describe('Web main fragment', () => {
   });
 
   it('Clicking skills tab should display the skills page', () => {
-    cy.get('[aria-labelledby="skills tab"]').click({ waitForAnimations: false });
+    interceptApiV1Request().visit('/').wait(Cypress.env('SPLASH_SCREEN_DELAY'));
+    cy.get('[aria-labelledby="skills tab"]').click({waitForAnimations: false});
 
     cy.url().should((url) => {
       expect(url).toContain('/#skills');
@@ -30,7 +22,8 @@ describe('Web main fragment', () => {
   });
 
   it('Clicking experiences tab should display the experiences page', () => {
-    cy.get('[aria-labelledby="experiences tab"]').click({ waitForAnimations: false });
+    interceptApiV1Request().visit('/').wait(Cypress.env('SPLASH_SCREEN_DELAY'));
+    cy.get('[aria-labelledby="experiences tab"]').click({waitForAnimations: false});
 
     cy.url().should((url) => {
       expect(url).toContain('/#experiences');
@@ -40,7 +33,8 @@ describe('Web main fragment', () => {
   });
 
   it('Clicking formations tab should display the formations page', () => {
-    cy.get('[aria-labelledby="formations tab"]').click({ waitForAnimations: false });
+    interceptApiV1Request().visit('/').wait(Cypress.env('SPLASH_SCREEN_DELAY'));
+    cy.get('[aria-labelledby="formations tab"]').click({waitForAnimations: false});
 
     cy.url().should((url) => {
       expect(url).toContain('/#formations');
@@ -50,7 +44,8 @@ describe('Web main fragment', () => {
   });
 
   it('Clicking portfolio tab should display the portfolio page', () => {
-    cy.get('[aria-labelledby="portfolio tab"]').click({ waitForAnimations: false });
+    interceptApiV1Request().visit('/').wait(Cypress.env('SPLASH_SCREEN_DELAY'));
+    cy.get('[aria-labelledby="portfolio tab"]').click({waitForAnimations: false});
 
     cy.url().should((url) => {
       expect(url).toContain('/#portfolio');
@@ -60,7 +55,8 @@ describe('Web main fragment', () => {
   });
 
   it('Clicking interests tab should display the interests page', () => {
-    cy.get('[aria-labelledby="interests tab"]').click({ waitForAnimations: false });
+    interceptApiV1Request().visit('/').wait(Cypress.env('SPLASH_SCREEN_DELAY'));
+    cy.get('[aria-labelledby="interests tab"]').click({waitForAnimations: false});
 
     cy.url().should((url) => {
       expect(url).toContain('/#interests');
@@ -70,7 +66,8 @@ describe('Web main fragment', () => {
   });
 
   it('Clicking home tab should display the home page', () => {
-    cy.get('[aria-labelledby="interests tab"]').click({ waitForAnimations: false });
+    interceptApiV1Request().visit('/').wait(Cypress.env('SPLASH_SCREEN_DELAY'));
+    cy.get('[aria-labelledby="interests tab"]').click({waitForAnimations: false});
     cy.wait(1000);
 
     cy.get('[aria-labelledby="home tab"]').click({ waitForAnimations: false });

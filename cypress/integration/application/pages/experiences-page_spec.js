@@ -1,18 +1,13 @@
 import {interceptApiV1Request} from "../../../common";
 
 describe('Experiences page', () => {
-  before(() => {
-    interceptApiV1Request();
-  });
-
-  beforeEach(() => {
-    cy
+  it('should be on experiences page', () => {
+    interceptApiV1Request()
       .visit('/')
       .wait(Cypress.env('SPLASH_SCREEN_DELAY'))
-      .get('[aria-labelledby="experiences tab"]').click({ waitForAnimations: false });
-  });
+      .get('[aria-labelledby="experiences tab"]')
+      .click({waitForAnimations: false});
 
-  it('should be on experiences page', () => {
     cy.url().should((url) => {
       expect(url).toContain('/#experiences');
     });

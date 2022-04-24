@@ -47,8 +47,10 @@ commands:
   cypress-post-steps:
     description: Store test results and report as an artifact
     steps:
-      - store_test_results:
+      - store_artifacts:
           path: cypress/report
+      - store_artifacts:
+          path: cypress/screenshots
       - store_artifacts:
           path: cypress/videos
 
@@ -229,8 +231,8 @@ workflows:
           parallel: true
           record: true
           group: all-test
-          start: npm start
-          wait-on: 'http://localhost:4200'
+          start: npm run cypress-server
+          wait-on: 'http://localhost:4201'
           no-workspace: true
           post-steps:
             - cypress-post-steps
@@ -310,8 +312,8 @@ workflows:
           record: true
           group: all-test
           command: npx cypress run --record --key 3e7233f2-3112-46a9-b9c5-7c70dbb71f99 --parallel --group all-test
-          start: npm start
-          wait-on: 'http://localhost:4200'
+          start: npm run cypress-server
+          wait-on: 'http://localhost:4201'
           no-workspace: true
           store_artifacts: true
           post-steps:
