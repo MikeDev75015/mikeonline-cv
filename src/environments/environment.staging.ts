@@ -1,5 +1,6 @@
 export const environment = {
   production: true,
+  interceptBackendRequest: false,
   API_URL: 'https://ocv-backend-staging.herokuapp.com',
   ACTIVATED_LOGS: true,
   APP_NAME: 'online-cv-staging',

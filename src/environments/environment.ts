@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
+  interceptBackendRequest: false,
   // API_URL: 'http://localhost:5000',
   API_URL: 'https://ocv-backend-staging.herokuapp.com',
   // API_URL: 'https://ocv-backend.herokuapp.com',

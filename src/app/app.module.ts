@@ -16,7 +16,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AlertModule, LoggerModule } from './core';
 import { CoreModule } from './core/core.module';
-import { apiV1HttpInterceptor, httpInterceptorProviders } from './core/interceptors';
+import { backendHttpInterceptor, httpInterceptorProviders } from './core/interceptors';
 import {
   ApplicationEffects,
   AuthEffects,
@@ -82,12 +82,12 @@ export function HttpLoaderFactory(http: HttpClient) {
     AlertModule,
   ],
   providers: [
-    environment.production
-      ? httpInterceptorProviders
-      : [
+    environment.interceptBackendRequest
+      ? [
         ...httpInterceptorProviders,
-        ...apiV1HttpInterceptor,
-      ],
+        ...backendHttpInterceptor,
+      ]
+      : httpInterceptorProviders,
 
     HttpClientService,
     MessageService,

@@ -47,7 +47,7 @@ export class ApiV1Interceptor implements HttpInterceptor {
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (request.url.includes('/v1-disabled/')) {
+    if (request.url.includes('/v1/')) {
       if (request.method === 'GET') {
         const apiPath = request.url.split('/v1/')[1] as ApiV1Path;
         console.debug('apiPath:', apiPath);

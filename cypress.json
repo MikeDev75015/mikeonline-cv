@@ -11,6 +11,7 @@
     "charts": true,
     "reportPageTitle": "Online CV - Integration Tests",
     "embeddedScreenshots": true,
-    "inlineAssets": true
+    "inlineAssets": true,
+    "saveAllAttempts": false
   }
 }

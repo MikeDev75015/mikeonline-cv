@@ -10,7 +10,7 @@ export const httpInterceptorProviders = [
   { provide: HTTP_INTERCEPTORS, useClass: HttpRequestInterceptor, multi: true },
 ];
 
-export const apiV1HttpInterceptor = [
+export const backendHttpInterceptor = [
   { provide: HTTP_INTERCEPTORS, useClass: ApiV1Interceptor, multi: true },
   { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
 ];

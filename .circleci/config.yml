@@ -224,11 +224,6 @@ workflows:
           executor: cypress-base-16-with-chrome-and-firefox
           ci-build-id: 'testing-commit-${CIRCLE_SHA1}'
           browser: chrome
-          parallelism: 14
-          parallel: true
-          record: true
-          group: all-test
-          command: npx cypress run --record --key 3e7233f2-3112-46a9-b9c5-7c70dbb71f99 --parallel --group all-test
           start: npm start
           wait-on: 'http://localhost:4200'
           no-workspace: true
