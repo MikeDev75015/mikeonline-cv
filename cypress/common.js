@@ -27,7 +27,12 @@ export const interceptApiV1Request = () => {
     .intercept(`**/v1/projects*`, addTags([projectsJsonFile[4]], tagsJsonFile)).as('getProjects');
 };
 
-export const interceptLoginRequest = (logAsAdmin = false) => {
+export const interceptLoginRequest = (loginFailure = true, logAsAdmin = false) => {
+  if (loginFailure) {
+    return cy
+      .intercept(`**/login*`, {statusCode: 401, body: {message: 'INVALID_USERNAME_OR_PASSWORD'}}).as('login');
+  }
+
   return cy
     .intercept(`**/login*`, {accessToken: '12345678'}).as('login')
     .intercept(`**/account*`, usersJsonFile[logAsAdmin ? 0 : 1]).as('account');

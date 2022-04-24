@@ -1,6 +1,6 @@
 import {interceptApiV1Request} from "../../../common";
 
-describe('main component', () => {
+describe('Web main fragment', () => {
   before(() => {
     interceptApiV1Request();
   });

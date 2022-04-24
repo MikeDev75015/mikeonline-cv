@@ -46,7 +46,8 @@ describe('Sign-in page', () => {
       cy.get('[data-cy="primeng-toast"]').should('be.visible');
     });
 
-    it('should display an error if user does not exist', () => {
+    it('should display an error if the login request fails', () => {
+      interceptLoginRequest();
       cy.get('[data-cy="input-text"]').type('toto');
       cy.get('[data-cy="input-password"]').type('1234');
       cy.get('[data-cy="submit-button"]').click();
@@ -57,8 +58,8 @@ describe('Sign-in page', () => {
       });
     });
 
-    it('should log the user in and navigate to the first admin tab', () => {
-      interceptLoginRequest();
+    it('should log in the user and navigate to the first admin tab if the login request succeeds', () => {
+      interceptLoginRequest(false);
       interceptApiV1Request();
       cy.get('[data-cy="input-text"]').type('toto');
       cy.get('[data-cy="input-password"]').type('1234');

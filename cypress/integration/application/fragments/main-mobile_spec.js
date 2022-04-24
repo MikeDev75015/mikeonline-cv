@@ -1,6 +1,6 @@
 import {interceptApiV1Request} from "../../../common";
 
-describe('main component', () => {
+describe('Mobile main fragment', () => {
   before(() => {
     interceptApiV1Request();
   });
