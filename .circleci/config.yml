@@ -230,7 +230,7 @@ workflows:
           parallel: true
           record: true
           group: all-test
-          command: npx cypress run --reporter list --record --key 3e7233f2-3112-46a9-b9c5-7c70dbb71f99 --parallel --group all-test
+          command: npx cypress run --record --key 3e7233f2-3112-46a9-b9c5-7c70dbb71f99 --parallel --group all-test
           start: npm start
           wait-on: 'http://localhost:4200'
           no-workspace: true
@@ -312,7 +312,7 @@ workflows:
           parallel: true
           record: true
           group: all-test
-          command: npx cypress --reporter list run --record --key 3e7233f2-3112-46a9-b9c5-7c70dbb71f99 --parallel --group all-test
+          command: npx cypress run --record --key 3e7233f2-3112-46a9-b9c5-7c70dbb71f99 --parallel --group all-test
           start: npm start
           wait-on: 'http://localhost:4200'
           no-workspace: true
