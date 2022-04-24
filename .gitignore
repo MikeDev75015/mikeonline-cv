@@ -8,6 +8,9 @@
 /out-tsc
 /bazel-out
 /coverage
+/cypress/reports
+/cypress/screenshots
+/cypress/videos
 
 # Node
 /node_modules

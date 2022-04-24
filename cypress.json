@@ -4,5 +4,12 @@
   "env": {
     "SPLASH_SCREEN_DELAY": 1000
   },
-  "fixturesFolder": "__mocks__/v1/json-files"
+  "fixturesFolder": "__mocks__/v1/json-files",
+  "reporter": "cypress-mochawesome-reporter",
+  "reporterOptions": {
+    "reportDir": "cypress/reports",
+    "overwrite": false,
+    "html": false,
+    "json": true
+  }
 }
