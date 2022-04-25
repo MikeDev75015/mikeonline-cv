@@ -2,9 +2,7 @@ import {interceptApiV1Request, interceptLoginRequest} from "../../../common";
 
 describe('Sign-in page', () => {
   beforeEach(() => {
-    cy
-      .viewport(1200, 700)
-      .visit('/admin');
+    cy.visit('/admin');
   });
 
   it('should be on the sign-in page', () => {

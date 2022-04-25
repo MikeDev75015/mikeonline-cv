@@ -48,7 +48,7 @@ commands:
     description: Store test results and report as an artifact
     steps:
       - store_test_results:
-          path: cypress/junit
+          path: cypress/results
       - store_artifacts:
           path: cypress/report
       - store_artifacts:
@@ -232,7 +232,7 @@ workflows:
           parallelism: 9
           command: |
             CYPRESSFILES=$(circleci tests glob "cypress/integration/**/*_spec.js" | circleci tests split --split-by=timings)
-            npm run cypress:ci --record false $CYPRESSFILES
+            npm run cypress:ci $CYPRESSFILES
           start: npm run cypress-server
           wait-on: 'http://localhost:4201'
           no-workspace: true

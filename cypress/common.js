@@ -45,10 +45,14 @@ export const interceptLoginRequest = (loginFailure = true, logAsAdmin = false) =
   }
 
   return cy
-    .intercept(`**/login*`, {accessToken: '12345678'}).as('login')
-    .intercept(`**/account*`, users[logAsAdmin ? 0 : 1]).as('account');
+    .intercept(`**/login*`, {statusCode: 200, body: {accessToken: '12345678'}}).as('login')
+    .intercept(`**/account*`, {statusCode: 200, body: users[logAsAdmin ? 0 : 1]}).as('account');
 };
 
-export const interceptLogoutRequest = () => {
-  return cy.intercept(`**/logout*`, {message: 'SUCCESS'}).as('logout');
+export const interceptLogoutRequest = (logoutFailure = true) => {
+  if (logoutFailure) {
+    return cy.intercept(`**/logout*`, {statusCode: 503, body: {message: 'NO_USER_FOUND'}}).as('logout');
+  }
+
+  return cy.intercept(`**/logout*`, {statusCode: 200, body: {message: 'SUCCESS'}}).as('logout');
 };

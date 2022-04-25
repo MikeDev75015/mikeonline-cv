@@ -4,14 +4,8 @@
   "env": {
     "SPLASH_SCREEN_DELAY": 1000
   },
+  "testFiles": "**/*_spec.js",
   "fixturesFolder": "__mocks__/v1/json-files",
-  "reporter": "cypress-mochawesome-reporter",
-  "reporterOptions": {
-    "reportDir": "cypress/report",
-    "charts": true,
-    "reportPageTitle": "Online CV - Integration Tests",
-    "embeddedScreenshots": true,
-    "inlineAssets": true,
-    "saveAllAttempts": false
-  }
+  "viewportHeight": 700,
+  "viewportWidth": 1200
 }

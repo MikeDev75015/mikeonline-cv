@@ -1,0 +1,7 @@
+{
+  "extends": "./cypress.json",
+  "reporter": "cypress-junit-reporter",
+  "reporterOptions": {
+    "mochaFile": "./cypress/results/junit-[hash].xml"
+  }
+}

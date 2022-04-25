@@ -10,6 +10,7 @@
 /coverage
 /mochawesome-report
 /cypress/report
+/cypress/results
 /cypress/screenshots
 /cypress/videos
 
