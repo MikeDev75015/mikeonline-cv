@@ -47,6 +47,8 @@ commands:
   cypress-post-steps:
     description: Store test results and report as an artifact
     steps:
+      - store_test_results:
+          path: cypress/junit
       - store_artifacts:
           path: cypress/report
       - store_artifacts:
@@ -113,9 +115,9 @@ jobs:
                   TESTFILES=$(circleci tests glob "src/**/*.spec.ts" | circleci tests split --split-by=timings)
                   npm run test:ci $TESTFILES
                 environment:
-                  JEST_JUNIT_OUTPUT_DIR: ./reports/junit/
+                  JEST_JUNIT_OUTPUT_DIR: ./reports/junit
             - store_test_results:
-                path: ./reports/junit/
+                path: ./reports/junit
             - store_artifacts:
                 path: ./reports/junit
       - when:
@@ -213,6 +215,7 @@ workflows:
       equal: [ << pipeline.git.tag >>, cypress ]
     jobs:
       - cypress/install:
+          name: ci-cypress-install-job
           executor: cypress-base-16-with-chrome-and-firefox
           filters:
             branches:
@@ -220,17 +223,16 @@ workflows:
             tags:
               only: cypress
       - cypress/run:
-          name: ci-cypress-job
+          name: ci-cypress-run-job
           context: CYPRESS_ENV
           requires:
-            - cypress/install
+            - ci-cypress-install-job
           executor: cypress-base-16-with-chrome-and-firefox
           ci-build-id: 'testing-commit-${CIRCLE_SHA1}'
-          browser: chrome
-          parallelism: 15
+          parallelism: 9
           command: |
             CYPRESSFILES=$(circleci tests glob "cypress/integration/**/*_spec.js" | circleci tests split --split-by=timings)
-            npm run cypress:ci $CYPRESSFILES
+            npm run cypress:ci --record false $CYPRESSFILES
           start: npm run cypress-server
           wait-on: 'http://localhost:4201'
           no-workspace: true
