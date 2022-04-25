@@ -75,5 +75,40 @@
 }
 
 .table-wrapper-row-to-delete {
-  background: #dd6363 !important;
+  background: var(--text-color-secondary) !important;
+  color: var(--primary-color-text) !important;
+}
+
+.wrapped-table-reorderable-row {
+  * {
+    box-shadow: unset !important;
+  }
+}
+
+.p-datatable-dragpoint-bottom:not(.wrapped-table-reorderable-row:not(.p-highlight):hover):not(.wrapped-table-reorderable-row:not(.p-highlight):hover + tr) {
+  border-top: 5px solid var(--primary-color) !important;
+}
+
+.p-datatable-reorderablerow-handle {
+  i {
+    pointer-events: none;
+    color: var(--text-color-secondary);
+  }
+}
+
+.p-datatable-reorderablerow-handle:hover {
+  i {
+    color: var(--primary-color) !important;
+  }
+}
+
+.p-datatable.p-datatable-hoverable-rows .p-datatable-tbody > tr:not(.p-highlight):hover {
+  background: var(--text-color-secondary);
+  color: var(--primary-color-text);
+
+  .p-datatable-reorderablerow-handle {
+    i {
+      color: var(--primary-color-text) !important;
+    }
+  }
 }

@@ -150,9 +150,25 @@ export class TableWrapperComponent implements OnInit, OnChanges {
    */
   public onDuplicateRow(rowData: { [key: string]: any; }, rowIndex: number, wrappedTable: Table): void {
     const { id, position, ...newRow } = rowData;
-    const newItem = { ...newRow, id: 'duplicatedAt' + DayJsService.getDate(undefined) };
+    const newItem: { [key: string]: any; } = { ...newRow, id: 'duplicatedAt' + DayJsService.getDate(undefined) };
+    const newItemIndex = rowIndex + 1;
 
-    this.tableData.splice(rowIndex + 1, 0, newItem);
+    this.tableData.splice(newItemIndex, 0, newItem);
+
+    if (position !== undefined) {
+      this.tableData = this.tableData.map((eachData: { [key: string]: any; }, i: number) => {
+        if (i < newItemIndex) {
+          return eachData;
+        }
+
+        if (i === newItemIndex) {
+          newItem['position'] = i;
+        }
+
+        return { ...eachData, position: i };
+      });
+    }
+
     wrappedTable.value = this.tableData;
 
     this.updateList(newItem, addOrUpdate, 'changedData');
@@ -316,8 +332,8 @@ export class TableWrapperComponent implements OnInit, OnChanges {
   /**
    * onRowsReorder
    */
-  public onRowsReorder({ dragIndex, dropIndex }: { dragIndex: number; dropIndex: number; }): void {
-    const draggedElement = this.tableData[dragIndex];
+  public onRowsReorder({ dragIndex, dropIndex }: { dragIndex: number; dropIndex: number; }, wrappedTable: Table): void {
+    const draggedElement = wrappedTable.value[dropIndex];
 
     this.tableData = this.tableData.map((data, i) => {
       const elementToUpdate: any = {};
@@ -325,8 +341,11 @@ export class TableWrapperComponent implements OnInit, OnChanges {
       if (data.id === draggedElement.id) {
         elementToUpdate['position'] = dropIndex;
 
-      } else if (i < dragIndex && i >= dropIndex) {
+      } else if (dragIndex > dropIndex && i < dragIndex && i >= dropIndex) {
         elementToUpdate['position'] = i + 1;
+
+      } else if (dragIndex < dropIndex && i > dragIndex && i <= dropIndex) {
+        elementToUpdate['position'] = i - 1;
 
       } else if (!data.position) {
         elementToUpdate['position'] = i;
@@ -339,6 +358,8 @@ export class TableWrapperComponent implements OnInit, OnChanges {
       this.updateList(elementToUpdate, addOrUpdate, 'changedData');
       return Object.assign({}, data, elementToUpdate);
     });
+
+    wrappedTable.value = this.tableData;
   }
 
   /**

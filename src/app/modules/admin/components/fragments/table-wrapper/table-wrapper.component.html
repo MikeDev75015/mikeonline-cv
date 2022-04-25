@@ -34,7 +34,8 @@
   </p-toolbar>
 
   <p-table
-    #wrappedTable (onRowReorder)="onRowsReorder($event)" [(selection)]="selectedTableData" [columns]="columnList"
+    #wrappedTable (onRowReorder)="onRowsReorder($event, wrappedTable)" [(selection)]="selectedTableData"
+    [columns]="columnList"
     [globalFilterFields]="globalFilterFields" [loading]="isLoading" [resizableColumns]="false" [rowHover]="true"
     [scrollHeight]="scrollHeight" [scrollable]="true" [sortField]="sortField" [sortMode]="sortMode"
     [sortOrder]="sortOrder" [value]="tableData" dataKey="id" styleClass="p-datatable-striped"
@@ -91,11 +92,17 @@
 
       <!-- row reorderable -->
       <tr
-        #rowReorderable *ngIf="rowsReorderable" [pReorderableRowHandle]="index"
-        [pReorderableRow]="index" class="fss w100 no-border"
+        #rowReorderable *ngIf="rowsReorderable" [pReorderableRow]="index"
+        class="fss w100 no-border relative wrapped-table-reorderable-row"
       >
-        <td class="no-border" style="width: 54px; min-width: 54px; max-width: 54px;">
+        <td class="fbc column no-border" style="width: 54px; min-width: 54px; max-width: 54px; height: 100%;">
           <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+          <div
+            [pReorderableRowHandle]="index" class="fcc absolute wrapped-table-reorder-button"
+            style="bottom: 0; left: 0; width: 54px; height: 54px;"
+          >
+            <i class="pi pi-sort" style="color: var(--text-color-secondary);"></i>
+          </div>
         </td>
 
         <ng-container
