@@ -1,0 +1,14 @@
+{
+  "reporterEnabled": "cypress-junit-reporter,cypress-mochawesome-reporter",
+  "cypressJunitReporterReporterOptions": {
+    "mochaFile": "./cypress/results/files/junit-[hash].xml"
+  },
+  "cypressMochawesomeReporterReporterOptions": {
+    "reportDir": "cypress/report",
+    "charts": true,
+    "reportPageTitle": "Online CV - Integration Tests",
+    "embeddedScreenshots": true,
+    "inlineAssets": true,
+    "saveAllAttempts": false
+  }
+}

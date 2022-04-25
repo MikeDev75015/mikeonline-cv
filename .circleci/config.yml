@@ -237,7 +237,7 @@ workflows:
             - ci-cypress-install-job
           executor: cypress-base-16-with-chrome-and-firefox
           ci-build-id: 'testing-commit-${CIRCLE_SHA1}'
-          parallelism: 4
+          parallelism: 8
           command: |
             CYPRESSFILES=$(circleci tests glob "cypress/integration/**/*_spec.js" | circleci tests split --split-by=timings)
             npm run cypress:ci $CYPRESSFILES
@@ -304,28 +304,27 @@ workflows:
               only:
                 - develop
       - cypress/install:
+          name: ci-cypress-install-job
           executor: cypress-base-16-with-chrome-and-firefox
           filters:
             branches:
               only:
                 - develop
       - cypress/run:
-          name: ci-cypress-job
+          name: ci-cypress-run-job
+          context: CYPRESS_ENV
           requires:
             - ci-test-job
-            - cypress/install
+            - ci-cypress-install-job
           executor: cypress-base-16-with-chrome-and-firefox
           ci-build-id: 'testing-commit-${CIRCLE_SHA1}'
-          browser: chrome
-          parallelism: 14
-          parallel: true
-          record: true
-          group: all-test
-          command: npx cypress run --record --key 3e7233f2-3112-46a9-b9c5-7c70dbb71f99 --parallel --group all-test
+          parallelism: 8
+          command: |
+            CYPRESSFILES=$(circleci tests glob "cypress/integration/**/*_spec.js" | circleci tests split --split-by=timings)
+            npm run cypress:ci $CYPRESSFILES
           start: npm run cypress-server
           wait-on: 'http://localhost:4201'
           no-workspace: true
-          store_artifacts: true
           post-steps:
             - cypress-post-steps
           filters:
@@ -335,7 +334,7 @@ workflows:
       - ci-build-job:
           requires:
             - ci-test-job
-            - ci-cypress-job
+            - ci-cypress-run-job
           post-steps:
             - jira/notify:
                 environment_type: staging
