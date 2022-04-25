@@ -20,6 +20,7 @@
     "start-cypress-open": "start-server-and-test cypress-server http://localhost:4201 cypress-open",
     "cypress-run": "cypress run",
     "cypress-open": "cypress open",
+    "cypress:ci": "CI=true npm run cypress-run --browser chrome --parallel --group all-test",
     "lint": "ng lint",
     "sonar-tag": "git tag -f sonar && git push -f upstream sonar",
     "cypress-tag": "git tag -f cypress && git push -f origin cypress",
