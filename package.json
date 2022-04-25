@@ -15,7 +15,7 @@
     "test": "jest",
     "test-coverage": "jest --coverage",
     "test:ci": "CI=true npm test -- --coverage --runInBand --testResultsProcessor=jest-sonar-reporter",
-    "cypress:ci": "cypress run --record false --parallel -b chrome -C cypress-extended-junit-reporter.json",
+    "cypress:ci": "cypress run --record --parallel -b chrome -C cypress-extended-junit-reporter.json",
     "merge-reports:ci": "jrm ./cypress/results/junit.xml \"./cypress/results/files/*.xml\"",
     "start-cypress-run": "npm run clean-reports && start-server-and-test cypress-server http://localhost:4201 cypress-run",
     "start-cypress-run-junit": "npm run clean-reports && start-server-and-test cypress-server http://localhost:4201 cypress-run-junit",
