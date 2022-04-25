@@ -1,5 +1,6 @@
 const deepmerge = require('deepmerge');
 const path = require('path');
+const fs = require('fs');
 const {beforeRunHook, afterRunHook} = require('cypress-mochawesome-reporter/lib');
 
 function loadConfig(filename) {
@@ -32,7 +33,10 @@ module.exports = (on, config) => {
   });
 
   on('after:run', async () => {
-    await afterRunHook();
+    const jsonDir = './cypress/report/.jsons';
+    if (fs.existsSync(jsonDir)) {
+      await afterRunHook();
+    }
   });
 
   return loadConfig(config.configFile);
