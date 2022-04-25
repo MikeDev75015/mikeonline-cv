@@ -75,7 +75,6 @@ export class FormWrapperService {
    * @private
    */
   private setFormValues(formFieldList: FormField[], value: any, container: { [p: string]: any } = {}, depth = 0): { [p: string]: any } {
-    console.debug('setFormValues:', value);
     formFieldList.forEach((formElement) => {
       const { field, adapter, defaultValue, childFormFields, isList } = formElement;
 
@@ -114,7 +113,6 @@ export class FormWrapperService {
    * @private
    */
   private generateData(formFieldList: FormField[], value: any, container: { [p: string]: any } = {}): { [p: string]: any } {
-    console.debug('generateData:', value);
     formFieldList.forEach((formElement) => {
       const { field, generator, childFormFields, isList } = formElement;
       if (

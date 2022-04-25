@@ -41,7 +41,6 @@ export class FormWrapperComponent implements OnInit {
     if (!this.isChildForm) {
       this.formValues = this.formWrapperService.initializeFormValues(this.formFields, { ...this.formValues });
     }
-    console.debug('formValues:', this.formValues);
 
     this.isInitialized = true;
   }
@@ -51,7 +50,6 @@ export class FormWrapperComponent implements OnInit {
   }
 
   public onSaveData(): void {
-    console.debug('onSaveData:', this.formValues);
     this.closeForm.emit(this.formValues);
   }
 
