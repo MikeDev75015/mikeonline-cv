@@ -50,7 +50,7 @@ commands:
       - run:
           name: Combine junit xml reports and delete once combined
           command: |
-            jrm ./cypress/results/junit.xml "./cypress/results/files/*.xml"
+            npm run merge-reports:ci
             rm -r -f ./cypress/results/files
       - run: echo 'Successfully combined'
       - store_test_results:
