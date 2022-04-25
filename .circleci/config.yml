@@ -47,7 +47,15 @@ commands:
   cypress-post-steps:
     description: Store test results and report as an artifact
     steps:
+      - run:
+          name: Combine junit xml reports and delete once combined
+          command: |
+            jrm ./cypress/results/junit.xml "./cypress/results/files/*.xml"
+            rm -r -f ./cypress/results/files
+      - run: echo 'Successfully combined'
       - store_test_results:
+          path: cypress/results
+      - store_artifacts:
           path: cypress/results
       - store_artifacts:
           path: cypress/report

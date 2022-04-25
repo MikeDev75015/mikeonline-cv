@@ -1,18 +1,14 @@
-/// <reference types="cypress" />
 const deepmerge = require('deepmerge');
 const path = require('path');
 
 function loadConfig(filename) {
-  // console.debug('loadConfig:', filename);
   const configJson = require(filename);
   if (configJson.extends) {
     const baseConfigFilename = path.join(path.dirname(filename), configJson.extends);
-    // console.debug('extends:', baseConfigFilename);
     const baseConfig = loadConfig(baseConfigFilename);
-    // console.debug('merging %s with %s', baseConfigFilename, filename);
     const merged = deepmerge(baseConfig, configJson);
     delete merged['extends'];
-    console.debug('merged:', merged);
+    console.debug('config:', merged);
     return merged;
   } else {
     return configJson;
@@ -28,7 +24,6 @@ module.exports = (on, config) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
   // console.debug('config:', config);
-  console.debug('on:', on);
 
   return loadConfig(config.configFile);
 }
