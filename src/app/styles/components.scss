@@ -9,6 +9,11 @@
 .home-content {
   height: calc(100vh - 100px);
 
+  .home-title {
+    font-weight: 500;
+    font-size: 20px;
+  }
+
   .home-summary {
     padding: 30px;
     max-width: 850px;
