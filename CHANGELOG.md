@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.11.0](https://bitbucket.org/mikeonline75/ocv-frontend/compare/v1.10.0...v1.11.0) (2022-05-01)
+
+
+### Features
+
+* add a dropdown wrapper ([062215c](https://bitbucket.org/mikeonline75/ocv-frontend/commit/062215ce92a6222d813b4fee68ef661fa6b78a93))
+* add a form wrapper ([05bf0a1](https://bitbucket.org/mikeonline75/ocv-frontend/commit/05bf0a154b89ae454dc34b2e1a58cfe4722c983d))
+* add a sign-in page ([c57d9cf](https://bitbucket.org/mikeonline75/ocv-frontend/commit/c57d9cfcf2e192c600ea9b07b004de4b8ac722d1))
+* add a table wrapper with its own crud service ([da45e43](https://bitbucket.org/mikeonline75/ocv-frontend/commit/da45e4362d59149ebde1d3523e1878dea7e38838))
+* add a theme service to allow switching between the different themes available ([a76f65f](https://bitbucket.org/mikeonline75/ocv-frontend/commit/a76f65f6805d089f1d28e4a34643068c04ebc16a))
+* add admin module and basic services ([a47deee](https://bitbucket.org/mikeonline75/ocv-frontend/commit/a47deeea451b9a91d9c619e520b5ce569a55a0d1))
+* add admin pages ([9ce2d9e](https://bitbucket.org/mikeonline75/ocv-frontend/commit/9ce2d9e86ce89ffb76578564dd12bd85fd74b6a3))
+* add API v1 interfaces and json files ([d7bffe6](https://bitbucket.org/mikeonline75/ocv-frontend/commit/d7bffe649d8f082f4455c66d3dcf919fc6226b01))
+* add cv-infos routing and its related elements, update theming ([6d7f839](https://bitbucket.org/mikeonline75/ocv-frontend/commit/6d7f83954e0f8bc38719218903ce8a2753d06b1e))
+* update form wrapper ([a253cb1](https://bitbucket.org/mikeonline75/ocv-frontend/commit/a253cb1fd0f6e39c1982ce4942cb4ac79044c669))
+* update or add new wrapped components ([dbdf7a9](https://bitbucket.org/mikeonline75/ocv-frontend/commit/dbdf7a915c8a93d2fb38c1b8833961f7dd7fdb61))
+* update sign in process ([e2dc7ef](https://bitbucket.org/mikeonline75/ocv-frontend/commit/e2dc7effdc9077d56a0646eb95c65641c9d87744))
+* update table wrapper ([14764f6](https://bitbucket.org/mikeonline75/ocv-frontend/commit/14764f60598fd08ed7781d082b22f9501d3249f9))
+
+
+### Bug Fixes
+
+* add condition to cypress after:run hook ([cb59f52](https://bitbucket.org/mikeonline75/ocv-frontend/commit/cb59f52395d9c87c814d4294ec86d56242892b37))
+* add missing unit tests imports and providers, rework some tests due to several refactors ([26db2e1](https://bitbucket.org/mikeonline75/ocv-frontend/commit/26db2e16c61cf5ac80fae22204a6066bfae90bb7))
+* enable interceptors in production ([4f9e21a](https://bitbucket.org/mikeonline75/ocv-frontend/commit/4f9e21a7b8fdb4babc5ee42cc1e73f0aa2fd81fb))
+* fix unit tests due to change ([a749bfc](https://bitbucket.org/mikeonline75/ocv-frontend/commit/a749bfc804cb84e225831b9df79a5ced2a9b9002))
+
 ## [1.10.0](https://bitbucket.org/mikeonline75/ocv-frontend/compare/v1.9.2...v1.10.0) (2022-04-11)
 
 
