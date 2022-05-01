@@ -1,4 +1,6 @@
-import { InputWrapperType } from '../../../../interfaces/input-wrapper.type';
+import {
+  AutoCompleteWrapperOptions,
+} from '../../auto-complete-wrapper/interfaces/auto-complete-wrapper-options.interface';
 import { DropdownWrapperOptions } from '../../dropdown-wrapper/interfaces/dropdown-wrapper-options.interface';
 import { InputWrapperCheckboxOptions } from '../../input-wrapper/interfaces/checkbox-options.interface';
 import { InputWrapperNumberOptions } from '../../input-wrapper/interfaces/number-options.interface';
@@ -6,12 +8,9 @@ import { InputWrapperTextareaOptions } from '../../input-wrapper/interfaces/text
 import {
   MultiSelectWrapperOptions,
 } from '../../multi-select-wrapper/interfaces/multi-select-wrapper-options.interfaces';
+import { PickListWrapperOptions } from '../../pick-list-wrapper/interfaces/pick-list-wrapper-options.interface';
 
 export interface FormInputOptions {
-  inputLabel: string;
-
-  inputType: InputWrapperType;
-
   inputName?: string;
 
   inputTitle?: string;
@@ -27,4 +26,8 @@ export interface FormInputOptions {
   dropdownWrapperOptions?: DropdownWrapperOptions;
 
   multiSelectWrapperOptions?: MultiSelectWrapperOptions;
+
+  pickListWrapperOptions?: PickListWrapperOptions;
+
+  autoCompleteWrapperOptions?: AutoCompleteWrapperOptions;
 }

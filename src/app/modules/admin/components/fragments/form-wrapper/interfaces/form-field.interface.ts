@@ -1,7 +1,12 @@
-import { FormInputOptions } from './form-input-options.interface';
+import { FormInput } from './form-input.interface';
+import { ValidationField } from './validation-field.interface';
 
-export interface FormField extends FormInputOptions {
+export interface FormField extends FormInput {
   field: string;
+
+  mandatoryField?: boolean;
+
+  validationFieldList?: ValidationField[];
 
   defaultValue: any;
 
@@ -14,8 +19,6 @@ export interface FormField extends FormInputOptions {
   adapter?: (data: any) => any;
 
   generator?: (data: any) => any;
-
-  validationFieldBundle?: { [field: string]: (value: any) => boolean };
 
   childFormFields?: ChildFormField[];
 }

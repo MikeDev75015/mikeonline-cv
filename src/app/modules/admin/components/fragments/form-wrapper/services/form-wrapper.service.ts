@@ -1,10 +1,23 @@
 import { Injectable } from '@angular/core';
-import { FormField } from '../../../form-wrapper/interfaces/form-field.interface';
+import { FormField } from '../interfaces/form-field.interface';
+import { ValidationField } from '../interfaces/validation-field.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FormWrapperService {
+  /**
+   * isInvalidValue
+   * @param value
+   * @param isList
+   * @private
+   */
+  private static isInvalidValue(value: any, isList?: boolean): boolean {
+    return value === undefined
+      || value === ''
+      || (typeof value === 'object' && !isList && Object.keys(value).length === 0);
+  }
+
   /**
    * convertValue
    * @param value
@@ -67,6 +80,15 @@ export class FormWrapperService {
   }
 
   /**
+   * isValidFormValues
+   * @param formFieldList
+   * @param formValues
+   */
+  public isValidFormValues(formFieldList: FormField[], formValues: { [key: string]: any; }): boolean {
+    return this.checkValuesValidity(formFieldList, formValues);
+  }
+
+  /**
    * setFormValues
    * @param formFieldList
    * @param value
@@ -78,13 +100,7 @@ export class FormWrapperService {
     formFieldList.forEach((formElement) => {
       const { field, adapter, defaultValue, childFormFields, isList } = formElement;
 
-      if (
-        value === undefined || value[field] === undefined
-        || (
-          typeof value[field] === 'object'
-          && (!isList && Object.keys(value[field]).length === 0) || (isList && value[field].length === 0)
-        )
-      ) {
+      if (value === undefined || FormWrapperService.isInvalidValue(value[field], isList)) {
         container[field] = defaultValue;
 
       } else {
@@ -115,13 +131,7 @@ export class FormWrapperService {
   private generateData(formFieldList: FormField[], value: any, container: { [p: string]: any } = {}): { [p: string]: any } {
     formFieldList.forEach((formElement) => {
       const { field, generator, childFormFields, isList } = formElement;
-      if (
-        value === undefined || value[field] === undefined
-        || (
-          typeof value[field] === 'object'
-          && (!isList && Object.keys(value[field]).length === 0) || (isList && value[field].length === 0)
-        )
-      ) {
+      if (value === undefined || FormWrapperService.isInvalidValue(value[field], isList)) {
         return;
       }
 
@@ -139,5 +149,39 @@ export class FormWrapperService {
     });
 
     return container;
+  }
+
+  /**
+   * checkValuesValidity
+   * @param formFieldList
+   * @param value
+   * @param parent
+   * @private
+   */
+  private checkValuesValidity(formFieldList: FormField[], value: any, parent = ''): boolean {
+    let isValidValues = true;
+
+    formFieldList.forEach((formElement) => {
+      const { field, mandatoryField, validationFieldList, childFormFields, isList } = formElement;
+
+      if (value === undefined || FormWrapperService.isInvalidValue(value[field], isList)) {
+        isValidValues = isValidValues && !mandatoryField;
+
+      } else {
+        if (validationFieldList && validationFieldList.length) {
+          const isValidFieldValue = validationFieldList.reduce((result: boolean, validationField: ValidationField) => {
+            const isValid = validationField.method(value[field], validationField.constraints);
+            return result && isValid;
+          }, true);
+
+          isValidValues = isValidValues && isValidFieldValue;
+        }
+
+        if (childFormFields && childFormFields.length) {
+          isValidValues = isValidValues && this.checkValuesValidity(childFormFields, value[field], field);
+        }
+      }
+    });
+    return isValidValues;
   }
 }

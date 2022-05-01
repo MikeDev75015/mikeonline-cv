@@ -1,6 +1,26 @@
 import { IMultiPart } from '../../../core/interfaces/models/commons/contact.interface';
 import { DayJsService } from '../../../core/services/dayjs/dayjs.service';
+import { UtilsService } from '../../../shared';
+import { DropdownOption } from '../components/fragments/dropdown-wrapper/interfaces/dropdown-option.interface';
 import { DataConverter } from '../components/fragments/table-wrapper/interfaces/data-converter.interface';
+
+export const autoCompleteByPropertyAdapterFactory = (property: string) => {
+  return (data: any[]) => {
+    const suggestionList: DropdownOption[] = [];
+    data.forEach((each: any) => {
+      if (!each[property]) {
+        return;
+      }
+      const eachValue = each[property].toLowerCase();
+      const foundInList = suggestionList.find((suggest) => suggest.value === eachValue);
+      if (!foundInList) {
+        suggestionList.push({ label: each[property], value: eachValue });
+      }
+    });
+
+    return UtilsService.sortObjectList(suggestionList, 'asc', 'label');
+  };
+};
 
 export const DEFAULT_FORM_FIELDS_ADAPTERS: DataConverter = {
   multiPartsAdapter: (data: IMultiPart) => {

@@ -5,4 +5,5 @@ export type InputWrapperType = 'text'
   | 'dropdown'
   | 'multiselect'
   | 'checkbox'
+  | 'autocomplete'
   | 'form';

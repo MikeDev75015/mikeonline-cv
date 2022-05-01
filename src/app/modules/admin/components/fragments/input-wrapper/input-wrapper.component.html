@@ -5,7 +5,7 @@
 
   <ng-container *ngIf="inputType === 'text'">
     <app-input-text
-      (valueChange)="onValueChange($event)" [(value)]="value" [class]="inlineClass" data-cy="input-text-wrapper"
+      (valueChange)="onValueChange($event)" [(value)]="inputValue" [class]="inlineClass" data-cy="input-text-wrapper"
       [disabled]="disabled" [name]="name"
       [ngStyle]="{width: inputWidth, height: inputHeight}" [placeholder]="placeholder"
     ></app-input-text>
@@ -13,7 +13,8 @@
 
   <ng-container *ngIf="inputType === 'password'">
     <app-input-password
-      (valueChange)="onValueChange($event)" [(value)]="value" [class]="inlineClass" data-cy="input-password-wrapper"
+      (valueChange)="onValueChange($event)" [(value)]="inputValue" [class]="inlineClass"
+      data-cy="input-password-wrapper"
       [disabled]="disabled" [name]="name"
       [ngStyle]="{width: inputWidth, height: inputHeight}" [placeholder]="placeholder"
     ></app-input-password>
@@ -21,7 +22,7 @@
 
   <ng-container *ngIf="inputType === 'number'">
     <app-input-number
-      (valueChange)="onValueChange($event)" [(value)]="value" [class]="inlineClass" data-cy="input-number-wrapper"
+      (valueChange)="onValueChange($event)" [(value)]="inputValue" [class]="inlineClass" data-cy="input-number-wrapper"
       [disabled]="disabled" [max]="numberOptions.max"
       [min]="numberOptions.min" [name]="name" [ngStyle]="{width: inputWidth, height: inputHeight}"
       [placeholder]="placeholder" [step]="numberOptions.step"
@@ -30,7 +31,8 @@
 
   <ng-container *ngIf="inputType === 'textarea'">
     <app-input-textarea
-      (valueChange)="onValueChange($event)" [(value)]="value" [class]="inlineClass" data-cy="input-textarea-wrapper"
+      (valueChange)="onValueChange($event)" [(value)]="inputValue" [class]="inlineClass"
+      data-cy="input-textarea-wrapper"
       [disabled]="disabled" [name]="name" [ngStyle]="{width: inputWidth, height: 'auto'}"
       [placeholder]="placeholder" [rows]="textareaOptions.rows"
     ></app-input-textarea>
@@ -38,7 +40,8 @@
 
   <ng-container *ngIf="inputType === 'checkbox'">
     <app-input-checkbox
-      (valueChange)="onValueChange($event)" [(value)]="value" [class]="inlineClass" data-cy="input-checkbox-wrapper"
+      (valueChange)="onValueChange($event)" [(value)]="inputValue" [class]="inlineClass"
+      data-cy="input-checkbox-wrapper"
       [disabled]="disabled" [labelPlacement]="checkboxOptions.labelPlacement"
       [label]="checkboxOptions.label"
       [name]="name" [ngStyle]="{width: inputWidth, height: 'auto'}"

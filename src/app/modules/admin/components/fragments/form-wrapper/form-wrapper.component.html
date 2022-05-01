@@ -3,44 +3,43 @@
   <div
     *ngFor="let element of formFields" [ngClass]="{
       fbc: !element.childFormFields || !element.childFormFields.length,
-      'form-wrapper-field': !element.childFormFields || !element.childFormFields.length,
       fss: element.childFormFields && element.childFormFields.length,
       column: element.childFormFields && element.childFormFields.length,
+      'form-wrapper-field': !element.childFormFields || !element.childFormFields.length,
       'form-wrapper-section': element.childFormFields && element.childFormFields.length,
       'list-section': element.isList
-    }"
-    class="w100"
+    }" class="w100 field-container" data-cy="field-container"
   >
     <label
-      *ngIf="element.inputLabel" data-cy="field-label"
-      [ngClass]="{
+      *ngIf="element.inputLabel" [ngClass]="{
         w30: !element.childFormFields || !element.childFormFields.length,
         w100: element.childFormFields && element.childFormFields.length,
-      'form-wrapper-section-title': element.childFormFields && element.childFormFields.length
+        'form-wrapper-section-title': element.childFormFields && element.childFormFields.length
       }"
+      class="fss"
     >
       {{ element.inputLabel }}
       <span *ngIf="!element.childFormFields || !element.childFormFields.length">&nbsp;:</span>
+      <span
+        *ngIf="element.mandatoryField" class="mandatory-field-indicator" pTooltip="Champ requis"
+      >&nbsp;*</span>
     </label>
 
     <ng-container
-      *ngIf="element.inputType !== 'form' && element.inputType !== 'dropdown' && element.inputType !== 'multiselect'"
+      *ngIf="element.inputType !== 'form' && element.inputType !== 'dropdown' && element.inputType !== 'multiselect' && element.inputType !== 'autocomplete'"
     >
       <app-input-wrapper
-        (valueChange)="onValueChange(element.field, $event)" [(value)]="formValues[element.field]"
-        data-cy="input-wrapper"
-        [checkboxOptions]="element.inputCheckboxOptions
-        ? {label: element.inputCheckboxOptions.label, labelPlacement: element.inputCheckboxOptions.labelPlacement}
-        : {}"
+        (valueChange)="onValueChange(element.field, $event)" [(value)]="formValues[element.field]" [checkboxOptions]="element.inputCheckboxOptions
+          ? {label: element.inputCheckboxOptions.label, labelPlacement: element.inputCheckboxOptions.labelPlacement}
+          : {}"
         [inlineClass]="'form-wrapper-' + element.inputType + '-input'" [inputType]="element.inputType"
-        [name]="element.inputName || ''"
+        [name]="element.inputName || ''" [placeholder]="element.inputPlaceholder || ''"
+        [title]="element.inputTitle || ''" data-cy="input-wrapper"
+        inputWidth="100%"
         [numberOptions]="element.inputNumberOptions
           ? {min: element.inputNumberOptions.min, max: element.inputNumberOptions.max, step: element.inputNumberOptions.step}
           : {}"
-        [placeholder]="element.inputPlaceholder || ''"
         [textareaOptions]="element.inputTextareaOptions ? {rows: element.inputTextareaOptions.rows} : {}"
-        [title]="element.inputTitle || ''"
-        inputWidth="100%"
       ></app-input-wrapper>
     </ng-container>
 
@@ -67,8 +66,18 @@
       ></app-multi-select-wrapper>
     </ng-container>
 
-    <ng-container *ngIf="element.inputType === 'form' && element.childFormFields && element.childFormFields.length">
+    <ng-container *ngIf="element.inputType === 'autocomplete' && element.autoCompleteWrapperOptions">
+      <app-auto-complete-wrapper
+        (valueChange)="onValueChange(element.field, $event)" [(value)]="formValues[element.field]"
+        [name]="element.inputName || ''" [placeholder]="element.inputPlaceholder || ''"
+        [scrollHeight]="element.autoCompleteWrapperOptions.scrollHeight || ''"
+        [suggestions]="element.autoCompleteWrapperOptions.list || []"
+        [title]="element.inputTitle || ''" class="w100 app-auto-complete-wrapper"
+        data-cy="auto-complete-wrapper" inlineClass="form-wrapper-auto-complete"
+      ></app-auto-complete-wrapper>
+    </ng-container>
 
+    <ng-container *ngIf="element.inputType === 'form' && element.childFormFields && element.childFormFields.length">
       <!-- multiple -->
       <div *ngIf="element.isList" class="fss column w100" data-cy="multiple-child-forms">
         <ng-container *ngFor="let subElement of formValues[element.field]; let i = index">
@@ -80,7 +89,7 @@
             ></app-form-wrapper>
 
             <button
-              (click)="onRemoveElement(i, formValues[element.field])" class="p-button-text form-wrapper-section-button"
+              (click)="onRemoveElement(i, element.field)" class="p-button-text form-wrapper-section-button"
               icon="pi pi-minus" pButton
               pRipple
               pTooltip="Supprimer cet élément" tooltipPosition="left"
@@ -90,7 +99,7 @@
 
         <div class="fec w100 form-wrapper-section-buttons-container">
           <button
-            (click)="onAddElement(element.field, formValues[element.field])"
+            (click)="onAddElement(element.field)"
             class="p-button-text form-wrapper-section-button" icon="pi pi-plus" pButton
             pRipple
             pTooltip="Ajouter un élément" tooltipPosition="left"
@@ -104,7 +113,6 @@
         [formFields]="element.childFormFields" [formValues]="formValues[element.field]"
         [isChildForm]="true" class="w100 child-form" data-cy="single-child-form"
       ></app-form-wrapper>
-
     </ng-container>
 
   </div>
@@ -115,6 +123,7 @@
     ></button>
     <button
       (click)="onSaveData()" class="p-button-text" icon="pi pi-check" label="Enregistrer" pButton pRipple
+      [disabled]="!isValidForm"
     ></button>
   </div>
 </form>

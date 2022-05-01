@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormWrapperService } from '../table-wrapper/services/form/form-wrapper.service';
 import { FormField } from './interfaces/form-field.interface';
+import { FormWrapperService } from './services/form-wrapper.service';
 
 @Component({
   selector: 'app-form-wrapper',
@@ -16,6 +16,10 @@ export class FormWrapperComponent implements OnInit {
   @Input() formValues: any = {};
 
   @Output() formValuesChange = new EventEmitter<any>();
+
+  @Input() isValidForm = false;
+
+  @Output() isValidFormChange = new EventEmitter<boolean>();
 
   @Output() closeForm = new EventEmitter<any>();
 
@@ -50,10 +54,15 @@ export class FormWrapperComponent implements OnInit {
   }
 
   public onSaveData(): void {
+    this.checkFormValidity();
+    if (!this.isValidForm) {
+      return;
+    }
+
     this.closeForm.emit(this.formValues);
   }
 
-  public onAddElement(field: string, actualValue: any[]): void {
+  public onAddElement(field: string): void {
     if (!this.formFields || !field) {
       throw new Error('Invalid state, cannot find form element!');
     }
@@ -61,16 +70,18 @@ export class FormWrapperComponent implements OnInit {
     const formElement = this.formWrapperService.findFormElement(field, this.formFields);
     const newElement = this.formWrapperService.getNewElement(formElement.childFormFields as FormField[]);
 
-    actualValue.push(newElement);
+    this.formValues[field].push(newElement);
+    this.checkFormValidity();
   }
 
-  public onRemoveElement(index: number, actualValue: any[]): void {
-    actualValue.splice(index, 1);
+  public onRemoveElement(index: number, field: string): void {
+    this.formValues[field].splice(index, 1);
+    this.checkFormValidity();
   }
 
   public onValueChange(field: string, value: any): void {
     this.formValues[field] = value;
-    this.formValuesChange.emit(this.formValues);
+    this.checkFormValidity();
   }
 
   public onSubFormValueChange(field: string, value: any, index?: number): void {
@@ -78,6 +89,16 @@ export class FormWrapperComponent implements OnInit {
       this.formValues[field][index] = value;
     } else {
       this.formValues[field] = value;
+    }
+    this.checkFormValidity(false);
+  }
+
+  private checkFormValidity(emit = true): void {
+    // @ts-ignore
+    this.isValidForm = this.formWrapperService.isValidFormValues(this.formFields, this.formValues);
+    this.isValidFormChange.emit(this.isValidForm);
+    if (this.isValidForm && emit) {
+      this.formValuesChange.emit(this.formValues);
     }
   }
 }

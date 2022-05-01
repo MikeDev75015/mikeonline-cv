@@ -1,0 +1,7 @@
+<p-autoComplete
+  (completeMethod)="onComplete($event)" (ngModelChange)="onValueChange($event)" [(ngModel)]="inputValue"
+  [appendTo]="appendTo"
+  [disabled]="disabled || !suggestions || !suggestions.length" [dropdown]="dropdown" [ngStyle]="inlineStyle"
+  [scrollHeight]="scrollHeight"
+  [styleClass]="inlineClass || ''" [suggestions]="results" field="label"
+></p-autoComplete>

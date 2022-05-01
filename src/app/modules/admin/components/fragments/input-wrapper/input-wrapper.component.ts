@@ -30,15 +30,33 @@ export class InputWrapperComponent implements OnInit {
 
   @Input() checkboxOptions: InputWrapperCheckboxOptions = {};
 
+  @Input() adapter: ((data: any) => any) | undefined;
+
+  @Input() generator: ((data: any) => any) | undefined;
+
   @Input() value: any = '';
 
   @Output() valueChange = new EventEmitter<any>();
+
+  public inputValue: any = '';
 
   ngOnInit(): void {
     if (!this.inputType) {
       this.inputType = 'text';
     }
 
+    this.initializeStyles();
+    this.initializeOptions();
+
+    this.inputValue = this.adapter ? this.adapter(this.value) : this.value;
+  }
+
+  public onValueChange(value: any): void {
+    this.value = this.generator ? this.generator(value) : value;
+    this.valueChange.emit(this.value);
+  }
+
+  private initializeStyles(): void {
     if (!this.inputWidth) {
       this.inputWidth = DEFAULT_INPUT_WIDTH;
     }
@@ -50,7 +68,9 @@ export class InputWrapperComponent implements OnInit {
     if (!this.inlineClass) {
       this.inlineClass = '';
     }
+  }
 
+  private initializeOptions(): void {
     if (this.inputType === 'number' && !this.numberOptions) {
       this.numberOptions = {};
     }
@@ -62,10 +82,5 @@ export class InputWrapperComponent implements OnInit {
     if (this.inputType === 'checkbox' && !this.checkboxOptions) {
       this.checkboxOptions = {};
     }
-  }
-
-  public onValueChange(value: any): void {
-    this.value = value;
-    this.valueChange.emit(this.value);
   }
 }

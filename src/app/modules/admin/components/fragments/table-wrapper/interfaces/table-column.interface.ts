@@ -1,12 +1,8 @@
 import { InputWrapperType } from '../../../../interfaces/input-wrapper.type';
-import { DropdownWrapperOptions } from '../../dropdown-wrapper/interfaces/dropdown-wrapper-options.interface';
 import { FormField } from '../../form-wrapper/interfaces/form-field.interface';
-import { InputWrapperCheckboxOptions } from '../../input-wrapper/interfaces/checkbox-options.interface';
-import { InputWrapperNumberOptions } from '../../input-wrapper/interfaces/number-options.interface';
-import { InputWrapperTextareaOptions } from '../../input-wrapper/interfaces/textarea-options.interface';
-import { PickListWrapperOptions } from '../../pick-list-wrapper/interfaces/pick-list-wrapper-options.interface';
+import { FormInputOptions } from '../../form-wrapper/interfaces/form-input-options.interface';
 
-export interface TableColumn {
+export interface TableColumn extends FormInputOptions {
   field: string;
 
   header: string;
@@ -28,16 +24,6 @@ export interface TableColumn {
   editable?: boolean;
 
   inputType?: InputWrapperType;
-
-  inputNumberOptions?: InputWrapperNumberOptions;
-
-  inputTextareaOptions?: InputWrapperTextareaOptions;
-
-  inputCheckboxOptions?: InputWrapperCheckboxOptions;
-
-  dropdownWrapperOptions?: DropdownWrapperOptions;
-
-  pickListWrapperOptions?: PickListWrapperOptions;
 
   overlayPanelTitle?: string;
 

@@ -1,5 +1,5 @@
 <!--suppress ALL -->
-<p-toast key="tableToast" position="center"></p-toast>
+<p-toast [position]="toastPosition" key="tableToast"></p-toast>
 
 <div class="card">
   <p-toolbar styleClass="mb-4">
@@ -16,12 +16,12 @@
 
     <ng-template pTemplate="right">
       <button
-        (click)="onExportSelectedData(wrappedTable)" *ngIf="hasExportableData" class="p-button-help" icon="pi pi-upload"
+        (click)="onExportSelectedData()" *ngIf="hasExportableData" class="p-button-help" icon="pi pi-upload"
         label="Exporter CSV" pButton
         pRipple
       ></button>
       <button
-        (click)="resetTableChanges()" *ngIf="crudEndPoint && changedData && changedData.length > 0"
+        (click)="onResetTableChanges()" *ngIf="crudEndPoint && changedData && changedData.length > 0"
         class="p-button-danger" icon="pi pi-times" label="Réinitialiser" style="margin-left: 10px;"
         pButton pRipple
       ></button>
@@ -34,7 +34,7 @@
   </p-toolbar>
 
   <p-table
-    #wrappedTable (onRowReorder)="onRowsReorder($event, wrappedTable)" [(selection)]="selectedTableData"
+    #wrappedTable (onRowReorder)="onRowsReorder($event)" [(selection)]="selectedTableData"
     [columns]="columnList"
     [globalFilterFields]="globalFilterFields" [loading]="isLoading" [resizableColumns]="false" [rowHover]="true"
     [scrollHeight]="scrollHeight" [scrollable]="true" [sortField]="sortField" [sortMode]="sortMode"
@@ -126,7 +126,7 @@
           class="p-button-rounded p-button-success mr-2" icon="pi pi-pencil" pButton pRipple
         ></button>
         <button
-          (click)="onDuplicateRow(rowData, rowIndex, wrappedTable)" class="p-button-rounded p-button-info mr-2"
+          (click)="onDuplicateRow(rowData, rowIndex)" class="p-button-rounded p-button-info mr-2"
           icon="pi pi-copy" pButton
           pRipple
         ></button>
@@ -168,8 +168,9 @@
         <p-cellEditor class="w100">
           <ng-template pTemplate="input">
             <app-input-wrapper
-              (valueChange)="onCellValueChange(rowData.id, col, $event)" *ngIf="col.inputType !== 'dropdown'"
-              [(value)]="rowData[col.field]"
+              (valueChange)="onCellValueChange(rowData.id, col, $event)"
+              *ngIf="col.inputType !== 'dropdown' && col.inputType !== 'autocomplete'"
+              [(value)]="rowData[col.field]" [adapter]="col.adapter" [generator]="col.generator"
               [checkboxOptions]="col.inputCheckboxOptions
                 ? {label: col.inputCheckboxOptions.label, labelPlacement: col.inputCheckboxOptions.labelPlacement}
                 : {}" [inputType]="col.inputType"
@@ -177,15 +178,24 @@
               min: col.inputNumberOptions.min, max: col.inputNumberOptions.max, step: col.inputNumberOptions.step
               } : {}"
               [textareaOptions]="col.inputTextareaOptions ? {rows: col.inputTextareaOptions.rows} : {}"
-              inputWidth="100%"
+              [placeholder]="col.inputPlaceholder || ''" inputWidth="100%"
             ></app-input-wrapper>
 
             <app-dropdown-wrapper
               *ngIf="col.inputType === 'dropdown' && col.dropdownWrapperOptions"
-              (selectedValueChange)="onCellValueChange(rowData.id, col, $event)"
-              [(selectedValue)]="rowData[col.field]" [list]="col.dropdownWrapperOptions.list"
+              (selectedValueChange)="onCellValueChange(rowData.id, col, $event)" [(selectedValue)]="rowData[col.field]"
+              [list]="col.dropdownWrapperOptions.list" [placeholder]="col.inputPlaceholder || ''"
               [scrollHeight]="col.dropdownWrapperOptions.scrollHeight" inlineClass="table-editable-cell-dropdown"
             ></app-dropdown-wrapper>
+
+            <app-auto-complete-wrapper
+              (valueChange)="onCellValueChange(rowData.id, col, $event)"
+              *ngIf="col.inputType === 'autocomplete' && col.autoCompleteWrapperOptions" [(value)]="rowData[col.field]"
+              [placeholder]="col.inputPlaceholder || ''"
+              [scrollHeight]="col.autoCompleteWrapperOptions.scrollHeight || ''"
+              [suggestions]="col.autoCompleteWrapperOptions.list"
+              inlineClass="table-editable-cell-auto-complete"
+            ></app-auto-complete-wrapper>
           </ng-template>
           <ng-template pTemplate="output">
             <span class="w100" [innerHTML]="rowData[col.field] | formatValueDisplay: col.field"></span>
@@ -203,21 +213,22 @@
           ></ng-container>
           <app-pick-list-wrapper
             (closeOverlayPanel)="onClosePickListOverlayPanel(opPickList, rowData, col, $event)"
-            [dragdrop]="col.pickListWrapperOptions.dragdrop"
-            [filterBy]="col.pickListWrapperOptions.filterBy" [inlineClass]="col.pickListWrapperOptions.inlineClass"
+            [dragdrop]="col.pickListWrapperOptions.dragdrop" [filterBy]="col.pickListWrapperOptions.filterBy"
+            [inlineClass]="col.pickListWrapperOptions.inlineClass"
             [inlineStyle]="col.pickListWrapperOptions.inlineStyle"
+            [selectionLimit]="col.pickListWrapperOptions.selectionLimit"
+            [showTargetControls]="col.pickListWrapperOptions.showSelectedControls"
             [propertyToDisplay]="col.pickListWrapperOptions.propertyToDisplay"
-            [showSourceControls]="col.pickListWrapperOptions.showSourceControls"
-            [showSourceFilter]="col.pickListWrapperOptions.showSourceFilter"
-            [showTargetControls]="col.pickListWrapperOptions.showTargetControls"
-            [showTargetFilter]="col.pickListWrapperOptions.showTargetFilter"
+            [showTargetFilter]="col.pickListWrapperOptions.showSelectedFilter"
             [sourceFilterPlaceholder]="col.pickListWrapperOptions.sourceFilterPlaceholder"
             [sourceHeader]="col.pickListWrapperOptions.sourceHeader"
             [sourceList]="col.pickListWrapperOptions.sourceList"
+            [showSourceControls]="col.pickListWrapperOptions.showSourceControls"
+            [showSourceFilter]="col.pickListWrapperOptions.showSourceFilter"
             [stripedRows]="col.pickListWrapperOptions.stripedRows"
-            [targetFilterPlaceholder]="col.pickListWrapperOptions.targetFilterPlaceholder"
-            [targetHeader]="col.pickListWrapperOptions.targetHeader"
-            [selectionLimit]="col.pickListWrapperOptions.selectionLimit" [targetList]="rowData[col.field]"
+            [targetFilterPlaceholder]="col.pickListWrapperOptions.selectedFilterPlaceholder"
+            [targetHeader]="col.pickListWrapperOptions.selectedHeader"
+            [targetList]="rowData[col.field]"
           ></app-pick-list-wrapper>
         </ng-template>
       </p-overlayPanel>
@@ -262,19 +273,21 @@
 </div>
 
 <p-dialog *ngIf="crudEndPoint" [(visible)]="showFormDialog"
-          [header]="formValues && formValues.id ? 'Editer l\'élément' : 'Ajouter un élément'" [modal]="true"
+          [header]="formValues && formValues.id ? editElementLabel : addElementLabel" [modal]="true"
           [style]="{width: '80%', 'min-width': '800px'}"
           styleClass="p-fluid">
   <ng-template pTemplate="content">
-    <app-form-wrapper (formValuesChange)="onFormValueChange($event)" [(formValues)]="formValues"
-                      [formFields]="formFields"></app-form-wrapper>
+    <app-form-wrapper
+      (formValuesChange)="onFormValueChange($event)" [(formValues)]="formValues"
+      [(isValidForm)]="isValidForm" [formFields]="formFields"
+    ></app-form-wrapper>
   </ng-template>
 
   <ng-template pTemplate="footer">
     <button (click)="onDialogCloseAction()" class="p-button-text" icon="pi pi-times" label="Annuler" pButton
             pRipple></button>
     <button (click)="onDialogSaveAction()" class="p-button-text" icon="pi pi-check" label="Enregistrer" pButton
-            pRipple></button>
+            [disabled]="!isValidForm" pRipple></button>
   </ng-template>
 </p-dialog>
 

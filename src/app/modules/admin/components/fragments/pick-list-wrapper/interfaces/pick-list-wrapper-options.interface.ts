@@ -1,29 +1,15 @@
 export interface PickListWrapperOptions {
-  sourceListEndPoint?: string;
+  sourceEndPoint?: string;
+
+  sourceAdapter?: (data: any[]) => any[];
 
   sourceList?: any[];
 
-  sourceAdapter?: (data: any) => any;
+  selectedList?: any[];
 
-  targetList?: any[];
+  selectedAdapter?: (data: any[]) => any[];
 
-  targetAdapter?: (data: any) => any;
-
-  sourceHeader?: string;
-
-  targetHeader?: string;
-
-  showSourceFilter?: boolean;
-
-  showTargetFilter?: boolean;
-
-  showSourceControls?: boolean;
-
-  showTargetControls?: boolean;
-
-  sourceFilterPlaceholder?: string;
-
-  targetFilterPlaceholder?: string;
+  selectionLimit?: number;
 
   filterBy?: string;
 
@@ -31,11 +17,28 @@ export interface PickListWrapperOptions {
 
   dragdrop?: boolean;
 
+  // styles options
   stripedRows?: boolean;
 
   inlineClass?: string;
 
   inlineStyle?: { [key: string]: any };
 
-  selectionLimit?: number;
+  // source options
+  sourceHeader?: string;
+
+  showSourceFilter?: boolean;
+
+  showSourceControls?: boolean;
+
+  sourceFilterPlaceholder?: string;
+
+  // selected options
+  selectedHeader?: string;
+
+  showSelectedFilter?: boolean;
+
+  showSelectedControls?: boolean;
+
+  selectedFilterPlaceholder?: string;
 }

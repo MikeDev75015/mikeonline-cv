@@ -1,19 +1,17 @@
 import { DropdownOption } from '../../dropdown-wrapper/interfaces/dropdown-option.interface';
 
 export interface MultiSelectWrapperOptions {
-  sourceListEndPoint?: string;
-
-  sourceList?: any[];
+  sourceEndPoint?: string;
 
   sourceAdapter: (data: any[]) => DropdownOption[];
+
+  sourceList?: any[];
 
   list?: DropdownOption[];
 
   selectedList?: string[];
 
   selectedAdapter?: (data: any[]) => string[];
-
-  selectedGenerator?: (data: string[]) => any[];
 
   scrollHeight?: string;
 
