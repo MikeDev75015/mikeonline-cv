@@ -2,7 +2,7 @@ import {interceptApiV1Request, interceptLoginRequest} from "../../../common";
 
 describe('Sign-in page', () => {
   beforeEach(() => {
-    cy.visit('/admin');
+    cy.visit('/admin').wait(500);
   });
 
   it('should be on the sign-in page', () => {
@@ -31,23 +31,22 @@ describe('Sign-in page', () => {
   });
 
 
-  describe('click on the submit button', () => {
-    it('should display an error if the password input is empty', () => {
+  describe('Submit button', () => {
+    it('should be disabled if the password input is empty', () => {
       cy.get('[data-cy="input-text"]').type('toto');
-      cy.get('[data-cy="submit-button"]').click();
-      cy.get('[data-cy="primeng-toast"]').should('be.visible');
+      cy.get('[data-cy="submit-button"]').should('be.disabled');
     });
 
-    it('should display an error if the username input is empty', () => {
+    it('should be disabled if the username input is empty', () => {
       cy.get('[data-cy="input-password"]').type('1234');
-      cy.get('[data-cy="submit-button"]').click();
-      cy.get('[data-cy="primeng-toast"]').should('be.visible');
+      cy.get('[data-cy="submit-button"]').should('be.disabled');
     });
 
-    it('should display an error if the login request fails', () => {
+    it('should not be disabled and display an error if the login request fails', () => {
       interceptLoginRequest();
       cy.get('[data-cy="input-text"]').type('toto');
       cy.get('[data-cy="input-password"]').type('1234');
+      cy.get('[data-cy="submit-button"]').should('not.be.disabled');
       cy.get('[data-cy="submit-button"]').click();
 
       cy.get('[data-cy="primeng-toast"]').should('be.visible');
@@ -61,6 +60,7 @@ describe('Sign-in page', () => {
       interceptApiV1Request();
       cy.get('[data-cy="input-text"]').type('toto');
       cy.get('[data-cy="input-password"]').type('1234');
+      cy.get('[data-cy="submit-button"]').should('not.be.disabled');
       cy.get('[data-cy="submit-button"]').click();
 
       cy.url().should((url) => {

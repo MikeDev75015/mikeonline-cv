@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MockComponent } from 'ng2-mock-component';
+import { tableWrapperComponentMock } from '../../../../../../../__mocks__/components/table-wrapper-component.mock';
 
 import { AdminSkillsComponent } from './admin-skills.component';
 
@@ -9,11 +10,10 @@ describe('AdminSkillsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [AdminSkillsComponent,
-        MockComponent({
-          selector: 'app-table-wrapper',
-          inputs: ['columnList', 'crudEndPoint', 'exportCsvFileName', 'formFields', 'dataGeneratorList', 'rowsReorderable'],
-        })],
+      declarations: [
+        AdminSkillsComponent,
+        MockComponent(tableWrapperComponentMock),
+      ],
     })
       .compileComponents();
   });

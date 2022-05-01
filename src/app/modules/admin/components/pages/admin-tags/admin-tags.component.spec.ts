@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MockComponent } from 'ng2-mock-component';
+import { tableWrapperComponentMock } from '../../../../../../../__mocks__/components/table-wrapper-component.mock';
 
 import { AdminTagsComponent } from './admin-tags.component';
 
@@ -11,10 +12,7 @@ describe('AdminTagsComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         AdminTagsComponent,
-        MockComponent({
-          selector: 'app-table-wrapper',
-          inputs: ['columnList', 'crudEndPoint', 'exportCsvFileName', 'formFields', 'dataGenerator', 'rowsReorderable'],
-        }),
+        MockComponent(tableWrapperComponentMock),
       ],
     })
     .compileComponents();
