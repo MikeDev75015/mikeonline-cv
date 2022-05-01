@@ -4,12 +4,11 @@ import { Subscription } from 'rxjs';
 import { CvInfosV1 } from '../../../../../core/interfaces/models/v1/cv-infos.interface';
 import { selectAppCvInfosLoaded } from '../../../../../core/ngrx/selectors/application.selectors';
 import { selectCvInfos } from '../../../../../core/ngrx/selectors/cv-infos.selectors';
-import { DataService } from '../../../../../shared';
+import { DataService, UtilsService } from '../../../../../shared';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   public headerImage = 'assets/img/mikeonline1024.jpg';
@@ -31,18 +30,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private readonly dataService: DataService,
     private readonly store: Store,
   ) {
-  }
-
-  private static autoChargeImg(): string {
-    if (window.innerWidth > 768) {
-      return 'assets/img/mikeonline1024.jpg';
-    } else if (window.innerWidth > 480) {
-      return 'assets/img/mikeonline768.jpg';
-    } else if (window.innerWidth > 320) {
-      return 'assets/img/mikeonline480.jpg';
-    } else {
-      return 'assets/img/mikeonline320.jpg';
-    }
   }
 
   ngOnInit(): void {
@@ -71,7 +58,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   private adaptHeaderImage(): void {
     this.mobile = window.innerWidth <= 840;
-    this.headerImage = HeaderComponent.autoChargeImg();
+    this.headerImage = UtilsService.autoChargeHeaderImage();
   }
 
   private initializeComponent(cvInfos: CvInfosV1): void {

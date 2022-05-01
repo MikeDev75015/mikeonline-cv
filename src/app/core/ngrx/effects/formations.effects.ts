@@ -3,10 +3,12 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { mergeMap, tap } from 'rxjs/operators';
-import { ApiService, TagsService } from '../../../shared';
+import { catchError, of, repeat } from 'rxjs';
+import { map, mergeMap } from 'rxjs/operators';
+import { ApiService } from '../../../shared';
 import { ApiV1Path } from '../../interfaces/api/api-v1-path.enum';
 import { FormationV1 } from '../../interfaces/models/v1/formation.interface';
+import { appLoadingFailure } from '../actions/application.actions';
 import { FormationsActions } from '../ngrx-index';
 
 /**
@@ -20,38 +22,27 @@ export class FormationsEffects {
   fetchFormations$ = createEffect(() => this.actions$.pipe(
     ofType(FormationsActions.fetchFormations),
     mergeMap(() => this.apiV0Service.getData<FormationV1[]>(ApiV1Path.FORMATIONS)),
-    tap((formationList) => {
+    map((formationList) => {
       if (!formationList || !formationList.length) {
-        this.store.dispatch(FormationsActions.fetchFormationsFailure());
-        return;
+        return appLoadingFailure();
       }
 
-      this.store.dispatch(FormationsActions.fetchFormationsSuccess({ formationList }));
+      return FormationsActions.fetchFormationsSuccess({ formationList });
     }),
-  ), { dispatch: false });
-
-  /**
-   * Effect for the fetchFormationsFailure action
-   */
-  fetchFormationsFailure$ = createEffect(() => this.actions$.pipe(
-    ofType(FormationsActions.fetchFormationsFailure),
-    tap(() => {
-      console.log('fetch Formations Failure');
-    }),
-  ), { dispatch: false });
+    catchError(() => of(appLoadingFailure())),
+    repeat(),
+  ));
 
   /**
    * @ignore
    * @param actions$
    * @param store
    * @param apiV0Service
-   * @param tagsService
    */
   constructor(
     private readonly actions$: Actions,
     private readonly store: Store,
     private readonly apiV0Service: ApiService,
-    private readonly tagsService: TagsService,
   ) {
   }
 }

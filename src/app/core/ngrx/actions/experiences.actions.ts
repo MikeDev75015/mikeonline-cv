@@ -7,11 +7,6 @@ import { ExperienceV1 } from '../../interfaces/models/v1/experience.interface';
 export const fetchExperiences = createAction('[Experiences] Fetch Experiences');
 
 /**
- * Fetch Experiences Failure
- */
-export const fetchExperiencesFailure = createAction('[Experiences] Fetch Experiences Failure');
-
-/**
  * Fetch Experiences Success
  */
 export const fetchExperiencesSuccess = createAction(

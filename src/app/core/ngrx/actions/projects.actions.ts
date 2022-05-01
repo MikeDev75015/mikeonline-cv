@@ -7,11 +7,6 @@ import { ProjectV1 } from '../../interfaces/models/v1/project.interface';
 export const fetchProjects = createAction('[Projects] Fetch Projects');
 
 /**
- * Fetch Projects Failure
- */
-export const fetchProjectsFailure = createAction('[Projects] Fetch Projects Failure');
-
-/**
  * Fetch Projects Success
  */
 export const fetchProjectsSuccess = createAction(

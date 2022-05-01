@@ -3,10 +3,12 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
+import { catchError, of, repeat } from 'rxjs';
 import { map, mergeMap, tap } from 'rxjs/operators';
 import { ApiService } from '../../../shared';
 import { ApiV1Path } from '../../interfaces/api/api-v1-path.enum';
 import { TagV1 } from '../../interfaces/models/v1/tag.interface';
+import { appLoadingFailure } from '../actions/application.actions';
 import {
   ExperiencesActions,
   FormationsActions,
@@ -29,11 +31,13 @@ export class TagsEffects {
     mergeMap(() => this.apiV0Service.getData<TagV1[]>(ApiV1Path.TAGS)),
     map((tagList) => {
       if (!tagList || !tagList.length) {
-        return TagsActions.fetchTagsFailure();
+        return appLoadingFailure();
       }
 
       return TagsActions.fetchTagsSuccess({ tagList });
     }),
+    catchError(() => of(appLoadingFailure())),
+    repeat(),
   ));
 
   /**
@@ -47,16 +51,6 @@ export class TagsEffects {
       this.store.dispatch(FormationsActions.fetchFormations());
       this.store.dispatch(ProjectsActions.fetchProjects());
       this.store.dispatch(InterestsActions.fetchInterests());
-    }),
-  ), { dispatch: false });
-
-  /**
-   * Effect for the fetchTagsFailure action
-   */
-  fetchTagsFailure$ = createEffect(() => this.actions$.pipe(
-    ofType(TagsActions.fetchTagsFailure),
-    tap(() => {
-      console.log('fetch Tags Failure');
     }),
   ), { dispatch: false });
 

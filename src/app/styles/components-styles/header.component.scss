@@ -6,7 +6,7 @@ h2 {
   top: 2px;
 }
 div.hgroup{
-  height: 100%;
+  height: auto;
   min-height: 140px;
   width: 100%;
   padding: 10px;
@@ -23,24 +23,20 @@ div.hgroup, h1, h2 {
   color: white;
 }
 
-#figAccueil{
+#figHome {
   position: relative;
   -webkit-filter: grayscale(100);
-  -moz-filter: grayscale(100);
-  -o-filter: grayscale(100);
   filter: grayscale(100);
   transition: all 3s
 }
 
-#figAccueil:hover{
+#figHome:hover {
   -webkit-filter: none;
-  -moz-filter: none;
   -ms-filter: none;
-  -o-filter: none;
   filter: none
 }
 
-#imgAccueil {
+#imgHome {
   width: 100%;
   height: auto;
 }

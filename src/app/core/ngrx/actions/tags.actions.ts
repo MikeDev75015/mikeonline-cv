@@ -7,11 +7,6 @@ import { TagV1 } from '../../interfaces/models/v1/tag.interface';
 export const fetchTags = createAction('[Tags] Fetch Tags');
 
 /**
- * Fetch Tags Failure
- */
-export const fetchTagsFailure = createAction('[Tags] Fetch Tags Failure');
-
-/**
  * Fetch Tags Success
  */
 export const fetchTagsSuccess = createAction(

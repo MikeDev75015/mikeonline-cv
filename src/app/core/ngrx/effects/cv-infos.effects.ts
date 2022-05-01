@@ -3,10 +3,12 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
+import { catchError, of, repeat } from 'rxjs';
 import { map, mergeMap, tap } from 'rxjs/operators';
 import { ApiService } from '../../../shared';
 import { ApiV1Path } from '../../interfaces/api/api-v1-path.enum';
 import { CvInfosV1 } from '../../interfaces/models/v1/cv-infos.interface';
+import { appLoadingFailure } from '../actions/application.actions';
 import { ApplicationActions, CvInfosActions, TagsActions } from '../ngrx-index';
 
 /**
@@ -19,27 +21,22 @@ export class CvInfosEffects {
     mergeMap(() => this.apiV0Service.getData<CvInfosV1[]>(ApiV1Path.CV_INFOS)),
     map(([cvInfos]) => {
       if (!cvInfos) {
-        return CvInfosActions.loadCvInfosFailure();
+        return appLoadingFailure();
       }
 
       return CvInfosActions.loadCvInfosSuccess({ cvInfos });
     }),
+    catchError(() => of(appLoadingFailure())),
+    repeat(),
   ));
 
   loadCvInfosSuccess$ = createEffect(() => this.actions$.pipe(
     ofType(CvInfosActions.loadCvInfosSuccess),
     tap(() => {
-      this.store.dispatch(TagsActions.fetchTags());
+      this.store.dispatch(ApplicationActions.cvInfosLoaded());
     }),
-    map(() => ApplicationActions.cvInfosLoaded()),
+    map(() => TagsActions.fetchTags()),
   ));
-
-  loadCvInfosFailure$ = createEffect(() => this.actions$.pipe(
-    ofType(CvInfosActions.loadCvInfosFailure),
-    tap(() => {
-      console.log('load Cv Infos Failure');
-    }),
-  ), { dispatch: false });
 
   /**
    * @ignore

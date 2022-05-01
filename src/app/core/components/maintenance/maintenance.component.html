@@ -1,3 +1,22 @@
-<div class="fcc column full-screen">
-  <h1>Une maintenance est en cours, merci de revenir dans un petit moment.</h1>
+<div class="fbc column full-screen">
+  <div class="fcc column w100">
+    <div class="hgroup">
+      <h1 [innerHTML]="title"></h1>
+      <h2>{{ subTitle }}</h2>
+    </div>
+    <figure class="fse w100" id="figHome">
+      <img [src]="headerImage" alt="MIKEONLINE" id="imgHome" role="img">
+    </figure>
+    <p [ngClass]="{'column': mobile}" class="fcc w100" style="margin-top: 30px;">
+      <span>Une maintenance est en cours,</span>
+      {{ !mobile ? '&nbsp;' : '' }}
+      <span>merci de revenir dans un petit moment.</span>
+    </p>
+  </div>
+
+  <p [ngClass]="{'column': mobile}" class="fcc" style="margin-bottom: 10px;">
+    <span>{{ credits.copyright }}</span>
+    {{ !mobile ? '&nbsp;' : '' }}
+    <span>{{ credits.owner }}</span>
+  </p>
 </div>

@@ -19,8 +19,8 @@ p, em, a, li, button {
   font-family: 'Roboto', sans-serif !important;
   font-size: 16px;
 }
-
 @import "app/styles/view-utils";
+@import "app/styles/components-styles/header.component";
 @import "app/styles/components";
 @import "app/styles/vertical-accordion";
 @import "app/styles/buttons";

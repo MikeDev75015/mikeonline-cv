@@ -26,6 +26,18 @@ export class UtilsService {
   ) {
   }
 
+  public static autoChargeHeaderImage(): string {
+    if (window.innerWidth > 768) {
+      return 'assets/img/mikeonline1024.jpg';
+    } else if (window.innerWidth > 480) {
+      return 'assets/img/mikeonline768.jpg';
+    } else if (window.innerWidth > 320) {
+      return 'assets/img/mikeonline480.jpg';
+    } else {
+      return 'assets/img/mikeonline320.jpg';
+    }
+  }
+
   /**
    * Sort the array by property in different modes
    * @param list
