@@ -47,7 +47,7 @@ export class FormationsComponent implements OnInit {
             defaultValue: [],
           });
 
-          this.formationList = TemplatesService.reorderItemList<FormationV1>(unsortedList);
+          this.formationList = TemplatesService.reorderItemListByEndDate<FormationV1>(unsortedList);
         }
       }),
       map((loaded) => !loaded),

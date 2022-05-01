@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { STORAGE_KEYS } from '../../../../core/constants/storage-keys.constant';
-import { loginUserSuccess } from '../../../../core/ngrx/actions/auth.actions';
+import { getUser } from '../../../../core/ngrx/actions/auth.actions';
 import { selectCurrentUser } from '../../../../core/ngrx/selectors/auth.selectors';
 import { StorageService } from '../../../../core/services/storage/storage.service';
 
@@ -27,10 +27,10 @@ export class AuthGuard implements CanActivate {
         if (!currentUser) {
           const accessToken = StorageService.getItem<string>('localStorage', STORAGE_KEYS.accessToken);
           if (accessToken) {
-            this.store.dispatch(loginUserSuccess({ accessToken }));
+            this.store.dispatch(getUser());
           } else {
             this.router.navigate(['/admin/sign-in']).finally(() => {
-              console.debug('AuthGuard supposed to have been redirected on the sign in page!');
+              console.debug('No currentUser or accessToken found, AuthGuard supposed to have been redirected on the sign in page!');
             });
           }
           return false;

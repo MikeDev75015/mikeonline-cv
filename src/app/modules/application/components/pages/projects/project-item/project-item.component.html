@@ -2,9 +2,9 @@
   <div class="p_main">
     <figure class="p_face">
       <img
-        [src]="project.pictureList[0].src"
-        [alt]="project.pictureList[0].alt"
-        [title]="project.pictureList[0].title">
+        [alt]="project.pictureList[0].alt" [src]="project.pictureList[0].src" [title]="project.pictureList[0].title"
+        height="130" width="175"
+      >
       <p>
         <span
           [ngStyle]="
@@ -13,9 +13,9 @@
             project.styles[mobileView ? 'mobileView' : 'classicView'].title
               ? project.styles[mobileView ? 'mobileView' : 'classicView'].title
               : {}
-          "
+          " style="font-size: 15px !important;"
         >{{ project.title }}</span>
-        <span>{{ project.subTitle }}</span>
+        <span style="font-size: 15px !important;">{{ project.subTitle }}</span>
       </p>
     </figure>
     <ul class="p_dos"

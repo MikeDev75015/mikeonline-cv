@@ -1,13 +1,13 @@
 import dayJS from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import 'dayjs/locale/fr';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
 
 dayJS.extend(utc);
 dayJS.extend(timezone);
 dayJS.locale('fr');
-dayJS.extend(relativeTime)
+dayJS.extend(relativeTime);
 
 /**
  * DayJsService
@@ -24,10 +24,22 @@ export class DayJsService {
   /**
    * Returns relative time to now
    * @param dateToConvert
-   * @param suffix
+   * @param withoutSuffix
    */
-  public static getTimeToNow(dateToConvert: string, suffix = false): string {
-    const convertedDate = dayJS(dateToConvert).toNow(suffix);
-    return convertedDate !== 'un an' ? convertedDate : '1 an';
+  public static getTimeToNow(dateToConvert: string, withoutSuffix = false): string {
+    const convertedDate = dayJS(dateToConvert).toNow(withoutSuffix);
+    return convertedDate.replace('un ', '1 ');
+  }
+
+  /**
+   * Returns relative time to x
+   * @param startDate
+   * @param endDate
+   * @param withoutSuffix
+   */
+  public static getTimeToX(startDate: string, endDate: string, withoutSuffix = false): string {
+    const convertedEndDate = dayJS(endDate);
+    const timeToX = dayJS(startDate).to(convertedEndDate, true);
+    return timeToX.replace('un ', '1 ');
   }
 }

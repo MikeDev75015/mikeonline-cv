@@ -133,7 +133,7 @@ export class SkillsRadarChartComponent implements OnInit, OnDestroy {
     ]);
 
     let dataList = skills
-      .filter((skill) => ['Angular', 'Nest.js', 'Node.js', 'MongoDb'].includes(skill.name))
+      .filter((skill) => ['Angular', 'Nest.js', 'MongoDb'].includes(skill.name))
       .map((skill) => {
         let experiencesFound: ExperienceV1[] = [], formationsFound: FormationV1[] = [], projectsFound: ProjectV1[] = [];
         skill.tagList.forEach((tag) => {
@@ -156,7 +156,7 @@ export class SkillsRadarChartComponent implements OnInit, OnDestroy {
         };
       });
 
-    dataList = UtilsService.sortObjectList([...dataList], 'desc', 'weight', 'number');
+    dataList = UtilsService.sortObjectList([...dataList], 'asc', 'name');
 
     this.radarData = {
       labels: ['Projets', 'Formations', 'Expériences'],

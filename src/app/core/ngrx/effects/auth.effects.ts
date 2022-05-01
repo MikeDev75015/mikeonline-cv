@@ -4,12 +4,12 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { catchError, of } from 'rxjs';
+import { catchError, of, repeat } from 'rxjs';
 import { map, mergeMap, tap } from 'rxjs/operators';
+import { DEFAULT_ADMIN_TABS } from '../../../modules/admin/constants/default-admin-tabs.constant';
 import { ExtendedMenuItem } from '../../../modules/admin/interfaces/extended-menu-item.interface';
 import { AuthService } from '../../../modules/admin/services/auth/auth.service';
 import { STORAGE_KEYS } from '../../constants/storage-keys.constant';
-import { LoginRequest } from '../../interfaces/requests/login.request';
 import { StorageService } from '../../services/storage/storage.service';
 import { AuthActions } from '../ngrx-index';
 
@@ -20,28 +20,47 @@ import { AuthActions } from '../ngrx-index';
 export class AuthEffects {
   loginUser$ = createEffect(() => this.actions$.pipe(
     ofType(AuthActions.loginUser),
-    mergeMap((payload: LoginRequest) => this.authService.login(payload)),
-    map(({ accessToken }) => {
-      if (!accessToken) {
-        return AuthActions.loginUserFailure();
-      }
-      return AuthActions.loginUserSuccess({ accessToken });
-    }),
+    mergeMap(({ username, password }) => this.authService.login({ username, password })),
+    map(({ accessToken }) => AuthActions.loginUserSuccess({ accessToken })),
     catchError(() => of(AuthActions.loginUserFailure())),
+    repeat(),
   ));
-
-  loginUserSuccess$ = createEffect(() => this.actions$.pipe(
-    ofType(AuthActions.loginUserSuccess),
-    tap(({ accessToken }) => {
-      StorageService.setItem('localStorage', STORAGE_KEYS.accessToken, accessToken);
-    }),
-    map(() => AuthActions.getUser())),
-  );
 
   loginUserFailure$ = createEffect(() => this.actions$.pipe(
     ofType(AuthActions.loginUserFailure),
     tap(() => {
-      this.cleanStorageAccessToken();
+      this.cleanStorageItems();
+    }),
+  ), { dispatch: false });
+
+  loginUserSuccess$ = createEffect(() => this.actions$.pipe(
+    ofType(AuthActions.loginUserSuccess),
+    tap(({ accessToken }) => {
+      this.authService.setAccessToken(accessToken);
+    }),
+    map(() => AuthActions.getUser()),
+  ));
+
+  getUser$ = createEffect(() => this.actions$.pipe(
+    ofType(AuthActions.getUser),
+    mergeMap(() => this.authService.getUserAccount()),
+    map((user) => AuthActions.getUserSuccess({ user })),
+    catchError(() => of(AuthActions.getUserFailure())),
+    repeat(),
+  ));
+
+  getUserFailure$ = createEffect(() => this.actions$.pipe(
+    ofType(AuthActions.getUserFailure),
+    tap(() => {
+      this.cleanStorageItems(true);
+    }),
+  ), { dispatch: false });
+
+  getUserSuccess$ = createEffect(() => this.actions$.pipe(
+    ofType(AuthActions.getUserSuccess),
+    tap(async () => {
+      const activeItem = StorageService.getItem<ExtendedMenuItem>('sessionStorage', STORAGE_KEYS.activeItem);
+      await this.router.navigate([activeItem?.routerLink || DEFAULT_ADMIN_TABS[0].routerLink]);
     }),
   ), { dispatch: false });
 
@@ -50,46 +69,20 @@ export class AuthEffects {
     mergeMap(() => this.authService.logout()),
     map(() => AuthActions.logoutUserSuccess()),
     catchError(() => of(AuthActions.logoutUserFailure())),
+    repeat(),
   ));
 
   logoutUserSuccess$ = createEffect(() => this.actions$.pipe(
     ofType(AuthActions.logoutUserSuccess),
     tap(() => {
-      this.cleanStorageAccessToken(true);
+      this.cleanStorageItems(true);
     }),
   ), { dispatch: false });
 
   logoutUserFailure$ = createEffect(() => this.actions$.pipe(
     ofType(AuthActions.logoutUserFailure),
     tap(() => {
-      this.cleanStorageAccessToken(true);
-    }),
-  ), { dispatch: false });
-
-  getUser$ = createEffect(() => this.actions$.pipe(
-    ofType(AuthActions.getUser),
-    mergeMap(() => this.authService.getUserAccount()),
-    map((user) => {
-      if (!user || !user.id) {
-        return AuthActions.getUserFailure();
-      }
-      return AuthActions.getUserSuccess({ user });
-    }),
-    catchError(() => of(AuthActions.getUserFailure())),
-  ));
-
-  getUserSuccess$ = createEffect(() => this.actions$.pipe(
-    ofType(AuthActions.getUserSuccess),
-    tap(async () => {
-      const activeItem = AuthEffects.getStorageActiveItem();
-      await this.router.navigate([activeItem?.routerLink || '/admin']);
-    }),
-  ), { dispatch: false });
-
-  getUserFailure$ = createEffect(() => this.actions$.pipe(
-    ofType(AuthActions.getUserFailure),
-    tap(() => {
-      this.cleanStorageAccessToken(true);
+      this.cleanStorageItems(true);
     }),
   ), { dispatch: false });
 
@@ -108,23 +101,15 @@ export class AuthEffects {
   ) {
   }
 
-  private static getStorageActiveItem(): ExtendedMenuItem {
-    return StorageService.getItem('sessionStorage', STORAGE_KEYS.activeItem);
-  }
-
-  private static removeActiveItemFromStorage(): void {
+  private cleanStorageItems(navigateToSignInPage = false): void {
     StorageService.removeItem('sessionStorage', STORAGE_KEYS.activeItem);
-  }
+    this.authService.removeAccessToken();
 
-  private cleanStorageAccessToken(navigateToSignInPage = false): void {
-    AuthEffects.removeActiveItemFromStorage();
-    StorageService.removeItem('localStorage', STORAGE_KEYS.accessToken);
     if (!navigateToSignInPage) {
-      console.debug('Access token removed!');
       return;
     }
-    this.router.navigate(['/admin/sign-in']).finally(() => {
-      console.debug('AuthEffects supposed to have been redirected on the sign in page!');
-    });
+
+    console.debug('Storage items removed, redirection to sign-in page!');
+    this.router.navigate(['/admin/sign-in']).finally(() => undefined);
   }
 }

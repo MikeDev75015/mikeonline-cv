@@ -1,10 +1,12 @@
 import { HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ApiV1Path } from '../../../../core/interfaces/api/api-v1-path.enum';
+import { STORAGE_KEYS } from '../../../../core/constants/storage-keys.constant';
+import { AuthPath } from '../../../../core/interfaces/api/auth-path.enum';
 import { UserV1 } from '../../../../core/interfaces/models/v1/user.interface';
 import { LoginRequest } from '../../../../core/interfaces/requests/login.request';
 import { HttpClientService } from '../../../../core/services/http-client/http-client.service';
+import { StorageService } from '../../../../core/services/storage/storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +18,19 @@ export class AuthService {
   ) {
   }
 
-  public setAuthorizationHeader(request: HttpRequest<any>, accessToken: string): HttpRequest<any> {
+  public setAccessToken(accessToken: string) {
+    StorageService.setItem('localStorage', STORAGE_KEYS.accessToken, accessToken);
+  }
+
+  public getAccessToken(): string {
+    return StorageService.getItem<string>('localStorage', STORAGE_KEYS.accessToken);
+  }
+
+  public removeAccessToken(): void {
+    StorageService.removeItem('localStorage', STORAGE_KEYS.accessToken);
+  }
+
+  public setHeaderAuthorization(request: HttpRequest<any>, accessToken: string): HttpRequest<any> {
     return request.clone({
       setHeaders: {
         Authorization: `Bearer ${accessToken}`,
@@ -25,16 +39,18 @@ export class AuthService {
   }
 
   public login(payload: LoginRequest): Observable<{ accessToken: string; }> {
-    return this.httpClientService.post<{ accessToken: string; }>(`/${ApiV1Path.LOGIN}`, {
-      username: payload.username, password: payload.password,
-    });
+    return this.httpClientService.post<{ accessToken: string; }>(`/${AuthPath.LOGIN}`, payload);
   }
 
   public logout(): Observable<void> {
-    return this.httpClientService.put<void>(`/${ApiV1Path.LOGOUT}`, {});
+    return this.httpClientService.put<void>(`/${AuthPath.LOGOUT}`, {});
   }
 
   public getUserAccount(): Observable<UserV1> {
-    return this.httpClientService.get<UserV1>(`/${ApiV1Path.ACCOUNT}`);
+    return this.httpClientService.get<UserV1>(`/${AuthPath.ACCOUNT}`);
+  }
+
+  public refreshAccessToken(): Observable<{ accessToken: string; }> {
+    return this.httpClientService.put<{ accessToken: string; }>(`/${AuthPath.REFRESH_TOKEN}`, {});
   }
 }

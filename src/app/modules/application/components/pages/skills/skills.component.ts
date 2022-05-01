@@ -419,14 +419,20 @@ export class SkillsComponent implements OnInit, OnDestroy, AfterViewChecked {
       });
     }));
 
-    this.experienceList = TemplatesService.reorderItemList<ExperienceV1>(allRelatedList[0] as ExperienceV1[]);
-    this.formationList = TemplatesService.reorderItemList<FormationV1>(allRelatedList[1] as FormationV1[]);
+    this.experienceList = TemplatesService.reorderItemListByEndDate<ExperienceV1>(allRelatedList[0] as ExperienceV1[]);
+    this.formationList = TemplatesService.reorderItemListByEndDate<FormationV1>(allRelatedList[1] as FormationV1[]);
     this.projectItemList = UtilsService.sortObjectList<ProjectItem>(allRelatedList[2].map(s => ({
       ...s, technoList: this.utilsService.initTechnoListWithTagList(s.tagList),
     }) as ProjectItem), 'asc', 'position', 'number');
 
     const selectedSkillStartDate = selectedSkill.startDate.match(partialIsoDatePattern) ? selectedSkill.startDate + '-01' : selectedSkill.startDate;
-    const experienceYearsText = DayJsService.getTimeToNow(selectedSkillStartDate, true);
+    let experienceYearsText: string;
+    if (selectedSkill.endDate) {
+      const selectedSkillEndDate = selectedSkill.endDate.match(partialIsoDatePattern) ? selectedSkill.endDate + '-01' : selectedSkill.endDate;
+      experienceYearsText = DayJsService.getTimeToX(selectedSkillStartDate, selectedSkillEndDate, true);
+    } else {
+      experienceYearsText = DayJsService.getTimeToNow(selectedSkillStartDate, true);
+    }
 
     this.knobSkill = {
       ...selectedSkill,

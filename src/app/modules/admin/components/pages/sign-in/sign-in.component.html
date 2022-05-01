@@ -3,18 +3,23 @@
 <div class="fcc column full-screen" data-cy="sign-in content">
 
   <app-form-wrapper
+    [(isValidForm)]="isValidForm" [ngStyle]="{opacity: showInput ? 1 : 0}" data-cy="form-fields" style="width: 250px;"
     (formValuesChange)="onFormValueChange($event)" [(formValues)]="formValues" [formFields]="formFields"
-    data-cy="form-fields" style="width: 250px;"
   ></app-form-wrapper>
 
-  <button (click)="onLogin()" class="fcc" data-cy="submit-button" pButton style="width: 250px; margin-top: 20px;">
+  <button
+    (click)="onLogin()" [disabled]="!isValidForm" [loading]="isLoading" class="fcc"
+    data-cy="submit-button" pButton style="width: 250px; margin-top: 20px;"
+  >
     <div class="fcc w100">
       <span>Se connecter</span>
       <mat-icon style="margin-left: 10px;">login</mat-icon>
     </div>
   </button>
 
-  <a class="fcc" data-cy="app-button" routerLink="/"
-     style="width: 250px; margin-top: 20px; text-decoration: none; color: var(--primary-color);">Voir le site</a>
-
+  <button
+    [disabled]="isLoading" class="p-button-text p-button-plain" data-cy="app-button" label="Retour sur l'application"
+    pButton
+    pRipple routerLink="/" style="width: 250px; margin-top: 10px;" type="button"
+  ></button>
 </div>

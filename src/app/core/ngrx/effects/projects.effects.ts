@@ -26,7 +26,7 @@ export class ProjectsEffects {
         return;
       }
 
-      this.store.dispatch(ProjectsActions.fetchProjectsSuccess({ projectList }));
+      this.store.dispatch(ProjectsActions.fetchProjectsSuccess({ projectList: projectList.filter((el) => el.position >= 0) }));
     }),
   ), { dispatch: false });
 

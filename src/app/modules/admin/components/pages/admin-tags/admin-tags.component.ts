@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { DEFAULT_TABLE_COLUMNS_CONFIG } from '../../../constants/common-table-columns.config';
+import { getValidationField } from '../../fragments/form-wrapper/constants/validation-field-bundle.constant';
 import { FormField } from '../../fragments/form-wrapper/interfaces/form-field.interface';
+import { ValidationType } from '../../fragments/form-wrapper/interfaces/validation-type.enum';
 import { TableColumn } from '../../fragments/table-wrapper/interfaces/table-column.interface';
 
 @Component({
@@ -11,6 +13,10 @@ export class AdminTagsComponent implements OnInit {
   public columnList: TableColumn[] = [];
 
   public formFields: FormField[] | undefined;
+
+  public editElementLabel = 'Editer le tag';
+
+  public addElementLabel = 'Ajouter un tag';
 
   public crudEndPoint = '/v1/tags';
 
@@ -28,10 +34,20 @@ export class AdminTagsComponent implements OnInit {
 
     if (this.crudEndPoint) {
       this.formFields = [
-        { field: 'name', inputLabel: 'Nom', inputType: 'text', defaultValue: '' },
+        {
+          field: 'name', inputLabel: 'Nom', inputType: 'text', defaultValue: '', mandatoryField: true,
+          validationFieldList: [
+            getValidationField(ValidationType.required, {}),
+          ],
+        },
         {
           field: 'weight', inputLabel: 'Poids', defaultValue: 1,
-          inputType: 'number', inputNumberOptions: { min: 0.1, max: 9.9, step: 0.1 },
+          inputType: 'number', inputNumberOptions: { min: 0.1, max: 9.9, step: 0.1 }, mandatoryField: true,
+          validationFieldList: [
+            getValidationField(ValidationType.required, { valueType: 'number' }),
+            getValidationField(ValidationType.min, { min: 0.1 }),
+            getValidationField(ValidationType.max, { max: 9.9 }),
+          ],
         },
       ];
     }

@@ -48,7 +48,7 @@ export class ExperiencesComponent implements OnInit {
             selector: selectAllExperiences, defaultValue: [],
           });
 
-          this.experienceList = TemplatesService.reorderItemList<ExperienceV1>(unsortedList);
+          this.experienceList = TemplatesService.reorderItemListByEndDate<ExperienceV1>(unsortedList);
         }
       }),
       map((loaded) => !loaded),

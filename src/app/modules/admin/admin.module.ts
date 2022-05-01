@@ -3,6 +3,9 @@ import { NgModule } from '@angular/core';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { SharedModule } from '../../shared/shared.module';
 import { AdminRoutingModule } from './admin-routing.module';
+import {
+  AutoCompleteWrapperComponent,
+} from './components/fragments/auto-complete-wrapper/auto-complete-wrapper.component';
 import { DropdownWrapperComponent } from './components/fragments/dropdown-wrapper/dropdown-wrapper.component';
 import { FormWrapperComponent } from './components/fragments/form-wrapper/form-wrapper.component';
 import { InputCheckboxComponent } from './components/fragments/input-wrapper/input-checkbox/input-checkbox.component';
@@ -55,6 +58,7 @@ const primeNgModule: any[] = [
     FormatValueDisplayPipe,
     AdminCvInfosComponent,
     MultiSelectWrapperComponent,
+    AutoCompleteWrapperComponent,
   ],
   imports: [
     CommonModule,

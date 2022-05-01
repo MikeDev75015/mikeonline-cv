@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { dataGeneratorListFactory } from '../../../constants/common-data-converters.config';
+import { partialDatePattern } from '../../../constants/common-date.config';
 import {
   DEFAULT_CHILD_FORM_FIELDS_CONFIG,
   DEFAULT_FORM_FIELDS_CONFIG,
 } from '../../../constants/common-formFields.config';
 import { DEFAULT_TABLE_COLUMNS_CONFIG } from '../../../constants/common-table-columns.config';
+import { getValidationField } from '../../fragments/form-wrapper/constants/validation-field-bundle.constant';
 import { FormField } from '../../fragments/form-wrapper/interfaces/form-field.interface';
+import { ValidationType } from '../../fragments/form-wrapper/interfaces/validation-type.enum';
 import { TableColumn } from '../../fragments/table-wrapper/interfaces/table-column.interface';
 
 @Component({
@@ -16,6 +19,10 @@ export class AdminProjectsComponent implements OnInit {
   public columnList: TableColumn[] = [];
 
   public formFields: FormField[] | undefined;
+
+  public editElementLabel = 'Editer le projet';
+
+  public addElementLabel = 'Ajouter un projet';
 
   public crudEndPoint = '/v1/projects';
 
@@ -47,10 +54,27 @@ export class AdminProjectsComponent implements OnInit {
 
     if (this.crudEndPoint) {
       this.formFields = [
-        DEFAULT_FORM_FIELDS_CONFIG['title'],
-        DEFAULT_FORM_FIELDS_CONFIG['subTitle'],
-        DEFAULT_FORM_FIELDS_CONFIG['createdDate'],
-        DEFAULT_FORM_FIELDS_CONFIG['tagList'],
+        {
+          ...DEFAULT_FORM_FIELDS_CONFIG['title'], mandatoryField: true, validationFieldList: [
+            getValidationField(ValidationType.required, {}),
+          ],
+        },
+        {
+          ...DEFAULT_FORM_FIELDS_CONFIG['subTitle'], mandatoryField: true, validationFieldList: [
+            getValidationField(ValidationType.required, {}),
+          ],
+        },
+        {
+          ...DEFAULT_FORM_FIELDS_CONFIG['createdDate'], mandatoryField: true, validationFieldList: [
+            getValidationField(ValidationType.pattern, { pattern: partialDatePattern }),
+          ],
+        },
+        {
+          ...DEFAULT_FORM_FIELDS_CONFIG['tagList'], mandatoryField: true, validationFieldList: [
+            getValidationField(ValidationType.required, {}),
+            getValidationField(ValidationType.minLength, { minLength: 1 }),
+          ],
+        },
         DEFAULT_FORM_FIELDS_CONFIG['description'],
         DEFAULT_FORM_FIELDS_CONFIG['link'],
         {

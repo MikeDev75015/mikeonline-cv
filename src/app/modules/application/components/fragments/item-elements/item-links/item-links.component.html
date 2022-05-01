@@ -1,0 +1,18 @@
+<ng-container *ngIf="linkList">
+  <div class="fsc w100">
+    <ng-container *ngFor="let link of linkList">
+      <button
+        (click)="onClickLink(link)" *ngIf="link.description === 'Certificat'" [pTooltip]="link.title"
+        class="p-button-link" label=" " pButton pRipple tooltipPosition="bottom" type="button"
+      ><i class="fas fa-user-graduate"></i></button>
+      <button
+        (click)="onClickLink(link)" *ngIf="link.description === 'Cours'" [pTooltip]="link.title"
+        class="p-button-link" label=" " pButton pRipple tooltipPosition="bottom" type="button"
+      ><i class="fas fa-book"></i></button>
+      <button
+        (click)="onClickLink(link)" *ngIf="link.description === 'Organisme'" [pTooltip]="link.title"
+        class="p-button-link" label=" " pButton pRipple tooltipPosition="bottom" type="button"
+      ><i class="fas fa-university"></i></button>
+    </ng-container>
+  </div>
+</ng-container>

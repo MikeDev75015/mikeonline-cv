@@ -25,7 +25,7 @@ export class InterestsEffects {
         return InterestsActions.fetchInterestsFailure();
       }
 
-      return InterestsActions.fetchInterestsSuccess({ interestList });
+      return InterestsActions.fetchInterestsSuccess({ interestList: interestList.filter((el) => el.position >= 0) });
     }),
   ));
 

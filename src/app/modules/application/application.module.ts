@@ -22,6 +22,7 @@ import { LeftFooterComponent } from './components/fragments/footer/left-footer/l
 import { HeaderComponent } from './components/fragments/header/header.component';
 import { ItemDatesComponent } from './components/fragments/item-elements/item-dates/item-dates.component';
 import { ItemDetailComponent } from './components/fragments/item-elements/item-details/item-detail.component';
+import { ItemLinksComponent } from './components/fragments/item-elements/item-links/item-links.component';
 import {
   ItemOpenCloseButtonsComponent,
 } from './components/fragments/item-elements/item-open-close-buttons/item-open-close-buttons.component';
@@ -77,6 +78,7 @@ import { PageLayoutComponent } from './layouts/page-layout/page-layout.component
     HeaderTitleFormatPipe,
     IncompressibleSpacePipe,
     FirstLetterUppercasePipe,
+    ItemLinksComponent,
   ],
   imports: [
     CommonModule,

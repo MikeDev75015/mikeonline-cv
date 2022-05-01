@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ButtonModule } from 'primeng/button';
 import { ChartModule } from 'primeng/chart';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -51,6 +52,7 @@ const primeNgModules: any[] = [
   OverlayPanelModule,
   PickListModule,
   MultiSelectModule,
+  AutoCompleteModule,
 ];
 
 @NgModule({

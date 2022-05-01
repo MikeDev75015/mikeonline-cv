@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { JOB_TYPE_DROPDOWN_LIST } from '../../../../../core/constants/common.constant';
 import { dataGeneratorListFactory } from '../../../constants/common-data-converters.config';
+import { partialDatePattern } from '../../../constants/common-date.config';
 import { DEFAULT_FORM_FIELDS_CONFIG } from '../../../constants/common-formFields.config';
 import { DEFAULT_TABLE_COLUMNS_CONFIG } from '../../../constants/common-table-columns.config';
+import { getValidationField } from '../../fragments/form-wrapper/constants/validation-field-bundle.constant';
 import { FormField } from '../../fragments/form-wrapper/interfaces/form-field.interface';
+import { ValidationType } from '../../fragments/form-wrapper/interfaces/validation-type.enum';
 import { TableColumn } from '../../fragments/table-wrapper/interfaces/table-column.interface';
 
 @Component({
@@ -14,6 +17,10 @@ export class AdminExperiencesComponent implements OnInit {
   public columnList: TableColumn[] = [];
 
   public formFields: FormField[] | undefined;
+
+  public editElementLabel = 'Editer l\'expérience';
+
+  public addElementLabel = 'Ajouter une expérience';
 
   public crudEndPoint = '/v1/experiences';
 
@@ -42,17 +49,40 @@ export class AdminExperiencesComponent implements OnInit {
 
     if (this.crudEndPoint) {
       this.formFields = [
-        DEFAULT_FORM_FIELDS_CONFIG['title'],
-        DEFAULT_FORM_FIELDS_CONFIG['beginDate'],
-        DEFAULT_FORM_FIELDS_CONFIG['endDate'],
+        {
+          ...DEFAULT_FORM_FIELDS_CONFIG['title'], mandatoryField: true, validationFieldList: [
+            getValidationField(ValidationType.required, {}),
+          ],
+        },
+        {
+          ...DEFAULT_FORM_FIELDS_CONFIG['beginDate'], mandatoryField: true, validationFieldList: [
+            getValidationField(ValidationType.required, {}),
+            getValidationField(ValidationType.pattern, { pattern: partialDatePattern }),
+          ],
+        },
+        {
+          ...DEFAULT_FORM_FIELDS_CONFIG['endDate'], validationFieldList: [
+            getValidationField(ValidationType.pattern, { pattern: partialDatePattern }),
+          ],
+        },
         { field: 'actualJob', inputLabel: 'Actuel', inputType: 'checkbox', defaultValue: false },
         {
           field: 'jobType', inputLabel: 'Type', inputType: 'dropdown', defaultValue: 0, dropdownWrapperOptions: {
             list: JOB_TYPE_DROPDOWN_LIST, scrollHeight: '200px',
-          },
+          }, mandatoryField: true, validationFieldList: [
+            getValidationField(ValidationType.required, { valueType: 'number' }),
+          ],
         },
-        DEFAULT_FORM_FIELDS_CONFIG['society'],
-        DEFAULT_FORM_FIELDS_CONFIG['place'],
+        {
+          ...DEFAULT_FORM_FIELDS_CONFIG['society'], mandatoryField: true, validationFieldList: [
+            getValidationField(ValidationType.required, {}),
+          ],
+        },
+        {
+          ...DEFAULT_FORM_FIELDS_CONFIG['place'], mandatoryField: true, validationFieldList: [
+            getValidationField(ValidationType.required, {}),
+          ],
+        },
         DEFAULT_FORM_FIELDS_CONFIG['tagList'],
         DEFAULT_FORM_FIELDS_CONFIG['detailList'],
         DEFAULT_FORM_FIELDS_CONFIG['linkList'],

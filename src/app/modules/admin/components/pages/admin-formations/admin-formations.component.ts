@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { dataGeneratorListFactory } from '../../../constants/common-data-converters.config';
+import { partialDatePattern } from '../../../constants/common-date.config';
 import { DEFAULT_FORM_FIELDS_CONFIG } from '../../../constants/common-formFields.config';
 import { DEFAULT_TABLE_COLUMNS_CONFIG } from '../../../constants/common-table-columns.config';
+import { getValidationField } from '../../fragments/form-wrapper/constants/validation-field-bundle.constant';
 import { FormField } from '../../fragments/form-wrapper/interfaces/form-field.interface';
+import { ValidationType } from '../../fragments/form-wrapper/interfaces/validation-type.enum';
 import { TableColumn } from '../../fragments/table-wrapper/interfaces/table-column.interface';
 
 @Component({
@@ -13,6 +16,10 @@ export class AdminFormationsComponent implements OnInit {
   public columnList: TableColumn[] = [];
 
   public formFields: FormField[] | undefined;
+
+  public editElementLabel = 'Editer la formation';
+
+  public addElementLabel = 'Ajouter une formation';
 
   public crudEndPoint = '/v1/formations';
 
@@ -37,12 +44,33 @@ export class AdminFormationsComponent implements OnInit {
 
     if (this.crudEndPoint) {
       this.formFields = [
-        DEFAULT_FORM_FIELDS_CONFIG['title'],
-        DEFAULT_FORM_FIELDS_CONFIG['beginDate'],
-        DEFAULT_FORM_FIELDS_CONFIG['endDate'],
+        {
+          ...DEFAULT_FORM_FIELDS_CONFIG['title'], mandatoryField: true, validationFieldList: [
+            getValidationField(ValidationType.required, {}),
+          ],
+        },
+        {
+          ...DEFAULT_FORM_FIELDS_CONFIG['beginDate'], validationFieldList: [
+            getValidationField(ValidationType.pattern, { pattern: partialDatePattern }),
+          ],
+        },
+        {
+          ...DEFAULT_FORM_FIELDS_CONFIG['endDate'], mandatoryField: true, validationFieldList: [
+            getValidationField(ValidationType.required, {}),
+            getValidationField(ValidationType.pattern, { pattern: partialDatePattern }),
+          ],
+        },
         { field: 'certificate', inputLabel: 'Certificat', inputType: 'checkbox', defaultValue: false },
-        DEFAULT_FORM_FIELDS_CONFIG['society'],
-        DEFAULT_FORM_FIELDS_CONFIG['place'],
+        {
+          ...DEFAULT_FORM_FIELDS_CONFIG['society'], mandatoryField: true, validationFieldList: [
+            getValidationField(ValidationType.required, {}),
+          ],
+        },
+        {
+          ...DEFAULT_FORM_FIELDS_CONFIG['place'], mandatoryField: true, validationFieldList: [
+            getValidationField(ValidationType.required, {}),
+          ],
+        },
         DEFAULT_FORM_FIELDS_CONFIG['tagList'],
         DEFAULT_FORM_FIELDS_CONFIG['detailList'],
         DEFAULT_FORM_FIELDS_CONFIG['linkList'],

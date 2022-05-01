@@ -9,6 +9,7 @@ import { AuthActions } from '../../../../core/ngrx/ngrx-index';
 import { selectCurrentUser } from '../../../../core/ngrx/selectors/auth.selectors';
 import { StorageService } from '../../../../core/services/storage/storage.service';
 import { ThemingService } from '../../../../core/services/theming/theming.service';
+import { DEFAULT_ADMIN_TABS } from '../../constants/default-admin-tabs.constant';
 import { ExtendedMenuItem } from '../../interfaces/extended-menu-item.interface';
 
 @Component({
@@ -19,7 +20,7 @@ import { ExtendedMenuItem } from '../../interfaces/extended-menu-item.interface'
 export class AdminLayoutComponent implements OnInit, OnDestroy {
   public readonly themeList = this.themingService.getThemeList();
 
-  public leftItems: ExtendedMenuItem[] = [];
+  public tabItems: ExtendedMenuItem[] = [];
 
   public rightItems: ExtendedMenuItem[] = [];
 
@@ -29,6 +30,8 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
 
   public selectedTheme = '';
 
+  private readonly defaultTabList: ExtendedMenuItem[] = DEFAULT_ADMIN_TABS;
+
   private readonly subscriptionList: Subscription[] = [];
 
   constructor(
@@ -36,10 +39,6 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly themingService: ThemingService,
   ) {
-  }
-
-  private static setStorageActiveItem(activeItem: ExtendedMenuItem): void {
-    StorageService.setItem('sessionStorage', STORAGE_KEYS.activeItem, activeItem);
   }
 
   async ngOnInit(): Promise<void> {
@@ -55,43 +54,12 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
 
     this.selectedTheme = this.themingService.getThemeName();
 
-    this.leftItems = [
-      {
-        label: 'Infos CV', routerLink: '/admin/cv-infos', command: (event: any) => {
-          AdminLayoutComponent.setStorageActiveItem(event.item);
-        },
+    this.tabItems = this.defaultTabList.map((item) => ({
+      ...item,
+      command: (event: any) => {
+        StorageService.setItem('sessionStorage', STORAGE_KEYS.activeItem, event.item);
       },
-      {
-        label: 'Tags', routerLink: '/admin/tags', command: (event: any) => {
-          AdminLayoutComponent.setStorageActiveItem(event.item);
-        },
-      },
-      {
-        label: 'Compétences', routerLink: '/admin/skills', command: (event: any) => {
-          AdminLayoutComponent.setStorageActiveItem(event.item);
-        },
-      },
-      {
-        label: 'Expériences', routerLink: '/admin/experiences', command: (event: any) => {
-          AdminLayoutComponent.setStorageActiveItem(event.item);
-        },
-      },
-      {
-        label: 'Formations', routerLink: '/admin/formations', command: (event: any) => {
-          AdminLayoutComponent.setStorageActiveItem(event.item);
-        },
-      },
-      {
-        label: 'Projets', routerLink: '/admin/projects', command: (event: any) => {
-          AdminLayoutComponent.setStorageActiveItem(event.item);
-        },
-      },
-      {
-        label: 'Centre d\'Intérêts', routerLink: '/admin/interests', command: (event: any) => {
-          AdminLayoutComponent.setStorageActiveItem(event.item);
-        },
-      },
-    ];
+    }));
 
     this.rightItems = [
       { label: 'Voir le site', routerLink: '/' },

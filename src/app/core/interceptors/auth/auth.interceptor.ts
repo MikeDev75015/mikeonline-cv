@@ -8,7 +8,7 @@ import { AuthPath } from '../../interfaces/api/auth-path.enum';
 export class AuthInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     if (request.url.includes('/auth/')) {
-      const authPath = request.url.split('/auth/')[1] as AuthPath;
+      const authPath = ('/auth/' + request.url.split('/auth/')[1]) as AuthPath;
       const token = request.headers.get('Authorization')?.split(' ')[1] || '';
 
       let body: any;

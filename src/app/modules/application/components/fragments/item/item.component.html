@@ -1,9 +1,14 @@
 <ng-container *ngIf="itemData && itemType">
-  <div class="line-header fbs w100" style="position: relative;">
-    <div class="fss column">
+  <div class="line-header fbs w100 relative">
+    <div class="fss column relative">
       <h3 class="fss wrap">{{ itemData.title }}</h3>
       <p *ngIf="itemData.society">{{ itemData.society }}</p>
       <em [innerHTML]="itemData.place | incompressibleSpace"></em>
+
+      <app-item-links
+        *ngIf="itemData.linkList && itemData.linkList.length > 0" [linkList]="itemData.linkList"
+        class="absolute item-links"
+      ></app-item-links>
     </div>
 
     <app-item-dates [item]="{ startDate: itemData.beginDate, endDate: itemData.endDate! }"></app-item-dates>
@@ -12,7 +17,7 @@
 
   <app-item-tag-list *ngIf="itemData.tagList" [tagList]="itemData.tagList"></app-item-tag-list>
 
-  <ng-container *ngIf="itemData.detailList && showDetails">
+  <ng-container *ngIf="itemData.detailList && itemData.detailList.length && showDetails">
     <div
       class="line-body w100"
       [ngStyle]="{

@@ -61,7 +61,7 @@
 <script defer id="init"></script>
 
 <script lang="js">
-  if (window.location.href.includes('localhost')) {
+  if (!window.location.href.includes('localhost')) {
     document.querySelector('#app-compat').src = '/__/firebase/9.6.8/firebase-app-compat.js';
     document.querySelector('#auth-compat').src = '/__/firebase/9.6.8/firebase-auth-compat.js';
     document.querySelector('#database-compat').src = '/__/firebase/9.6.8/firebase-database-compat.js';

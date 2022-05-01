@@ -34,7 +34,7 @@ export class TemplatesService {
     return window.innerWidth > 840 ? '50px' : '30px';
   }
 
-  public static reorderItemList<T>(unsortedList: T[]): T[] {
+  public static reorderItemListByEndDate<T>(unsortedList: T[]): T[] {
     const withoutEndDateList: T[] = [];
     const withEndDateList: T[] = unsortedList.filter((item: any) => {
       if (item.endDate) {

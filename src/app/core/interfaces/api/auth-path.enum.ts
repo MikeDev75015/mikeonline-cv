@@ -1,5 +1,6 @@
 export enum AuthPath {
-  LOGIN = 'login',
-  LOGOUT = 'logout',
-  ACCOUNT = 'account',
+  LOGIN = 'auth/login',
+  LOGOUT = 'auth/logout',
+  ACCOUNT = 'auth/account',
+  REFRESH_TOKEN = 'auth/refresh-token',
 }

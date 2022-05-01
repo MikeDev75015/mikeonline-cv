@@ -23,7 +23,7 @@ export const autoCompleteByPropertyAdapterFactory = (property: string) => {
 };
 
 export const DEFAULT_FORM_FIELDS_ADAPTERS: DataConverter = {
-  multiPartsAdapter: (data: IMultiPart) => {
+  multiParts: (data: IMultiPart) => {
     if (!data) {
       return '';
     }
@@ -34,17 +34,23 @@ export const DEFAULT_FORM_FIELDS_ADAPTERS: DataConverter = {
 
     return data;
   },
-  birthDate: (data: string) => {
-    if (!data) {
+  birthDate: (date: string) => {
+    if (!date) {
       return '';
     }
-    if (data.includes('/')) {
-      return data;
+    if (date.includes('/')) {
+      return date;
     }
-    return DayJsService.getDate(data, 'DD/MM/YYYY');
+    return DayJsService.getDate(date, 'DD/MM/YYYY');
   },
   tagList: (data: any[]) => data.map((each: any) => each.id),
   lineList: (data: string[]): string => data?.join('\n') || '',
+  partialDate: (date: string): string => {
+    if (!date) {
+      return '';
+    }
+    return DayJsService.getDate(date, 'MM/YYYY');
+  },
 };
 
 export const DEFAULT_FORM_FIELDS_GENERATORS: DataConverter = {
@@ -64,14 +70,21 @@ export const DEFAULT_FORM_FIELDS_GENERATORS: DataConverter = {
     const parts = data?.split(joiner);
     return { joiner, parts };
   },
-  birthDate: (data: string) => {
-    if (!data) {
+  birthDate: (date: string) => {
+    if (!date) {
       return '';
     }
-    const datePartList = data.split('/');
-    return DayJsService.getDate(`${datePartList[2]}-${datePartList[1]}-${datePartList[0]}`);
+    const datePartList = date.split('/');
+    return DayJsService.getDate(`${datePartList[2]}-${datePartList[1]}-${datePartList[0]}`, 'YYYY-MM-DD');
   },
   lineList: (data: string): string[] => data?.split('\n').filter((content) => content) || [],
+  partialDate: (date: string): string => {
+    if (!date) {
+      return '';
+    }
+    const datePartList = date.split('/');
+    return DayJsService.getDate(`${datePartList[1]}-${datePartList[0]}-01`, 'YYYY-MM');
+  },
 };
 
 export const dataGeneratorListFactory = (dataKeyList: string[]): DataConverter[] => {

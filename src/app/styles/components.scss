@@ -187,6 +187,26 @@ section > div > .exp-line, section > div > .form-line {
   }
 }
 
+.item-links {
+  top: -30px;
+  left: 0;
+
+  .p-button-link {
+    padding: 0;
+    width: auto;
+    margin-left: 10px;
+    color: #555555;
+  }
+
+  .p-button-link:hover {
+    color: rgba(2, 72, 115, 1) !important;
+  }
+
+  .p-button-link:first-of-type {
+    margin-left: 0;
+  }
+}
+
 .line-tags, .line-body {
   padding-top: 0;
 }

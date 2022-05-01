@@ -4,7 +4,9 @@ import {
   DEFAULT_FORM_FIELDS_CONFIG,
 } from '../../../constants/common-formFields.config';
 import { DEFAULT_TABLE_COLUMNS_CONFIG } from '../../../constants/common-table-columns.config';
+import { getValidationField } from '../../fragments/form-wrapper/constants/validation-field-bundle.constant';
 import { FormField } from '../../fragments/form-wrapper/interfaces/form-field.interface';
+import { ValidationType } from '../../fragments/form-wrapper/interfaces/validation-type.enum';
 import { TableColumn } from '../../fragments/table-wrapper/interfaces/table-column.interface';
 
 @Component({
@@ -15,6 +17,10 @@ export class AdminInterestsComponent implements OnInit {
   public columnList: TableColumn[] = [];
 
   public formFields: FormField[] | undefined;
+
+  public editElementLabel = 'Editer le centre d\'intérêt';
+
+  public addElementLabel = 'Ajouter un centre d\'intérêt';
 
   public crudEndPoint = '/v1/interests';
 
@@ -39,8 +45,16 @@ export class AdminInterestsComponent implements OnInit {
 
     if (this.crudEndPoint) {
       this.formFields = [
-        DEFAULT_FORM_FIELDS_CONFIG['title'],
-        DEFAULT_FORM_FIELDS_CONFIG['description'],
+        {
+          ...DEFAULT_FORM_FIELDS_CONFIG['title'], mandatoryField: true, validationFieldList: [
+            getValidationField(ValidationType.required, {}),
+          ],
+        },
+        {
+          ...DEFAULT_FORM_FIELDS_CONFIG['description'], mandatoryField: true, validationFieldList: [
+            getValidationField(ValidationType.required, {}),
+          ],
+        },
         DEFAULT_FORM_FIELDS_CONFIG['link'],
       ];
     }

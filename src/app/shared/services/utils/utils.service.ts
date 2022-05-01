@@ -170,9 +170,21 @@ export class UtilsService {
 
   public uppercaseFirstLetter = (s: string): string => s.charAt(0).toUpperCase() + s.substring(1);
 
-  public openURL(url: string): void {
+  public openURL(url: string, target?: '_blank' | '_self'): void {
+    const openLinkInTarget = (link: string, selectedTarget: string) => {
+      setTimeout(() => {
+        window.open(link, selectedTarget);
+        this.openingUrl = false;
+      }, 500);
+    };
+
     if (!this.openingUrl) {
       this.openingUrl = true;
+
+      if (target) {
+        openLinkInTarget(url, target);
+        return;
+      }
 
       this.alertService.displayConfirmDialog({
         title: 'attention, ouverture d\'une page externe...',
@@ -182,17 +194,12 @@ export class UtilsService {
           { action: '_blank', name: 'nouvel onglet' },
           { action: '_self', name: 'onglet actuel' },
         ],
-      }).then(action => {
+      }).then((action) => {
         if (!action) {
           return;
         }
 
-        setTimeout(() => {
-          window.open(url, action);
-        }, 500);
-
-      }).finally(() => {
-        this.openingUrl = false;
+        openLinkInTarget(url, action);
       });
     }
   }

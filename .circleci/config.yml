@@ -182,7 +182,7 @@ jobs:
           name: Push master
           command: git push https://${REPO_USER}:${REPO_PASS}@bitbucket.org/${REPO_TEAM}/${REPO_NAME}.git master
       - run:
-          name: create new tag with the package.json version number and push it to the repository
+          name: Create new tag with the package.json version number and push it to the repository
           command: |
             VERSION_NUMBER=v$(jq -r '.version' package.json)
             echo ${VERSION_NUMBER}
@@ -303,18 +303,50 @@ workflows:
             branches:
               only:
                 - develop
+      - ci-build-job:
+          requires:
+            - ci-test-job
+          post-steps:
+            - jira/notify:
+                environment_type: staging
+                job_type: build
+          filters:
+            branches:
+              only:
+                - develop
+      - cd-deploy-firebase-job:
+          name: cd-deploy-staging-job
+          requires:
+            - ci-test-job
+            - ci-build-job
+          context: FIREBASE
+          hosting: cv-mikeonline-staging
+          post-steps:
+            - jira/notify:
+                environment_type: staging
+                job_type: deployment
+          filters:
+            branches:
+              only:
+                - develop
+
+  ##################################### RELEASE WORKFLOW - on release TAG ##############################################
+  cd-release-workflow:
+    when:
+      equal: [ << pipeline.git.tag >>, release ]
+    jobs:
       - cypress/install:
           name: ci-cypress-install-job
           executor: cypress-base-16-with-chrome-and-firefox
           filters:
             branches:
-              only:
-                - develop
+              ignore: /.*/
+            tags:
+              only: release
       - cypress/run:
           name: ci-cypress-run-job
           context: CYPRESS_ENV
           requires:
-            - ci-test-job
             - ci-cypress-install-job
           executor: cypress-base-16-with-chrome-and-firefox
           ci-build-id: 'testing-commit-${CIRCLE_SHA1}'
@@ -329,49 +361,12 @@ workflows:
             - cypress-post-steps
           filters:
             branches:
-              only:
-                - develop
-      - ci-build-job:
-          requires:
-            - ci-test-job
-            - ci-cypress-run-job
-          post-steps:
-            - jira/notify:
-                environment_type: staging
-                job_type: build
-          filters:
-            branches:
-              only:
-                - develop
-      - cd-deploy-firebase-job:
-          name: cd-deploy-staging-job
-          requires:
-            - ci-build-job
-          context: FIREBASE
-          hosting: cv-mikeonline-staging
-          post-steps:
-            - jira/notify:
-                environment_type: staging
-                job_type: deployment
-          filters:
-            branches:
-              only:
-                - develop
-      - ci-sonar-job:
-          context: OCV_SONARCLOUD
-          requires:
-            - cd-deploy-staging-job
-          filters:
-            branches:
-              only:
-                - develop
-
-  ##################################### RELEASE WORKFLOW - on release TAG ##############################################
-  cd-release-workflow:
-    when:
-      equal: [ << pipeline.git.tag >>, release ]
-    jobs:
+              ignore: /.*/
+            tags:
+              only: release
       - cd-release-job:
+          requires:
+            - ci-cypress-run-job
           context:
             - GIT
             - REPOS
@@ -380,6 +375,16 @@ workflows:
               ignore: /.*/
             tags:
               only: release
+
+  ####################################### MASTER WORKFLOW - only master ################################################
+  ci-master-workflow:
+    jobs:
+      - ci-sonar-job:
+          context: OCV_SONARCLOUD
+          filters:
+            branches:
+              only:
+                - master
 
   ################################## DEPLOY PRODUCTION WORKFLOW - only [version] TAG ###################################
   ci-cd-deploy-production-workflow:

@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CV_TYPE_DROPDOWN_LIST } from '../../../../../core/constants/common.constant';
 import { DEFAULT_FORM_FIELDS_CONFIG } from '../../../constants/common-formFields.config';
+import { getValidationField } from '../../fragments/form-wrapper/constants/validation-field-bundle.constant';
 import { FormField } from '../../fragments/form-wrapper/interfaces/form-field.interface';
+import { ValidationType } from '../../fragments/form-wrapper/interfaces/validation-type.enum';
 import { TableColumn } from '../../fragments/table-wrapper/interfaces/table-column.interface';
 
 @Component({
@@ -12,6 +14,10 @@ export class AdminCvInfosComponent implements OnInit {
   public columnList: TableColumn[] = [];
 
   public formFields: FormField[] | undefined;
+
+  public editElementLabel = 'Editer le CV';
+
+  public addElementLabel = 'Ajouter un CV';
 
   public crudEndPoint = '/v1/cv-infos';
 
@@ -38,10 +44,10 @@ export class AdminCvInfosComponent implements OnInit {
       {
         field: 'technoList', header: 'Les 3 principales technos', exportable: true,
         pickListWrapperOptions: {
-          sourceListEndPoint: '/v1/skills', sourceAdapter: (data: any) => data.name,
+          sourceEndPoint: '/v1/skills', sourceAdapter: (data: any) => data.name,
           inlineStyle: { width: '100%' }, inlineClass: 'table-techno-list-pickList',
-          sourceHeader: 'Disponible(s)', targetHeader: 'Sélection', showSourceFilter: true,
-          sourceFilterPlaceholder: 'Rechercher', showTargetFilter: false, filterBy: '',
+          sourceHeader: 'Disponible(s)', selectedHeader: 'Sélection', showSourceFilter: true,
+          sourceFilterPlaceholder: 'Rechercher', showSelectedFilter: false, filterBy: '',
           selectionLimit: 3,
         },
         style: 'width: 20%; min-width: 200px; max-width: 320px; cursor: pointer;',
@@ -57,16 +63,35 @@ export class AdminCvInfosComponent implements OnInit {
       this.formFields = [
         {
           field: 'cvType', inputLabel: 'Type de CV', inputType: 'dropdown', defaultValue: 'full-cv',
-          dropdownWrapperOptions: { list: CV_TYPE_DROPDOWN_LIST },
+          dropdownWrapperOptions: { list: CV_TYPE_DROPDOWN_LIST }, mandatoryField: true,
+          validationFieldList: [
+            getValidationField(ValidationType.required, {}),
+          ],
         },
-        { field: 'fileName', inputLabel: 'Nom du fichier PDF', inputType: 'text', defaultValue: '' },
-        DEFAULT_FORM_FIELDS_CONFIG['title'],
+        {
+          field: 'fileName', inputLabel: 'Nom du fichier PDF', inputType: 'text', defaultValue: '',
+          mandatoryField: true,
+          validationFieldList: [
+            getValidationField(ValidationType.required, {}),
+          ],
+        },
+        {
+          ...DEFAULT_FORM_FIELDS_CONFIG['title'],
+          mandatoryField: true, validationFieldList: [
+            getValidationField(ValidationType.required, {}),
+            getValidationField(ValidationType.maxLength, { maxLength: 20 }),
+          ],
+        },
         {
           field: 'technoList', inputLabel: 'Les 3 principales technos', inputType: 'multiselect', defaultValue: [],
           multiSelectWrapperOptions: {
-            sourceListEndPoint: '/v1/skills', selectionLimit: 3,
+            sourceEndPoint: '/v1/skills', selectionLimit: 3,
             sourceAdapter: (data: any[]) => data.map((each: any) => ({ label: each.name, value: each.name })),
-          },
+          }, mandatoryField: true, validationFieldList: [
+            getValidationField(ValidationType.required, {}),
+            getValidationField(ValidationType.maxLength, { maxLength: 3 }),
+            getValidationField(ValidationType.minLength, { minLength: 3 }),
+          ],
         },
         DEFAULT_FORM_FIELDS_CONFIG['logo'],
         DEFAULT_FORM_FIELDS_CONFIG['contact'],
