@@ -1,5 +1,7 @@
+type ValueTypes = 'string' | 'number' | 'boolean' | 'list';
+
 export interface ValidationConstraints {
-  valueType?: 'string' | 'number' | 'boolean' | 'list';
+  valueType?: ValueTypes;
 
   minLength?: number;
 

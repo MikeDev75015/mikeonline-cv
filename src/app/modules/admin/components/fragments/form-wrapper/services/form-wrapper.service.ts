@@ -12,7 +12,7 @@ export class FormWrapperService {
    * @param isList
    * @private
    */
-  private static isInvalidValue(value: any, isList?: boolean): boolean {
+  private static isInvalidValue(value: any, isList = false): boolean {
     return value === undefined
       || value === ''
       || (typeof value === 'object' && !isList && Object.keys(value).length === 0);
