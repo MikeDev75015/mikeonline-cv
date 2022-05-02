@@ -12,6 +12,7 @@ import { selectAllInterests } from '../../../../../../core/ngrx/selectors/intere
 import { selectAllProjects } from '../../../../../../core/ngrx/selectors/projects.selectors';
 import { PdfCreatorService } from '../../../../../../core/services/pdf-creator/pdf-creator.service';
 import { DataService, UtilsService } from '../../../../../../shared';
+import { TemplatesService } from '../../../../../../shared/services/templates/templates.service';
 import { ProjectItem } from '../../../../interfaces/project-item.interface';
 
 @Component({
@@ -45,7 +46,7 @@ export class LeftFooterComponent implements OnInit, OnDestroy {
     let
       experiences: ExperienceV1[] = [],
       formations: FormationV1[] = [],
-      projects: ProjectV1[] = [],
+      projects: ProjectItem[] = [],
       interests: InterestV1[] = [];
 
     const allList = await Promise.all([
@@ -60,9 +61,12 @@ export class LeftFooterComponent implements OnInit, OnDestroy {
       });
     }));
 
-    experiences = allList[0] as ExperienceV1[];
-    formations = allList[1] as FormationV1[];
-    projects = UtilsService.sortObjectList<ProjectV1>(allList[2] as ProjectV1[], 'asc', 'position', 'number');
+    experiences = TemplatesService.reorderItemListByEndDate<ExperienceV1>(allList[0] as ExperienceV1[]);
+    formations = TemplatesService.reorderItemListByEndDate<FormationV1>(allList[1] as FormationV1[]);
+    projects = UtilsService.sortObjectList<ProjectItem>((allList[2] as ProjectV1[]).map((project) => ({
+      ...project,
+      technoList: this.utilsService.initTechnoListWithTagList(project.tagList, true),
+    }) as ProjectItem), 'asc', 'position', 'number');
     interests = UtilsService.sortObjectList<InterestV1>(allList[3] as InterestV1[], 'asc', 'position', 'number');
 
     const summary = await this.dataService.getSummary();
@@ -76,11 +80,8 @@ export class LeftFooterComponent implements OnInit, OnDestroy {
       data: {
         experienceList: experiences,
         formationList: formations,
-        projectList: UtilsService.sortObjectList(projects.map((project) => ({
-          ...project,
-          technoList: this.utilsService.initTechnoListWithTagList(project.tagList, true),
-        }) as ProjectItem), 'asc', 'position', 'number'),
-        interestList: UtilsService.sortObjectList(interests, 'asc', 'position', 'number'),
+        projectList: projects,
+        interestList: interests,
         competenceList: summary,
       },
     }).then(() => this.downloading = false);

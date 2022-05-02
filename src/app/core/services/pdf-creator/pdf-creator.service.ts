@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as pdfMake from 'pdfmake/build/pdfmake';
+import { TDocumentDefinitions } from 'pdfmake/interfaces';
 import { ProjectItem } from '../../../modules/application/interfaces/project-item.interface';
 import { UtilsService } from '../../../shared';
 import { PDF_CV_CREDITS, PDF_DEFAULT_FOOTER, PDF_DEFAULT_HEADER } from '../../constants/pdf.constant';
@@ -7,96 +8,83 @@ import { ExperienceV1 } from '../../interfaces/models/v1/experience.interface';
 import { FormationV1 } from '../../interfaces/models/v1/formation.interface';
 import { InterestV1 } from '../../interfaces/models/v1/interest.interface';
 import { DayJsService } from '../dayjs/dayjs.service';
-import { PdfDefinition } from './classes/pdf-definition.class';
+import {
+  ContentImage,
+  ContentTable,
+  ContentText,
+  PdfDocumentDefinition,
+} from './interfaces/pdf-document-definition.interface';
 import { PdfInfosData } from './interfaces/pdf-infos-data.interface';
 
-export interface IPdfColumn {
-  width: string | number; // '*', 'auto', '%' or numeric value
-  text: string;
-
-  fontSize?: number;
-
-  style?: string;
-}
-
-export interface IPdfColumnBundle {
-  columns: IPdfColumn[];
-  style?: string;
-  alignment?: string;
-  columnGap?: number; // optional space between columns
-}
-
-export interface IPdfTableBundle {
-  table: {
-    body: any[][];
-    widths?: (string | number)[];
-    heights?: number[] | number;
-    headerRows?: number;
-    dontBreakRows?: boolean;
-    keepWithHeaderRows?: number;
-  };
-  style?: string;
-  color?: string;
-  layout?: any;
-  margin?: number[] | number;
-}
-
-export interface IPdfImageOptions {
-  width?: number;
-  height?: number;
-  fit?: number[];
-  opacity?: number;
-  pageBreak?: 'after' | 'before' | '';
-}
-
+/**
+ * @link https://pdfmake.github.io/docs/0.1/document-definition-object
+ */
 @Injectable({
   providedIn: 'root',
 })
 export class PdfCreatorService {
-  private pdfDocument = PdfCreatorService.initPdf();
+  private pdfDocument: PdfDocumentDefinition = PdfCreatorService.initPdf();
+
   private readonly updatePdfContent = {
-    addText: (
-      text: string,
-      style = 'defaultStyle',
-      link = ''
-      // @ts-ignore
-    ) => this.pdfDocument.content.push(link ? {text, style, link} : {text, style}),
-
-    addImage: (
-      image: string,
-      options: IPdfImageOptions
-      // @ts-ignore
-    ) => this.pdfDocument.content.push(options ? {image, ...options} : {image}),
-
-    // @ts-ignore
-    addColumns: (columns: IPdfColumnBundle) => this.pdfDocument.content.push(columns),
-    // @ts-ignore
-    addTable: (table: IPdfTableBundle) => this.pdfDocument.content.push(table),
-    setHeader: (header: any = PDF_DEFAULT_HEADER) => this.pdfDocument.header = header,
-    setFooter: (footer: any = PDF_DEFAULT_FOOTER) => this.pdfDocument.footer = footer,
+    addText: (pdfText: ContentText): void => {
+      this.pdfDocument.content.push(pdfText);
+    },
+    addImage: (pdfImage: ContentImage): void => {
+      this.pdfDocument.content.push(pdfImage);
+    },
+    addTable: (pdfTable: ContentTable): void => {
+      this.pdfDocument.content.push(pdfTable);
+    },
+    setHeader: (header: any = PDF_DEFAULT_HEADER): void => {
+      this.pdfDocument.header = header;
+    },
+    setFooter: (footer: any = PDF_DEFAULT_FOOTER): void => {
+      this.pdfDocument.footer = footer;
+    },
     addSectionTitle: (
-      title: string,
-      style = 'defaultStyle',
-      background = '#CCCCCC',
-      pageBreak = ''
-    ) => {
+      title: string, style = 'defaultStyle', background = '#CCCCCC', pageBreak?: string,
+    ): void => {
       this.pdfDocument.content.push({
-        // @ts-ignore
         layout: 'noBorders',
-        // @ts-ignore
         margin: [0, 20, 0, 0],
         table: {
-          // @ts-ignore
           widths: ['*'],
           body: [
-            [
-              // @ts-ignore
-              {text: title, style, fillColor: background, pageBreak: pageBreak ? pageBreak : ''},
-            ]
-          ]
-        }
+            [{ text: title, style, fillColor: background, pageBreak: pageBreak || '' }],
+          ],
+        },
       });
-    }
+    },
+    addItemHeader: (
+      item: ExperienceV1 | FormationV1, date: string,
+    ): void => {
+      this.pdfDocument.content.push({
+        layout: 'noBorders',
+        margin: [0, 10, 0, 0],
+        table: {
+          dontBreakRows: true,
+          widths: ['*', 'auto'],
+          body: [
+            [
+              { text: item.title, style: 'bold' },
+              { text: date, style: 'right', bold: true, color: '#555555' },
+            ],
+            [{ text: `${item.society} - ${item.place}`, italics: true, color: '#555555' }, { text: '' }],
+          ],
+        },
+      });
+    },
+    addItemContent: (contentBody: any[]): void => {
+      this.pdfDocument.content.push({
+        layout: 'noBorders',
+        margin: [0, 5, 0, 0],
+        table: {
+          dontBreakRows: true,
+          widths: ['*'],
+          body: contentBody,
+        },
+      });
+    },
   };
 
   constructor(
@@ -104,53 +92,35 @@ export class PdfCreatorService {
   ) {
   }
 
-  private static addTitle(body: any[], exp: ExperienceV1 | FormationV1, date: string): void {
-    body.push([
-      {
-        layout: 'noBorders',
-        margin: [0, 20, 0, 0],
-        table: {
-          widths: ['*', 'auto'],
-          body: [
-            [
-              { text: exp.title, style: 'bold' },
-              { text: date, style: 'right', bold: true, color: '#555555' },
-            ],
-          ],
-        },
-      },
-    ]);
-  }
-
-  private static getDefaultStyle() {
+  private static getDefaultStyle(): PdfDocumentDefinition['defaultStyle'] {
     return {
       font: 'Roboto',
       fontSize: 12,
       lineHeight: 1,
       color: '#024873',
-      alignment: 'left'
+      alignment: 'left',
     };
   }
 
-  private static getStyles() {
+  private static getStyles(): PdfDocumentDefinition['styles'] {
     return {
       right: {
-        alignment: 'right'
+        alignment: 'right',
       },
       center: {
-        alignment: 'center'
+        alignment: 'center',
       },
       bold: {
-        bold: true
+        bold: true,
       },
       header: {
         fontSize: 8,
         color: '#555555',
-        alignment: 'center'
+        alignment: 'center',
       },
       footer: {
         fontSize: 8,
-        alignment: 'center'
+        alignment: 'center',
       },
       contact: {
         fontSize: 12,
@@ -164,65 +134,77 @@ export class PdfCreatorService {
       title: {
         fontSize: 24,
         bold: true,
-        alignment: 'right'
+        alignment: 'right',
       },
       subtitle: {
         fontSize: 18,
         bold: true,
-        alignment: 'right'
+        alignment: 'right',
       },
       sectionTitle: {
         fontSize: 18,
         bold: true,
         alignment: 'center',
-        color: '#FFFFFF'
+        color: '#FFFFFF',
       },
       lineDetail: {
         fontSize: 11,
-        lineHeight: 0.9
+        lineHeight: 0.9,
       },
       chip: {
         fontSize: 11,
-        color: '#555555'
-      }
+        color: '#555555',
+      },
     };
   }
 
-  private static initPdf(): PdfDefinition {
-    const newPdf = new PdfDefinition();
-    newPdf.info = PDF_CV_CREDITS;
-    newPdf.pageSize = 'A4';
-    newPdf.pageOrientation = 'portrait';
-    newPdf.pageMargins = [20, 20, 20, 20];
-    newPdf.defaultStyle = PdfCreatorService.getDefaultStyle();
-    newPdf.styles = PdfCreatorService.getStyles();
-    newPdf.content = [];
-    return newPdf;
+  private static initPdf(): PdfDocumentDefinition {
+    return {
+      info: PDF_CV_CREDITS,
+      pageSize: 'A4',
+      pageOrientation: 'portrait',
+      pageMargins: [20, 20, 20, 20],
+      defaultStyle: PdfCreatorService.getDefaultStyle(),
+      styles: PdfCreatorService.getStyles(),
+      content: [],
+    };
   }
 
-  private static addPlace(expBody: any[], exp: ExperienceV1 | FormationV1): void {
-    if (exp.place) {
-      expBody.push([{ text: (exp.society ? exp.society + ' - ' : '') + exp.place, italics: true, color: '#555555' }]);
+  private static getDateToPrint(beginDate: string, endDate?: string): string {
+    if (!beginDate && endDate) {
+      return UtilsService.uppercaseFirstLetter(DayJsService.getDate(endDate, 'MMMM YYYY'));
     }
+
+    if (!endDate && beginDate) {
+      return `Depuis ${DayJsService.getDate(beginDate, 'MMMM YYYY')}`;
+    }
+
+    return `De ${DayJsService.getDate(beginDate, 'MMMM YYYY')} à ${DayJsService.getDate(endDate, 'MMMM YYYY')}`;
   }
 
+  /**
+   * create Downloadable Pdf
+   * @param pdfInfos
+   */
   public async createDownloadablePdf(pdfInfos: PdfInfosData): Promise<void> {
     return new Promise(async resolve => {
-
-      const { fileName, contact, title, technoList, logo, cvType } = pdfInfos;
+      const { fileName, contact, title, technoList, logo } = pdfInfos;
+      const defaultPdfLogo: ContentImage = {
+        image: await this.utilsService.convertImageToBase64('assets/img/pdf-web.png'), width: 86, height: 30,
+      };
 
       this.updatePdfContent.setHeader();
       this.updatePdfContent.setFooter();
 
-      const headerTable: IPdfTableBundle = {
+      const headerTable: ContentTable = {
         layout: 'noBorders',
         table: {
           headerRows: 1,
           widths: ['*', '*'],
           body: [
             [
-              // @ts-ignore
-              { image: logo.src, width: logo.width, height: logo.height },
+
+              logo ? { image: logo.src, width: logo.width, height: logo.height } : defaultPdfLogo,
               { text: 'Le ' + DayJsService.getDate(undefined, 'DD MMMM YYYY'), style: 'right' },
             ],
             [
@@ -243,15 +225,15 @@ export class PdfCreatorService {
       };
       this.updatePdfContent.addTable(headerTable);
 
-      contact.webLinkList.forEach(webLink => {
-        this.updatePdfContent.addText(
-          `${webLink.name} : ${webLink.url}`,
-          'link',
-          webLink.url,
-        );
+      contact.webLinkList.forEach((webLink) => {
+        this.updatePdfContent.addText({
+          text: `${webLink.name} : ${webLink.url}`,
+          style: 'defaultStyle',
+          link: webLink.url,
+        });
       });
 
-      await this.addAdditionalFields(cvType, pdfInfos.data);
+      await this.addPdfContents(pdfInfos.data);
 
       // @ts-ignore
       pdfMake.fonts = {
@@ -263,116 +245,80 @@ export class PdfCreatorService {
         },
       };
 
-      // @ts-ignore
-      pdfMake.createPdf(this.pdfDocument).download(fileName);
+      pdfMake.createPdf(this.pdfDocument as TDocumentDefinitions).download(fileName);
       this.pdfDocument = PdfCreatorService.initPdf();
       resolve();
     });
   }
 
-  private static getDateToPrint(beginDate: string, endDate?: string): string {
-    if (!beginDate && endDate) {
-      return UtilsService.uppercaseFirstLetter(DayJsService.getDate(endDate, 'MMMM YYYY'));
-    }
-
-    if (!endDate && beginDate) {
-      return `Depuis ${DayJsService.getDate(beginDate, 'MMMM YYYY')}`;
-    }
-
-    return `De ${DayJsService.getDate(beginDate, 'MMMM YYYY')} à ${DayJsService.getDate(endDate, 'MMMM YYYY')}`;
-  }
-
-  private static checkLineBreakMode(currentNode: { headlineLevel: number; }, followingNodesOnPage: any[]): string {
-    if (currentNode.headlineLevel === 1 && followingNodesOnPage.length === 0) {
-      return 'before';
-    }
-    return '';
-  }
-
-  private async addAdditionalFields(type: string, data: {
+  private async addPdfContents(data: {
     experienceList?: ExperienceV1[]; formationList?: FormationV1[]; projectList?: ProjectItem[]; interestList?: InterestV1[];
   }): Promise<void> {
-    if (type !== 'full-cv') {
-      return;
+    if (data.experienceList && data.experienceList.length) {
+      this.buildPdfExperiences(data.experienceList);
     }
-
-    if (data.experienceList) {
-      this.buildPdfExperiences(UtilsService.sortObjectList(data.experienceList, 'desc', 'beginDate', 'date'));
+    if (data.formationList && data.formationList.length) {
+      this.buildPdfFormations(data.formationList);
     }
-    if (data.formationList) {
-      this.buildPdfFormations(UtilsService.sortObjectList(data.formationList.map((f) => {
-        if (!f.endDate) {
-          return {
-            ...f,
-            endDate: DayJsService.getDate(undefined, 'YYYY-MM'),
-          };
-        }
-
-        return f;
-      }), 'desc', 'endDate', 'date'));
+    if (data.projectList && data.projectList.length) {
+      await this.buildPdfProjects(data.projectList);
     }
-    if (data.projectList) {
-      await this.buildPdfProjects(UtilsService.sortObjectList(data.projectList, 'asc', 'position', 'number'));
-    }
-    if (data.interestList) {
+    if (data.interestList && data.interestList.length) {
       this.buildPdfInterests(data.interestList);
     }
   }
 
   private buildPdfExperiences(experienceList: ExperienceV1[]): void {
     this.updatePdfContent.addSectionTitle('Mes expériences', 'sectionTitle', '#024873');
-    const expBody: any[] = [];
 
     experienceList.forEach((exp) => {
       const expDate = PdfCreatorService.getDateToPrint(exp.beginDate, exp.endDate);
-      PdfCreatorService.addTitle(expBody, exp, expDate);
-      PdfCreatorService.addPlace(expBody, exp);
+      this.updatePdfContent.addItemHeader(exp, expDate);
 
       if (exp.detailList && exp.detailList.length) {
-        exp.detailList.forEach(detail => {
+        exp.detailList.forEach((detail) => {
+          const eachDetailBody: any[] = [];
           if (detail.title) {
-            expBody.push([{ text: detail.title.toUpperCase(), bold: true, margin: [0, 8, 0, -2], fontSize: 10 }]);
+            eachDetailBody.push([{
+              text: detail.title.toUpperCase(),
+              bold: true,
+              margin: [0, 8, 0, -2],
+              fontSize: 10,
+            }]);
           }
+
           if (detail.lineList && detail.lineList.length) {
-            detail.lineList.forEach(line => {
-              expBody.push(line.charAt(0) !== '*'
+            detail.lineList.forEach((line) => {
+              eachDetailBody.push(line.charAt(0) !== '*'
                 ? [{ text: ' - ' + line, style: 'lineDetail', margin: [5, 0, 10, 0] }]
                 : [{ text: line, style: 'lineDetail' }],
               );
             });
           }
+
+          this.updatePdfContent.addItemContent(eachDetailBody);
         });
       }
     });
-
-    const expTable: IPdfTableBundle = {
-      margin: [0, 10],
-      layout: 'noBorders',
-      table: {
-        widths: ['*'],
-        body: expBody
-      }
-    };
-    this.updatePdfContent.addTable(expTable);
   }
 
   private buildPdfFormations(formationList: FormationV1[]): void {
-    this.updatePdfContent.addSectionTitle('Mes formations', 'sectionTitle', '#024873', 'before');
-    const formBody: any[] = [];
+    this.updatePdfContent.addSectionTitle('Mes formations', 'sectionTitle', '#024873');
 
     formationList.forEach((form) => {
       const formDate = PdfCreatorService.getDateToPrint(form.beginDate, form.endDate);
-      PdfCreatorService.addTitle(formBody, form, formDate);
-      PdfCreatorService.addPlace(formBody, form);
+      this.updatePdfContent.addItemHeader(form, formDate);
 
       if (form.detailList && form.detailList.length) {
-        form.detailList.forEach(detail => {
+        form.detailList.forEach((detail) => {
           if (detail.title && !detail.title.includes('Voir le certificat')) {
+            const eachDetailBody: any[] = [];
+
             const title: string = detail.title.includes('Stage ')
               ? 'Stage (' + detail.title.split('(')[1]
               : detail.title;
 
-            formBody.push([{
+            eachDetailBody.push([{
               text: title
                 .replace('Détail du cours (', 'Durée du cours : ')
                 .replace('Cours (', 'Durée des cours : ')
@@ -382,105 +328,53 @@ export class PdfCreatorService {
                 .replace('semaines)', 'semaines')
                 .toUpperCase(),
               link: detail.url ? detail.url : '',
-              bold: true, margin: [0, 4, 0, -2], fontSize: 10
+              bold: true, margin: [0, 4, 0, -2], fontSize: 10,
             }]);
+
+            this.updatePdfContent.addItemContent(eachDetailBody);
           }
         });
       }
     });
-
-    const formTable: IPdfTableBundle = {
-      margin: [0, 10],
-      layout: 'noBorders',
-      table: {
-        widths: ['*'],
-        body: formBody
-      }
-    };
-    this.updatePdfContent.addTable(formTable);
   }
 
   private async buildPdfProjects(projectList: ProjectItem[]): Promise<void> {
-    this.updatePdfContent.addSectionTitle('Mes projets',
-      'sectionTitle', '#024873', 'before');
-    const projBody = [];
-    let index = 0;
-    const displayPerPage = 4;
-    let newLimit = displayPerPage;
+    this.updatePdfContent.addSectionTitle('Mes projets', 'sectionTitle', '#024873', 'before');
 
-    for (const [i, p] of projectList.entries()) {
-      projBody.push([
-        {
-          layout: 'noBorders',
-          margin: [0, 30, 0, 0],
-          table: {
-            widths: ['auto', '*'],
-            body: [
-              [
-                {
-                  image: await this.utilsService.convertImageToBase64(p.pictureList[0].src), margin: [0, 0, 20, 10],
-                  // @ts-ignore
-                  pageBreak: (currentNode, followingNodesOnPage) => PdfCreatorService.checkLineBreakMode(currentNode, followingNodesOnPage),
+    for (const project of projectList) {
+      const image = await this.utilsService.convertImageToBase64(project.pictureList[0].src);
+
+      const projTable: ContentTable = {
+        layout: 'noBorders',
+        margin: [0, 15, 0, 0],
+        table: {
+          dontBreakRows: true,
+          widths: [190, '*'],
+          body: [
+            [
+              { image, width: 175, height: 130 },
+              {
+                layout: 'noBorders',
+                table: {
+                  widths: ['*'],
+                  body: [
+                    [{ text: project.title, link: project?.link?.url || null, bold: true }],
+                    [{ text: project.subTitle }],
+                    [{ text: 'Technos utilisées : ' + project.technoList.join('  '), style: 'chip' }],
+                  ],
                 },
-                {
-                  layout: 'noBorders',
-                  table: {
-                    widths: ['*'],
-                    body: [
-                      [
-                        {
-                          text: p.title, link: p.link && p.link.url ? p.link.url : null, bold: true,
-                          // @ts-ignore
-                          pageBreak: (currentNode, followingNodesOnPage) => PdfCreatorService.checkLineBreakMode(currentNode, followingNodesOnPage),
-                        }
-                      ]
-                    ]
-                  }
-                }
-              ]
-            ]
-          }
-        }
-      ]);
+              },
+            ],
+          ],
+        },
+      };
 
-      if (p.subTitle) {
-        // @ts-ignore
-        projBody[index][0].table.body[0][1].table.body.push([{text: p.subTitle}]);
-      }
-
-      if (p.technoList && p.technoList.length) {
-        // @ts-ignore
-        projBody[index][0].table.body[0][1].table.body.push([
-          // @ts-ignore
-          {text: 'Technos utilisées : ' + p.technoList.join('  '), style: 'chip'}
-          // chipTable
-        ]);
-      }
-
-      if ((i + 1) === newLimit) {
-        newLimit += displayPerPage;
-        projBody.push([{text: '', pageBreak: 'before'}]);
-        index += 1;
-      }
-
-      index += 1;
+      this.updatePdfContent.addTable(projTable);
     }
-
-    const projTable: IPdfTableBundle = {
-      margin: [0, 10],
-      layout: 'noBorders',
-      table: {
-        widths: ['*'],
-        body: projBody
-      }
-    };
-    this.updatePdfContent.addTable(projTable);
   }
 
   private buildPdfInterests(interestList: InterestV1[]): void {
-    this.updatePdfContent.addSectionTitle(
-      'Mes centres d\'intérêts', 'sectionTitle',
-      '#024873'/*, 'before'*/);
+    this.updatePdfContent.addSectionTitle('Mes centres d\'intérêts', 'sectionTitle', '#024873');
     const intBody: any[] = [];
 
     interestList.forEach(int => {
@@ -492,34 +386,34 @@ export class PdfCreatorService {
       }]);
     });
 
-    const intTable: IPdfTableBundle = {
+    const intTable: ContentTable = {
       margin: [0, 10],
       layout: 'noBorders',
       table: {
         widths: ['*'],
-        body: intBody
-      }
+        body: intBody,
+      },
     };
     this.updatePdfContent.addTable(intTable);
   }
 }
 
 /*
-Style properties
+ Style properties
 
-font: string: name of the font
-fontSize: number: size of the font in pt
-fontFeatures: string[]: array of advanced typographic features supported in TTF fonts (supported features depend on font file)
-lineHeight: number: the line height (default: 1)
-bold: boolean: whether to use bold text (default: false)
-italics: boolean: whether to use italic text (default: false)
-alignment: string: (‘left’ or ‘center’ or ‘right’) the alignment of the text
-characterSpacing: number: size of the letter spacing in pt
-color: string: the color of the text (color name e.g., ‘blue’ or hexadecimal color e.g., ‘#ff5500’)
-background: string the background color of the text
-markerColor: string: the color of the bullets in a buletted list
-decoration: string: the text decoration to apply (‘underline’ or ‘lineThrough’ or ‘overline’)
-decorationStyle: string: the style of the text decoration (‘dashed’ or ‘dotted’ or ‘double’ or ‘wavy’)
-decorationColor: string: the color of the text decoration, see color
+ font: string: name of the font
+ fontSize: number: size of the font in pt
+ fontFeatures: string[]: array of advanced typographic features supported in TTF fonts (supported features depend on font file)
+ lineHeight: number: the line height (default: 1)
+ bold: boolean: whether to use bold text (default: false)
+ italics: boolean: whether to use italic text (default: false)
+ alignment: string: (‘left’ or ‘center’ or ‘right’) the alignment of the text
+ characterSpacing: number: size of the letter spacing in pt
+ color: string: the color of the text (color name e.g., ‘blue’ or hexadecimal color e.g., ‘#ff5500’)
+ background: string the background color of the text
+ markerColor: string: the color of the bullets in a buletted list
+ decoration: string: the text decoration to apply (‘underline’ or ‘lineThrough’ or ‘overline’)
+ decorationStyle: string: the style of the text decoration (‘dashed’ or ‘dotted’ or ‘double’ or ‘wavy’)
+ decorationColor: string: the color of the text decoration, see color
 
  */
