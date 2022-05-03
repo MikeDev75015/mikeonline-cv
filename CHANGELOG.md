@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.12.0](https://bitbucket.org/mikeonline75/ocv-frontend/compare/v1.11.1...v1.12.0) (2022-05-03)
+
+
+### Features
+
+* add the possibility to filter skills ([f065ebd](https://bitbucket.org/mikeonline75/ocv-frontend/commit/f065ebd53c2f19ba7f4f8add0f7604b2c3d0792b))
+
+
+### Bug Fixes
+
+* prevent skills unexpectedly reloading when mobile keyboard opens ([9125397](https://bitbucket.org/mikeonline75/ocv-frontend/commit/9125397a0ab9fb9a7a6718ed16b4e7da6690f4c0))
+
 ### [1.11.1](https://bitbucket.org/mikeonline75/ocv-frontend/compare/v1.11.0...v1.11.1) (2022-05-02)
 
 ## [1.11.0](https://bitbucket.org/mikeonline75/ocv-frontend/compare/v1.10.0...v1.11.0) (2022-05-01)
