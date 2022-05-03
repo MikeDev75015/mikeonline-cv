@@ -120,6 +120,12 @@ export class SkillsComponent implements OnInit, OnDestroy, AfterViewChecked {
   public skillsLoaded = false;
 
   /**
+   * Allows to detect if the window width has changed before initialize again the load of wordcould
+   * @private
+   */
+  private innerWidth!: number;
+
+  /**
    * A boolean that inform if word-cloud is initialized or not.
    * @private
    */
@@ -196,6 +202,8 @@ export class SkillsComponent implements OnInit, OnDestroy, AfterViewChecked {
       }),
       map((loaded) => !loaded),
     );
+
+    this.innerWidth = window.innerWidth;
   }
 
   /**
@@ -240,6 +248,10 @@ export class SkillsComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.cdRef.detectChanges();
   }
 
+  /**
+   * Changes display of skills whenever filter input value changes
+   * @param filterInputValue
+   */
   public onFormValuesChange({ filterInputValue }: { filterInputValue: string; }): void {
     this.filterValue = filterInputValue.toLowerCase();
 
@@ -320,6 +332,12 @@ export class SkillsComponent implements OnInit, OnDestroy, AfterViewChecked {
    * The callback of the window resize event.
    */
   private readonly windowResizeCallback = () => {
+    if (this.innerWidth === window.innerWidth) {
+      return;
+    }
+
+    this.innerWidth = window.innerWidth;
+
     if (this.drawingTimeout) {
       clearTimeout(this.drawingTimeout);
       this.drawingTimeout = undefined;
@@ -334,7 +352,7 @@ export class SkillsComponent implements OnInit, OnDestroy, AfterViewChecked {
       wcCanvas.innerHTML = '';
 
       this.defaultText = 'Chargement des technos en cours...';
-      await this.loadWordCloudInCanvasElement(wcCanvas);
+      await this.loadWordCloudInCanvasElement(wcCanvas, false);
     }, 500);
   };
 
@@ -409,32 +427,35 @@ export class SkillsComponent implements OnInit, OnDestroy, AfterViewChecked {
   /**
    * Loads WordCloud to the canvas element.
    * @param wcCanvas
+   * @param loadSkills
    * @private
    */
-  private async loadWordCloudInCanvasElement(wcCanvas: HTMLElement): Promise<void> {
+  private async loadWordCloudInCanvasElement(wcCanvas: HTMLElement, loadSkills = true): Promise<void> {
     this.skillsDrawn = 0;
     this.timeOutToDrawn = 0;
 
-    this.skillList = await this.dataService.getStoreData({
-      selector: selectAllSkills, defaultValue: [],
-    });
+    if (loadSkills) {
+      this.skillList = await this.dataService.getStoreData({
+        selector: selectAllSkills, defaultValue: [],
+      });
 
-    if (!this.skillList || this.skillList.length === 0) {
-      console.debug('No skills found!');
-      return;
+      if (!this.skillList || this.skillList.length === 0) {
+        console.debug('No skills found!');
+        return;
+      }
+
+      this.formFields = [
+        {
+          field: 'filterInputValue', inputType: 'text', defaultValue: '', inputLabel: '',
+          inputPlaceholder: 'filtrer les technos',
+
+        },
+      ];
+
+      this.wordList = this.skillList.map(
+        (skill) => ([skill.name, this.policeSize(skill.expertiseLevel, skill.priority)]),
+      );
     }
-
-    this.formFields = [
-      {
-        field: 'filterInputValue', inputType: 'text', defaultValue: '', inputLabel: '',
-        inputPlaceholder: 'filtrer les technos',
-
-      },
-    ];
-
-    this.wordList = this.skillList.map(
-      (skill) => ([skill.name, this.policeSize(skill.expertiseLevel, skill.priority)]),
-    );
 
     window.WordCloud(wcCanvas, {
       ...this.setWorldCloudOptions(),
