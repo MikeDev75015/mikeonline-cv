@@ -1,6 +1,4 @@
-import {
-  DropdownOption,
-} from '../../modules/admin/components/fragments/dropdown-wrapper/interfaces/dropdown-option.interface';
+import { DropdownOption } from '../../shared/components/dropdown-wrapper/interfaces/dropdown-option.interface';
 
 export const APP_CREDITS = {
   copyright: 'Copyright © 2018-2022',

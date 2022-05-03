@@ -26,6 +26,17 @@ import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 import { LoadingComponent } from '../core/directives/loading/component/loading.component';
 import { LoadingDirective } from '../core/directives/loading/loading.directive';
+
+import { AutoCompleteWrapperComponent } from './components/auto-complete-wrapper/auto-complete-wrapper.component';
+import { DropdownWrapperComponent } from './components/dropdown-wrapper/dropdown-wrapper.component';
+import { FormWrapperComponent } from './components/form-wrapper/form-wrapper.component';
+import { InputCheckboxComponent } from './components/input-wrapper/input-checkbox/input-checkbox.component';
+import { InputNumberComponent } from './components/input-wrapper/input-number/input-number.component';
+import { InputPasswordComponent } from './components/input-wrapper/input-password/input-password.component';
+import { InputTextComponent } from './components/input-wrapper/input-text/input-text.component';
+import { InputTextareaComponent } from './components/input-wrapper/input-textarea/input-textarea.component';
+import { InputWrapperComponent } from './components/input-wrapper/input-wrapper.component';
+import { MultiSelectWrapperComponent } from './components/multi-select-wrapper/multi-select-wrapper.component';
 import {
   DynamicComponentLoaderDirective,
 } from './directives/dynamic-component-loader/dynamic-component-loader.directive';
@@ -55,12 +66,27 @@ const primeNgModules: any[] = [
   AutoCompleteModule,
 ];
 
+const sharedComponents: any[] = [
+  LoadingComponent,
+  InputWrapperComponent,
+  DropdownWrapperComponent,
+  FormWrapperComponent,
+  InputTextComponent,
+  InputPasswordComponent,
+  InputNumberComponent,
+  InputTextareaComponent,
+  InputCheckboxComponent,
+  MultiSelectWrapperComponent,
+  AutoCompleteWrapperComponent,
+];
+
 @NgModule({
   declarations: [
-    DateFormatPipe,
-    LoadingComponent,
     LoadingDirective,
     DynamicComponentLoaderDirective,
+
+    DateFormatPipe,
+    ...sharedComponents,
   ],
   imports: [
     CommonModule,
@@ -75,10 +101,11 @@ const primeNgModules: any[] = [
     MatIconModule,
     ...primeNgModules,
 
-    DateFormatPipe,
-
     LoadingDirective,
     DynamicComponentLoaderDirective,
+
+    DateFormatPipe,
+    ...sharedComponents,
   ],
 })
 export class SharedModule {

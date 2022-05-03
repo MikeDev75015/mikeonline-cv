@@ -1,6 +1,6 @@
-import { getValidationField } from '../components/fragments/form-wrapper/constants/validation-field-bundle.constant';
-import { ChildFormField, FormField } from '../components/fragments/form-wrapper/interfaces/form-field.interface';
-import { ValidationType } from '../components/fragments/form-wrapper/interfaces/validation-type.enum';
+import { getValidationField } from '../../../shared/components/form-wrapper/constants/validation-field-bundle.constant';
+import { ChildFormField, FormField } from '../../../shared/components/form-wrapper/interfaces/form-field.interface';
+import { ValidationType } from '../../../shared/components/form-wrapper/interfaces/validation-type.enum';
 import {
   autoCompleteByPropertyAdapterFactory,
   DEFAULT_FORM_FIELDS_ADAPTERS,

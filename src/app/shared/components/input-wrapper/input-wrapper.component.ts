@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { InputWrapperType } from '../../../interfaces/input-wrapper.type';
+import { InputWrapperType } from '../../../modules/admin/interfaces/input-wrapper.type';
 import { DEFAULT_INPUT_HEIGHT, DEFAULT_INPUT_TYPE, DEFAULT_INPUT_WIDTH } from './constants/input-wrapper.constant';
 import { InputWrapperCheckboxOptions } from './interfaces/checkbox-options.interface';
 import { InputWrapperNumberOptions } from './interfaces/number-options.interface';

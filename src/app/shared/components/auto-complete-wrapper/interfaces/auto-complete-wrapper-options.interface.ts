@@ -11,5 +11,7 @@ export interface AutoCompleteWrapperOptions {
 
   list?: DropdownOption[];
 
+  suggestionLimit?: number;
+
   scrollHeight?: string;
 }

@@ -1,7 +1,7 @@
 import { IMultiPart } from '../../../core/interfaces/models/commons/contact.interface';
 import { DayJsService } from '../../../core/services/dayjs/dayjs.service';
 import { UtilsService } from '../../../shared';
-import { DropdownOption } from '../components/fragments/dropdown-wrapper/interfaces/dropdown-option.interface';
+import { DropdownOption } from '../../../shared/components/dropdown-wrapper/interfaces/dropdown-option.interface';
 import { DataConverter } from '../components/fragments/table-wrapper/interfaces/data-converter.interface';
 
 export const autoCompleteByPropertyAdapterFactory = (property: string) => {

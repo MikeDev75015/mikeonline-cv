@@ -1,4 +1,4 @@
-import { InputWrapperType } from '../../../../interfaces/input-wrapper.type';
+import { InputWrapperType } from '../../../../modules/admin/interfaces/input-wrapper.type';
 
 export const DEFAULT_INPUT_TYPE: InputWrapperType = 'text';
 export const DEFAULT_INPUT_WIDTH = '250px';

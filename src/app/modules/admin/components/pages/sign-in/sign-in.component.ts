@@ -7,10 +7,12 @@ import { MessageSeverity } from '../../../../../core/interfaces/types/message-se
 import { loginUser } from '../../../../../core/ngrx/actions/auth.actions';
 import { selectCurrentUser } from '../../../../../core/ngrx/selectors/auth.selectors';
 import { ErrorMessageService } from '../../../../../core/services/error-message/error-message.service';
+import {
+  getValidationField,
+} from '../../../../../shared/components/form-wrapper/constants/validation-field-bundle.constant';
+import { FormField } from '../../../../../shared/components/form-wrapper/interfaces/form-field.interface';
+import { ValidationType } from '../../../../../shared/components/form-wrapper/interfaces/validation-type.enum';
 import { AuthService } from '../../../services/auth/auth.service';
-import { getValidationField } from '../../fragments/form-wrapper/constants/validation-field-bundle.constant';
-import { FormField } from '../../fragments/form-wrapper/interfaces/form-field.interface';
-import { ValidationType } from '../../fragments/form-wrapper/interfaces/validation-type.enum';
 import { SEVERITY_MESSAGE_SUMMARY } from '../../fragments/table-wrapper/constants/common.constant';
 
 @Component({

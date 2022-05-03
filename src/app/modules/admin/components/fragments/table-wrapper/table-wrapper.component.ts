@@ -20,11 +20,15 @@ import { DayJsService } from '../../../../../core/services/dayjs/dayjs.service';
 import { UtilsService } from '../../../../../shared';
 import {
   AutoCompleteWrapperOptions,
-} from '../auto-complete-wrapper/interfaces/auto-complete-wrapper-options.interface';
-import { DropdownWrapperOptions } from '../dropdown-wrapper/interfaces/dropdown-wrapper-options.interface';
-import { FormField } from '../form-wrapper/interfaces/form-field.interface';
-import { FormWrapperService } from '../form-wrapper/services/form-wrapper.service';
-import { MultiSelectWrapperOptions } from '../multi-select-wrapper/interfaces/multi-select-wrapper-options.interfaces';
+} from '../../../../../shared/components/auto-complete-wrapper/interfaces/auto-complete-wrapper-options.interface';
+import {
+  DropdownWrapperOptions,
+} from '../../../../../shared/components/dropdown-wrapper/interfaces/dropdown-wrapper-options.interface';
+import { FormField } from '../../../../../shared/components/form-wrapper/interfaces/form-field.interface';
+import { FormWrapperService } from '../../../../../shared/components/form-wrapper/services/form-wrapper.service';
+import {
+  MultiSelectWrapperOptions,
+} from '../../../../../shared/components/multi-select-wrapper/interfaces/multi-select-wrapper-options.interfaces';
 import { SEVERITY_MESSAGE_SUMMARY } from './constants/common.constant';
 import { DEFAULT_TOAST_CONFIRMATIONS, DEFAULT_TOAST_MESSAGES } from './constants/toast-config.constant';
 import { DataConverter } from './interfaces/data-converter.interface';

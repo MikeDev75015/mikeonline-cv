@@ -6,7 +6,9 @@ import {
 } from '../../../../../../core/constants/common.constant';
 import { TagV1 } from '../../../../../../core/interfaces/models/v1/tag.interface';
 import { DayJsService } from '../../../../../../core/services/dayjs/dayjs.service';
-import { DropdownOption } from '../../dropdown-wrapper/interfaces/dropdown-option.interface';
+import {
+  DropdownOption,
+} from '../../../../../../shared/components/dropdown-wrapper/interfaces/dropdown-option.interface';
 
 @Pipe({
   name: 'formatValueDisplay',

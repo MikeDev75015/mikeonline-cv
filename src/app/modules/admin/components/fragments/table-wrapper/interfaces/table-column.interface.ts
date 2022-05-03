@@ -1,6 +1,8 @@
+import { FormField } from '../../../../../../shared/components/form-wrapper/interfaces/form-field.interface';
+import {
+  FormInputOptions,
+} from '../../../../../../shared/components/form-wrapper/interfaces/form-input-options.interface';
 import { InputWrapperType } from '../../../../interfaces/input-wrapper.type';
-import { FormField } from '../../form-wrapper/interfaces/form-field.interface';
-import { FormInputOptions } from '../../form-wrapper/interfaces/form-input-options.interface';
 
 export interface TableColumn extends FormInputOptions {
   field: string;

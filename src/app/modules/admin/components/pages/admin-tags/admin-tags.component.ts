@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import {
+  getValidationField,
+} from '../../../../../shared/components/form-wrapper/constants/validation-field-bundle.constant';
+import { FormField } from '../../../../../shared/components/form-wrapper/interfaces/form-field.interface';
+import { ValidationType } from '../../../../../shared/components/form-wrapper/interfaces/validation-type.enum';
 import { DEFAULT_TABLE_COLUMNS_CONFIG } from '../../../constants/common-table-columns.config';
-import { getValidationField } from '../../fragments/form-wrapper/constants/validation-field-bundle.constant';
-import { FormField } from '../../fragments/form-wrapper/interfaces/form-field.interface';
-import { ValidationType } from '../../fragments/form-wrapper/interfaces/validation-type.enum';
 import { TableColumn } from '../../fragments/table-wrapper/interfaces/table-column.interface';
 
 @Component({

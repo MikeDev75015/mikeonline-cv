@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { AutoCompleteModule } from 'primeng/autocomplete';
-import { CV_TYPE_DROPDOWN_LIST } from '../../../../../core/constants/common.constant';
+import { CV_TYPE_DROPDOWN_LIST } from '../../../core/constants/common.constant';
 
 import { AutoCompleteWrapperComponent } from './auto-complete-wrapper.component';
 

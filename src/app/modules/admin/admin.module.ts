@@ -3,20 +3,6 @@ import { NgModule } from '@angular/core';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { SharedModule } from '../../shared/shared.module';
 import { AdminRoutingModule } from './admin-routing.module';
-import {
-  AutoCompleteWrapperComponent,
-} from './components/fragments/auto-complete-wrapper/auto-complete-wrapper.component';
-import { DropdownWrapperComponent } from './components/fragments/dropdown-wrapper/dropdown-wrapper.component';
-import { FormWrapperComponent } from './components/fragments/form-wrapper/form-wrapper.component';
-import { InputCheckboxComponent } from './components/fragments/input-wrapper/input-checkbox/input-checkbox.component';
-import { InputNumberComponent } from './components/fragments/input-wrapper/input-number/input-number.component';
-import { InputPasswordComponent } from './components/fragments/input-wrapper/input-password/input-password.component';
-import { InputTextComponent } from './components/fragments/input-wrapper/input-text/input-text.component';
-import { InputTextareaComponent } from './components/fragments/input-wrapper/input-textarea/input-textarea.component';
-import { InputWrapperComponent } from './components/fragments/input-wrapper/input-wrapper.component';
-import {
-  MultiSelectWrapperComponent,
-} from './components/fragments/multi-select-wrapper/multi-select-wrapper.component';
 import { PickListWrapperComponent } from './components/fragments/pick-list-wrapper/pick-list-wrapper.component';
 import { FormatValueDisplayPipe } from './components/fragments/table-wrapper/pipes/format-value-display.pipe';
 import { TableWrapperComponent } from './components/fragments/table-wrapper/table-wrapper.component';
@@ -38,27 +24,18 @@ const primeNgModule: any[] = [
   declarations: [
     SignInComponent,
     AdminLayoutComponent,
-    AdminTagsComponent,
+    AdminCvInfosComponent,
     AdminExperiencesComponent,
     AdminFormationsComponent,
-    AdminSkillsComponent,
-    AdminProjectsComponent,
     AdminInterestsComponent,
-    InputWrapperComponent,
+    AdminProjectsComponent,
+    AdminSkillsComponent,
+    AdminTagsComponent,
+
     TableWrapperComponent,
-    DropdownWrapperComponent,
-    FormWrapperComponent,
-    InputTextComponent,
-    InputPasswordComponent,
-    InputNumberComponent,
-    InputTextareaComponent,
-    InputCheckboxComponent,
     PickListWrapperComponent,
 
     FormatValueDisplayPipe,
-    AdminCvInfosComponent,
-    MultiSelectWrapperComponent,
-    AutoCompleteWrapperComponent,
   ],
   imports: [
     CommonModule,

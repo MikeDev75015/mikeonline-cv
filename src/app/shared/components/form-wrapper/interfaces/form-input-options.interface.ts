@@ -1,4 +1,7 @@
 import {
+  PickListWrapperOptions,
+} from '../../../../modules/admin/components/fragments/pick-list-wrapper/interfaces/pick-list-wrapper-options.interface';
+import {
   AutoCompleteWrapperOptions,
 } from '../../auto-complete-wrapper/interfaces/auto-complete-wrapper-options.interface';
 import { DropdownWrapperOptions } from '../../dropdown-wrapper/interfaces/dropdown-wrapper-options.interface';
@@ -8,7 +11,6 @@ import { InputWrapperTextareaOptions } from '../../input-wrapper/interfaces/text
 import {
   MultiSelectWrapperOptions,
 } from '../../multi-select-wrapper/interfaces/multi-select-wrapper-options.interfaces';
-import { PickListWrapperOptions } from '../../pick-list-wrapper/interfaces/pick-list-wrapper-options.interface';
 
 export interface FormInputOptions {
   inputName?: string;

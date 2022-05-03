@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import {
+  getValidationField,
+} from '../../../../../shared/components/form-wrapper/constants/validation-field-bundle.constant';
+import { FormField } from '../../../../../shared/components/form-wrapper/interfaces/form-field.interface';
+import { ValidationType } from '../../../../../shared/components/form-wrapper/interfaces/validation-type.enum';
 import { dataGeneratorListFactory } from '../../../constants/common-data-converters.config';
 import { partialDatePattern } from '../../../constants/common-date.config';
 import {
@@ -6,9 +11,6 @@ import {
   DEFAULT_FORM_FIELDS_CONFIG,
 } from '../../../constants/common-formFields.config';
 import { DEFAULT_TABLE_COLUMNS_CONFIG } from '../../../constants/common-table-columns.config';
-import { getValidationField } from '../../fragments/form-wrapper/constants/validation-field-bundle.constant';
-import { FormField } from '../../fragments/form-wrapper/interfaces/form-field.interface';
-import { ValidationType } from '../../fragments/form-wrapper/interfaces/validation-type.enum';
 import { TableColumn } from '../../fragments/table-wrapper/interfaces/table-column.interface';
 
 @Component({
