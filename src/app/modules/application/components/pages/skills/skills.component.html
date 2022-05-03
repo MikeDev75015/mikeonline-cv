@@ -5,6 +5,13 @@
   [isLoadingData$]="isLoadingData$"
 >
   <div class="fsc column w100" aria-labelledby="skills content">
+
+    <app-form-wrapper
+      (formValuesChange)="onFormValuesChange($event)" *ngIf="formFields && formFields.length > 0"
+      [(formValues)]="formValues"
+      [formFields]="formFields" class="filter-form"
+    ></app-form-wrapper>
+
     <div class="w90 fcc" id="wc_canvas" style="min-height: 200px; height: auto;"></div>
     <p *ngIf="selectedKeyword || defaultText" class="fcc chip"
        style="margin-top: 50px !important;">{{ selectedKeyword || defaultText }}</p><br>

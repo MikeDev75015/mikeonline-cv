@@ -25,6 +25,23 @@
   }
 }
 
+#SKILLS {
+  .filter-form {
+    margin-bottom: 20px;
+    position: sticky;
+    top: 0;
+
+    .p-inputtext {
+      color: rgb(2, 72, 115);
+    }
+
+    .p-inputtext, .p-inputtext:hover, .p-inputtext:focus {
+      border-color: transparent;
+      box-shadow: unset;
+    }
+  }
+}
+
 section {
   margin-bottom: 140px !important;
   position: relative;

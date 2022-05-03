@@ -6,6 +6,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MockComponent } from 'ng2-mock-component';
 import { KnobModule } from 'primeng/knob';
 import { lastValueFrom, of } from 'rxjs';
+import { formWrapperComponentMock } from '../../../../../../../__mocks__/components/form-wrapper-component.mock';
 import { addTags } from '../../../../../../../__mocks__/helper';
 import { changeDetectorRefMock } from '../../../../../../../__mocks__/services/change-detector-ref.mock';
 import { dataServiceMock } from '../../../../../../../__mocks__/services/data-service.mock';
@@ -38,6 +39,7 @@ describe('SkillsComponent', () => {
       ],
       declarations: [
         SkillsComponent,
+        MockComponent(formWrapperComponentMock),
         MockComponent({
           selector: 'app-item',
           inputs: [],
@@ -362,7 +364,7 @@ describe('SkillsComponent', () => {
       expect(wcElementMock.onclick).toStrictEqual(null);
       expect(wcElementMock.getAttribute('init-onclick')).toStrictEqual(null);
 
-      component['addClickActionOnElement'](wcElementMock);
+      component['addAttributesOnWcElement'](wcElementMock);
 
       expect(wcElementMock.onclick).toBeDefined();
       expect(wcElementMock.getAttribute('init-onclick')).toStrictEqual('true');

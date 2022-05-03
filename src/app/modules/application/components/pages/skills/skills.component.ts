@@ -13,7 +13,9 @@ import { selectAllProjects } from '../../../../../core/ngrx/selectors/projects.s
 import { selectAllSkills, selectSkillsLoaded } from '../../../../../core/ngrx/selectors/skills.selectors';
 import { DayJsService } from '../../../../../core/services/dayjs/dayjs.service';
 import { DataService, UtilsService } from '../../../../../shared';
+import { FormField } from '../../../../../shared/components/form-wrapper/interfaces/form-field.interface';
 import { TemplatesService } from '../../../../../shared/services/templates/templates.service';
+import { KnobSkill } from '../../../interfaces/knob-skill.interface';
 import { ProjectItem } from '../../../interfaces/project-item.interface';
 
 /**
@@ -25,13 +27,6 @@ declare global {
   }
 }
 window.WordCloud = window.WordCloud || {};
-
-export interface KnobSkill extends SkillV1 {
-  experienceYears: {
-    value: number;
-    text: string;
-  };
-}
 
 /**
  * The component of the skills page.
@@ -46,6 +41,23 @@ export class SkillsComponent implements OnInit, OnDestroy, AfterViewChecked {
    * An observable allowing to initialize the page when data are loaded.
    */
   public isLoadingData$: Observable<boolean> = of(true);
+
+  /**
+   * The skills filter form config
+   */
+  public formFields: FormField[] | undefined;
+
+  /**
+   * The filter value used
+   */
+  public filterValue = '';
+
+  /**
+   * Contains the filter input value
+   */
+  public formValues: { filterInputValue: string; } = {
+    filterInputValue: '',
+  };
 
   /**
    * The text to display under the skills cloud when no skill is selected.
@@ -228,6 +240,23 @@ export class SkillsComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.cdRef.detectChanges();
   }
 
+  public onFormValuesChange({ filterInputValue }: { filterInputValue: string; }): void {
+    this.filterValue = filterInputValue.toLowerCase();
+
+    const wcElements: HTMLSpanElement[] = Array.from(document.querySelectorAll('span.word-in-cloud'));
+    wcElements.forEach((element) => {
+      const text = element.innerText.toLowerCase();
+      if (this.filterValue && !text.includes(this.filterValue)) {
+        element.style.opacity = '0.1';
+        element.style.pointerEvents = 'none';
+        return;
+      }
+
+      element.style.opacity = '1';
+      element.style.pointerEvents = 'auto';
+    });
+  }
+
   /**
    * Pluralizes string if needed.
    * @see UtilsService#pluralize
@@ -280,7 +309,7 @@ export class SkillsComponent implements OnInit, OnDestroy, AfterViewChecked {
 
     for (const element of wcElements) {
       if (!element.getAttribute('init-onclick')) {
-        this.addClickActionOnElement(element as HTMLElement);
+        this.addAttributesOnWcElement(element as HTMLElement);
       }
     }
 
@@ -344,7 +373,7 @@ export class SkillsComponent implements OnInit, OnDestroy, AfterViewChecked {
    * @param el The HTML element of the skill.
    * @private
    */
-  private addClickActionOnElement(el: HTMLElement) {
+  private addAttributesOnWcElement(el: HTMLElement) {
     el.onclick = async (e) => {
       e.preventDefault();
       this.selectedKeyword = el.innerText;
@@ -389,6 +418,20 @@ export class SkillsComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.skillList = await this.dataService.getStoreData({
       selector: selectAllSkills, defaultValue: [],
     });
+
+    if (!this.skillList || this.skillList.length === 0) {
+      console.debug('No skills found!');
+      return;
+    }
+
+    this.formFields = [
+      {
+        field: 'filterInputValue', inputType: 'text', defaultValue: '', inputLabel: '',
+        inputPlaceholder: 'filtrer les technos',
+
+      },
+    ];
+
     this.wordList = this.skillList.map(
       (skill) => ([skill.name, this.policeSize(skill.expertiseLevel, skill.priority)]),
     );
