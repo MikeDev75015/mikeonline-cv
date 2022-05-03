@@ -335,38 +335,38 @@ workflows:
     when:
       equal: [ << pipeline.git.tag >>, release ]
     jobs:
-      - cypress/install:
-          name: ci-cypress-install-job
-          executor: cypress-base-16-with-chrome-and-firefox
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: release
-      - cypress/run:
-          name: ci-cypress-run-job
-          context: CYPRESS_ENV
-          requires:
-            - ci-cypress-install-job
-          executor: cypress-base-16-with-chrome-and-firefox
-          ci-build-id: 'testing-commit-${CIRCLE_SHA1}'
-          parallelism: 8
-          command: |
-            CYPRESSFILES=$(circleci tests glob "cypress/integration/**/*_spec.js" | circleci tests split --split-by=timings)
-            npm run cypress:ci $CYPRESSFILES
-          start: npm run cypress-server
-          wait-on: 'http://localhost:4201'
-          no-workspace: true
-          post-steps:
-            - cypress-post-steps
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: release
+#      - cypress/install:
+#          name: ci-cypress-install-job
+#          executor: cypress-base-16-with-chrome-and-firefox
+#          filters:
+#            branches:
+#              ignore: /.*/
+#            tags:
+#              only: release
+#      - cypress/run:
+#          name: ci-cypress-run-job
+#          context: CYPRESS_ENV
+#          requires:
+#            - ci-cypress-install-job
+#          executor: cypress-base-16-with-chrome-and-firefox
+#          ci-build-id: 'testing-commit-${CIRCLE_SHA1}'
+#          parallelism: 8
+#          command: |
+#            CYPRESSFILES=$(circleci tests glob "cypress/integration/**/*_spec.js" | circleci tests split --split-by=timings)
+#            npm run cypress:ci $CYPRESSFILES
+#          start: npm run cypress-server
+#          wait-on: 'http://localhost:4201'
+#          no-workspace: true
+#          post-steps:
+#            - cypress-post-steps
+#          filters:
+#            branches:
+#              ignore: /.*/
+#            tags:
+#              only: release
       - cd-release-job:
-          requires:
-            - ci-cypress-run-job
+#          requires:
+#            - ci-cypress-run-job
           context:
             - GIT
             - REPOS
@@ -377,14 +377,14 @@ workflows:
               only: release
 
   ####################################### MASTER WORKFLOW - only master ################################################
-  ci-master-workflow:
-    jobs:
-      - ci-sonar-job:
-          context: OCV_SONARCLOUD
-          filters:
-            branches:
-              only:
-                - master
+#  ci-master-workflow:
+#    jobs:
+#      - ci-sonar-job:
+#          context: OCV_SONARCLOUD
+#          filters:
+#            branches:
+#              only:
+#                - master
 
   ################################## DEPLOY PRODUCTION WORKFLOW - only [version] TAG ###################################
   ci-cd-deploy-production-workflow:
