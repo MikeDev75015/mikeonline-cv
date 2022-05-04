@@ -165,7 +165,13 @@ jobs:
           command: git pull https://${REPO_USER}:${REPO_PASS}@bitbucket.org/${REPO_TEAM}/${REPO_NAME}.git develop
       - run:
           name: Run standard-version without generate tag
-          command: npm run release -- --skip.tag
+          command: npm run release -- --skip.tag --skip.commit
+      - run:
+          name: Commit release version number and skip ci
+          command: |
+            VERSION_NUMBER=$(jq -r '.version' package.json)
+            echo ${VERSION_NUMBER}
+            git commit -m "chore(release): ${VERSION_NUMBER}" -m "[skip ci]"
       - run:
           name: Push develop with the new version commit
           command: git push https://${REPO_USER}:${REPO_PASS}@bitbucket.org/${REPO_TEAM}/${REPO_NAME}.git develop
