@@ -27,7 +27,7 @@
 
 #SKILLS {
   .filter-form {
-    margin-bottom: 20px;
+    z-index: 1;
     position: sticky;
     top: 0;
 
@@ -39,6 +39,24 @@
       border-color: transparent;
       box-shadow: unset;
     }
+  }
+
+  .reset-selected-skill-button {
+    position: absolute;
+    top: 7px;
+    right: -25px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+  }
+
+  .skill-details {
+    z-index: 2;
+    background: #EBF2F2;
+  }
+
+  .mat-accordion {
+    z-index: 3;
   }
 }
 

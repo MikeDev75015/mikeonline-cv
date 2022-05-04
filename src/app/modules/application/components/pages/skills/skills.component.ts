@@ -249,6 +249,27 @@ export class SkillsComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   /**
+   * Deselects the skill and resets the view
+   */
+  public onResetSelectedSkill(): void {
+    this.knobSkill = undefined;
+    this.experienceList = [];
+    this.formationList = [];
+    this.projectItemList = [];
+    this.selectedKeyword = '';
+  }
+
+  /**
+   * Scrolls up when clicking on the form containing the filter input
+   */
+  public onFormClick(): void {
+    const scrollTopButton = document.querySelector('p-scrollTop button') as HTMLButtonElement;
+    if (scrollTopButton) {
+      scrollTopButton.click();
+    }
+  }
+
+  /**
    * Changes display of skills whenever filter input value changes
    * @param filterInputValue
    */
