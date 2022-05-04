@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.1](https://bitbucket.org/mikeonline75/ocv-frontend/compare/v1.12.0...v1.12.1) (2022-05-04)
+
+
+### Bug Fixes
+
+* add variable initialization to know if data is loaded ([0efce4d](https://bitbucket.org/mikeonline75/ocv-frontend/commit/0efce4d518b491858c357e345342f5b9b6e156c4))
+
 ## [1.12.0](https://bitbucket.org/mikeonline75/ocv-frontend/compare/v1.11.1...v1.12.0) (2022-05-03)
 
 
