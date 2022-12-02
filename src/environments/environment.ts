@@ -5,9 +5,9 @@
 export const environment = {
   production: false,
   interceptBackendRequest: false,
-  API_URL: 'http://localhost:5000',
-  // API_URL: 'https://ocv-backend-staging.herokuapp.com',
-  // API_URL: 'https://ocv-backend.herokuapp.com',
+  // API_URL: 'http://localhost:5000',
+  API_URL: 'https://ocv-staging.mikeonline.services',
+  // API_URL: 'https://ocv-backend.mikeonline.services',
   ACTIVATED_LOGS: true,
   APP_NAME: 'online-cv',
   SPLASH_SCREEN_DELAY: 2500,
