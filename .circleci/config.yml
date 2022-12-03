@@ -171,6 +171,7 @@ jobs:
           command: |
             VERSION_NUMBER=$(jq -r '.version' package.json)
             echo ${VERSION_NUMBER}
+            git add .
             git commit -m "chore(release): ${VERSION_NUMBER}" -m "[skip ci]"
       - run:
           name: Push develop with the new version commit
