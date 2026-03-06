@@ -5,8 +5,8 @@
 export const environment = {
   production: false,
   interceptBackendRequest: false,
-  // API_URL: 'http://localhost:5000',
-  API_URL: 'https://ocv-staging.mikeonline.services',
+  API_URL: 'http://localhost:5000',
+  // API_URL: 'https://ocv-staging.mikeonline.services',
   // API_URL: 'https://ocv-backend.mikeonline.services',
   ACTIVATED_LOGS: true,
   APP_NAME: 'online-cv',
