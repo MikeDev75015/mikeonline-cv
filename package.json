@@ -39,7 +39,8 @@
     "sonar-tag": "git tag -f sonar && git push -f upstream sonar",
     "cypress-tag": "git tag -f cypress && git push -f origin cypress",
     "deploy-staging-tag": "git tag -f deploy && git push -f origin deploy",
-    "release-tag": "git tag -f release && git push -f origin release"
+    "release-tag": "git tag -f release && git push -f origin release",
+    "deploy:prod": "npm run build-prod && firebase deploy --project cv-mikeonline --only hosting:cv-mikeonline"
   },
   "private": true,
   "dependencies": {
