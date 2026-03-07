@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MockComponent } from 'ng2-mock-component';
+import { MockComponent } from '../../../../../../test/ng2-mock-component-compat';
 import { tableWrapperComponentMock } from '../../../../../../../__mocks__/components/table-wrapper-component.mock';
 
 import { AdminFormationsComponent } from './admin-formations.component';

@@ -1,10 +1,11 @@
 import { TestBed } from '@angular/core/testing';
+import { vi } from 'vitest';
 
 import { ClipboardService } from './clipboard.service';
 
 describe('ClipboardGenService', () => {
-  let writeTextSpy: jest.SpyInstance<Promise<void>, [data: string]>;
-  let readTextSpy: jest.SpyInstance<Promise<string>, []>;
+  let writeTextSpy: any;
+  let readTextSpy: any;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({});
@@ -15,14 +16,14 @@ describe('ClipboardGenService', () => {
     Object.defineProperty(window, 'navigator', {
       value: {
         clipboard: {
-          writeText: jest.fn(),
-          readText: jest.fn(),
+          writeText: vi.fn(),
+          readText: vi.fn(),
         },
       },
     });
 
-    writeTextSpy = jest.spyOn(window.navigator.clipboard, 'writeText');
-    readTextSpy = jest.spyOn(window.navigator.clipboard, 'readText');
+    writeTextSpy = vi.spyOn(window.navigator.clipboard, 'writeText');
+    readTextSpy = vi.spyOn(window.navigator.clipboard, 'readText');
   });
 
   it('should be created', () => {

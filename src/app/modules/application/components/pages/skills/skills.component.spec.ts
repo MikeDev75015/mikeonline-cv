@@ -3,7 +3,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { MockComponent } from 'ng2-mock-component';
+import { MockComponent } from '../../../../../../test/ng2-mock-component-compat';
 import { KnobModule } from 'primeng/knob';
 import { lastValueFrom, of } from 'rxjs';
 import { formWrapperComponentMock } from '../../../../../../../__mocks__/components/form-wrapper-component.mock';

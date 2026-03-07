@@ -3,7 +3,7 @@ import { AlertModule } from '../../../../../core';
 import { DataService } from '../../../../../shared';
 
 import {VerticalAccordionComponent} from './vertical-accordion.component';
-import {MockComponent} from 'ng2-mock-component';
+import {MockComponent} from '../../../../../../test/ng2-mock-component-compat';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 
 describe('VerticalAccordionComponent', () => {

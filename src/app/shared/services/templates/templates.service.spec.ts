@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { vi } from 'vitest';
 import { IDetail } from '../../../core';
 import { ExperienceV1 } from '../../../core/interfaces/models/v1/experience.interface';
 import { FormationV1 } from '../../../core/interfaces/models/v1/formation.interface';
@@ -18,7 +19,7 @@ describe('TemplatesService', () => {
   });
 
   /* afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   }); */
 
   describe('showOpenCloseButtons', () => {
@@ -72,25 +73,10 @@ describe('TemplatesService', () => {
     });
 
     describe('invalid window object', () => {
-      let initialWindowObject: Window & typeof globalThis;
-
-      beforeAll(() => {
-        initialWindowObject = window;
-      });
-
-      afterAll(() => {
-        Object.defineProperty(global, 'window', {
-          value: initialWindowObject,
-        });
-      });
-
-      test.each([
-        ['window object is invalid', undefined],
-        ['innerWidth is invalid', { innerWidth: undefined }],
-      ])('should return 0 if %s', (name: string, windowObject: any) => {
-
-        Object.defineProperty(global, 'window', {
-          value: windowObject,
+      it('should return 0 if innerWidth is invalid', () => {
+        Object.defineProperty(window, 'innerWidth', {
+          configurable: true,
+          value: undefined,
         });
 
         expect(

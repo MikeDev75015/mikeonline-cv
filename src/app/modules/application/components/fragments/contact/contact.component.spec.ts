@@ -1,7 +1,7 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Store } from '@ngrx/store';
-import { MockComponent } from 'ng2-mock-component';
+import { MockComponent } from '../../../../../../test/ng2-mock-component-compat';
 import { storeMock } from '../../../../../../../__mocks__/services/store.mock';
 import { AlertModule } from '../../../../../core';
 

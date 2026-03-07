@@ -1,7 +1,7 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MockComponent } from 'ng2-mock-component';
+import { MockComponent } from '../../../../../../test/ng2-mock-component-compat';
 import { lastValueFrom, of } from 'rxjs';
 import { addTags } from '../../../../../../../__mocks__/helper';
 import { dataServiceMock } from '../../../../../../../__mocks__/services/data-service.mock';

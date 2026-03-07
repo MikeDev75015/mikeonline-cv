@@ -4,7 +4,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatTabsModule } from '@angular/material/tabs';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
-import { MockComponent } from 'ng2-mock-component';
+import { MockComponent } from '../../../../../../test/ng2-mock-component-compat';
 import { dataServiceMock } from '../../../../../../../__mocks__/services/data-service.mock';
 import { DataService } from '../../../../../shared';
 

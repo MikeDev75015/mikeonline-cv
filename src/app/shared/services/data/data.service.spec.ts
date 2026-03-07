@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { Store } from '@ngrx/store';
 import { lastValueFrom, of } from 'rxjs';
+import { vi } from 'vitest';
 import { storeMock } from '../../../../../__mocks__/services/store.mock';
 import cvInfoListMock from '../../../../../__mocks__/v1/json-files/cv-infos.json';
 import unsortedExperienceListMock from '../../../../../__mocks__/v1/json-files/experiences.json';
@@ -39,9 +40,9 @@ describe('DataService', () => {
     });
     service = TestBed.inject(DataService);
 
-    storeSelectSpy = jest.spyOn(storeMock, 'select');
-    storeDispatchSpy = jest.spyOn(storeMock, 'dispatch');
-    consoleDebugSpy = jest.spyOn(console, 'debug');
+    storeSelectSpy = vi.spyOn(storeMock, 'select');
+    storeDispatchSpy = vi.spyOn(storeMock, 'dispatch');
+    consoleDebugSpy = vi.spyOn(console, 'debug');
   });
 
   it('should be created', () => {
@@ -49,7 +50,7 @@ describe('DataService', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('getStoreData', () => {

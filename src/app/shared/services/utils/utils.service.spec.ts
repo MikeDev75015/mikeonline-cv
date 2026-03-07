@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
+import { vi } from 'vitest';
 import { alertServiceMock } from '../../../../../__mocks__/services/alert-service.mock';
 import { httpClientMock } from '../../../../../__mocks__/services/http-client.mock';
 import { waitTimeout } from '../../../../../__mocks__/timeout.mock';
@@ -32,7 +33,7 @@ describe('UtilsService', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should be created', () => {
@@ -138,7 +139,7 @@ describe('UtilsService', () => {
     const withoutEndDate = [{ startDate: 'toto' }];
 
     beforeEach(() => {
-      jest.spyOn(DayJsService, 'getDate').mockImplementationOnce(() => 'tata');
+      vi.spyOn(DayJsService, 'getDate').mockImplementationOnce(() => 'tata');
     });
 
     it('should do nothing if endDate is present', () => {
@@ -221,7 +222,7 @@ describe('UtilsService', () => {
     const divElement = document.createElement('div');
 
     beforeEach(() => {
-      getComputedStyleSpy = jest.spyOn(window, 'getComputedStyle').mockImplementation(() => ({ getPropertyValue: jest.fn() } as unknown as CSSStyleDeclaration));
+      getComputedStyleSpy = vi.spyOn(window, 'getComputedStyle').mockImplementation(() => ({ getPropertyValue: vi.fn() } as unknown as CSSStyleDeclaration));
     });
 
     it('should call window getComputedStyle method', () => {
@@ -354,8 +355,8 @@ describe('UtilsService', () => {
     let displayConfirmDialogSpy: any, windowOpenSpy: any;
 
     beforeEach(() => {
-      displayConfirmDialogSpy = jest.spyOn(alertServiceMock, 'displayConfirmDialog');
-      windowOpenSpy = jest.spyOn(window, 'open').mockImplementation(() => null);
+      displayConfirmDialogSpy = vi.spyOn(alertServiceMock, 'displayConfirmDialog');
+      windowOpenSpy = vi.spyOn(window, 'open').mockImplementation(() => null);
     });
 
     it('should open a confirmation dialog if openingUrl is false', () => {
@@ -398,7 +399,7 @@ describe('UtilsService', () => {
     const blob = new Blob();
 
     beforeEach(() => {
-      getSpy = jest.spyOn(httpClientMock, 'get').mockImplementation(() => of(blob));
+      getSpy = vi.spyOn(httpClientMock, 'get').mockImplementation(() => of(blob));
     });
 
     it('should convert', async () => {
@@ -427,9 +428,9 @@ describe('UtilsService', () => {
         },
       });
 
-      windowNavigatorShareSpy = jest.spyOn(window.navigator, 'share');
-      onClipboardCopySpy = jest.spyOn(ClipboardService, 'onClipboardCopy');
-      displayAlertDialogSpy = jest.spyOn(alertServiceMock, 'displayAlertDialog');
+      windowNavigatorShareSpy = vi.spyOn(window.navigator, 'share');
+      onClipboardCopySpy = vi.spyOn(ClipboardService, 'onClipboardCopy');
+      displayAlertDialogSpy = vi.spyOn(alertServiceMock, 'displayAlertDialog');
     });
 
     it('should share', async () => {

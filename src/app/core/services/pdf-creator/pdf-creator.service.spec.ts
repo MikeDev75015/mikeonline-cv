@@ -15,7 +15,7 @@ describe('PdfCreatorService', () => {
   }));
 
   it('should be created', () => {
-    const service: PdfCreatorService = TestBed.get(PdfCreatorService);
+    const service: PdfCreatorService = TestBed.inject(PdfCreatorService);
     expect(service).toBeTruthy();
   });
 });
