@@ -69,7 +69,7 @@ export class DataService {
         : (data as { [key: string]: any; })[property as string];
 
       return selected || defaultValue;
-    } catch (e) {
+    } catch {
       console.debug('Cannot get the expected value!', { value, property });
       return defaultValue;
     }

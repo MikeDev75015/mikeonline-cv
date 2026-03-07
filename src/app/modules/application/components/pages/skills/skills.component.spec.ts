@@ -64,21 +64,21 @@ describe('SkillsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(SkillsComponent);
     component = fixture.componentInstance;
-    isDataLoadedSpy = jest.spyOn(dataServiceMock, 'isDataLoaded');
-    getStoreDataSpy = jest.spyOn(dataServiceMock, 'getStoreData');
-    getSummarySpy = jest.spyOn(dataServiceMock, 'getSummary');
-    getElementSpy = jest.spyOn(document, 'getElementById');
-    changeDetectorRefSpy = jest.spyOn(component['cdRef'], 'detectChanges');
+    isDataLoadedSpy = vi.spyOn(dataServiceMock, 'isDataLoaded');
+    getStoreDataSpy = vi.spyOn(dataServiceMock, 'getStoreData');
+    getSummarySpy = vi.spyOn(dataServiceMock, 'getSummary');
+    getElementSpy = vi.spyOn(document, 'getElementById');
+    changeDetectorRefSpy = vi.spyOn(component['cdRef'], 'detectChanges');
   });
 
   beforeAll(() => {
     Object.defineProperty(window, 'crypto', {
-      value: { getRandomValues: jest.fn(() => [200]) },
+      value: { getRandomValues: vi.fn(() => [200]) },
     });
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should create', () => {
@@ -127,12 +127,12 @@ describe('SkillsComponent', () => {
     let consoleWarnSpy: any;
 
     beforeEach(() => {
-      consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+      consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
     });
 
     it('should call removeEventListener 3 times if canvas is found', () => {
       getElementSpy.mockImplementation(() => canvasMock);
-      removeEventListenerSpy = jest.spyOn(canvasMock, 'removeEventListener').mockImplementation(() => undefined);
+      removeEventListenerSpy = vi.spyOn(canvasMock, 'removeEventListener').mockImplementation(() => undefined);
       component.ngOnDestroy();
 
       expect(removeEventListenerSpy).toBeDefined();
@@ -185,13 +185,13 @@ describe('SkillsComponent', () => {
 
     beforeAll(() => {
       Object.defineProperty(window, 'WordCloud', {
-        value: jest.fn(),
+        value: vi.fn(),
       });
     });
 
     beforeEach(() => {
-      consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
-      addEventListenerSpy = jest.spyOn(canvasMock, 'addEventListener').mockImplementation(() => undefined);
+      consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+      addEventListenerSpy = vi.spyOn(canvasMock, 'addEventListener').mockImplementation(() => undefined);
       getSummarySpy.mockImplementation(() => Promise.resolve(tagListMock));
     });
 
@@ -206,7 +206,7 @@ describe('SkillsComponent', () => {
     it('should add addEventListener method to canvas element if found', async () => {
       getStoreDataSpy.mockImplementation(() => Promise.resolve(addTags(skillListMock)));
       getElementSpy.mockImplementation(() => canvasMock);
-      addEventListenerSpy = jest.spyOn(canvasMock, 'addEventListener').mockImplementation(() => undefined);
+      addEventListenerSpy = vi.spyOn(canvasMock, 'addEventListener').mockImplementation(() => undefined);
       await component['initializeEvents']();
 
       expect(addEventListenerSpy).toBeDefined();
@@ -282,7 +282,7 @@ describe('SkillsComponent', () => {
   });
 
   describe('worldCloudStopCallback', () => {
-    const getElementsByClassNameSpy = jest.spyOn(document, 'getElementsByClassName');
+    const getElementsByClassNameSpy = vi.spyOn(document, 'getElementsByClassName');
     const wcElementMock = document.createElement('span');
     const wcElementMockWithInitOnclickAttribute = document.createElement('span');
     wcElementMockWithInitOnclickAttribute.setAttribute('init-onclick', 'true');
@@ -312,8 +312,8 @@ describe('SkillsComponent', () => {
 
     beforeEach(() => {
       getElementSpy.mockImplementation(() => canvasMock);
-      setTimeoutSpy = jest.spyOn(window, 'setTimeout').mockImplementation(jest.fn());
-      clearTimeoutSpy = jest.spyOn(window, 'clearTimeout').mockImplementation(jest.fn());
+      setTimeoutSpy = vi.spyOn(window, 'setTimeout').mockImplementation(vi.fn());
+      clearTimeoutSpy = vi.spyOn(window, 'clearTimeout').mockImplementation(vi.fn());
     });
 
     it('should set timeout and not call clearTimeout if undefined', () => {

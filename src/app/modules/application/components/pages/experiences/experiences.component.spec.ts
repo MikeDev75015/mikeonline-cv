@@ -26,9 +26,9 @@ const sortedExperienceListMock = [
 describe('ExperiencesComponent', () => {
   let component: ExperiencesComponent;
   let fixture: ComponentFixture<ExperiencesComponent>;
-  const isDataLoadedSpy = jest.spyOn(dataServiceMock, 'isDataLoaded');
-  const getStoreDataSpy = jest.spyOn(dataServiceMock, 'getStoreData');
-  const sortObjectListSpy = jest.spyOn(UtilsService, 'sortObjectList');
+  const isDataLoadedSpy = vi.spyOn(dataServiceMock, 'isDataLoaded');
+  const getStoreDataSpy = vi.spyOn(dataServiceMock, 'getStoreData');
+  const sortObjectListSpy = vi.spyOn(UtilsService, 'sortObjectList');
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -56,7 +56,7 @@ describe('ExperiencesComponent', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should create', () => {

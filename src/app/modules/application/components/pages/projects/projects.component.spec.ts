@@ -22,13 +22,13 @@ const projectMock1: ProjectV1 = sortedProjectListMock[0];
 describe('PortfolioComponent', () => {
   let component: ProjectsComponent;
   let fixture: ComponentFixture<ProjectsComponent>;
-  const isDataLoadedSpy = jest.spyOn(dataServiceMock, 'isDataLoaded');
-  const getStoreDataSpy = jest.spyOn(dataServiceMock, 'getStoreData');
-  const sortObjectListSpy = jest.spyOn(UtilsService, 'sortObjectList');
-  const initTechnoListWithTagListSpy = jest.spyOn(utilsServiceMock, 'initTechnoListWithTagList');
+  const isDataLoadedSpy = vi.spyOn(dataServiceMock, 'isDataLoaded');
+  const getStoreDataSpy = vi.spyOn(dataServiceMock, 'getStoreData');
+  const sortObjectListSpy = vi.spyOn(UtilsService, 'sortObjectList');
+  const initTechnoListWithTagListSpy = vi.spyOn(utilsServiceMock, 'initTechnoListWithTagList');
 
-  const setTimeoutSpy = jest.spyOn(global, 'setTimeout');
-  const clearTimeoutSpy = jest.spyOn(global, 'clearTimeout');
+  const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
+  const clearTimeoutSpy = vi.spyOn(global, 'clearTimeout');
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -62,7 +62,7 @@ describe('PortfolioComponent', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should create', () => {

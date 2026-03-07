@@ -35,9 +35,9 @@ export class DayJsService {
    * Returns relative time to x
    * @param startDate
    * @param endDate
-   * @param withoutSuffix
+   * @param _withoutSuffix
    */
-  public static getTimeToX(startDate: string, endDate: string, withoutSuffix = false): string {
+  public static getTimeToX(startDate: string, endDate: string, _withoutSuffix = false): string {
     const convertedEndDate = dayJS(endDate);
     const timeToX = dayJS(startDate).to(convertedEndDate, true);
     return timeToX.replace('un ', '1 ');

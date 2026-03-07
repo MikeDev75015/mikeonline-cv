@@ -30,23 +30,23 @@ describe('PwaService', () => {
     });
     service = TestBed.inject(PwaService);
 
-    consoleDebugSpy = jest.spyOn(console, 'debug').mockImplementation(() => undefined);
-    displayConfirmDialogSpy = jest.spyOn(alertServiceMock, 'displayConfirmDialog');
-    activateUpdateSpy = jest.spyOn(swUpdateMock, 'activateUpdate');
+    consoleDebugSpy = vi.spyOn(console, 'debug').mockImplementation(() => undefined);
+    displayConfirmDialogSpy = vi.spyOn(alertServiceMock, 'displayConfirmDialog');
+    activateUpdateSpy = vi.spyOn(swUpdateMock, 'activateUpdate');
 
     Object.defineProperty(window, 'location', {
       value: {
-        reload: jest.fn(),
+        reload: vi.fn(),
       },
     });
-    windowLocationReloadSpy = jest.spyOn(window.location, 'reload');
+    windowLocationReloadSpy = vi.spyOn(window.location, 'reload');
 
     swPushMock.notificationClicks = notificationClickSubject.asObservable();
     swUpdateMock.versionUpdates = versionEventSubject.asObservable();
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should be created', () => {

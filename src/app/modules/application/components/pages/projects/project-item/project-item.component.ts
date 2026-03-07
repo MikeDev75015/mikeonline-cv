@@ -11,7 +11,7 @@ import { ProjectItem } from '../../../../interfaces/project-item.interface';
 export class ProjectItemComponent implements OnInit, OnDestroy {
   mobileView = false;
 
-  @Input() project: ProjectItem | undefined;
+  @Input({ required: true }) project!: ProjectItem;
 
   constructor(
     private readonly utilsService: UtilsService,

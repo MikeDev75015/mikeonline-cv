@@ -12,9 +12,8 @@ import { InterestsComponent } from './interests.component';
 describe('InterestsComponent', () => {
   let component: InterestsComponent;
   let fixture: ComponentFixture<InterestsComponent>;
-  let changeDetectorRefSpy: any;
-  const isDataLoadedSpy = jest.spyOn(dataServiceMock, 'isDataLoaded');
-  const getStoreDataSpy = jest.spyOn(dataServiceMock, 'getStoreData');
+  const isDataLoadedSpy = vi.spyOn(dataServiceMock, 'isDataLoaded');
+  const getStoreDataSpy = vi.spyOn(dataServiceMock, 'getStoreData');
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -52,7 +51,7 @@ describe('InterestsComponent', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should create', () => {

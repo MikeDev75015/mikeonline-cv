@@ -1,4 +1,4 @@
 export const alertServiceMock = {
-  displayAlertDialog: jest.fn(),
+  displayAlertDialog: vi.fn(),
   displayConfirmDialog: () => Promise.resolve(''),
 };

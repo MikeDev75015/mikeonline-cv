@@ -5,5 +5,5 @@ export const dataServiceMock = {
   extractUsedTags: () => Promise.resolve(),
   isAllDataLoaded: () => of(false),
   isDataLoaded: () => of(false),
-  getSummary: jest.fn(),
+  getSummary: vi.fn(),
 };

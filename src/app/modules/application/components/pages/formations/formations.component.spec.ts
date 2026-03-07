@@ -26,10 +26,10 @@ const sortedFormationListMock = [
 describe('FormationsComponent', () => {
   let component: FormationsComponent;
   let fixture: ComponentFixture<FormationsComponent>;
-  const isDataLoadedSpy = jest.spyOn(dataServiceMock, 'isDataLoaded');
-  const getStoreDataSpy = jest.spyOn(dataServiceMock, 'getStoreData');
-  const sortObjectListSpy = jest.spyOn(UtilsService, 'sortObjectList');
-  const addMissingEndDateSpy = jest.spyOn(UtilsService, 'addMissingEndDate');
+  const isDataLoadedSpy = vi.spyOn(dataServiceMock, 'isDataLoaded');
+  const getStoreDataSpy = vi.spyOn(dataServiceMock, 'getStoreData');
+  const sortObjectListSpy = vi.spyOn(UtilsService, 'sortObjectList');
+  const addMissingEndDateSpy = vi.spyOn(UtilsService, 'addMissingEndDate');
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -57,7 +57,7 @@ describe('FormationsComponent', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should create', () => {

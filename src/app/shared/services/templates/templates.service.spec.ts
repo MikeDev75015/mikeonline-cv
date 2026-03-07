@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { vi } from 'vitest';
+
 import { IDetail } from '../../../core';
 import { ExperienceV1 } from '../../../core/interfaces/models/v1/experience.interface';
 import { FormationV1 } from '../../../core/interfaces/models/v1/formation.interface';

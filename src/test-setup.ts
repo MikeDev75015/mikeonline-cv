@@ -1,14 +1,11 @@
 import '@angular/compiler';
 import '@analogjs/vitest-angular/setup-zone';
 import { setupTestBed } from '@analogjs/vitest-angular/setup-testbed';
-import { vi } from 'vitest';
 
 setupTestBed({
   zoneless: false,
 });
 
-// Temporary compatibility layer for Jest-based specs.
-(globalThis as any).jest = vi;
 
 const mockStorage = () => {
   let storage: { [key: string]: string } = {};

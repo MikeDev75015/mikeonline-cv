@@ -6,11 +6,11 @@ describe('DateFormatPipe', () => {
   let getDateSpy: any;
 
   beforeEach(() => {
-    getDateSpy = jest.spyOn(DayJsService, 'getDate');
+    getDateSpy = vi.spyOn(DayJsService, 'getDate');
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('create an instance', () => {

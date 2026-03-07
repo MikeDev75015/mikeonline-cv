@@ -3,7 +3,7 @@ import { of } from 'rxjs';
 import { notificationPayloadMock } from '../data/notification-payload.mock';
 
 export const pwaServiceMock = {
-  initializeServiceWorker: jest.fn(),
+  initializeServiceWorker: vi.fn(),
 };
 
 export const swPushMock = {

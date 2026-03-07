@@ -158,7 +158,7 @@ export class FormWrapperService {
    * @param parent
    * @private
    */
-  private checkValuesValidity(formFieldList: FormField[], value: any, parent = ''): boolean {
+  private checkValuesValidity(formFieldList: FormField[], value: any, _parent = ''): boolean {
     let isValidValues = true;
 
     formFieldList.forEach((formElement) => {

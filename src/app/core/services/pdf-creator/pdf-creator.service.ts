@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import jsPDF from 'jspdf';
+
 import { ProjectItem } from '../../../modules/application/interfaces/project-item.interface';
 import { UtilsService } from '../../../shared';
 import { PDF_CV_CREDITS, PDF_DEFAULT_FOOTER, PDF_DEFAULT_HEADER } from '../../constants/pdf.constant';

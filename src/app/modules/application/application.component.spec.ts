@@ -46,11 +46,11 @@ describe('ApplicationComponent', () => {
     fixture = TestBed.createComponent(ApplicationComponent);
     component = fixture.componentInstance;
     // @ts-ignore
-    jest.spyOn(window, 'getComputedStyle').mockImplementation(() => ({ getPropertyValue: jest.fn() }));
+    vi.spyOn(window, 'getComputedStyle').mockImplementation(() => ({ getPropertyValue: vi.fn() }));
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should create', () => {
@@ -62,8 +62,8 @@ describe('ApplicationComponent', () => {
     let dispatchSpy: any;
 
     beforeEach(() => {
-      jest.spyOn(dataServiceMock, 'isAllDataLoaded').mockImplementationOnce(() => of(true));
-      dispatchSpy = jest.spyOn(storeMock, 'dispatch');
+      vi.spyOn(dataServiceMock, 'isAllDataLoaded').mockImplementationOnce(() => of(true));
+      dispatchSpy = vi.spyOn(storeMock, 'dispatch');
       fixture.detectChanges();
     });
 
