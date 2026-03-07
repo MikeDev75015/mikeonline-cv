@@ -7,9 +7,10 @@ import { Observable, of } from 'rxjs';
  * The component of the page layout
  */
 @Component({
-  selector: 'app-page-layout',
-  templateUrl: './page-layout.component.html',
-  providers: [MessageService],
+    selector: 'app-page-layout',
+    templateUrl: './page-layout.component.html',
+    providers: [MessageService],
+    standalone: false
 })
 export class PageLayoutComponent implements OnInit {
   @Input() isLoadingData$: Observable<boolean> = of(true);

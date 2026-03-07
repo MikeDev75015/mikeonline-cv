@@ -1,7 +1,8 @@
 import {Pipe, PipeTransform} from '@angular/core';
 
 @Pipe({
-  name: 'incompressibleSpace',
+    name: 'incompressibleSpace',
+    standalone: false
 })
 export class IncompressibleSpacePipe implements PipeTransform {
 

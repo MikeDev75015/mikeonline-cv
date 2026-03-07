@@ -1,7 +1,8 @@
 import {Pipe, PipeTransform} from '@angular/core';
 
 @Pipe({
-  name: 'headerTitleFormat',
+    name: 'headerTitleFormat',
+    standalone: false
 })
 export class HeaderTitleFormatPipe implements PipeTransform {
 

@@ -1,10 +1,10 @@
 <p-multiSelect
   (ngModelChange)="onSelectedValuesChange($event)" [(ngModel)]="selectedValues" [appendTo]="appendTo"
-  [defaultLabel]="defaultLabel || ''" [options]="optionList"
+  [options]="optionList"
   [placeholder]="placeholder || 'Sélectionner'"
   [selectedItemsLabel]="'{0} sélectionné' + (selectedValues.length > 1 ? 's' : '')"
   [selectionLimit]="selectionLimit || optionList.length"
-  [styleClass]="inlineClass || ''"
+  [class]="inlineClass || ''"
   display="chip" optionLabel="label"
   optionValue="value"
 ></p-multiSelect>

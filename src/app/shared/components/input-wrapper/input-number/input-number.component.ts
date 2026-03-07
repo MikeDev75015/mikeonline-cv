@@ -3,8 +3,9 @@ import { InputText } from 'primeng/inputtext';
 import { DEFAULT_INPUT_HEIGHT, DEFAULT_INPUT_WIDTH } from '../constants/input-wrapper.constant';
 
 @Component({
-  selector: 'app-input-number',
-  templateUrl: './input-number.component.html',
+    selector: 'app-input-number',
+    templateUrl: './input-number.component.html',
+    standalone: false
 })
 export class InputNumberComponent implements AfterViewInit {
   @ViewChild('inputNumberWrapped', { static: false }) inputNumber: InputText | undefined;

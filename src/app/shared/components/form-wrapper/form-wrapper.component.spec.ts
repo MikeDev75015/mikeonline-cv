@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MockComponent } from 'ng2-mock-component';
+import { MockComponent } from '../../../../test/ng2-mock-component-compat';
 import { DEFAULT_FORM_FIELDS_CONFIG } from '../../../modules/admin/constants/common-formFields.config';
 
 import { FormWrapperComponent } from './form-wrapper.component';

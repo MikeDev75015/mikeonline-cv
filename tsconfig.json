@@ -18,15 +18,13 @@
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "importHelpers": true,
-    "target": "es2017",
+    "target": "es2020",
     "module": "es2020",
-    "lib": [
-      "es2020",
-      "dom"
-    ],
-    "types": ["jest"]
+    "types": [
+      "vitest/globals"
+    ]
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,

@@ -1,13 +1,14 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { InputTextarea } from 'primeng/inputtextarea';
+import { Textarea } from 'primeng/textarea';
 import { DEFAULT_INPUT_WIDTH, DEFAULT_TEXTAREA_ROWS } from '../constants/input-wrapper.constant';
 
 @Component({
-  selector: 'app-input-textarea',
-  templateUrl: './input-textarea.component.html',
+    selector: 'app-input-textarea',
+    templateUrl: './input-textarea.component.html',
+    standalone: false
 })
 export class InputTextareaComponent {
-  @ViewChild('inputTextareaWrapped', { static: false }) inputTextarea: InputTextarea | undefined;
+  @ViewChild('inputTextareaWrapped', { static: false }) inputTextarea: Textarea | undefined;
 
   @Input() inputWidth = DEFAULT_INPUT_WIDTH;
 

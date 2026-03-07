@@ -1,6 +1,6 @@
 <div [ngStyle]="{width: '100%', height: 'auto'}" class="fss relative input-textarea-wrapped">
     <textarea
       #inputTextareaWrapped (ngModelChange)="onValueChange($event)" [(ngModel)]="value" [class]="inlineClass || ''"
-      [disabled]="disabled" [ngStyle]="{width: '100%', height: 'auto'}" data-cy="input-textarea" pInputTextarea
+      [disabled]="disabled" [ngStyle]="{width: '100%', height: 'auto'}" data-cy="input-textarea" pTextarea
     ></textarea>
 </div>

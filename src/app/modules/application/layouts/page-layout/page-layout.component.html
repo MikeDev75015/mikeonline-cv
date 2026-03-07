@@ -5,28 +5,38 @@
     [id]="sectionId" class="fsc column w100" [ngClass]="{'scrollable-section': scrollSection}"
     aria-labelledby="page section">
 
-    <h3 *ngIf="pageTitle" class="animated-background">
-      <span>
-        <div *ngIf="titleParts && titleParts.length" class="fsc title-parts" aria-labelledby="page title">
-          <ng-container *ngFor="let part of titleParts">
-            <span [ngClass]="{'transform-first-letter': part.length > 2}">{{ part }}&nbsp;</span>
-          </ng-container>
-        </div>
-        <span
-          *ngIf="elementsNumber" class="badge-element"
-          aria-labelledby="page elements number"
-        >{{ elementsNumber }}</span>
-      </span>
-    </h3>
+    @if (pageTitle) {
+      <h3 class="animated-background">
+        <span>
+          @if (titleParts && titleParts.length) {
+            <div class="fsc title-parts" aria-labelledby="page title">
+              @for (part of titleParts; track $index) {
+                <span [ngClass]="{'transform-first-letter': part.length > 2}">{{ part }}&nbsp;</span>
+              }
+            </div>
+          }
+          @if (elementsNumber) {
+            <span
+              class="badge-element"
+              aria-labelledby="page elements number"
+            >{{ elementsNumber }}</span>
+          }
+        </span>
+      </h3>
+    }
 
     <div class="w100" [ngClass]="{'page-layout-content': !scrollSection}">
       <ng-content></ng-content>
-      <p-scrollTop
-        *ngIf="!scrollSection" styleClass="scroll-top-content" target="parent" [threshold]="100" icon="pi pi-angle-up"></p-scrollTop>
+      @if (!scrollSection) {
+        <p-scrollTop
+        styleClass="scroll-top-content" target="parent" [threshold]="100" icon="pi pi-angle-up"></p-scrollTop>
+      }
     </div>
 
-    <p-scrollTop
-      *ngIf="scrollSection" styleClass="scroll-top-section" target="parent" [threshold]="100" icon="pi pi-angle-up"
-    ></p-scrollTop>
+    @if (scrollSection) {
+      <p-scrollTop
+        styleClass="scroll-top-section" target="parent" [threshold]="100" icon="pi pi-angle-up"
+      ></p-scrollTop>
+    }
   </section>
 </ng-container>

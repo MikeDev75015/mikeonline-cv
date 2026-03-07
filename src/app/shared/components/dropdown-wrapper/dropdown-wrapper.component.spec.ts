@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { DropdownModule } from 'primeng/dropdown';
+import { Select } from 'primeng/select';
 import { CV_TYPE_DROPDOWN_LIST } from '../../../core/constants/common.constant';
 
 import { DropdownWrapperComponent } from './dropdown-wrapper.component';
@@ -13,7 +13,7 @@ describe('DropdownWrapperComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [DropdownWrapperComponent],
       imports: [
-        DropdownModule,
+        Select,
         FormsModule,
       ],
     })

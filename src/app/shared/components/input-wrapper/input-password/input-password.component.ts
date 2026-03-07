@@ -3,8 +3,9 @@ import { InputText } from 'primeng/inputtext';
 import { DEFAULT_INPUT_HEIGHT, DEFAULT_INPUT_WIDTH } from '../constants/input-wrapper.constant';
 
 @Component({
-  selector: 'app-input-password',
-  templateUrl: './input-password.component.html',
+    selector: 'app-input-password',
+    templateUrl: './input-password.component.html',
+    standalone: false
 })
 export class InputPasswordComponent implements AfterViewInit {
   @ViewChild('inputPasswordWrapped', { static: false }) inputPassword: InputText | undefined;

@@ -4,8 +4,9 @@ import { DropdownOption } from '../dropdown-wrapper/interfaces/dropdown-option.i
 import { DEFAULT_INPUT_HEIGHT, DEFAULT_INPUT_WIDTH } from '../input-wrapper/constants/input-wrapper.constant';
 
 @Component({
-  selector: 'app-auto-complete-wrapper',
-  templateUrl: './auto-complete-wrapper.component.html',
+    selector: 'app-auto-complete-wrapper',
+    templateUrl: './auto-complete-wrapper.component.html',
+    standalone: false
 })
 export class AutoCompleteWrapperComponent implements OnInit {
   @Input() scrollHeight = DEFAULT_DROPDOWN_WRAPPER_SCROLL_HEIGHT;

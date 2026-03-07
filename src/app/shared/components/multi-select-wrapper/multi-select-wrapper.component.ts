@@ -3,8 +3,9 @@ import { DEFAULT_DROPDOWN_WRAPPER_SCROLL_HEIGHT } from '../dropdown-wrapper/cons
 import { DropdownOption } from '../dropdown-wrapper/interfaces/dropdown-option.interface';
 
 @Component({
-  selector: 'app-multi-select-wrapper',
-  templateUrl: './multi-select-wrapper.component.html',
+    selector: 'app-multi-select-wrapper',
+    templateUrl: './multi-select-wrapper.component.html',
+    standalone: false
 })
 export class MultiSelectWrapperComponent implements OnInit {
   @Input() scrollHeight = DEFAULT_DROPDOWN_WRAPPER_SCROLL_HEIGHT;
