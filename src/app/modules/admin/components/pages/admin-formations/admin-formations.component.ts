@@ -11,8 +11,9 @@ import { DEFAULT_TABLE_COLUMNS_CONFIG } from '../../../constants/common-table-co
 import { TableColumn } from '../../fragments/table-wrapper/interfaces/table-column.interface';
 
 @Component({
-  selector: 'app-admin-formations',
-  templateUrl: './admin-formations.component.html',
+    selector: 'app-admin-formations',
+    templateUrl: './admin-formations.component.html',
+    standalone: false
 })
 export class AdminFormationsComponent implements OnInit {
   public columnList: TableColumn[] = [];

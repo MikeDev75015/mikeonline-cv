@@ -1,39 +1,42 @@
-<ng-container *ngIf="itemData">
+@if (itemData) {
   <div [class]="itemClass">
-
-    <ng-container *ngIf="!lastItem" [ngTemplateOutlet]="header"></ng-container>
-
+    @if (!lastItem) {
+      <ng-container [ngTemplateOutlet]="header"></ng-container>
+    }
     <div
       [class]="'vertical-accordion-item-body'"
       [@VerticalAccordionItemComponentBodyInOut]="expanded ? 'in' : 'out'"
       (@VerticalAccordionItemComponentBodyInOut.start)="onAnimation($event)"
       (@VerticalAccordionItemComponentBodyInOut.done)="onAnimation($event)"
-    >
+      >
       <p
         class="vertical-accordion-item-body-content"
       >{{ itemData.description }}</p>
-      <br *ngIf="itemData.link && itemData.link.url">
-      <p
-        *ngIf="itemData.link && itemData.link.url"
-        class="vertical-accordion-item-body-link"
-      >
-        <a
-          [href]="itemData.link.url"
-          target="_blank"
-          rel="noopener"
-        >
-          {{ itemData.link.title ? itemData.link.title : 'Cliquer pour voir' }}
-        </a>
-      </p>
+      @if (itemData.link && itemData.link.url) {
+        <br>
+        }
+        @if (itemData.link && itemData.link.url) {
+          <p
+            class="vertical-accordion-item-body-link"
+            >
+            <a
+              [href]="itemData.link.url"
+              target="_blank"
+              rel="noopener"
+              >
+              {{ itemData.link.title ? itemData.link.title : 'Cliquer pour voir' }}
+            </a>
+          </p>
+        }
+      </div>
+      @if (lastItem) {
+        <ng-container [ngTemplateOutlet]="header"></ng-container>
+      }
     </div>
+  }
 
-    <ng-container *ngIf="lastItem" [ngTemplateOutlet]="header"></ng-container>
-
-  </div>
-</ng-container>
-
-<ng-template #header>
-  <div class="vertical-accordion-item-header" (click)="!expanded ? onOpenItem() : null">
-    <p class="vertical-accordion-item-header-title" [innerHTML]="itemData.title | oneLetterByLine"></p>
-  </div>
-</ng-template>
+  <ng-template #header>
+    <div class="vertical-accordion-item-header" (click)="!expanded ? onOpenItem() : null">
+      <p class="vertical-accordion-item-header-title" [innerHTML]="itemData.title | oneLetterByLine"></p>
+    </div>
+  </ng-template>

@@ -1,32 +1,42 @@
 <p-toast data-cy="primeng-toast" key="applicationError" position="center"></p-toast>
 
 <ng-container *appLoading="!currentUser">
-  <div *ngIf="tabItems" class="fbc w100 admin-layout-header" data-cy="admin-layout-header">
-    <p-tabMenu [model]="tabItems" data-cy="admin-tab-menu" styleClass="admin-tab-menu"></p-tabMenu>
-
-    <div class="fec">
-      <div class="fcc">
-        <span>Thème :</span>&nbsp;
-        <app-dropdown-wrapper
-          (selectedValueChange)="onSelectedThemeChange($event)" [(selectedValue)]="selectedTheme"
-          [inlineStyle]="{'margin-right': '10px'}"
-          [scrollHeight]="'80vh'" [stringList]="themeList"
-        ></app-dropdown-wrapper>
+  @if (tabItems) {
+    <div class="fbc w100 admin-layout-header" data-cy="admin-layout-header">
+      <div class="admin-tab-menu fss" data-cy="admin-tab-menu">
+        @for (item of tabItems; track item) {
+          <button
+            [routerLink]="item.routerLink"
+            class="p-button-text"
+            pButton
+            type="button"
+          >
+            {{ item.label }}
+          </button>
+        }
       </div>
-
-      <ng-container *ngIf="currentUser">
-      <span [pTooltip]="currentUser.role" data-cy="current-user-name" style="margin-right: 10px;"
+      <div class="fec">
+        <div class="fcc">
+          <span>Thème :</span>&nbsp;
+          <app-dropdown-wrapper
+            (selectedValueChange)="onSelectedThemeChange($event)" [(selectedValue)]="selectedTheme"
+            [inlineStyle]="{'margin-right': '10px'}"
+            [scrollHeight]="'80vh'" [stringList]="themeList"
+          ></app-dropdown-wrapper>
+        </div>
+        @if (currentUser) {
+          <span [pTooltip]="currentUser.role" data-cy="current-user-name" style="margin-right: 10px;"
             tooltipPosition="bottom">
-        Utilisateur: {{ currentUser.name }}
-      </span>
-
-        <button (click)="menu.toggle($event)" data-cy="menu-button" pButton type="button">
-          <mat-icon>menu</mat-icon>
-        </button>
-        <p-menu #menu [model]="rightItems" [popup]="true" data-cy="primeng-menu"></p-menu>
-      </ng-container>
+            Utilisateur: {{ currentUser.name }}
+          </span>
+          <button (click)="menu.toggle($event)" data-cy="menu-button" pButton type="button">
+            <mat-icon>menu</mat-icon>
+          </button>
+          <p-menu #menu [model]="rightItems" [popup]="true" data-cy="primeng-menu"></p-menu>
+        }
+      </div>
     </div>
-  </div>
+  }
 
   <router-outlet></router-outlet>
 </ng-container>

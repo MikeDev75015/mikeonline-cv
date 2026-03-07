@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import * as pdfMake from 'pdfmake/build/pdfmake';
-import { TDocumentDefinitions } from 'pdfmake/interfaces';
+import jsPDF from 'jspdf';
 import { ProjectItem } from '../../../modules/application/interfaces/project-item.interface';
 import { UtilsService } from '../../../shared';
 import { PDF_CV_CREDITS, PDF_DEFAULT_FOOTER, PDF_DEFAULT_HEADER } from '../../constants/pdf.constant';
@@ -8,6 +7,7 @@ import { ExperienceV1 } from '../../interfaces/models/v1/experience.interface';
 import { FormationV1 } from '../../interfaces/models/v1/formation.interface';
 import { InterestV1 } from '../../interfaces/models/v1/interest.interface';
 import { DayJsService } from '../dayjs/dayjs.service';
+import { PdfBuilder } from './pdf-builder';
 import {
   ContentImage,
   ContentTable,
@@ -17,12 +17,14 @@ import {
 import { PdfInfosData } from './interfaces/pdf-infos-data.interface';
 
 /**
- * @link https://pdfmake.github.io/docs/0.1/document-definition-object
+ * @link https://github.com/parallax/jsPDF
+ * NOTE: Migrated from pdfmake to jsPDF for ESM support
  */
 @Injectable({
   providedIn: 'root',
 })
 export class PdfCreatorService {
+  private pdfBuilder: PdfBuilder = new PdfBuilder();
   private pdfDocument: PdfDocumentDefinition = PdfCreatorService.initPdf();
 
   private readonly updatePdfContent = {
@@ -235,17 +237,9 @@ export class PdfCreatorService {
 
       await this.addPdfContents(pdfInfos.data);
 
-      // @ts-ignore
-      pdfMake.fonts = {
-        Roboto: {
-          normal: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Regular.ttf',
-          bold: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Medium.ttf',
-          italics: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Italic.ttf',
-          bolditalics: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-MediumItalic.ttf',
-        },
-      };
-
-      pdfMake.createPdf(this.pdfDocument as TDocumentDefinitions).download(fileName);
+      // Generate PDF using jsPDF through pdfBuilder
+      this.pdfBuilder.download(fileName);
+      this.pdfBuilder = new PdfBuilder();
       this.pdfDocument = PdfCreatorService.initPdf();
       resolve();
     });

@@ -10,10 +10,7 @@ import { AlertPopupComponent } from './components/alert-popup/alert-popup.compon
     CommonModule,
     MatDialogModule,
     MatButtonModule,
-    MatDialogModule,
-    MatDialogModule,
   ],
-  entryComponents: [AlertPopupComponent],
   exports: [AlertPopupComponent],
 })
 export class AlertModule {

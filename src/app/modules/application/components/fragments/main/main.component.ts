@@ -14,9 +14,10 @@ import { ProjectsComponent } from '../../pages/projects/projects.component';
 import { SkillsComponent } from '../../pages/skills/skills.component';
 
 @Component({
-  selector: 'app-main',
-  templateUrl: './main.component.html',
-  styleUrls: ['./main.component.scss'],
+    selector: 'app-main',
+    templateUrl: './main.component.html',
+    styleUrls: ['./main.component.scss'],
+    standalone: false
 })
 export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() hideHeader = false;

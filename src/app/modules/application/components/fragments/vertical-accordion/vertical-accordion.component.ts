@@ -40,54 +40,48 @@ const verticalAccordionItemMinWidth = adaptItemMinWidth();
 const verticalAccordionItemMaxWidth = calculateItemMaxWidth(verticalAccordionItemPercentParentWidth);
 
 @Component({
-  selector: 'app-vertical-accordion',
-  templateUrl: './vertical-accordion.component.html',
-  animations: [
-    ...IN_OUT_TEMPLATE_ANIMATION(
-      'VerticalAccordionItem',
-      true,
-      { in: 500, out: 600 },
-      {
-        style: { width: '{{itemMaxWidth}}', minWidth: '{{itemMinWidth}}', maxWidth: '{{itemMaxWidth}}' },
-        options: {
-          params: {
-            itemMinWidth: verticalAccordionItemMinWidth,
-            itemMaxWidth: verticalAccordionItemMaxWidth,
-          },
-        },
-      },
-      {
-        style: { width: '{{itemMinWidth}}', minWidth: '{{itemMinWidth}}', maxWidth: '{{itemMaxWidth}}' },
-        options: {
-          params: {
-            itemMinWidth: verticalAccordionItemMinWidth,
-            itemMaxWidth: verticalAccordionItemMaxWidth,
-          },
-        },
-      },
-      {
-        voidDelay: { in: 0, out: 0 },
-        voidInPayload: {
-          style: { width: '{{itemMaxWidth}}', minWidth: '{{itemMinWidth}}', maxWidth: '{{itemMaxWidth}}' },
-          options: {
-            params: {
-              itemMinWidth: verticalAccordionItemMinWidth,
-              itemMaxWidth: verticalAccordionItemMaxWidth,
+    selector: 'app-vertical-accordion',
+    templateUrl: './vertical-accordion.component.html',
+    animations: [
+        ...IN_OUT_TEMPLATE_ANIMATION('VerticalAccordionItem', true, { in: 500, out: 600 }, {
+            style: { width: '{{itemMaxWidth}}', minWidth: '{{itemMinWidth}}', maxWidth: '{{itemMaxWidth}}' },
+            options: {
+                params: {
+                    itemMinWidth: verticalAccordionItemMinWidth,
+                    itemMaxWidth: verticalAccordionItemMaxWidth,
+                },
             },
-          },
-        },
-        voidOutPayload: {
-          style: { width: '{{itemMinWidth}}', minWidth: '{{itemMinWidth}}', maxWidth: '{{itemMaxWidth}}' },
-          options: {
-            params: {
-              itemMinWidth: verticalAccordionItemMinWidth,
-              itemMaxWidth: verticalAccordionItemMaxWidth,
+        }, {
+            style: { width: '{{itemMinWidth}}', minWidth: '{{itemMinWidth}}', maxWidth: '{{itemMaxWidth}}' },
+            options: {
+                params: {
+                    itemMinWidth: verticalAccordionItemMinWidth,
+                    itemMaxWidth: verticalAccordionItemMaxWidth,
+                },
             },
-          },
-        },
-      },
-    ),
-  ],
+        }, {
+            voidDelay: { in: 0, out: 0 },
+            voidInPayload: {
+                style: { width: '{{itemMaxWidth}}', minWidth: '{{itemMinWidth}}', maxWidth: '{{itemMaxWidth}}' },
+                options: {
+                    params: {
+                        itemMinWidth: verticalAccordionItemMinWidth,
+                        itemMaxWidth: verticalAccordionItemMaxWidth,
+                    },
+                },
+            },
+            voidOutPayload: {
+                style: { width: '{{itemMinWidth}}', minWidth: '{{itemMinWidth}}', maxWidth: '{{itemMaxWidth}}' },
+                options: {
+                    params: {
+                        itemMinWidth: verticalAccordionItemMinWidth,
+                        itemMaxWidth: verticalAccordionItemMaxWidth,
+                    },
+                },
+            },
+        }),
+    ],
+    standalone: false
 })
 export class VerticalAccordionComponent implements OnInit, OnChanges, OnDestroy, AfterViewChecked {
   @Input() itemList: InterestV1[] | undefined;

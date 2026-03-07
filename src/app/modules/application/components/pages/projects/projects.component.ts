@@ -11,24 +11,25 @@ import { ProjectItem } from '../../../interfaces/project-item.interface';
  * The component of the portfolio page.
  */
 @Component({
-  selector: 'app-projects',
-  templateUrl: './projects.component.html',
-  animations: [
-    trigger('showHideBackgroundImage', [
-      state('show', style({
-        opacity: 0.3,
-      })),
-      state('hide', style({
-        opacity: 0,
-      })),
-      transition('hide => show', [
-        animate(500),
-      ]),
-      transition('show => hide', [
-        animate(0),
-      ]),
-    ]),
-  ],
+    selector: 'app-projects',
+    templateUrl: './projects.component.html',
+    animations: [
+        trigger('showHideBackgroundImage', [
+            state('show', style({
+                opacity: 0.3,
+            })),
+            state('hide', style({
+                opacity: 0,
+            })),
+            transition('hide => show', [
+                animate(500),
+            ]),
+            transition('show => hide', [
+                animate(0),
+            ]),
+        ]),
+    ],
+    standalone: false
 })
 export class ProjectsComponent implements OnInit {
   /**

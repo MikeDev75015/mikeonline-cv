@@ -3,7 +3,7 @@
   [pageTitle]="'components.portfolio.title'"
   [elementsNumber]="projectList.length"
   [isLoadingData$]="isLoadingData$"
->
+  >
   <ng-container>
     <div
       [@showHideBackgroundImage]="showImage ? 'show' : 'hide'"
@@ -12,14 +12,17 @@
       [ngStyle]="{backgroundImage: backgroundImage ? 'url(' + backgroundImage + ')' : ''}"
     ></div>
 
-    <div *ngIf="projectList.length" class="pf_flip w100 fcc" aria-labelledby="portfolio content">
-      <app-project-item
-        *ngFor="let project of projectList"
-        class="app-portfolio-item"
-        [project]="project"
-        (mouseenter)="onLoadBackgroundImage(project)"
-        (mouseleave)="onRemoveBackgroundImage()"
-      ></app-project-item>
-    </div>
+    @if (projectList.length) {
+      <div class="pf_flip w100 fcc" aria-labelledby="portfolio content">
+        @for (project of projectList; track project) {
+          <app-project-item
+            class="app-portfolio-item"
+            [project]="project"
+            (mouseenter)="onLoadBackgroundImage(project)"
+            (mouseleave)="onRemoveBackgroundImage()"
+          ></app-project-item>
+        }
+      </div>
+    }
   </ng-container>
 </app-page-layout>

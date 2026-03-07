@@ -23,7 +23,21 @@ export class AuthService {
   }
 
   public getAccessToken(): string {
-    return StorageService.getItem<string>('localStorage', STORAGE_KEYS.accessToken);
+    const token = StorageService.getItem<any>('localStorage', STORAGE_KEYS.accessToken);
+
+    if (!token) {
+      return '';
+    }
+
+    if (typeof token === 'string') {
+      return token;
+    }
+
+    if (typeof token === 'object' && typeof token.value === 'string') {
+      return token.value;
+    }
+
+    return '';
   }
 
   public removeAccessToken(): void {

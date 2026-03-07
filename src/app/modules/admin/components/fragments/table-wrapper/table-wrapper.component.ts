@@ -11,8 +11,8 @@ import {
 } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { InputText } from 'primeng/inputtext';
-import { OverlayPanel } from 'primeng/overlaypanel';
-import { Table } from 'primeng/table';
+import { Popover } from 'primeng/popover';
+import { Table, TableRowReorderEvent } from 'primeng/table';
 import { lastValueFrom, Subscription } from 'rxjs';
 import { ApiResponsePayload } from '../../../../../core/interfaces/api/api-response.payload';
 import { MessageSeverity } from '../../../../../core/interfaces/types/message-severity.type';
@@ -43,9 +43,10 @@ const addOrUpdate = 'add-or-update';
 const rowToDeleteClass = 'table-wrapper-row-to-delete';
 
 @Component({
-  selector: 'app-table-wrapper',
-  templateUrl: './table-wrapper.component.html',
-  providers: [MessageService, ConfirmationService, CrudService],
+    selector: 'app-table-wrapper',
+    templateUrl: './table-wrapper.component.html',
+    providers: [MessageService, ConfirmationService, CrudService],
+    standalone: false
 })
 export class TableWrapperComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('wrappedTable', { static: false }) wrappedTable: Table | undefined;
@@ -350,9 +351,22 @@ export class TableWrapperComponent implements OnInit, OnChanges, OnDestroy {
   /**
    * onRowsReorder
    */
-  public onRowsReorder({ dragIndex, dropIndex }: { dragIndex: number; dropIndex: number; }): void {
+  public onRowsReorder(event: TableRowReorderEvent): void {
+    const dragIndex = event.dragIndex;
+    const dropIndex = event.dropIndex;
+
     if (!this.wrappedTable) {
       console.debug('No valid wrappedTable!');
+      return;
+    }
+
+    if (dragIndex === undefined || dropIndex === undefined) {
+      console.debug('Invalid drag and drop indices!');
+      return;
+    }
+
+    if (!this.wrappedTable.value?.[dropIndex]) {
+      console.debug('Invalid drop position!');
       return;
     }
 
@@ -363,7 +377,7 @@ export class TableWrapperComponent implements OnInit, OnChanges, OnDestroy {
 
     const elementId: string = this.wrappedTable.value[dropIndex].id;
 
-    if (dropIndex > dragIndex && this.wrappedTable) {
+    if (dropIndex > dragIndex) {
       const [draggedElement] = this.wrappedTable.value.splice(dropIndex, 1);
       this.wrappedTable.value.splice(dropIndex - 1, 0, draggedElement);
     }
@@ -411,7 +425,7 @@ export class TableWrapperComponent implements OnInit, OnChanges, OnDestroy {
    * @param col
    * @param e
    */
-  public async onOpenPickListOverlayPanel(op: OverlayPanel, col: TableColumn, e: MouseEvent): Promise<void> {
+  public async onOpenPickListOverlayPanel(op: Popover, col: TableColumn, e: MouseEvent): Promise<void> {
     const { pickListWrapperOptions } = col;
     if (!pickListWrapperOptions) {
       this.displayMessage(
@@ -453,7 +467,7 @@ export class TableWrapperComponent implements OnInit, OnChanges, OnDestroy {
    * @param col
    * @param value
    */
-  public onClosePickListOverlayPanel(op: OverlayPanel, rowData: any, col: TableColumn, value?: any[]): void {
+  public onClosePickListOverlayPanel(op: Popover, rowData: any, col: TableColumn, value?: any[]): void {
     op.hide();
 
     if (!value || !col.pickListWrapperOptions) {
@@ -487,7 +501,7 @@ export class TableWrapperComponent implements OnInit, OnChanges, OnDestroy {
    * @param col
    * @param e
    */
-  public onOpenFormOverlayPanel(op: OverlayPanel, col: TableColumn, e: MouseEvent): void {
+  public onOpenFormOverlayPanel(op: Popover, col: TableColumn, e: MouseEvent): void {
     if (!col || !col.formFields) {
       this.displayMessage(
         'Impossible d\'éditer ce champ, les options de configuration sont invalides.', 'error',
@@ -505,7 +519,7 @@ export class TableWrapperComponent implements OnInit, OnChanges, OnDestroy {
    * @param col
    * @param values
    */
-  public onCloseFormOverlayPanel(op: OverlayPanel, rowData: any, col: TableColumn, values?: any): void {
+  public onCloseFormOverlayPanel(op: Popover, rowData: any, col: TableColumn, values?: any): void {
     op.hide();
 
     if (!values || !col.formFields) {
@@ -902,12 +916,12 @@ export class TableWrapperComponent implements OnInit, OnChanges, OnDestroy {
    * @param callback
    * @private
    */
-  private async sendRequest<t, T>(
-    method: SendRequestMethods, endpoint: string, payload: t, callback: (response: any) => Promise<void>,
+  private async sendRequest<TPayload extends {[key: string]: any}, TResponse>(
+    method: SendRequestMethods, endpoint: string, payload: TPayload, callback: (response: TResponse) => Promise<void>,
   ): Promise<void> {
     try {
       this.isLoading = true;
-      const response: any = await lastValueFrom(this.crudService[method]<T>(endpoint, payload));
+      const response: TResponse = await lastValueFrom(this.crudService[method]<TResponse>(endpoint, payload));
 
       if (!response) {
         console.debug('sendRequest server error - request details:', { method, endpoint, payload });

@@ -3,8 +3,9 @@ import { UtilsService } from '../../../shared';
 import { APP_CREDITS } from '../../constants/common.constant';
 
 @Component({
-  selector: 'app-maintenance',
-  templateUrl: './maintenance.component.html',
+    selector: 'app-maintenance',
+    templateUrl: './maintenance.component.html',
+    standalone: false
 })
 export class MaintenanceComponent implements OnInit {
   public headerImage = 'assets/img/mikeonline1024.jpg';

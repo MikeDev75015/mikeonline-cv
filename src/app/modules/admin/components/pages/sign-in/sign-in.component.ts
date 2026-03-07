@@ -16,9 +16,10 @@ import { AuthService } from '../../../services/auth/auth.service';
 import { SEVERITY_MESSAGE_SUMMARY } from '../../fragments/table-wrapper/constants/common.constant';
 
 @Component({
-  selector: 'app-sign-in',
-  templateUrl: './sign-in.component.html',
-  providers: [MessageService],
+    selector: 'app-sign-in',
+    templateUrl: './sign-in.component.html',
+    providers: [MessageService],
+    standalone: false
 })
 export class SignInComponent implements OnInit, AfterViewInit, OnDestroy {
   public isLoading = false;

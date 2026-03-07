@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { TabMenuModule } from 'primeng/tabmenu';
 import { SharedModule } from '../../shared/shared.module';
 import { AdminRoutingModule } from './admin-routing.module';
 import { PickListWrapperComponent } from './components/fragments/pick-list-wrapper/pick-list-wrapper.component';
@@ -15,10 +14,6 @@ import { AdminSkillsComponent } from './components/pages/admin-skills/admin-skil
 import { AdminTagsComponent } from './components/pages/admin-tags/admin-tags.component';
 import { SignInComponent } from './components/pages/sign-in/sign-in.component';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
-
-const primeNgModule: any[] = [
-  TabMenuModule,
-];
 
 @NgModule({
   declarations: [
@@ -41,7 +36,6 @@ const primeNgModule: any[] = [
     CommonModule,
     SharedModule,
     AdminRoutingModule,
-    ...primeNgModule,
   ],
 })
 export class AdminModule {

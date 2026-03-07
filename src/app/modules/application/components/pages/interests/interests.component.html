@@ -4,13 +4,15 @@
   [elementsNumber]="interestList ? interestList.length : 0"
   [isLoadingData$]="isLoadingData$"
   [scrollSection]="true"
->
-  <div *ngIf="interestList" class="fcs w100" aria-labelledby="interests content">
-    <app-vertical-accordion
-      class="vertical-accordion"
-      [verticalAccordionContainerClass]="'vertical-accordion-container'"
-      [verticalAccordionItemClass]="'vertical-accordion-item'"
-      [itemList]="interestList"
-    ></app-vertical-accordion>
-  </div>
+  >
+  @if (interestList) {
+    <div class="fcs w100" aria-labelledby="interests content">
+      <app-vertical-accordion
+        class="vertical-accordion"
+        [verticalAccordionContainerClass]="'vertical-accordion-container'"
+        [verticalAccordionItemClass]="'vertical-accordion-item'"
+        [itemList]="interestList"
+      ></app-vertical-accordion>
+    </div>
+  }
 </app-page-layout>

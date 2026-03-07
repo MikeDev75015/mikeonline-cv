@@ -11,7 +11,8 @@ import {
 } from '../../../../../../shared/components/dropdown-wrapper/interfaces/dropdown-option.interface';
 
 @Pipe({
-  name: 'formatValueDisplay',
+    name: 'formatValueDisplay',
+    standalone: false
 })
 export class FormatValueDisplayPipe implements PipeTransform {
 

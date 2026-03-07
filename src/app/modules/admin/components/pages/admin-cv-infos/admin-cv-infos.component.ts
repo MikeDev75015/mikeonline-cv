@@ -9,8 +9,9 @@ import { DEFAULT_FORM_FIELDS_CONFIG } from '../../../constants/common-formFields
 import { TableColumn } from '../../fragments/table-wrapper/interfaces/table-column.interface';
 
 @Component({
-  selector: 'app-admin-cv-infos',
-  templateUrl: './admin-cv-infos.component.html',
+    selector: 'app-admin-cv-infos',
+    templateUrl: './admin-cv-infos.component.html',
+    standalone: false
 })
 export class AdminCvInfosComponent implements OnInit {
   public columnList: TableColumn[] = [];

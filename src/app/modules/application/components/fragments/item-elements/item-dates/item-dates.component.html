@@ -1,18 +1,20 @@
-<ng-container *ngIf="item">
+@if (item) {
   <h3 class="fes" style="text-align: right;">
-
-    <span *ngIf="item.startDate && !item.endDate">
-      Depuis {{ item.startDate | dateFormat:'MMMM[&nbsp;]YYYY' }}
-    </span>
-
-    <span *ngIf="item.startDate && item.endDate">
+    @if (item.startDate && !item.endDate) {
+      <span>
+        Depuis {{ item.startDate | dateFormat:'MMMM[&nbsp;]YYYY' }}
+      </span>
+    }
+    @if (item.startDate && item.endDate) {
+      <span>
         De&nbsp;{{ item.startDate | dateFormat:'MMMM[&nbsp;]YYYY' }}
-      à&nbsp;{{ item.endDate | dateFormat:'MMMM[&nbsp;]YYYY' }}
-    </span>
-
-    <span *ngIf="!item.startDate && item.endDate">
-      {{ item.endDate | dateFormat:'MMMM[&nbsp;]YYYY' | firstLetterUppercase }}
-    </span>
-
+        à&nbsp;{{ item.endDate | dateFormat:'MMMM[&nbsp;]YYYY' }}
+      </span>
+    }
+    @if (!item.startDate && item.endDate) {
+      <span>
+        {{ item.endDate | dateFormat:'MMMM[&nbsp;]YYYY' | firstLetterUppercase }}
+      </span>
+    }
   </h3>
-</ng-container>
+}

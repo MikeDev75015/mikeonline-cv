@@ -13,9 +13,10 @@ import { DEFAULT_ADMIN_TABS } from '../../constants/default-admin-tabs.constant'
 import { ExtendedMenuItem } from '../../interfaces/extended-menu-item.interface';
 
 @Component({
-  selector: 'app-admin-layout',
-  templateUrl: './admin-layout.component.html',
-  providers: [ThemingService, MessageService],
+    selector: 'app-admin-layout',
+    templateUrl: './admin-layout.component.html',
+    providers: [ThemingService, MessageService],
+    standalone: false
 })
 export class AdminLayoutComponent implements OnInit, OnDestroy {
   public readonly themeList = this.themingService.getThemeList();

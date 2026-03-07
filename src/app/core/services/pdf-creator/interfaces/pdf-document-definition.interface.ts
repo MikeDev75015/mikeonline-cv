@@ -1,5 +1,4 @@
 /// <reference types="node" />
-/// <reference types="pdfkit" />
 
 type PageSize = PredefinedPageSize | CustomPageSize;
 
@@ -148,7 +147,8 @@ interface Style {
   /** size of the font in pt */
   fontSize?: number;
 
-  fontFeatures?: PDFKit.Mixins.OpenTypeFeatures[];
+  // Kept broad to avoid pdfkit type dependency during jsPDF migration.
+  fontFeatures?: string[];
 
   /** the line height (default: 1) */
   lineHeight?: number;
@@ -552,7 +552,15 @@ export interface PdfDocumentDefinition {
 
   ownerPassword?: string;
 
-  permissions?: PDFKit.DocumentPermissions;
+  permissions?: {
+    printing?: 'highResolution' | 'lowResolution';
+    modifying?: boolean;
+    copying?: boolean;
+    annotating?: boolean;
+    fillingForms?: boolean;
+    contentAccessibility?: boolean;
+    documentAssembly?: boolean;
+  };
 
   version?: PDFVersion;
 

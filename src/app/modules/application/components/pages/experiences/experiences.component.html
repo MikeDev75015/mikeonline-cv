@@ -3,15 +3,15 @@
   [pageTitle]="'components.experiences.title'"
   [elementsNumber]="experienceList ? experienceList.length : 0"
   [isLoadingData$]="isLoadingData$"
->
-  <ng-container *ngIf="experienceList">
+  >
+  @if (experienceList) {
     <div class="exp w100 column fsc" aria-labelledby="experiences content">
-      <ng-container *ngFor="let exp of experienceList; let i = index">
+      @for (exp of experienceList; track exp; let i = $index) {
         <app-item
           [id]="'experience-item-' + i" [index]="i" [itemData]="exp" [showDetails]="true"
           class="fss w70 column exp-line" itemType="experienceItem"
         ></app-item>
-      </ng-container>
+      }
     </div>
-  </ng-container>
+  }
 </app-page-layout>

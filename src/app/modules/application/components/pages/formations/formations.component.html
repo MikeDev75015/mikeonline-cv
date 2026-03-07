@@ -3,15 +3,15 @@
   [pageTitle]="'components.formations.title'"
   [elementsNumber]="formationList ? formationList.length : 0"
   [isLoadingData$]="isLoadingData$"
->
-  <ng-container *ngIf="formationList">
+  >
+  @if (formationList) {
     <div class="exp w100 column fsc" aria-labelledby="formations content">
-      <ng-container *ngFor="let form of formationList; let i = index">
+      @for (form of formationList; track form; let i = $index) {
         <app-item
           [id]="'formation-item-' + i" [index]="i" [itemData]="form" [showDetails]="true"
           class="fss w70 column form-line" itemType="formationItem"
         ></app-item>
-      </ng-container>
+      }
     </div>
-  </ng-container>
+  }
 </app-page-layout>

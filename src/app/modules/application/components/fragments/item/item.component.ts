@@ -7,21 +7,13 @@ import { AnimationsService } from '../../../../../shared/services/animations/ani
 import { TemplatesService } from '../../../../../shared/services/templates/templates.service';
 
 @Component({
-  selector: 'app-item',
-  templateUrl: './item.component.html',
-  animations: [
-    ...IN_OUT_TEMPLATE_ANIMATION(
-      'ItemComponent',
-      false,
-      { in: 800, out: 700 },
-      { style: { maxHeight: '600px' } },
-      { style: { maxHeight: '100px' } },
-    ),
-    ...IN_OUT_TEMPLATE_ANIMATION(
-      'ClosedLayer',
-      false,
-    ),
-  ],
+    selector: 'app-item',
+    templateUrl: './item.component.html',
+    animations: [
+        ...IN_OUT_TEMPLATE_ANIMATION('ItemComponent', false, { in: 800, out: 700 }, { style: { maxHeight: '600px' } }, { style: { maxHeight: '100px' } }),
+        ...IN_OUT_TEMPLATE_ANIMATION('ClosedLayer', false),
+    ],
+    standalone: false
 })
 export class ItemComponent implements OnInit, OnChanges, OnDestroy, AfterViewChecked {
   @Input() itemData: ExperienceV1 | FormationV1 | undefined;

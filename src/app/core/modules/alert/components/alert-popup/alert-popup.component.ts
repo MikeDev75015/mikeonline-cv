@@ -3,9 +3,10 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import { DialogData } from '../../interfaces/dialog-data.interface';
 
 @Component({
-  selector: 'app-alert-popup',
-  templateUrl: './alert-popup.component.html',
-  styleUrls: ['./alert-popup.component.scss']
+    selector: 'app-alert-popup',
+    templateUrl: './alert-popup.component.html',
+    styleUrls: ['./alert-popup.component.scss'],
+    standalone: false
 })
 export class AlertPopupComponent {
   /**

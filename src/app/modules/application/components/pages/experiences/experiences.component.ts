@@ -13,8 +13,9 @@ import { TemplatesService } from '../../../../../shared/services/templates/templ
  * The component of the experiences page.
  */
 @Component({
-  selector: 'app-experiences',
-  templateUrl: './experiences.component.html',
+    selector: 'app-experiences',
+    templateUrl: './experiences.component.html',
+    standalone: false
 })
 export class ExperiencesComponent implements OnInit {
   /**

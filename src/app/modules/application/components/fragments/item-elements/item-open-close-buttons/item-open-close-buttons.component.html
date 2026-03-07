@@ -1,23 +1,25 @@
-<ng-container *ngIf="enableOpenCloseButtons">
+@if (enableOpenCloseButtons) {
   <div
     class="closed-layer w100 fce"
     [@ClosedLayerInOut]="masked ? 'in' : 'out'"
     (@ClosedLayerInOut.start)="onAnimation($event)"
     (@ClosedLayerInOut.done)="onAnimation($event)"
     (click)="toggleView('open')"
-  >
-    <button
-      *ngIf="!opened && btnOpen" class="btns-open-close-items btn-open-item blinking">
-      <i class="fas fa-hand-point-down" style="pointer-events: none;"></i>
-    </button>
+    >
+    @if (!opened && btnOpen) {
+      <button
+        class="btns-open-close-items btn-open-item blinking">
+        <i class="fas fa-hand-point-down" style="pointer-events: none;"></i>
+      </button>
+    }
   </div>
-</ng-container>
+}
 
-<ng-container *ngIf="enableOpenCloseButtons && opened && !masked">
+@if (enableOpenCloseButtons && opened && !masked) {
   <button
     class="fcc btns-open-close-items btn-close-item blinking"
     (click)="toggleView('close')"
-  >
+    >
     <i class="fas fa-hand-point-up" style="pointer-events: none;"></i>
   </button>
-</ng-container>
+}
