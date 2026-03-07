@@ -1,5 +1,5 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { dataServiceMock } from '../../../../../../../../__mocks__/services/data-service.mock';
 import { utilsServiceMock } from '../../../../../../../../__mocks__/services/utils-service.mock';
 import { DataService, UtilsService } from '../../../../../../shared';
@@ -10,8 +10,8 @@ describe('LeftFooterComponent', () => {
   let component: LeftFooterComponent;
   let fixture: ComponentFixture<LeftFooterComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
       ],
@@ -28,7 +28,7 @@ describe('LeftFooterComponent', () => {
       ],
     })
       .compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(LeftFooterComponent);

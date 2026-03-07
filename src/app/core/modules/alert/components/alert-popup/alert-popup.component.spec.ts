@@ -1,4 +1,4 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {AlertPopupComponent} from './alert-popup.component';
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
@@ -7,8 +7,8 @@ describe('AlertPopupComponent', () => {
   let component: AlertPopupComponent;
   let fixture: ComponentFixture<AlertPopupComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [ AlertPopupComponent ],
       imports: [MatDialogModule],
       providers: [
@@ -23,7 +23,7 @@ describe('AlertPopupComponent', () => {
       ]
     })
     .compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AlertPopupComponent);
