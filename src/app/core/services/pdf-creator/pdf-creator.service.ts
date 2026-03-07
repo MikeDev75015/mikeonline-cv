@@ -237,6 +237,9 @@ export class PdfCreatorService {
 
       await this.addPdfContents(pdfInfos.data);
 
+      // Build jsPDF from pdfDocument structure
+      this.buildJsPdfFromDocument();
+
       // Generate PDF using jsPDF through pdfBuilder
       this.pdfBuilder.download(fileName);
       this.pdfBuilder = new PdfBuilder();
@@ -364,6 +367,127 @@ export class PdfCreatorService {
       };
 
       this.updatePdfContent.addTable(projTable);
+    }
+  }
+
+  /**
+   * Convert pdfDocument structure to jsPDF using PdfBuilder
+   */
+  private buildJsPdfFromDocument(): void {
+    if (!this.pdfDocument.content || this.pdfDocument.content.length === 0) {
+      console.warn('PDF document has no content');
+      return;
+    }
+
+    // Process each content element
+    this.pdfDocument.content.forEach((element: any) => {
+      this.renderContentElement(element);
+    });
+  }
+
+  /**
+   * Render a single content element (text, image, or table)
+   */
+  private renderContentElement(element: any): void {
+    if (!element) return;
+
+    // Handle text elements
+    if (element.text !== undefined) {
+      const options = {
+        bold: element.bold,
+        fontSize: element.fontSize || 12,
+        color: element.color,
+        alignment: element.alignment as 'left' | 'center' | 'right' | undefined,
+      };
+      this.pdfBuilder.addText(String(element.text), options);
+      return;
+    }
+
+    // Handle image elements
+    if (element.image !== undefined) {
+      const options = {
+        x: element.x || 15,
+        y: element.y,
+        width: element.width || 50,
+        height: element.height || 50,
+      };
+      this.pdfBuilder.addImage(element.image, options.x, options.y, options.width, options.height);
+      return;
+    }
+
+    // Handle table elements (complex pdfmake-style tables)
+    if (element.table !== undefined) {
+      this.renderTableElement(element);
+      return;
+    }
+  }
+
+  /**
+   * Render table elements from pdfmake-style structure to jsPDF
+   */
+  private renderTableElement(element: any): void {
+    if (!element.table || !element.table.body) {
+      return;
+    }
+
+    const table = element.table;
+    const margin = element.margin || [0, 0, 0, 0];
+
+    // Add top margin
+    if (margin[0]) {
+      this.pdfBuilder.addText('');
+    }
+
+    // Process each row
+    table.body.forEach((row: any[]) => {
+      if (!row || row.length === 0) return;
+
+      // Handle multi-column rows
+      if (row.length === 1) {
+        // Single column - render as text
+        const cell = row[0];
+        if (typeof cell === 'string') {
+          this.pdfBuilder.addText(cell);
+        } else if (cell.text !== undefined) {
+          const options = {
+            bold: cell.bold,
+            fontSize: cell.fontSize || 12,
+            color: cell.color,
+            alignment: cell.alignment as 'left' | 'center' | 'right' | undefined,
+          };
+          this.pdfBuilder.addText(String(cell.text), options);
+        } else if (cell.image !== undefined) {
+          this.pdfBuilder.addImage(cell.image, cell.x || 15, undefined, cell.width || 50, cell.height || 50);
+        } else if (cell.table !== undefined) {
+          // Nested table
+          this.renderTableElement(cell);
+        }
+      } else {
+        // Multi-column row - render columns with appropriate spacing
+        row.forEach((cell: any) => {
+          if (typeof cell === 'string') {
+            this.pdfBuilder.addText(`${cell}`);
+          } else if (cell.text !== undefined) {
+            const options = {
+              bold: cell.bold,
+              fontSize: cell.fontSize || 11,
+              color: cell.color,
+              alignment: cell.alignment as 'left' | 'center' | 'right' | undefined,
+            };
+            this.pdfBuilder.addText(String(cell.text), options);
+          } else if (cell.image !== undefined) {
+            this.pdfBuilder.addImage(cell.image, cell.x || 15, undefined, cell.width || 50, cell.height || 50);
+          } else if (cell.table !== undefined) {
+            // Nested table
+            this.renderTableElement(cell);
+          }
+        });
+      }
+    });
+
+    // Add bottom margin
+    if (margin[2]) {
+      this.pdfBuilder.addText('');
     }
   }
 

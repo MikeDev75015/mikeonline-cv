@@ -104,10 +104,11 @@ export class PdfBuilder {
   /**
    * Add image
    */
-  addImage(imageData: string, x: number = this.margin, y: number = this.currentY, width: number = 50, height: number = 50): void {
+  addImage(imageData: string, x: number = this.margin, y?: number, width: number = 50, height: number = 50): void {
     try {
-      this.doc.addImage(imageData, 'PNG', x, y, width, height);
-      this.currentY = Math.max(this.currentY + this.lineHeight, y + height + 5);
+      const yPos = y || this.currentY;
+      this.doc.addImage(imageData, 'PNG', x, yPos, width, height);
+      this.currentY = Math.max(this.currentY + this.lineHeight, yPos + height + 5);
     } catch (error) {
       console.warn('Failed to add image:', error);
     }
