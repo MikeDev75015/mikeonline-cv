@@ -12,7 +12,6 @@ export default [
       'node_modules/**',
       'coverage/**',
       '.angular/**',
-      'cypress/**',
       '*.config.js',
       '*.config.mjs',
     ],

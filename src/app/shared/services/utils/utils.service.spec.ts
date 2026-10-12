@@ -155,8 +155,10 @@ describe('UtilsService', () => {
     });
   });
 
-  describe('uppercaseFirstLetter', () => {
-    expect(UtilsService.uppercaseFirstLetter('unit test')).toStrictEqual('Unit test');
+  describe('static uppercaseFirstLetter', () => {
+    it('should uppercase the first letter', () => {
+      expect(UtilsService.uppercaseFirstLetter('unit test')).toStrictEqual('Unit test');
+    });
   });
 
   describe('getElementId', () => {

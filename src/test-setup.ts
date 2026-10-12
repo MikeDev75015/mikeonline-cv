@@ -1,11 +1,13 @@
 import '@angular/compiler';
-import '@analogjs/vitest-angular/setup-zone';
-import { setupTestBed } from '@analogjs/vitest-angular/setup-testbed';
+import './test/vitest-zone-patch';
+import { ɵgetCleanupHook as getCleanupHook, getTestBed } from '@angular/core/testing';
+import { BrowserTestingModule, platformBrowserTesting } from '@angular/platform-browser/testing';
+import { afterEach, beforeEach } from 'vitest';
 
-setupTestBed({
-  zoneless: false,
-});
-
+// Reset the TestBed (and the fake async zone) around every test, then boot the zone-based test environment once.
+beforeEach(getCleanupHook(false));
+afterEach(getCleanupHook(true));
+getTestBed().initTestEnvironment(BrowserTestingModule, platformBrowserTesting());
 
 const mockStorage = () => {
   let storage: { [key: string]: string } = {};

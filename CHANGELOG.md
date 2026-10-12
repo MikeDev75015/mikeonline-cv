@@ -2,6 +2,39 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.13.0](https://github.com/MikeDev75015/mikeonline-cv/compare/v1.12.2...v1.13.0) (2026-10-12)
+
+Phase 0 of the overhaul plan (see `docs/PLAN_REFONTE.md`): stabilisation of the Angular 21 code base. No visual change.
+
+### ⚠ BREAKING CHANGES
+
+* requires `mikeonline-api` >= 0.2.0: login stores an access **and** a refresh token, the refresh call sends the refresh token. Admin users must log in again once.
+
+### Bug Fixes
+
+* `npm ci` works on a clean clone without `--legacy-peer-deps` (NgRx aligned on Angular 21, Vite pinned through `overrides`)
+* 30 failing unit tests fixed (jsdom `location`, `useDefineForClassFields`, leaked spies, change-detection timers, a test without `it`); 219 tests green
+* refresh token flow: the retried request now carries the new access token, a failed refresh clears the session and redirects to sign-in, no refresh attempted on the auth endpoints
+* service worker registered once (manual registration removed from `main.ts`)
+* `robots.txt` allowed indexing is restored (`Disallow: /admin` only) and `robots.txt` / `sitemap.xml` are shipped in the build
+* `ngsw-config.json` referenced a non-existent favicon
+* `environment.staging.ts` created (the staging build was broken)
+
+### Security
+
+* `npm audit --omit=dev`: 0 vulnerabilities (Angular 21.2.25 patches, pdfmake 0.3.11, firebase-tools 15)
+* real personal data removed from fixtures
+
+### Build & tooling
+
+* removed dead dependencies: jquery, hammerjs, wordcloud (npm), jspdf, ng2-mock-component, FontAwesome packages, jasmine, mocha/mochawesome, ng-mocks, `@analogjs/vitest-angular`, ts-node, deepmerge
+* Cypress 13 removed (non-runnable legacy configuration, replaced by Playwright in phase 6) with its reporters, scripts and CircleCI jobs; no Windows-only npm scripts remain
+* local zone test setup for Vitest (`src/test/vitest-zone-patch.ts`), `@vitest/coverage-v8` added
+* 11 unused Firebase compat scripts removed from `index.html`
+* `.firebase/*.cache` removed from the repository
+* GitHub Actions CI (lint, test, build, audit)
+* `engines.node >= 22`
+
 ### [1.12.2](https://bitbucket.org/mikeonline75/ocv-frontend/compare/v1.12.1...v1.12.2) (2022-12-03)
 
 ### [1.12.1](https://bitbucket.org/mikeonline75/ocv-frontend/compare/v1.12.0...v1.12.1) (2022-05-04)

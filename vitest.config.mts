@@ -9,7 +9,7 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['src/test-setup.ts'],
     include: ['src/**/*.spec.ts'],
-    exclude: ['node_modules', 'dist', '.idea', '.git', '.cache', 'cypress/**'],
+    exclude: ['node_modules', 'dist', '.idea', '.git', '.cache'],
     reporters: ['default'],
     coverage: {
       provider: 'v8',
@@ -21,7 +21,6 @@ export default defineConfig({
     alias: {
       '@core': '/src/app/core',
       '@test/mock-component': '/src/test/ng2-mock-component-compat.ts',
-      'ng2-mock-component': '/src/test/ng2-mock-component-compat.ts',
     },
   },
 });

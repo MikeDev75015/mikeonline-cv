@@ -1,3 +1,4 @@
+import { DOCUMENT } from '@angular/common';
 import { TestBed } from '@angular/core/testing';
 import { SwPush, SwUpdate, VersionEvent } from '@angular/service-worker';
 import { Subject } from 'rxjs';
@@ -18,6 +19,8 @@ describe('PwaService', () => {
   let activateUpdateSpy: any;
   let notificationClickSubject = new Subject<NotificationPayloadType>();
   let versionEventSubject = new Subject<VersionEvent>();
+  // jsdom's window.location is not configurable, so the service reaches it through the DOCUMENT token.
+  const documentMock = { defaultView: { location: { reload: vi.fn() } } };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -26,6 +29,7 @@ describe('PwaService', () => {
         { provide: SwPush, useValue: swPushMock },
         { provide: SwUpdate, useValue: swUpdateMock },
         { provide: AlertService, useValue: alertServiceMock },
+        { provide: DOCUMENT, useValue: documentMock },
       ],
     });
     service = TestBed.inject(PwaService);
@@ -33,13 +37,7 @@ describe('PwaService', () => {
     consoleDebugSpy = vi.spyOn(console, 'debug').mockImplementation(() => undefined);
     displayConfirmDialogSpy = vi.spyOn(alertServiceMock, 'displayConfirmDialog');
     activateUpdateSpy = vi.spyOn(swUpdateMock, 'activateUpdate');
-
-    Object.defineProperty(window, 'location', {
-      value: {
-        reload: vi.fn(),
-      },
-    });
-    windowLocationReloadSpy = vi.spyOn(window.location, 'reload');
+    windowLocationReloadSpy = vi.spyOn(documentMock.defaultView.location, 'reload');
 
     swPushMock.notificationClicks = notificationClickSubject.asObservable();
     swUpdateMock.versionUpdates = versionEventSubject.asObservable();
