@@ -1,3 +1,3 @@
 export const changeDetectorRefMock = {
-  detectChanges: jest.fn(),
+  detectChanges: vi.fn(),
 };

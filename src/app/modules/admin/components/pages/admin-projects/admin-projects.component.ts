@@ -14,8 +14,9 @@ import { DEFAULT_TABLE_COLUMNS_CONFIG } from '../../../constants/common-table-co
 import { TableColumn } from '../../fragments/table-wrapper/interfaces/table-column.interface';
 
 @Component({
-  selector: 'app-admin-projects',
-  templateUrl: './admin-projects.component.html',
+    selector: 'app-admin-projects',
+    templateUrl: './admin-projects.component.html',
+    standalone: false
 })
 export class AdminProjectsComponent implements OnInit {
   public columnList: TableColumn[] = [];

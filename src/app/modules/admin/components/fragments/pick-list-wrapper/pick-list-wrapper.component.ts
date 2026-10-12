@@ -3,8 +3,9 @@ import { PickList } from 'primeng/picklist';
 import { UtilsService } from '../../../../../shared';
 
 @Component({
-  selector: 'app-pick-list-wrapper',
-  templateUrl: './pick-list-wrapper.component.html',
+    selector: 'app-pick-list-wrapper',
+    templateUrl: './pick-list-wrapper.component.html',
+    standalone: false
 })
 export class PickListWrapperComponent implements OnInit {
   @ViewChild('pickListWrapped', { static: false }) pickList: PickList | undefined;

@@ -1,4 +1,4 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { ComponentFixture, TestBed} from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { animationServiceMock } from '../../../../../../../../__mocks__/services/animation-service.mock';
 import { AnimationsService } from '../../../../../../shared/services/animations/animations.service';
@@ -10,8 +10,8 @@ describe('VerticalAccordionItemComponent', () => {
   let component: VerticalAccordionItemComponent;
   let fixture: ComponentFixture<VerticalAccordionItemComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [
         NoopAnimationsModule,
       ],
@@ -24,7 +24,7 @@ describe('VerticalAccordionItemComponent', () => {
       ]
     })
     .compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(VerticalAccordionItemComponent);

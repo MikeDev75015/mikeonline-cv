@@ -96,13 +96,6 @@ import { PageLayoutComponent } from './layouts/page-layout/page-layout.component
   providers: [
     PdfCreatorService,
   ],
-  entryComponents: [
-    SkillsComponent,
-    ExperiencesComponent,
-    FormationsComponent,
-    ProjectsComponent,
-    InterestsComponent,
-  ],
 })
 export class ApplicationModule {
 }

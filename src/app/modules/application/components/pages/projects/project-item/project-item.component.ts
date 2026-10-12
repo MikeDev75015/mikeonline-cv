@@ -3,14 +3,15 @@ import { UtilsService } from '../../../../../../shared';
 import { ProjectItem } from '../../../../interfaces/project-item.interface';
 
 @Component({
-  selector: 'app-project-item',
-  templateUrl: './project-item.component.html',
-  styleUrls: ['./project-item.component.scss'],
+    selector: 'app-project-item',
+    templateUrl: './project-item.component.html',
+    styleUrls: ['./project-item.component.scss'],
+    standalone: false
 })
 export class ProjectItemComponent implements OnInit, OnDestroy {
   mobileView = false;
 
-  @Input() project: ProjectItem | undefined;
+  @Input({ required: true }) project!: ProjectItem;
 
   constructor(
     private readonly utilsService: UtilsService,

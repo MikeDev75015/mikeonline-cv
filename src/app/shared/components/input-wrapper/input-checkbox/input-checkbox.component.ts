@@ -3,8 +3,9 @@ import { Checkbox } from 'primeng/checkbox';
 import { DEFAULT_INPUT_HEIGHT, DEFAULT_INPUT_WIDTH } from '../constants/input-wrapper.constant';
 
 @Component({
-  selector: 'app-input-checkbox',
-  templateUrl: './input-checkbox.component.html',
+    selector: 'app-input-checkbox',
+    templateUrl: './input-checkbox.component.html',
+    standalone: false
 })
 export class InputCheckboxComponent implements OnInit, AfterViewInit {
   @ViewChild('inputCheckboxWrapped', { static: false }) inputCheckbox: Checkbox | undefined;
@@ -36,10 +37,6 @@ export class InputCheckboxComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    if (this.inputCheckbox) {
-      this.inputCheckbox.name = this.name || '';
-    }
-
     this.onValueChange(this.value);
   }
 

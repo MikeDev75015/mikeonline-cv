@@ -1,4 +1,4 @@
-import { HttpRequest } from '@angular/common/http';
+import { HttpHeaders, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { STORAGE_KEYS } from '../../../../core/constants/storage-keys.constant';
@@ -7,6 +7,11 @@ import { UserV1 } from '../../../../core/interfaces/models/v1/user.interface';
 import { LoginRequest } from '../../../../core/interfaces/requests/login.request';
 import { HttpClientService } from '../../../../core/services/http-client/http-client.service';
 import { StorageService } from '../../../../core/services/storage/storage.service';
+
+export interface TokenPair {
+  accessToken: string;
+  refreshToken: string;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -18,16 +23,30 @@ export class AuthService {
   ) {
   }
 
+  public setTokens({ accessToken, refreshToken }: TokenPair): void {
+    this.setAccessToken(accessToken);
+    StorageService.setItem('localStorage', STORAGE_KEYS.refreshToken, refreshToken);
+  }
+
   public setAccessToken(accessToken: string) {
     StorageService.setItem('localStorage', STORAGE_KEYS.accessToken, accessToken);
   }
 
   public getAccessToken(): string {
-    return StorageService.getItem<string>('localStorage', STORAGE_KEYS.accessToken);
+    return AuthService.readToken(STORAGE_KEYS.accessToken);
+  }
+
+  public getRefreshToken(): string {
+    return AuthService.readToken(STORAGE_KEYS.refreshToken);
   }
 
   public removeAccessToken(): void {
     StorageService.removeItem('localStorage', STORAGE_KEYS.accessToken);
+  }
+
+  public removeTokens(): void {
+    this.removeAccessToken();
+    StorageService.removeItem('localStorage', STORAGE_KEYS.refreshToken);
   }
 
   public setHeaderAuthorization(request: HttpRequest<any>, accessToken: string): HttpRequest<any> {
@@ -38,8 +57,8 @@ export class AuthService {
     });
   }
 
-  public login(payload: LoginRequest): Observable<{ accessToken: string; }> {
-    return this.httpClientService.post<{ accessToken: string; }>(`/${AuthPath.LOGIN}`, payload);
+  public login(payload: LoginRequest): Observable<TokenPair> {
+    return this.httpClientService.post<TokenPair>(`/${AuthPath.LOGIN}`, payload);
   }
 
   public logout(): Observable<void> {
@@ -50,7 +69,30 @@ export class AuthService {
     return this.httpClientService.get<UserV1>(`/${AuthPath.ACCOUNT}`);
   }
 
-  public refreshAccessToken(): Observable<{ accessToken: string; }> {
-    return this.httpClientService.put<{ accessToken: string; }>(`/${AuthPath.REFRESH_TOKEN}`, {});
+  /**
+   * Rotates the token pair. The refresh token is sent as Bearer; the HttpRequestInterceptor
+   * leaves an existing Authorization header untouched.
+   */
+  public refreshAccessToken(): Observable<TokenPair> {
+    const headers = new HttpHeaders({ Authorization: `Bearer ${this.getRefreshToken()}` });
+    return this.httpClientService.put<TokenPair>(`/${AuthPath.REFRESH_TOKEN}`, {}, { headers });
+  }
+
+  private static readToken(key: string): string {
+    const token = StorageService.getItem<any>('localStorage', key);
+
+    if (!token) {
+      return '';
+    }
+
+    if (typeof token === 'string') {
+      return token;
+    }
+
+    if (typeof token === 'object' && typeof token.value === 'string') {
+      return token.value;
+    }
+
+    return '';
   }
 }

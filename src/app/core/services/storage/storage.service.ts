@@ -14,7 +14,8 @@ export class StorageService {
    */
   public static setItem<T>(type: 'localStorage' | 'sessionStorage', key: string, value: T): void {
     try {
-      window[type].setItem(key, EncryptionService.encryptUsingAES256(value));
+      const dataToEncrypt = typeof value === 'object' ? (value as any) : { value };
+      window[type].setItem(key, EncryptionService.encryptUsingAES256(dataToEncrypt));
     } catch (e: any) {
       console.warn(`Cannot set the ${key} item in ${type}.\n => ${e.message}`);
     }
@@ -29,12 +30,29 @@ export class StorageService {
    */
   public static getItem<T>(type: 'localStorage' | 'sessionStorage', key: string, defaultValue?: T): T {
     try {
-      if (!window[type].getItem(key)) {
+      const rawItem = window[type].getItem(key);
+      if (!rawItem) {
         return defaultValue as T;
       }
-      return EncryptionService.decryptUsingAES256(window[type].getItem(key) as string) as T;
+
+      const decrypted = EncryptionService.decryptUsingAES256(rawItem);
+      if (decrypted === null || decrypted === undefined) {
+        this.removeItem(type, key);
+        return defaultValue as T;
+      }
+
+      if (
+        typeof decrypted === 'object'
+        && 'value' in decrypted
+        && Object.keys(decrypted).length === 1
+      ) {
+        return (decrypted as { value: T }).value;
+      }
+
+      return decrypted as T;
     } catch (e: any) {
       console.warn(`No valid item found for ${key} in ${type}.\n => ${e.message}`);
+      this.removeItem(type, key);
       return defaultValue as T;
     }
   }

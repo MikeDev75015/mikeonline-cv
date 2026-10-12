@@ -3,14 +3,12 @@ import { IN_OUT_TEMPLATE_ANIMATION, UtilsService } from '../../../../../../share
 import { AnimationsService } from '../../../../../../shared/services/animations/animations.service';
 
 @Component({
-  selector: 'app-item-open-close-buttons',
-  templateUrl: './item-open-close-buttons.component.html',
-  animations: [
-    ...IN_OUT_TEMPLATE_ANIMATION(
-      'ClosedLayer',
-      false,
-    ),
-  ],
+    selector: 'app-item-open-close-buttons',
+    templateUrl: './item-open-close-buttons.component.html',
+    animations: [
+        ...IN_OUT_TEMPLATE_ANIMATION('ClosedLayer', false),
+    ],
+    standalone: false
 })
 export class ItemOpenCloseButtonsComponent {
   @Input() enableOpenCloseButtons!: boolean;

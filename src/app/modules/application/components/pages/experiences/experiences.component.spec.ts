@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MockComponent } from 'ng2-mock-component';
+import { MockComponent } from '../../../../../../test/ng2-mock-component-compat';
 import { lastValueFrom, of } from 'rxjs';
 import { addTags } from '../../../../../../../__mocks__/helper';
 import { dataServiceMock } from '../../../../../../../__mocks__/services/data-service.mock';
@@ -26,9 +26,9 @@ const sortedExperienceListMock = [
 describe('ExperiencesComponent', () => {
   let component: ExperiencesComponent;
   let fixture: ComponentFixture<ExperiencesComponent>;
-  const isDataLoadedSpy = jest.spyOn(dataServiceMock, 'isDataLoaded');
-  const getStoreDataSpy = jest.spyOn(dataServiceMock, 'getStoreData');
-  const sortObjectListSpy = jest.spyOn(UtilsService, 'sortObjectList');
+  const isDataLoadedSpy = vi.spyOn(dataServiceMock, 'isDataLoaded');
+  const getStoreDataSpy = vi.spyOn(dataServiceMock, 'getStoreData');
+  const sortObjectListSpy = vi.spyOn(UtilsService, 'sortObjectList');
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -56,7 +56,7 @@ describe('ExperiencesComponent', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should create', () => {

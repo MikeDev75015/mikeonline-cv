@@ -5,9 +5,11 @@
     <span>{{ credits.owner }}</span>
   </p>
 
-  <button
-    *ngIf="!mobile" class="p-button-rounded p-button-text p-button-plain absolute bottom-footer-admin-button"
-    icon="pi pi-user-edit" pButton pRipple routerLink="/admin"
-    type="button"
-  ></button>
+  @if (!mobile) {
+    <button
+      class="p-button-rounded p-button-text p-button-plain absolute bottom-footer-admin-button"
+      icon="pi pi-user-edit" pButton pRipple routerLink="/admin"
+      type="button"
+    ></button>
+  }
 </div>

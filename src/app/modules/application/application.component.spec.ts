@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
-import { MockComponent } from 'ng2-mock-component';
+import { MockComponent } from '../../../test/ng2-mock-component-compat';
 import { of } from 'rxjs';
 import { animationServiceMock } from '../../../../__mocks__/services/animation-service.mock';
 import { contactOpenCloseServiceMock } from '../../../../__mocks__/services/contact-open-close-service.mock';
@@ -46,11 +46,11 @@ describe('ApplicationComponent', () => {
     fixture = TestBed.createComponent(ApplicationComponent);
     component = fixture.componentInstance;
     // @ts-ignore
-    jest.spyOn(window, 'getComputedStyle').mockImplementation(() => ({ getPropertyValue: jest.fn() }));
+    vi.spyOn(window, 'getComputedStyle').mockImplementation(() => ({ getPropertyValue: vi.fn() }));
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should create', () => {
@@ -62,8 +62,8 @@ describe('ApplicationComponent', () => {
     let dispatchSpy: any;
 
     beforeEach(() => {
-      jest.spyOn(dataServiceMock, 'isAllDataLoaded').mockImplementationOnce(() => of(true));
-      dispatchSpy = jest.spyOn(storeMock, 'dispatch');
+      vi.spyOn(dataServiceMock, 'isAllDataLoaded').mockImplementationOnce(() => of(true));
+      dispatchSpy = vi.spyOn(storeMock, 'dispatch');
       fixture.detectChanges();
     });
 

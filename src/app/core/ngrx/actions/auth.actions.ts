@@ -15,7 +15,7 @@ export const loginUserFailure = createAction('[Auth] Login Failure');
 /**
  * login User Success
  */
-export const loginUserSuccess = createAction('[Auth] Login Success', props<{ accessToken: string; }>());
+export const loginUserSuccess = createAction('[Auth] Login Success', props<{ accessToken: string; refreshToken: string; }>());
 
 /**
  * logout User

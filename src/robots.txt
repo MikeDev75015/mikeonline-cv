@@ -1,5 +1,5 @@
-# Group 1
 User-agent: *
-Disallow: /
+Allow: /
+Disallow: /admin
 
 Sitemap: https://cv-mikeonline.web.app/sitemap.xml

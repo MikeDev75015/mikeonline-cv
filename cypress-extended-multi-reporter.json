@@ -1,7 +1,0 @@
-{
-  "extends": "./cypress.json",
-  "reporter": "cypress-multi-reporters",
-  "reporterOptions": {
-    "configFile": "cypress-extended-multi-reporter-config.json"
-  }
-}

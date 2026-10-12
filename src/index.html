@@ -25,11 +25,11 @@
 
   <!-- add to homescreen for ios -->
   <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
   <link rel="apple-touch-icon" sizes="192x192" href="https://cv-mikeonline.web.app/assets/icons/icon-192x192.png">
   <link rel="apple-touch-startup-image" href="https://cv-mikeonline.web.app/assets/icons/icon-192x192.png">
   <meta name="msapplication-square310x310logo" content="https://cv-mikeonline.web.app/assets/icons/icon-310x310.png">
-  <meta name="apple-mobile-web-app-status-bar-style" content="#024873">
 
   <script src="https://kit.fontawesome.com/89399c51d5.js" crossorigin="anonymous"></script>
   <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -41,40 +41,6 @@
 
 <!-- Word Cloud JS -->
 <script src="assets/js/wordcloud2.js"></script>
-
-<!-- update the version number as needed -->
-<script defer id="app-compat"></script>
-<!-- include only the Firebase features as you need -->
-<script defer id="auth-compat"></script>
-<script defer id="database-compat"></script>
-<script defer id="firestore-compat"></script>
-<script defer id="functions-compat"></script>
-<script defer id="messaging-compat"></script>
-<script defer id="storage-compat"></script>
-<script defer id="analytics-compat"></script>
-<script defer id="remote-config-compat"></script>
-<script defer id="performance-compat"></script>
-<!--
-  initialize the SDK after all desired features are loaded, set useEmulator to false
-  to avoid connecting the SDK to running emulators.
--->
-<script defer id="init"></script>
-
-<script lang="js">
-  if (!window.location.href.includes('localhost')) {
-    document.querySelector('#app-compat').src = '/__/firebase/9.6.8/firebase-app-compat.js';
-    document.querySelector('#auth-compat').src = '/__/firebase/9.6.8/firebase-auth-compat.js';
-    document.querySelector('#database-compat').src = '/__/firebase/9.6.8/firebase-database-compat.js';
-    document.querySelector('#firestore-compat').src = '/__/firebase/9.6.8/firebase-firestore-compat.js';
-    document.querySelector('#functions-compat').src = '/__/firebase/9.6.8/firebase-functions-compat.js';
-    document.querySelector('#messaging-compat').src = '/__/firebase/9.6.8/firebase-messaging-compat.js';
-    document.querySelector('#storage-compat').src = '/__/firebase/9.6.8/firebase-storage-compat.js';
-    document.querySelector('#analytics-compat').src = '/__/firebase/9.6.8/firebase-analytics-compat.js';
-    document.querySelector('#remote-config-compat').src = '/__/firebase/9.6.8/firebase-remote-config-compat.js';
-    document.querySelector('#performance-compat').src = '/__/firebase/9.6.8/firebase-performance-compat.js';
-    document.querySelector('#init').src = '/__/firebase/init.js?useEmulator=true';
-  }
-</script>
 
 <noscript>Please enable JavaScript to continue using this application.</noscript>
 </body>

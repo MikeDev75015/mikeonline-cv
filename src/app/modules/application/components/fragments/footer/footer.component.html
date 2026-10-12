@@ -12,23 +12,24 @@
       [style.background]="mobile || heightIsTooSmall ? mobileTiles[0].background : classicTiles[1].background">
       <div class="fcc w100 h100 bottom-tile">
         <app-bottom-footer [mobile]="mobile || heightIsTooSmall" class="fcc w100 h100"
-                           (copyrightClick)="onShowHeader()"></app-bottom-footer>
+        (copyrightClick)="onShowHeader()"></app-bottom-footer>
       </div>
     </mat-grid-tile>
-    <mat-grid-tile
-      (click)="onOpenContact()"
-      *ngIf="mobile || heightIsTooSmall"
-      [ngClass]="{'no-pointer-events': isLoadingData}"
-      [colspan]="mobileTiles[1].cols"
-      [rowspan]="mobileTiles[1].rows"
-      [style.background]="mobileTiles[1].background"
-    >
-      <div class="fcc wrap mobile-right-tile">
-        <figure class="fes"><i class="fas fa-phone-alt"></i></figure>
-        <figure class="fss"><i class="fas fa-envelope"></i></figure>
-        <figure class="fee"><i class="fas fa-map-marker-alt"></i></figure>
-        <figure class="fse"><i class="fas fa-share-alt"></i></figure>
-      </div>
-    </mat-grid-tile>
+    @if (mobile || heightIsTooSmall) {
+      <mat-grid-tile
+        (click)="onOpenContact()"
+        [ngClass]="{'no-pointer-events': isLoadingData}"
+        [colspan]="mobileTiles[1].cols"
+        [rowspan]="mobileTiles[1].rows"
+        [style.background]="mobileTiles[1].background"
+        >
+        <div class="fcc wrap mobile-right-tile">
+          <figure class="fes"><i class="fas fa-phone-alt"></i></figure>
+          <figure class="fss"><i class="fas fa-envelope"></i></figure>
+          <figure class="fee"><i class="fas fa-map-marker-alt"></i></figure>
+          <figure class="fse"><i class="fas fa-share-alt"></i></figure>
+        </div>
+      </mat-grid-tile>
+    }
   </mat-grid-list>
 </div>

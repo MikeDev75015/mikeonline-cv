@@ -3,8 +3,9 @@ import { TranslateService } from '@ngx-translate/core';
 import { PwaService } from './core/services/pwa/pwa.service';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    standalone: false
 })
 export class AppComponent implements OnInit {
   constructor(

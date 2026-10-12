@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import * as pdfMake from 'pdfmake/build/pdfmake';
-import { TDocumentDefinitions } from 'pdfmake/interfaces';
+
 import { ProjectItem } from '../../../modules/application/interfaces/project-item.interface';
 import { UtilsService } from '../../../shared';
 import { PDF_CV_CREDITS, PDF_DEFAULT_FOOTER, PDF_DEFAULT_HEADER } from '../../constants/pdf.constant';
@@ -16,14 +15,26 @@ import {
 } from './interfaces/pdf-document-definition.interface';
 import { PdfInfosData } from './interfaces/pdf-infos-data.interface';
 
-/**
- * @link https://pdfmake.github.io/docs/0.1/document-definition-object
- */
 @Injectable({
   providedIn: 'root',
 })
 export class PdfCreatorService {
   private pdfDocument: PdfDocumentDefinition = PdfCreatorService.initPdf();
+  private pdfMake: any;
+
+  constructor(
+    private readonly utilsService: UtilsService,
+  ) {
+    const pdfMakeModule = require('pdfmake/build/pdfmake');
+    const pdfFontsModule = require('pdfmake/build/vfs_fonts');
+
+    this.pdfMake = pdfMakeModule.default || pdfMakeModule;
+    const pdfFonts = pdfFontsModule.default || pdfFontsModule;
+
+    if (this.pdfMake && pdfFonts && pdfFonts.pdfMake && pdfFonts.pdfMake.vfs) {
+      this.pdfMake.vfs = pdfFonts.pdfMake.vfs;
+    }
+  }
 
   private readonly updatePdfContent = {
     addText: (pdfText: ContentText): void => {
@@ -86,11 +97,6 @@ export class PdfCreatorService {
       });
     },
   };
-
-  constructor(
-    private readonly utilsService: UtilsService,
-  ) {
-  }
 
   private static getDefaultStyle(): PdfDocumentDefinition['defaultStyle'] {
     return {
@@ -235,17 +241,7 @@ export class PdfCreatorService {
 
       await this.addPdfContents(pdfInfos.data);
 
-      // @ts-ignore
-      pdfMake.fonts = {
-        Roboto: {
-          normal: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Regular.ttf',
-          bold: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Medium.ttf',
-          italics: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Italic.ttf',
-          bolditalics: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-MediumItalic.ttf',
-        },
-      };
-
-      pdfMake.createPdf(this.pdfDocument as TDocumentDefinitions).download(fileName);
+      this.pdfMake.createPdf(this.pdfDocument as any).download(fileName);
       this.pdfDocument = PdfCreatorService.initPdf();
       resolve();
     });
@@ -398,22 +394,3 @@ export class PdfCreatorService {
   }
 }
 
-/*
- Style properties
-
- font: string: name of the font
- fontSize: number: size of the font in pt
- fontFeatures: string[]: array of advanced typographic features supported in TTF fonts (supported features depend on font file)
- lineHeight: number: the line height (default: 1)
- bold: boolean: whether to use bold text (default: false)
- italics: boolean: whether to use italic text (default: false)
- alignment: string: (‘left’ or ‘center’ or ‘right’) the alignment of the text
- characterSpacing: number: size of the letter spacing in pt
- color: string: the color of the text (color name e.g., ‘blue’ or hexadecimal color e.g., ‘#ff5500’)
- background: string the background color of the text
- markerColor: string: the color of the bullets in a buletted list
- decoration: string: the text decoration to apply (‘underline’ or ‘lineThrough’ or ‘overline’)
- decorationStyle: string: the style of the text decoration (‘dashed’ or ‘dotted’ or ‘double’ or ‘wavy’)
- decorationColor: string: the color of the text decoration, see color
-
- */

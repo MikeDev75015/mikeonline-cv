@@ -15,8 +15,9 @@ import { DataSets, RadarData } from './models/radar-data.interface';
 import { RadarConfigService } from './services/radar-config/radar-config.service';
 
 @Component({
-  selector: 'app-skills-radar-chart',
-  templateUrl: './skills-radar-chart.component.html',
+    selector: 'app-skills-radar-chart',
+    templateUrl: './skills-radar-chart.component.html',
+    standalone: false
 })
 export class SkillsRadarChartComponent implements OnInit, OnDestroy {
   public radarData: RadarData | undefined;

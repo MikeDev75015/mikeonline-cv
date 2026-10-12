@@ -1,14 +1,15 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { Dropdown } from 'primeng/dropdown';
+import { Select } from 'primeng/select';
 import { DEFAULT_DROPDOWN_WRAPPER_SCROLL_HEIGHT } from './constants/dropdown-wrapper.constant';
 import { DropdownOption } from './interfaces/dropdown-option.interface';
 
 @Component({
-  selector: 'app-dropdown-wrapper',
-  templateUrl: './dropdown-wrapper.component.html',
+    selector: 'app-dropdown-wrapper',
+    templateUrl: './dropdown-wrapper.component.html',
+    standalone: false
 })
 export class DropdownWrapperComponent implements OnInit, AfterViewInit {
-  @ViewChild('dropdownWrapped', { static: false }) dropdown: Dropdown | undefined;
+  @ViewChild('dropdownWrapped', { static: false }) dropdown: Select | undefined;
 
   @Input() scrollHeight = DEFAULT_DROPDOWN_WRAPPER_SCROLL_HEIGHT;
 
@@ -74,10 +75,6 @@ export class DropdownWrapperComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.selectedValueChange.emit(this.selectedValue);
-    if (this.dropdown) {
-      this.dropdown.name = this.name || '';
-      this.dropdown.placeholder = this.placeholder || '';
-    }
   }
 
   public onSelectedValueChange(value: any): void {

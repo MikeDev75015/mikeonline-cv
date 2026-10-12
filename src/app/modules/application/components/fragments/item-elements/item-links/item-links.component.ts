@@ -3,8 +3,9 @@ import { ILink } from '../../../../../../core';
 import { UtilsService } from '../../../../../../shared';
 
 @Component({
-  selector: 'app-item-links',
-  templateUrl: './item-links.component.html',
+    selector: 'app-item-links',
+    templateUrl: './item-links.component.html',
+    standalone: false
 })
 export class ItemLinksComponent {
   @Input() linkList: ILink[] | undefined;

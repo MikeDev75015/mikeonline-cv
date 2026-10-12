@@ -3,9 +3,10 @@ import { IDetail } from '../../../../../../core';
 import { UtilsService } from '../../../../../../shared';
 
 @Component({
-  selector: 'app-item-detail',
-  templateUrl: './item-detail.component.html',
-  styleUrls: ['./item-detail.component.scss'],
+    selector: 'app-item-detail',
+    templateUrl: './item-detail.component.html',
+    styleUrls: ['./item-detail.component.scss'],
+    standalone: false
 })
 export class ItemDetailComponent {
   @Input() detail: IDetail | undefined;

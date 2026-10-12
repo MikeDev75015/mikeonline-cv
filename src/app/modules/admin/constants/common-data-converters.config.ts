@@ -112,7 +112,7 @@ export const DEFAULT_DATA_GENERATORS: DataConverter = {
       return '';
     }).filter((isValid: string) => !!isValid);
 
-    const { tagList, ...adaptedData } = data;
+    const { tagList: _tagList, ...adaptedData } = data;
     adaptedData['tagIdList'] = tagIdList;
     return adaptedData;
   },

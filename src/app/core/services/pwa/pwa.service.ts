@@ -1,4 +1,5 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Inject, Injectable, OnDestroy } from '@angular/core';
 import { SwPush, SwUpdate } from '@angular/service-worker';
 import { Subscription } from 'rxjs';
 import { AlertService } from '../../modules/alert/services/alert.service';
@@ -14,11 +15,13 @@ export class PwaService implements OnDestroy {
    * @param swPush
    * @param swUpdate
    * @param alertService
+   * @param document
    */
   constructor(
     private readonly swPush: SwPush,
     private readonly swUpdate: SwUpdate,
     private readonly alertService: AlertService,
+    @Inject(DOCUMENT) private readonly document: Document,
   ) {
   }
 
@@ -76,7 +79,7 @@ export class PwaService implements OnDestroy {
         return;
       }
 
-      window.location.reload();
+      this.document.defaultView?.location.reload();
     }
   }
 }

@@ -21,7 +21,7 @@ export class AuthEffects {
   loginUser$ = createEffect(() => this.actions$.pipe(
     ofType(AuthActions.loginUser),
     mergeMap(({ username, password }) => this.authService.login({ username, password })),
-    map(({ accessToken }) => AuthActions.loginUserSuccess({ accessToken })),
+    map(({ accessToken, refreshToken }) => AuthActions.loginUserSuccess({ accessToken, refreshToken })),
     catchError(() => of(AuthActions.loginUserFailure())),
     repeat(),
   ));
@@ -35,8 +35,8 @@ export class AuthEffects {
 
   loginUserSuccess$ = createEffect(() => this.actions$.pipe(
     ofType(AuthActions.loginUserSuccess),
-    tap(({ accessToken }) => {
-      this.authService.setAccessToken(accessToken);
+    tap(({ accessToken, refreshToken }) => {
+      this.authService.setTokens({ accessToken, refreshToken });
     }),
     map(() => AuthActions.getUser()),
   ));
@@ -103,7 +103,7 @@ export class AuthEffects {
 
   private cleanStorageItems(navigateToSignInPage = false): void {
     StorageService.removeItem('sessionStorage', STORAGE_KEYS.activeItem);
-    this.authService.removeAccessToken();
+    this.authService.removeTokens();
 
     if (!navigateToSignInPage) {
       return;

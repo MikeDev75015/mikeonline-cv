@@ -1,16 +1,16 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 import { AlertModule } from '../../../../../core';
 import { DataService } from '../../../../../shared';
 
 import {VerticalAccordionComponent} from './vertical-accordion.component';
-import {MockComponent} from 'ng2-mock-component';
+import {MockComponent} from '../../../../../../test/ng2-mock-component-compat';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 
 describe('VerticalAccordionComponent', () => {
   let component: VerticalAccordionComponent;
   let fixture: ComponentFixture<VerticalAccordionComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
@@ -40,7 +40,7 @@ describe('VerticalAccordionComponent', () => {
       ]
     })
     .compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(VerticalAccordionComponent);

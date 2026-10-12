@@ -31,7 +31,7 @@ describe('AppComponent', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should create the app', () => {

@@ -1,7 +1,7 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MockComponent } from 'ng2-mock-component';
+import { MockComponent } from '../../../../../../test/ng2-mock-component-compat';
 import { lastValueFrom, of } from 'rxjs';
 import { addTags } from '../../../../../../../__mocks__/helper';
 import { dataServiceMock } from '../../../../../../../__mocks__/services/data-service.mock';
@@ -22,13 +22,13 @@ const projectMock1: ProjectV1 = sortedProjectListMock[0];
 describe('PortfolioComponent', () => {
   let component: ProjectsComponent;
   let fixture: ComponentFixture<ProjectsComponent>;
-  const isDataLoadedSpy = jest.spyOn(dataServiceMock, 'isDataLoaded');
-  const getStoreDataSpy = jest.spyOn(dataServiceMock, 'getStoreData');
-  const sortObjectListSpy = jest.spyOn(UtilsService, 'sortObjectList');
-  const initTechnoListWithTagListSpy = jest.spyOn(utilsServiceMock, 'initTechnoListWithTagList');
+  const isDataLoadedSpy = vi.spyOn(dataServiceMock, 'isDataLoaded');
+  const getStoreDataSpy = vi.spyOn(dataServiceMock, 'getStoreData');
+  const sortObjectListSpy = vi.spyOn(UtilsService, 'sortObjectList');
+  const initTechnoListWithTagListSpy = vi.spyOn(utilsServiceMock, 'initTechnoListWithTagList');
 
-  const setTimeoutSpy = jest.spyOn(global, 'setTimeout');
-  const clearTimeoutSpy = jest.spyOn(global, 'clearTimeout');
+  const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
+  const clearTimeoutSpy = vi.spyOn(global, 'clearTimeout');
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -62,7 +62,7 @@ describe('PortfolioComponent', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should create', () => {
@@ -102,6 +102,9 @@ describe('PortfolioComponent', () => {
   describe('onLoadBackgroundImage', () => {
     it('should set background image url and start animation after component timeout', async () => {
       fixture.detectChanges();
+      // Angular's change detection scheduler uses timers itself: only count the component's own calls.
+      setTimeoutSpy.mockClear();
+      clearTimeoutSpy.mockClear();
       expect(component.backgroundImage).toStrictEqual('');
       expect(component.showImage).toBeFalsy();
       expect(component['timeoutCreated']).not.toBeDefined();
@@ -123,6 +126,9 @@ describe('PortfolioComponent', () => {
   describe('onRemoveBackgroundImage', () => {
     beforeEach(async () => {
       fixture.detectChanges();
+      // Angular's change detection scheduler uses timers itself: only count the component's own calls.
+      setTimeoutSpy.mockClear();
+      clearTimeoutSpy.mockClear();
     });
 
     it('should clear timeout created if exist before remove background image', async () => {

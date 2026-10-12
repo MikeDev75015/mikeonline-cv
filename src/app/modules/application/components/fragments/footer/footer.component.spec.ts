@@ -1,6 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MockComponent } from 'ng2-mock-component';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MockComponent } from '../../../../../../test/ng2-mock-component-compat';
 import { dataServiceMock } from '../../../../../../../__mocks__/services/data-service.mock';
 import { LoadingDirective } from '../../../../../core/directives/loading/loading.directive';
 import { DataService } from '../../../../../shared';
@@ -11,8 +11,8 @@ describe('FooterComponent', () => {
   let component: FooterComponent;
   let fixture: ComponentFixture<FooterComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [
         FooterComponent,
         MockComponent({
@@ -26,7 +26,7 @@ describe('FooterComponent', () => {
       schemas: [NO_ERRORS_SCHEMA],
     })
       .compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(FooterComponent);

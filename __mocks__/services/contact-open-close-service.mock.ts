@@ -1,6 +1,6 @@
 export const contactOpenCloseServiceMock = {
-  onOpenCloseContactStatusChange: jest.fn(),
-  setOpenCloseContactStatus: jest.fn(),
-  onHeightIsTooSmallChange: jest.fn(),
-  setHeightIsTooSmall: jest.fn(),
+  onOpenCloseContactStatusChange: vi.fn(),
+  setOpenCloseContactStatus: vi.fn(),
+  onHeightIsTooSmallChange: vi.fn(),
+  setHeightIsTooSmall: vi.fn(),
 };

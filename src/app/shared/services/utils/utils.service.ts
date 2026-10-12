@@ -42,13 +42,17 @@ export class UtilsService {
    * Sort the array by property in different modes
    * @param list
    * @param way
+  /**
+   * Sorts a list of object
+   * @param list
+   * @param way
    * @param key
    * @param mode
    */
-  public static sortObjectList<t>(
-    list: t[], way: 'asc' | 'desc', key: string, mode: 'string' | 'number' | 'date' = 'string',
-  ): t[] {
-    return list.sort((a: { [key: string]: any }, b: { [key: string]: any }) => {
+  public static sortObjectList<T extends {[key: string]: any}>(
+    list: T[], way: 'asc' | 'desc', key: string, mode: 'string' | 'number' | 'date' = 'string',
+  ): T[] {
+    return list.sort((a: T, b: T) => {
       if (a[key] === undefined || b[key] === undefined) {
         throw new Error('One of values to compare is undefined, cannot sort object list!');
       }

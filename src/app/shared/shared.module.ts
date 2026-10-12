@@ -9,14 +9,14 @@ import { ChartModule } from 'primeng/chart';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
-import { DropdownModule } from 'primeng/dropdown';
+import { Select } from 'primeng/select';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
-import { InputTextareaModule } from 'primeng/inputtextarea';
+import { Textarea } from 'primeng/textarea';
 import { KnobModule } from 'primeng/knob';
-import { MenuModule } from 'primeng/menu';
+import { Menu } from 'primeng/menu';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { Popover } from 'primeng/popover';
 import { PasswordModule } from 'primeng/password';
 import { PickListModule } from 'primeng/picklist';
 import { RippleModule } from 'primeng/ripple';
@@ -24,6 +24,7 @@ import { ScrollTopModule } from 'primeng/scrolltop';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
+import { Tooltip } from 'primeng/tooltip';
 import { LoadingComponent } from '../core/directives/loading/component/loading.component';
 import { LoadingDirective } from '../core/directives/loading/loading.directive';
 
@@ -55,15 +56,16 @@ const primeNgModules: any[] = [
   RippleModule,
   DialogModule,
   ConfirmDialogModule,
-  DropdownModule,
-  MenuModule,
+  Select,
+  Menu,
   InputNumberModule,
-  InputTextareaModule,
+  Textarea,
   CheckboxModule,
-  OverlayPanelModule,
+  Popover,
   PickListModule,
   MultiSelectModule,
   AutoCompleteModule,
+  Tooltip,
 ];
 
 const sharedComponents: any[] = [

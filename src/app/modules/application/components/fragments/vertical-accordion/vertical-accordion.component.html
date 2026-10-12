@@ -1,5 +1,5 @@
 <div [class]="verticalAccordionContainerClass">
-  <ng-container *ngFor="let item of itemList; let i = index">
+  @for (item of itemList; track item; let i = $index) {
     <app-vertical-accordion-item
       [id]="'vertical-accordion-item' + i"
       [lastItem]="itemList ? i === (itemList.length - 1) : false"
@@ -12,7 +12,6 @@
         }"
       [expanded]="getItemState(i) && !isItemToOpen(i)"
       (open)="updateVerticalAccordionItemState(i, $event)"
-
       [@VerticalAccordionItemInOut]="{
           value: getItemState(i) || isItemToClose(i) ? 'in' : 'out',
           params: {itemWidth: getItemState(i) || isItemToClose(i) ? itemMaxWidth : itemMinWidth, itemMinWidth: itemMinWidth, itemMaxWidth: itemMaxWidth}
@@ -20,6 +19,6 @@
       (@VerticalAccordionItemInOut.start)="onAnimation($event, i)"
       (@VerticalAccordionItemInOut.done)="onAnimation($event, i)"
     ></app-vertical-accordion-item>
-  </ng-container>
+  }
 </div>
 

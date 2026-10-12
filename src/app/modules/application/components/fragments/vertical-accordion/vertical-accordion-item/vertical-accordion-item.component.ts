@@ -5,17 +5,12 @@ import { IAnimationServiceResponse, IN_OUT_TEMPLATE_ANIMATION } from '../../../.
 import { AnimationsService } from '../../../../../../shared/services/animations/animations.service';
 
 @Component({
-  selector: 'app-vertical-accordion-item',
-  templateUrl: './vertical-accordion-item.component.html',
-  animations: [
-    ...IN_OUT_TEMPLATE_ANIMATION(
-      'VerticalAccordionItemComponentBody',
-      false,
-      { in: 500, out: 250 },
-      { style: { opacity: 1 } },
-      { style: { opacity: 0 } },
-    ),
-  ],
+    selector: 'app-vertical-accordion-item',
+    templateUrl: './vertical-accordion-item.component.html',
+    animations: [
+        ...IN_OUT_TEMPLATE_ANIMATION('VerticalAccordionItemComponentBody', false, { in: 500, out: 250 }, { style: { opacity: 1 } }, { style: { opacity: 0 } }),
+    ],
+    standalone: false
 })
 export class VerticalAccordionItemComponent implements OnInit, AfterViewChecked {
   @Input() lastItem = false;

@@ -1,6 +1,8 @@
 <div [ngStyle]="{width: '100%', height: inputHeight}" class="fss relative input-checkbox-wrapped">
 
-  <label *ngIf="label && labelPlacement === 'before'" style="margin-right: 5px;">{{ label }}</label>
+  @if (label && labelPlacement === 'before') {
+    <label style="margin-right: 5px;">{{ label }}</label>
+  }
 
   <p-checkbox
     #inputCheckboxWrapped (ngModelChange)="onValueChange($event)" [(ngModel)]="value" data-cy="input-checkbox"
@@ -8,6 +10,8 @@
     [ngStyle]="{width: '100%', height: inputHeight}" [styleClass]="inlineClass || ''"
   ></p-checkbox>
 
-  <label *ngIf="label && labelPlacement === 'after'" style="margin-left: 5px;">{{ label }}</label>
+  @if (label && labelPlacement === 'after') {
+    <label style="margin-left: 5px;">{{ label }}</label>
+  }
 
 </div>

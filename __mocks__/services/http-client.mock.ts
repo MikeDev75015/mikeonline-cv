@@ -1,3 +1,3 @@
 export const httpClientMock = {
-  get: jest.fn(),
+  get: vi.fn(),
 };

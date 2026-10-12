@@ -9,9 +9,10 @@ import { DataService, UtilsService } from '../../../../../shared';
  * The component of the interests page.
  */
 @Component({
-  selector: 'app-interests',
-  templateUrl: './interests.component.html',
-  styleUrls: ['./interests.component.scss'],
+    selector: 'app-interests',
+    templateUrl: './interests.component.html',
+    styleUrls: ['./interests.component.scss'],
+    standalone: false
 })
 export class InterestsComponent implements OnInit, AfterContentInit {
   /**

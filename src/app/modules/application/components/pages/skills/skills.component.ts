@@ -32,9 +32,10 @@ window.WordCloud = window.WordCloud || {};
  * The component of the skills page.
  */
 @Component({
-  selector: 'app-skills',
-  templateUrl: './skills.component.html',
-  styleUrls: ['./skills.component.scss'],
+    selector: 'app-skills',
+    templateUrl: './skills.component.html',
+    styleUrls: ['./skills.component.scss'],
+    standalone: false
 })
 export class SkillsComponent implements OnInit, OnDestroy, AfterViewChecked {
   /**

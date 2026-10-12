@@ -15,24 +15,14 @@ import {
 } from '../../../../../shared';
 
 @Component({
-  selector: 'app-contact',
-  templateUrl: './contact.component.html',
-  styleUrls: ['./contact.component.scss'],
-  animations: [
-    ...IN_OUT_TEMPLATE_ANIMATION(
-      'ContactComponentMobileView',
-      true,
-      { in: 250, out: 750 },
-      { style: { opacity: 1, display: 'flex' } },
-    ),
-    ...STAGGER_IN_OUT_TEMPLATE_ANIMATION(
-      'MobileContactBtns',
-      { in: '250ms cubic-bezier(0.35, 0, 0.25, 1)', out: '200ms cubic-bezier(0.35, 0, 0.25, 1)' },
-      { in: '100ms', out: '100ms' },
-      { style: { opacity: 1, transform: 'none' } },
-      { style: { opacity: 0, transform: 'translateY(-50px)' } },
-    ),
-  ],
+    selector: 'app-contact',
+    templateUrl: './contact.component.html',
+    styleUrls: ['./contact.component.scss'],
+    animations: [
+        ...IN_OUT_TEMPLATE_ANIMATION('ContactComponentMobileView', true, { in: 250, out: 750 }, { style: { opacity: 1, display: 'flex' } }),
+        ...STAGGER_IN_OUT_TEMPLATE_ANIMATION('MobileContactBtns', { in: '250ms cubic-bezier(0.35, 0, 0.25, 1)', out: '200ms cubic-bezier(0.35, 0, 0.25, 1)' }, { in: '100ms', out: '100ms' }, { style: { opacity: 1, transform: 'none' } }, { style: { opacity: 0, transform: 'translateY(-50px)' } }),
+    ],
+    standalone: false
 })
 export class ContactComponent implements OnInit, OnDestroy {
   @Input() mobileView = false;

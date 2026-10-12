@@ -9,10 +9,11 @@ import { DataService, HEADER_ANIMATION, IAnimationServiceResponse, UtilsService 
 import { AnimationsService } from '../../shared/services/animations/animations.service';
 
 @Component({
-  selector: 'app-application',
-  templateUrl: './application.component.html',
-  styleUrls: ['./application.component.scss'],
-  animations: HEADER_ANIMATION,
+    selector: 'app-application',
+    templateUrl: './application.component.html',
+    styleUrls: ['./application.component.scss'],
+    animations: HEADER_ANIMATION,
+    standalone: false
 })
 export class ApplicationComponent implements OnInit {
   /**

@@ -1,95 +1,91 @@
-<mat-tab-group
-  *ngIf="tabsMenu" id="menuTab" class="mat-elevation-z4" mat-stretch-tabs
-  [ngClass]="{'full-screen': hideHeader}" [(selectedIndex)]="indexTab" (click)="updateHash($any($event))"
->
-  <mat-tab [label]="'components.main.menuLabel.home' | translate" aria-labelledby="home tab">
-    <app-home></app-home>
-  </mat-tab>
-  <mat-tab [label]="'components.main.menuLabel.skills' | translate" aria-labelledby="skills tab">
-    <app-skills></app-skills>
-  </mat-tab>
-  <mat-tab [label]="'components.main.menuLabel.experiences' | translate" aria-labelledby="experiences tab">
-    <app-experiences></app-experiences>
-  </mat-tab>
-  <mat-tab [label]="'components.main.menuLabel.formations' | translate" aria-labelledby="formations tab">
-    <app-formations></app-formations>
-  </mat-tab>
-  <mat-tab [label]="'components.main.menuLabel.portfolio' | translate" aria-labelledby="portfolio tab">
-    <app-projects></app-projects>
-  </mat-tab>
-  <mat-tab [label]="'components.main.menuLabel.interests' | translate" aria-labelledby="interests tab">
-    <app-interests></app-interests>
-  </mat-tab>
-</mat-tab-group>
+@if (tabsMenu) {
+  <mat-tab-group
+    id="menuTab" class="mat-elevation-z4" mat-stretch-tabs
+    [ngClass]="{'full-screen': hideHeader}" [(selectedIndex)]="indexTab" (click)="updateHash($any($event))"
+    >
+    <mat-tab [label]="'components.main.menuLabel.home' | translate" aria-labelledby="home tab">
+      <app-home></app-home>
+    </mat-tab>
+    <mat-tab [label]="'components.main.menuLabel.skills' | translate" aria-labelledby="skills tab">
+      <app-skills></app-skills>
+    </mat-tab>
+    <mat-tab [label]="'components.main.menuLabel.experiences' | translate" aria-labelledby="experiences tab">
+      <app-experiences></app-experiences>
+    </mat-tab>
+    <mat-tab [label]="'components.main.menuLabel.formations' | translate" aria-labelledby="formations tab">
+      <app-formations></app-formations>
+    </mat-tab>
+    <mat-tab [label]="'components.main.menuLabel.portfolio' | translate" aria-labelledby="portfolio tab">
+      <app-projects></app-projects>
+    </mat-tab>
+    <mat-tab [label]="'components.main.menuLabel.interests' | translate" aria-labelledby="interests tab">
+      <app-interests></app-interests>
+    </mat-tab>
+  </mat-tab-group>
+}
 
-<div *ngIf="!tabsMenu" id="menuMobile" class="w100">
-  <button mat-icon-button [matMenuTriggerFor]="menu"
-          style="background: white; border-radius: 5px; box-shadow: 0 2px 3px #024873; height: 38px;"
-          [ngStyle]="{'width': openedMenu ? '100%' : '70px'}"
-          aria-label="Display the Menu" aria-labelledby="toggle menu button"
-          (click)="toggleMenu(true)">
-    <mat-icon>menu</mat-icon>
-  </button>
-  <mat-menu
-    class="matMenu" #menu="matMenu" overlapTrigger="true" (closed)="toggleMenu(false)" aria-labelledby="mobile menu container">
-
-    <app-header></app-header>
-
-    <button mat-menu-item
-            [ngClass]="{'selected-menu': selectedMenu === 'home', 'no-pointer-events': isLoadingData}"
-            (click)="selectMenu($event, 'home')"
-            [disabled]="selectedMenu === 'Accueil'"
-            aria-label="Display the Home Page" aria-labelledby="home menu button">
-      <mat-icon class="no-pointer-events matIcon">home</mat-icon>
-      <span class="no-pointer-events btn-title">{{ 'components.main.menuLabel.home' | translate }}</span>
+@if (!tabsMenu) {
+  <div id="menuMobile" class="w100">
+    <button mat-icon-button [matMenuTriggerFor]="menu"
+      style="background: white; border-radius: 5px; box-shadow: 0 2px 3px #024873; height: 38px;"
+      [ngStyle]="{'width': openedMenu ? '100%' : '70px'}"
+      aria-label="Display the Menu" aria-labelledby="toggle menu button"
+      (click)="toggleMenu(true)">
+      <mat-icon>menu</mat-icon>
     </button>
+    <mat-menu
+      class="matMenu" #menu="matMenu" overlapTrigger="true" (closed)="toggleMenu(false)" aria-labelledby="mobile menu container">
+      <app-header></app-header>
+      <button mat-menu-item
+        [ngClass]="{'selected-menu': selectedMenu === 'home', 'no-pointer-events': isLoadingData}"
+        (click)="selectMenu($event, 'home')"
+        [disabled]="selectedMenu === 'Accueil'"
+        aria-label="Display the Home Page" aria-labelledby="home menu button">
+        <mat-icon class="no-pointer-events matIcon">home</mat-icon>
+        <span class="no-pointer-events btn-title">{{ 'components.main.menuLabel.home' | translate }}</span>
+      </button>
+      <button mat-menu-item
+        [ngClass]="{'selected-menu': selectedMenu === 'skills', 'no-pointer-events': isLoadingData}"
+        (click)="selectMenu($event, 'skills')"
+        [disabled]="selectedMenu === 'Compétences'"
+        aria-label="Display the Skills Page" aria-labelledby="skills menu button">
+        <mat-icon class="no-pointer-events matIcon">playlist_add_check</mat-icon>
+        <span class="no-pointer-events btn-title">{{ 'components.main.menuLabel.skills' | translate }}</span>
+      </button>
+      <button mat-menu-item
+        [ngClass]="{'selected-menu': selectedMenu === 'experiences', 'no-pointer-events': isLoadingData}"
+        (click)="selectMenu($event, 'experiences')"
+        [disabled]="selectedMenu === 'Expériences' || isLoadingData"
+        aria-label="Display the Experiences Page" aria-labelledby="experiences menu button">
+        <mat-icon class="no-pointer-events matIcon">business_center</mat-icon>
+        <span class="no-pointer-events btn-title">{{ 'components.main.menuLabel.experiences' | translate }}</span>
+      </button>
+      <button mat-menu-item
+        [ngClass]="{'selected-menu': selectedMenu === 'formations', 'no-pointer-events': isLoadingData}"
+        (click)="selectMenu($event, 'formations')"
+        [disabled]="selectedMenu === 'Formations' || isLoadingData"
+        aria-label="Display the Formations Page" aria-labelledby="formations menu button">
+        <mat-icon class="no-pointer-events matIcon">school</mat-icon>
+        <span class="no-pointer-events btn-title">{{ 'components.main.menuLabel.formations' | translate }}</span>
+      </button>
+      <button mat-menu-item
+        [ngClass]="{'selected-menu': selectedMenu === 'portfolio', 'no-pointer-events': isLoadingData}"
+        (click)="selectMenu($event, 'portfolio')"
+        [disabled]="selectedMenu === 'Portfolio' || isLoadingData"
+        aria-label="Display the Portfolio Page" aria-labelledby="portfolio menu button">
+        <mat-icon class="no-pointer-events matIcon">code</mat-icon>
+        <span class="no-pointer-events btn-title">{{ 'components.main.menuLabel.portfolio' | translate }}</span>
+      </button>
+      <button mat-menu-item
+        [ngClass]="{'selected-menu': selectedMenu === 'interests', 'no-pointer-events': isLoadingData}"
+        (click)="selectMenu($event, 'interests')"
+        [disabled]="selectedMenu === 'Intérêts' || isLoadingData"
+        aria-label="Display the Interests Page" aria-labelledby="interests menu button">
+        <mat-icon class="no-pointer-events matIcon">whatshot</mat-icon>
+        <span class="no-pointer-events btn-title">{{ 'components.main.menuLabel.interests' | translate }}</span>
+      </button>
+    </mat-menu>
+  </div>
+}
 
-    <button mat-menu-item
-            [ngClass]="{'selected-menu': selectedMenu === 'skills', 'no-pointer-events': isLoadingData}"
-            (click)="selectMenu($event, 'skills')"
-            [disabled]="selectedMenu === 'Compétences'"
-            aria-label="Display the Skills Page" aria-labelledby="skills menu button">
-      <mat-icon class="no-pointer-events matIcon">playlist_add_check</mat-icon>
-      <span class="no-pointer-events btn-title">{{ 'components.main.menuLabel.skills' | translate }}</span>
-    </button>
-
-    <button mat-menu-item
-            [ngClass]="{'selected-menu': selectedMenu === 'experiences', 'no-pointer-events': isLoadingData}"
-            (click)="selectMenu($event, 'experiences')"
-            [disabled]="selectedMenu === 'Expériences' || isLoadingData"
-            aria-label="Display the Experiences Page" aria-labelledby="experiences menu button">
-      <mat-icon class="no-pointer-events matIcon">business_center</mat-icon>
-      <span class="no-pointer-events btn-title">{{ 'components.main.menuLabel.experiences' | translate }}</span>
-    </button>
-
-    <button mat-menu-item
-            [ngClass]="{'selected-menu': selectedMenu === 'formations', 'no-pointer-events': isLoadingData}"
-            (click)="selectMenu($event, 'formations')"
-            [disabled]="selectedMenu === 'Formations' || isLoadingData"
-            aria-label="Display the Formations Page" aria-labelledby="formations menu button">
-      <mat-icon class="no-pointer-events matIcon">school</mat-icon>
-      <span class="no-pointer-events btn-title">{{ 'components.main.menuLabel.formations' | translate }}</span>
-    </button>
-
-    <button mat-menu-item
-            [ngClass]="{'selected-menu': selectedMenu === 'portfolio', 'no-pointer-events': isLoadingData}"
-            (click)="selectMenu($event, 'portfolio')"
-            [disabled]="selectedMenu === 'Portfolio' || isLoadingData"
-            aria-label="Display the Portfolio Page" aria-labelledby="portfolio menu button">
-      <mat-icon class="no-pointer-events matIcon">code</mat-icon>
-      <span class="no-pointer-events btn-title">{{ 'components.main.menuLabel.portfolio' | translate }}</span>
-    </button>
-
-    <button mat-menu-item
-            [ngClass]="{'selected-menu': selectedMenu === 'interests', 'no-pointer-events': isLoadingData}"
-            (click)="selectMenu($event, 'interests')"
-            [disabled]="selectedMenu === 'Intérêts' || isLoadingData"
-            aria-label="Display the Interests Page" aria-labelledby="interests menu button">
-      <mat-icon class="no-pointer-events matIcon">whatshot</mat-icon>
-      <span class="no-pointer-events btn-title">{{ 'components.main.menuLabel.interests' | translate }}</span>
-    </button>
-
-  </mat-menu>
-</div>
-
-<ng-template dynamicComponentLoader=""></ng-template>
+<ng-template appDynamicComponentLoader=""></ng-template>

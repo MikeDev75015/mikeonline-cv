@@ -6,7 +6,7 @@ describe('ContactOpenCloseService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: ContactOpenCloseService = TestBed.get(ContactOpenCloseService);
+    const service: ContactOpenCloseService = TestBed.inject(ContactOpenCloseService);
     expect(service).toBeTruthy();
   });
 });

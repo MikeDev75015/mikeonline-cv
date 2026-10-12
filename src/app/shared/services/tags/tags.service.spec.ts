@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
+import { vi } from 'vitest';
 import { storeMock } from '../../../../../__mocks__/services/store.mock';
 import tagListMock from '../../../../../__mocks__/v1/json-files/tags.json';
 import { TagV1 } from '../../../core/interfaces/models/v1/tag.interface';
@@ -9,8 +10,8 @@ import { TagsService } from './tags.service';
 
 describe('TagsService', () => {
   let service: TagsService;
-  let storeSelectSpy: jest.SpyInstance<any, any>;
-  let consoleWarnSpy: jest.SpyInstance<any, any>;
+  let storeSelectSpy: any;
+  let consoleWarnSpy: any;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -20,12 +21,12 @@ describe('TagsService', () => {
     });
 
     service = TestBed.inject(TagsService);
-    storeSelectSpy = jest.spyOn(storeMock, 'select');
-    consoleWarnSpy = jest.spyOn(console, 'warn');
+    storeSelectSpy = vi.spyOn(storeMock, 'select');
+    consoleWarnSpy = vi.spyOn(console, 'warn');
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should be created', () => {

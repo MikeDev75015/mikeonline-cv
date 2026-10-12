@@ -2,6 +2,7 @@ import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, mergeMap, Observable, throwError } from 'rxjs';
+import { environment } from '../../../../environments/environment';
 import { AuthService } from '../../../modules/admin/services/auth/auth.service';
 import { ErrorMessageService } from '../../services/error-message/error-message.service';
 
@@ -16,9 +17,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
       catchError((httpErrorResponse: HttpErrorResponse) => {
-        const { error, url } = httpErrorResponse;
-        // @ts-ignore
-        if (error.message === 'INVALID_TOKEN' && url.includes('/v1/')) {
+        if (this.shouldRefreshToken(httpErrorResponse, request)) {
           return this.handleInvalidTokenResponse(request, next);
         }
 
@@ -27,11 +26,30 @@ export class HttpErrorInterceptor implements HttpInterceptor {
     );
   }
 
-  private handleInvalidTokenResponse(request: HttpRequest<any>, next: HttpHandler): Observable<any> {
+  /**
+   * Refresh only once, for API calls made with an access token, never for the auth endpoints themselves.
+   */
+  private shouldRefreshToken(httpErrorResponse: HttpErrorResponse, request: HttpRequest<any>): boolean {
+    const url = request.url || httpErrorResponse.url || '';
+    const message = httpErrorResponse?.error?.message;
+
+    return httpErrorResponse.status === 401
+      && message === 'INVALID_TOKEN'
+      && url.includes(environment.API_URL)
+      && !url.includes('/auth/')
+      && !!this.authService.getRefreshToken();
+  }
+
+  private handleInvalidTokenResponse(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return this.authService.refreshAccessToken().pipe(
-      mergeMap(({ accessToken }) => {
-        this.authService.setAccessToken(accessToken);
-        return next.handle(request);
+      mergeMap((tokens) => {
+        this.authService.setTokens(tokens);
+        return next.handle(this.authService.setHeaderAuthorization(request, tokens.accessToken));
+      }),
+      catchError((refreshError: HttpErrorResponse) => {
+        this.authService.removeTokens();
+        this.router.navigate(['/admin/sign-in']).finally(() => undefined);
+        return throwError(() => refreshError?.error ?? refreshError);
       }),
     );
   }
@@ -41,9 +59,9 @@ export class HttpErrorInterceptor implements HttpInterceptor {
       this.redirectToMaintenancePage(httpErrorResponse);
     }
 
-    const { error } = httpErrorResponse;
+    const error = httpErrorResponse?.error ?? httpErrorResponse;
 
-    if (error.message === 'INVALID_USERNAME_OR_PASSWORD') {
+    if (error?.message === 'INVALID_USERNAME_OR_PASSWORD') {
       ErrorMessageService.sendMessage(error.message);
     }
 

@@ -7,8 +7,9 @@ import { selectCvInfos } from '../../../../../core/ngrx/selectors/cv-infos.selec
 import { DataService, UtilsService } from '../../../../../shared';
 
 @Component({
-  selector: 'app-header',
-  templateUrl: './header.component.html',
+    selector: 'app-header',
+    templateUrl: './header.component.html',
+    standalone: false
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   public headerImage = 'assets/img/mikeonline1024.jpg';

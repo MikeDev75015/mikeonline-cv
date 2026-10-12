@@ -1,7 +1,8 @@
-<form *ngIf="isInitialized" class="fcc column w100 form-wrapper-container">
-
-  <div
-    *ngFor="let element of formFields" [ngClass]="{
+@if (isInitialized) {
+  <form class="fcc column w100 form-wrapper-container">
+    @for (element of formFields; track element) {
+      <div
+    [ngClass]="{
       fbc: !element.childFormFields || !element.childFormFields.length,
       fss: element.childFormFields && element.childFormFields.length,
       column: element.childFormFields && element.childFormFields.length,
@@ -9,121 +10,123 @@
       'form-wrapper-section': element.childFormFields && element.childFormFields.length,
       'list-section': element.isList
     }" class="w100 field-container" data-cy="field-container"
-  >
-    <label
-      *ngIf="element.inputLabel" [ngClass]="{
+        >
+        @if (element.inputLabel) {
+          <label
+      [ngClass]="{
         w30: !element.childFormFields || !element.childFormFields.length,
         w100: element.childFormFields && element.childFormFields.length,
         'form-wrapper-section-title': element.childFormFields && element.childFormFields.length
       }"
-      class="fss"
-    >
-      {{ element.inputLabel }}
-      <span *ngIf="!element.childFormFields || !element.childFormFields.length">&nbsp;:</span>
-      <span
-        *ngIf="element.mandatoryField" class="mandatory-field-indicator" pTooltip="Champ requis"
-      >&nbsp;*</span>
-    </label>
-
-    <ng-container
-      *ngIf="element.inputType !== 'form' && element.inputType !== 'dropdown' && element.inputType !== 'multiselect' && element.inputType !== 'autocomplete'"
-    >
-      <app-input-wrapper
+            class="fss"
+            >
+            {{ element.inputLabel }}
+            @if (!element.childFormFields || !element.childFormFields.length) {
+              <span>&nbsp;:</span>
+            }
+            @if (element.mandatoryField) {
+              <span
+                class="mandatory-field-indicator" pTooltip="Champ requis"
+              >&nbsp;*</span>
+            }
+          </label>
+        }
+        @if (element.inputType !== 'form' && element.inputType !== 'dropdown' && element.inputType !== 'multiselect' && element.inputType !== 'autocomplete') {
+          <app-input-wrapper
         (valueChange)="onValueChange(element.field, $event)" [(value)]="formValues[element.field]" [checkboxOptions]="element.inputCheckboxOptions
           ? {label: element.inputCheckboxOptions.label, labelPlacement: element.inputCheckboxOptions.labelPlacement}
           : {}"
-        [inlineClass]="'form-wrapper-' + element.inputType + '-input'" [inputType]="element.inputType"
-        [name]="element.inputName || ''" [placeholder]="element.inputPlaceholder || ''"
-        [title]="element.inputTitle || ''" data-cy="input-wrapper"
-        inputWidth="100%"
+            [inlineClass]="'form-wrapper-' + element.inputType + '-input'" [inputType]="element.inputType"
+            [name]="element.inputName || ''" [placeholder]="element.inputPlaceholder || ''"
+            [title]="element.inputTitle || ''" data-cy="input-wrapper"
+            inputWidth="100%"
         [numberOptions]="element.inputNumberOptions
           ? {min: element.inputNumberOptions.min, max: element.inputNumberOptions.max, step: element.inputNumberOptions.step}
           : {}"
-        [textareaOptions]="element.inputTextareaOptions ? {rows: element.inputTextareaOptions.rows} : {}"
-      ></app-input-wrapper>
-    </ng-container>
-
-    <ng-container *ngIf="element.inputType === 'dropdown' && element.dropdownWrapperOptions">
-      <app-dropdown-wrapper
-        (selectedValueChange)="onValueChange(element.field, $event)" data-cy="dropdown-wrapper"
-        [(selectedValue)]="formValues[element.field]" [list]="element.dropdownWrapperOptions.list"
-        [name]="element.inputName || ''" [placeholder]="element.inputPlaceholder || ''"
-        [scrollHeight]="element.dropdownWrapperOptions.scrollHeight || ''" [title]="element.inputTitle || ''"
-        class="w100" inlineClass="form-wrapper-dropdown"
-      ></app-dropdown-wrapper>
-    </ng-container>
-
-    <ng-container *ngIf="element.inputType === 'multiselect' && element.multiSelectWrapperOptions">
-      <app-multi-select-wrapper
-        (selectedValuesChange)="onValueChange(element.field, $event)" [(selectedValues)]="formValues[element.field]"
-        [defaultLabel]="element.multiSelectWrapperOptions.defaultLabel || ''"
-        [list]="element.multiSelectWrapperOptions.list" data-cy="multi-select-wrapper"
-        [pTooltip]="formValues[element.field].length + ' sélectionné(s)'" [placeholder]="element.inputPlaceholder || ''"
-        [scrollHeight]="element.multiSelectWrapperOptions.scrollHeight || '200px'"
-        [selectionLimit]="element.multiSelectWrapperOptions.selectionLimit"
-        [title]="element.inputTitle || ''" class="w100 app-multi-select-wrapper"
-        inlineClass="form-wrapper-multi-select" tooltipPosition="top"
-      ></app-multi-select-wrapper>
-    </ng-container>
-
-    <ng-container *ngIf="element.inputType === 'autocomplete' && element.autoCompleteWrapperOptions">
-      <app-auto-complete-wrapper
-        (valueChange)="onValueChange(element.field, $event)" [(value)]="formValues[element.field]"
-        [name]="element.inputName || ''" [placeholder]="element.inputPlaceholder || ''"
-        [scrollHeight]="element.autoCompleteWrapperOptions.scrollHeight || ''"
-        [suggestions]="element.autoCompleteWrapperOptions.list || []"
-        [title]="element.inputTitle || ''" class="w100 app-auto-complete-wrapper"
-        data-cy="auto-complete-wrapper" inlineClass="form-wrapper-auto-complete"
-      ></app-auto-complete-wrapper>
-    </ng-container>
-
-    <ng-container *ngIf="element.inputType === 'form' && element.childFormFields && element.childFormFields.length">
-      <!-- multiple -->
-      <div *ngIf="element.isList" class="fss column w100" data-cy="multiple-child-forms">
-        <ng-container *ngFor="let subElement of formValues[element.field]; let i = index">
-          <div class="fas w100">
+            [textareaOptions]="element.inputTextareaOptions ? {rows: element.inputTextareaOptions.rows} : {}"
+          ></app-input-wrapper>
+        }
+        @if (element.inputType === 'dropdown' && element.dropdownWrapperOptions) {
+          <app-dropdown-wrapper
+            (selectedValueChange)="onValueChange(element.field, $event)" data-cy="dropdown-wrapper"
+            [(selectedValue)]="formValues[element.field]" [list]="element.dropdownWrapperOptions.list"
+            [name]="element.inputName || ''" [placeholder]="element.inputPlaceholder || ''"
+            [scrollHeight]="element.dropdownWrapperOptions.scrollHeight || ''" [title]="element.inputTitle || ''"
+            class="w100" inlineClass="form-wrapper-dropdown"
+          ></app-dropdown-wrapper>
+        }
+        @if (element.inputType === 'multiselect' && element.multiSelectWrapperOptions) {
+          <app-multi-select-wrapper
+            (selectedValuesChange)="onValueChange(element.field, $event)" [(selectedValues)]="formValues[element.field]"
+            [defaultLabel]="element.multiSelectWrapperOptions.defaultLabel || ''"
+            [list]="element.multiSelectWrapperOptions.list" data-cy="multi-select-wrapper"
+            [pTooltip]="formValues[element.field].length + ' sélectionné(s)'" [placeholder]="element.inputPlaceholder || ''"
+            [scrollHeight]="element.multiSelectWrapperOptions.scrollHeight || '200px'"
+            [selectionLimit]="element.multiSelectWrapperOptions.selectionLimit"
+            [title]="element.inputTitle || ''" class="w100 app-multi-select-wrapper"
+            inlineClass="form-wrapper-multi-select" tooltipPosition="top"
+          ></app-multi-select-wrapper>
+        }
+        @if (element.inputType === 'autocomplete' && element.autoCompleteWrapperOptions) {
+          <app-auto-complete-wrapper
+            (valueChange)="onValueChange(element.field, $event)" [(value)]="formValues[element.field]"
+            [name]="element.inputName || ''" [placeholder]="element.inputPlaceholder || ''"
+            [scrollHeight]="element.autoCompleteWrapperOptions.scrollHeight || ''"
+            [suggestions]="element.autoCompleteWrapperOptions.list || []"
+            [title]="element.inputTitle || ''" class="w100 app-auto-complete-wrapper"
+            data-cy="auto-complete-wrapper" inlineClass="form-wrapper-auto-complete"
+          ></app-auto-complete-wrapper>
+        }
+        @if (element.inputType === 'form' && element.childFormFields && element.childFormFields.length) {
+          <!-- multiple -->
+          @if (element.isList) {
+            <div class="fss column w100" data-cy="multiple-child-forms">
+              @for (subElement of formValues[element.field]; track subElement; let i = $index) {
+                <div class="fas w100">
+                  <app-form-wrapper
+                    (formValuesChange)="onSubFormValueChange(element.field, $event, i)"
+                    [class]="'w90 child-form child-form-' + i" [formFields]="element.childFormFields"
+                    [formValues]="subElement" [isChildForm]="true"
+                  ></app-form-wrapper>
+                  <button
+                    (click)="onRemoveElement(i, element.field)" class="p-button-text form-wrapper-section-button"
+                    icon="pi pi-minus" pButton
+                    pRipple
+                    pTooltip="Supprimer cet élément" tooltipPosition="left"
+                  ></button>
+                </div>
+              }
+              <div class="fec w100 form-wrapper-section-buttons-container">
+                <button
+                  (click)="onAddElement(element.field)"
+                  class="p-button-text form-wrapper-section-button" icon="pi pi-plus" pButton
+                  pRipple
+                  pTooltip="Ajouter un élément" tooltipPosition="left"
+                ></button>
+              </div>
+            </div>
+          }
+          <!-- single -->
+          @if (!element.isList) {
             <app-form-wrapper
-              (formValuesChange)="onSubFormValueChange(element.field, $event, i)"
-              [class]="'w90 child-form child-form-' + i" [formFields]="element.childFormFields"
-              [formValues]="subElement" [isChildForm]="true"
+              (formValuesChange)="onSubFormValueChange(element.field, $event)"
+              [formFields]="element.childFormFields" [formValues]="formValues[element.field]"
+              [isChildForm]="true" class="w100 child-form" data-cy="single-child-form"
             ></app-form-wrapper>
-
-            <button
-              (click)="onRemoveElement(i, element.field)" class="p-button-text form-wrapper-section-button"
-              icon="pi pi-minus" pButton
-              pRipple
-              pTooltip="Supprimer cet élément" tooltipPosition="left"
-            ></button>
-          </div>
-        </ng-container>
-
-        <div class="fec w100 form-wrapper-section-buttons-container">
-          <button
-            (click)="onAddElement(element.field)"
-            class="p-button-text form-wrapper-section-button" icon="pi pi-plus" pButton
-            pRipple
-            pTooltip="Ajouter un élément" tooltipPosition="left"
-          ></button>
-        </div>
+          }
+        }
       </div>
-
-      <!-- single -->
-      <app-form-wrapper
-        (formValuesChange)="onSubFormValueChange(element.field, $event)" *ngIf="!element.isList"
-        [formFields]="element.childFormFields" [formValues]="formValues[element.field]"
-        [isChildForm]="true" class="w100 child-form" data-cy="single-child-form"
-      ></app-form-wrapper>
-    </ng-container>
-
-  </div>
-
-  <div *ngIf="displayFormButtons" class="fcc w100 form-buttons-wrapped">
-    <button
-      (click)="onCloseForm()" class="p-button-text" icon="pi pi-times" label="Annuler" pButton pRipple
-    ></button>
-    <button
-      (click)="onSaveData()" class="p-button-text" icon="pi pi-check" label="Enregistrer" pButton pRipple
-      [disabled]="!isValidForm"
-    ></button>
-  </div>
-</form>
+    }
+    @if (displayFormButtons) {
+      <div class="fcc w100 form-buttons-wrapped">
+        <button
+          (click)="onCloseForm()" class="p-button-text" icon="pi pi-times" label="Annuler" pButton pRipple
+        ></button>
+        <button
+          (click)="onSaveData()" class="p-button-text" icon="pi pi-check" label="Enregistrer" pButton pRipple
+          [disabled]="!isValidForm"
+        ></button>
+      </div>
+    }
+  </form>
+}

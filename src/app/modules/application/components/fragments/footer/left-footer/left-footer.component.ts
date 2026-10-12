@@ -16,9 +16,10 @@ import { TemplatesService } from '../../../../../../shared/services/templates/te
 import { ProjectItem } from '../../../../interfaces/project-item.interface';
 
 @Component({
-  selector: 'app-left-footer',
-  templateUrl: './left-footer.component.html',
-  styleUrls: ['./left-footer.component.scss'],
+    selector: 'app-left-footer',
+    templateUrl: './left-footer.component.html',
+    styleUrls: ['./left-footer.component.scss'],
+    standalone: false
 })
 export class LeftFooterComponent implements OnInit, OnDestroy {
   @Input() mobile = false;

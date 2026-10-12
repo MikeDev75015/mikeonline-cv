@@ -5,7 +5,8 @@ import { LoadingComponent } from './component/loading.component';
  * Structural directive that replace the template reference by the loading component
  */
 @Directive({
-  selector: '[appLoading]',
+    selector: '[appLoading]',
+    standalone: false
 })
 export class LoadingDirective {
   /**

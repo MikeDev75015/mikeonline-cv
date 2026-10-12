@@ -1,40 +1,48 @@
-<div *ngIf="detail">
-  <!-- title -->
-  <h4
-    (click)="detail.url ? openUrl(detail.url) : null" *ngIf="detail.title"
-    [ngClass]="{'clickable': detail.url}"
-  >{{ detail.title | uppercase }}</h4>
-
-  <!-- details -->
-  <div class="fss">
-    <div class="column">
-      <p *ngFor="let line of detail.lineList">
-
-        <!--  section title line  -->
-        <span *ngIf="line.charAt(0) === '*'" class="fss" style="margin: 5px 0 2px; font-weight: 600;">
-          <span>
-            {{ line.replace('* ', '') }}
-            {{ detail.date ? ' (' + (detail.date | dateFormat:'MMM YYYY') + ')' : '' }}
-          </span>
-        </span>
-        <!--  subtitle line  -->
-        <span *ngIf="line.charAt(0) === '#'" class="fss" style="margin: 5px 0 2px;">
-          <span>
-            {{ line.replace('# ', '') }}
-            {{ detail.date ? ' (' + (detail.date | dateFormat:'MMM YYYY') + ')' : '' }}
-          </span>
-        </span>
-
-        <!--  default line  -->
-        <span *ngIf="line.charAt(0) !== '*' && line.charAt(0) !== '#'" class="fss">
-          <span>&nbsp;-&nbsp;</span>
-          <span>
-            {{ line }}
-            {{ detail.date ? ' (' + (detail.date | dateFormat:'MMM YYYY') + ')' : '' }}
-          </span>
-        </span>
-
-      </p>
+@if (detail) {
+  <div>
+    <!-- title -->
+    @if (detail.title) {
+      <h4
+        (click)="detail.url ? openUrl(detail.url) : null"
+        [ngClass]="{'clickable': detail.url}"
+      >{{ detail.title | uppercase }}</h4>
+    }
+    <!-- details -->
+    <div class="fss">
+      <div class="column">
+        @for (line of detail.lineList; track $index) {
+          <p>
+            <!--  section title line  -->
+            @if (line.charAt(0) === '*') {
+              <span class="fss" style="margin: 5px 0 2px; font-weight: 600;">
+                <span>
+                  {{ line.replace('* ', '') }}
+                  {{ detail.date ? ' (' + (detail.date | dateFormat:'MMM YYYY') + ')' : '' }}
+                </span>
+              </span>
+            }
+            <!--  subtitle line  -->
+            @if (line.charAt(0) === '#') {
+              <span class="fss" style="margin: 5px 0 2px;">
+                <span>
+                  {{ line.replace('# ', '') }}
+                  {{ detail.date ? ' (' + (detail.date | dateFormat:'MMM YYYY') + ')' : '' }}
+                </span>
+              </span>
+            }
+            <!--  default line  -->
+            @if (line.charAt(0) !== '*' && line.charAt(0) !== '#') {
+              <span class="fss">
+                <span>&nbsp;-&nbsp;</span>
+                <span>
+                  {{ line }}
+                  {{ detail.date ? ' (' + (detail.date | dateFormat:'MMM YYYY') + ')' : '' }}
+                </span>
+              </span>
+            }
+          </p>
+        }
+      </div>
     </div>
   </div>
-</div>
+}

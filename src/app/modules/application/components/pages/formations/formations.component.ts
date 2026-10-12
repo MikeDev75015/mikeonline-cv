@@ -10,8 +10,9 @@ import { TemplatesService } from '../../../../../shared/services/templates/templ
  * The component of the formations page.
  */
 @Component({
-  selector: 'app-formations',
-  templateUrl: './formations.component.html',
+    selector: 'app-formations',
+    templateUrl: './formations.component.html',
+    standalone: false
 })
 export class FormationsComponent implements OnInit {
   /**

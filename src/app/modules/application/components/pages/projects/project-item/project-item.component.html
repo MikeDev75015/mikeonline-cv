@@ -1,12 +1,13 @@
-<div *ngIf="project && project.pictureList && project.pictureList.length" class="p_conteneur">
-  <div class="p_main">
-    <figure class="p_face">
-      <img
-        [alt]="project.pictureList[0].alt" [src]="project.pictureList[0].src" [title]="project.pictureList[0].title"
-        height="130" width="175"
-      >
-      <p>
-        <span
+@if (project && project.pictureList && project.pictureList.length) {
+  <div class="p_conteneur">
+    <div class="p_main">
+      <figure class="p_face">
+        <img
+          [alt]="project.pictureList[0].alt" [src]="project.pictureList[0].src" [title]="project.pictureList[0].title"
+          height="130" width="175"
+          >
+          <p>
+            <span
           [ngStyle]="
             project.styles &&
             project.styles[mobileView ? 'mobileView' : 'classicView'] &&
@@ -14,15 +15,18 @@
               ? project.styles[mobileView ? 'mobileView' : 'classicView'].title
               : {}
           " style="font-size: 15px !important;"
-        >{{ project.title }}</span>
-        <span style="font-size: 15px !important;">{{ project.subTitle }}</span>
-      </p>
-    </figure>
-    <ul class="p_dos"
-        [ngStyle]="{'cursor': project.link && project.link.url ? 'pointer': 'default'}"
-        (click)="project.link && project.link.url ? openLinkInTab(project.link.url) : null">
-      <li><p>Technos utilisées</p></li>
-      <li *ngFor="let techno of project.technoList">{{ techno }}</li>
-    </ul>
-  </div>
-</div>
+            >{{ project.title }}</span>
+            <span style="font-size: 15px !important;">{{ project.subTitle }}</span>
+          </p>
+        </figure>
+        <ul class="p_dos"
+          [ngStyle]="{'cursor': project.link && project.link.url ? 'pointer': 'default'}"
+          (click)="project.link && project.link.url ? openLinkInTab(project.link.url) : null">
+          <li><p>Technos utilisées</p></li>
+          @for (techno of project.technoList; track $index) {
+            <li>{{ techno }}</li>
+          }
+        </ul>
+      </div>
+    </div>
+  }

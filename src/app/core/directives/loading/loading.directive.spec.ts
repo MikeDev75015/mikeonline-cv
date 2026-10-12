@@ -3,15 +3,15 @@ import { LoadingDirective } from './loading.directive';
 
 describe('LoadingDirective', () => {
   const viewContainerRef: ViewContainerRef = {
-    clear: jest.fn(),
-    createEmbeddedView: jest.fn(),
-    createComponent: jest.fn(),
+    clear: vi.fn(),
+    createEmbeddedView: vi.fn(),
+    createComponent: vi.fn(),
   } as unknown as ViewContainerRef;
   const templateRef: TemplateRef<any> = {} as TemplateRef<any>;
   const directive = new LoadingDirective(viewContainerRef, templateRef);
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should create an instance', () => {

@@ -1,9 +1,10 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-btn-mobile-contact',
-  templateUrl: './btn-mobile-contact.component.html',
-  styleUrls: ['./btn-mobile-contact.component.scss'],
+    selector: 'app-btn-mobile-contact',
+    templateUrl: './btn-mobile-contact.component.html',
+    styleUrls: ['./btn-mobile-contact.component.scss'],
+    standalone: false
 })
 export class BtnMobileContactComponent {
   @Input() btnClass = '';

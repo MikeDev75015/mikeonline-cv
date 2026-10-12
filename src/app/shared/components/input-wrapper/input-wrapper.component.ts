@@ -6,8 +6,9 @@ import { InputWrapperNumberOptions } from './interfaces/number-options.interface
 import { InputWrapperTextareaOptions } from './interfaces/textarea-options.interface';
 
 @Component({
-  selector: 'app-input-wrapper',
-  templateUrl: './input-wrapper.component.html',
+    selector: 'app-input-wrapper',
+    templateUrl: './input-wrapper.component.html',
+    standalone: false
 })
 export class InputWrapperComponent implements OnInit {
   @Input() inputWidth = DEFAULT_INPUT_WIDTH;

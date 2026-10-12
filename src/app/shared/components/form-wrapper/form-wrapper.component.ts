@@ -3,8 +3,9 @@ import { FormField } from './interfaces/form-field.interface';
 import { FormWrapperService } from './services/form-wrapper.service';
 
 @Component({
-  selector: 'app-form-wrapper',
-  templateUrl: './form-wrapper.component.html',
+    selector: 'app-form-wrapper',
+    templateUrl: './form-wrapper.component.html',
+    standalone: false
 })
 export class FormWrapperComponent implements OnInit {
   @Input() formFields: FormField[] | undefined;

@@ -4,8 +4,9 @@ import { map } from 'rxjs/operators';
 import { DataService } from '../../../../../shared';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
+    selector: 'app-home',
+    templateUrl: './home.component.html',
+    standalone: false
 })
 export class HomeComponent implements OnInit {
   /**

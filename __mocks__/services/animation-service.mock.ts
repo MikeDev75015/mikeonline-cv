@@ -6,5 +6,5 @@ export const animationServiceMock = {
     type: '',
     params: {},
   }),
-  onPhase: jest.fn(),
+  onPhase: vi.fn(),
 };
