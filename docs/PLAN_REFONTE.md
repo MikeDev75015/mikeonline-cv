@@ -20,11 +20,11 @@ Le domaine métier (7 ressources CRUD + auth) est petit et bien délimité. On g
 | D2 | Frontend | Angular 22, **standalone + signals + zoneless**, builder esbuild, pages routées |
 | D3 | État | **Suppression de NgRx** classique → `@ngrx/signals` (SignalStore) ou services à signaux |
 | D4 | UI | Site public : **composants maison + design tokens CSS** (zéro lib UI). Admin : **PrimeNG 22** seul (lazy). Suppression d'Angular Material, des 42 thèmes legacy, des 3 FontAwesome |
-| D5 | Backend | NestJS 12, module ressource **générique** (1 implémentation au lieu de 7 copies), auth v2, `@nestjs/config` + validation Zod, Docker Node 22 |
+| D5 | Backend | NestJS 12 + **`mongodb-dynamic-api` v6** (CRUD, auth dual-token, autorisation, validation, Swagger, health, tests e2e générés) : les 7 contrôleurs copiés et l'auth maison disparaissent. `@nestjs/config`, Docker Node 22 |
 | D6 | Qualité | Vitest (gardé) + **Playwright** (remplace Cypress), GitHub Actions (remplace CircleCI), Lighthouse CI |
 | D7 | SEO/PDF | **Prerender** des routes publiques (SSG compatible Firebase Hosting), vue `/print` + CSS print pour le PDF (pdfmake lazy en option) |
 
-**Effort estimé** : 55 à 70 jours-homme répartis en 7 phases (§5). Les phases 0 et 1 (stabilisation + sécurité) sont **urgentes** et indépendantes du reste.
+**Effort estimé** : 50 à 65 jours-homme répartis en 7 phases (§5). Les phases 0 et 1 (stabilisation + sécurité) sont **urgentes** et indépendantes du reste.
 
 ---
 
@@ -115,6 +115,7 @@ Le domaine métier (7 ressources CRUD + auth) est petit et bien délimité. On g
 5. **Design** : identité visuelle refaite (tokens, typo, dark mode), navigation par vraies routes, responsive mobile-first, accessibilité WCAG 2.2 AA.
 6. **SEO** : pages publiques prerendues, robots/sitemap/OpenGraph corrects, données structurées `Person`/`JobPosting`-like (schema.org).
 7. **Maintenabilité** : code dupliqué éliminé (contrôleurs, slices, pages admin), contrats API partagés front/back, tests qui testent (reducers, services, auth, e2e critiques).
+8. **Réutilisation** : l'API s'appuie sur vos propres bibliothèques (`mongodb-dynamic-api`, `mongodb-pipeline-builder`) : le CV devient aussi une vitrine fonctionnelle de ces projets.
 
 ---
 
@@ -127,9 +128,11 @@ Le domaine métier (7 ressources CRUD + auth) est petit et bien délimité. On g
 ```
 apps/web          Angular 22 (site public + admin)
 apps/api          NestJS 12
-packages/contracts  Types/DTO partagés (Zod schemas → types TS + validation Nest + validation forms)
+packages/contracts  Entités + DTO partagés (classes `class-validator`, le mécanisme natif de mongodb-dynamic-api ; types TS côté Angular, validation réutilisable dans les formulaires)
 packages/config    eslint, tsconfig, prettier partagés
 ```
+
+> Les entités `mongodb-dynamic-api` portent les décorateurs `@Prop` (Mongoose) **et** `class-validator`. Pour qu'Angular n'embarque pas Mongoose, `packages/contracts` expose deux entrées : `contracts/api` (entités complètes) et `contracts/web` (interfaces et DTO de validation uniquement, générés ou maintenus à côté). Les champs protégés (`password`, hash du refresh token) sont marqués `@ProtectedField` et n'apparaissent jamais dans les réponses.
 
 **Pourquoi** : solo dev, deux repos qui dupliquent déjà les interfaces (`UserV1`, `Skill`, `Experience`…), une CI, un seul `npm ci`, releases synchronisées.
 **Alternative** si le monorepo est refusé : garder deux repos + publier `@mikeonline/contracts` sur GitHub Packages. Coût : versionnage et publication à chaque changement de contrat.
@@ -156,7 +159,7 @@ Le store actuel est en lecture seule et lu par snapshot. Cible :
 
 **Site public** : aucune lib de composants. Design tokens CSS (`--color-*`, `--space-*`, `--radius-*`, `--font-*`), `prefers-color-scheme` + bascule manuelle, `prefers-reduced-motion`, layout CSS Grid/container queries. Composants nécessaires : nav, hero, carte, timeline, chip/tag, accordéon (`<details>` natif stylé), dialog (`<dialog>` natif), toast léger, bouton. Tous accessibles au clavier.
 
-**Admin** (`/admin`, lazy) : **PrimeNG 22** avec `providePrimeNG({ theme: { preset: Aura } })` + `primeicons@8`, pour `p-table` (tri, filtre, édition inline, réordonnancement), `p-dialog`, `p-confirmDialog`, `p-pickList`, `p-select`, `p-multiSelect`, `p-toast`. Formulaires passés en **Signal Forms** (Angular 22) ou Reactive Forms typés, générés depuis les schémas Zod de `packages/contracts`.
+**Admin** (`/admin`, lazy) : **PrimeNG 22** avec `providePrimeNG({ theme: { preset: Aura } })` + `primeicons@8`, pour `p-table` (tri, filtre, édition inline, réordonnancement), `p-dialog`, `p-confirmDialog`, `p-pickList`, `p-select`, `p-multiSelect`, `p-toast`. Formulaires passés en **Signal Forms** (Angular 22) ou Reactive Forms typés, construits depuis les DTO `class-validator` de `packages/contracts` (mêmes règles que l'API, erreurs 400 champ par champ remontées telles quelles).
 
 **Supprimés** : Angular Material + CDK (sauf `BreakpointObserver`/`a11y` si utile, sinon rien), les 42 thèmes legacy (`assets/themes`, 9 Mo), `ThemingService`, les trois FontAwesome, Material Icons CDN, `hammerjs`, `jquery`, `wordcloud` npm.
 
@@ -164,18 +167,47 @@ Le store actuel est en lecture seule et lu par snapshot. Cible :
 
 **Polices** : Inter variable **auto-hébergée** (`font-display: swap`, subset latin), plus de Google Fonts.
 
-### D5 — Backend NestJS 12, générique et strict
+### D5 — Backend NestJS 12 sur `mongodb-dynamic-api` v6
 
-- `tsconfig` : `strict: true`, target `es2022`, `noImplicitAny`, suppression des `any`.
-- **Config** : `@nestjs/config` + schéma **Zod** (`BDD_*`, `JWT_*`, `CORS_ORIGINS`, `SWAGGER_*`, `RATE_LIMIT_*`), `.env.example` versionné, `validate()` au boot, fin du `Env.get`.
-- **Module ressource générique** : `ResourceModule.register({ path, schema, dto, adapter })` → un seul contrôleur/service paramétré pour cv-infos, experiences, formations, interests, projects, skills, tags. Routes REST standard : `GET /v1/:resource` (pagination `?page&limit&sort&filter`), `GET /:id`, `POST`, `PATCH /:id`, `PUT /bulk`, `DELETE /:id`, `DELETE ?ids=`. Fin de la convention `duplicated`.
-- **Réponses** : retour direct des DTO (plus de `@Response() res`), `ClassSerializerInterceptor` ou mapping Zod, `HttpExceptionFilter` global (404 sur id inconnu, 409 sur E11000), `enableVersioning({ type: URI })`.
-- **Auth v2** : access token 15 min (HS256 → RS256/EdDSA optionnel), **refresh token dédié** (secret distinct, 7 j, stocké haché en base, rotation + révocation à la déconnexion), `@Roles()` + `RolesGuard` basé sur metadata (403), `APP_GUARD` global JWT avec `@Public()`, `argon2` ou `bcrypt` dans un hook `pre('save')`/service unique, **rate-limit** (`@nestjs/throttler` ou `@fastify/rate-limit`) sur `/auth/*`, `@fastify/helmet`, CORS liste blanche stricte indépendante de Swagger, Swagger désactivé en prod ou derrière auth timing-safe.
-- **Modèle** : `@Schema()` classes typées, `timestamps: true`, dates en `Date`, `ref: 'Tag'` + `populate` (ou lookup conservé via `mongodb-pipeline-builder@5`), index sur champs triés, migration des données existantes (script idempotent).
-- **Validation** : DTO générés depuis Zod (`nestjs-zod`) **ou** class-validator complet avec `whitelist + forbidNonWhitelisted + transform`. Recommandation : Zod partagé avec le front.
-- **Observabilité** : `/health` (`@nestjs/terminus`, ping Mongo), logs structurés (`pino` via `nestjs-pino`), `enableShutdownHooks()`, suppression du hack `EventEmitter`.
-- **Dépendances** : `moment-timezone` → `Intl`/`Temporal` polyfill ; `nanoid@3`/`uuidv4` → `crypto.randomUUID()` ; suppression de `rimraf` runtime, `heroku-client`, `tslint-*`, `supertest` réactivé pour les e2e.
-- **Docker** : multi-stage `node:22-alpine`, `npm ci --omit=dev`, utilisateur non-root, `HEALTHCHECK`, `.dockerignore` complet (`.env`, `.git`, `coverage`, `dist`).
+**Principe** : l'API actuelle réimplémente à la main ce que `mongodb-dynamic-api` (MDA, v6.2.2, NestJS 12, Mongoose 8) fournit déjà. On ne réécrit donc pas un « module générique » maison : on **déclare** les entités et on laisse MDA générer contrôleurs, services, auth, validation, Swagger et tests. Le code applicatif se réduit aux entités, aux prédicats d'autorisation, à quelques callbacks et aux routes custom.
+
+**Ce que MDA remplace, élément par élément**
+
+| Code actuel | Remplacé par |
+|---|---|
+| 7 contrôleurs copiés + `V1Service` à `switch` + 7 adapters | `DynamicApiModule.forFeature({ entity, controllerOptions: { path, version: '1' }, routes })` × 7 ; routes `GetMany`, `GetOne`, `CreateOne/Many`, `UpdateOne/Many`, `ReplaceOne`, `DeleteOne/Many`, `DuplicateOne/Many`, `Aggregate` |
+| Convention `id.includes('duplicated')` dans `PUT /many` | routes `DuplicateOne`/`DuplicateMany` natives |
+| `id` nanoid + `_id`, dates string, pas de timestamps | `BaseEntity` (`id`, `createdAt`, `updatedAt`, `_id`/`__v` masqués), `@Prop({ type: Date })` |
+| Auth maison (local + jwt + refresh sans expiration, même secret) | `useAuth` : access 15 min + **refresh dédié** (`refreshSecret` distinct **obligatoire** en v6, hash bcrypt en base, rotation, `reuseWindowMs`, `multiSession`, révocation, `/auth/logout` et `/auth/logout-all`), `loginField: 'name'`, `additionalFields: ['role']` |
+| `RolesGuard` par verbe HTTP, 401 au lieu de 403 | `isPublic: true` sur `GetMany`/`GetOne` des 7 ressources ; `abilityPredicate: (entity, user) => user.role === 'admin'` sur toutes les écritures ; `authAbilityPredicate` pour fermer `/auth/register` |
+| `updateUser` sans hash | `/auth/account` (`PATCH`) et `/auth/change-password` gérés par MDA ; `password` en `@ProtectedField` |
+| `ValidationPipe` sans whitelist, DTO incomplets | `enableDynamicAPIValidation` : `whitelist + forbidNonWhitelisted` par défaut en v6, décorateurs `class-validator` **sur l'entité**, `@IsUnique` / `@EntityExists` (`tagIds` → `Tag`) |
+| `tagIdList` sans intégrité, lookup manuel | `@Prop({ type: [Types.ObjectId], ref: 'Tag' })` + `populate: 'tags'` sur `GetMany`/`GetOne` ; `cascade` ou `beforeDeleteCallback` sur `DeleteOne` de `Tag` pour nettoyer les références |
+| `GET /v1/skills/:id` (éléments liés) via `mongodb-pipeline-builder` | route `Aggregate` avec `toPipeline` (MDA embarque déjà `mongodb-pipeline-builder`) **ou** `customRoutes` dans `forFeature` ; pagination `$facet` incluse |
+| Pas de rate-limit, pas de health | `rateLimit` par route auth (`login: { limit: 5, ttl: 60000 }`, `refreshToken`, `resetPassword`) + `ThrottlerModule` ; `DynamicApiHealthModule.register()` → `GET /health` |
+| Swagger manuel + basic-auth bricolé | Swagger généré par MDA, décorateurs de visibilité ; activé hors prod uniquement |
+| `main.ts` Fastify + hack `EventEmitter` | `main.ts` minimal : `enableDynamicAPIValidation`, `enableDynamicAPISwagger` (hors prod), `enableShutdownHooks`, CORS liste blanche |
+| 35 specs `should be defined` | `createDynamicApiTestingApp` (`mongodb-dynamic-api/testing`) + `supertest` + `mongodb-memory-server` : un e2e par ressource et par parcours auth |
+| Génération manuelle des 7 modules | schematic `nest g -c mongodb-dynamic-api resource <name>` |
+
+**Points d'attention spécifiques à MDA**
+
+- **Plateforme HTTP** : MDA embarque `@nestjs/platform-express` et sa doc ne mentionne pas Fastify. L'API actuelle tourne sur Fastify. Recommandation : **basculer sur Express** (trafic faible, zéro plugin Fastify indispensable, suppression des hacks `@fastify/basic-auth` et `onRequest`). À confirmer avec l'auteur de la lib (vous) si un support Fastify est prévu, sinon la bascule se fait en phase 2 (Q10).
+- **Garde globale** : dès que `useAuth` est configuré, `DynamicApiJwtAuthGuard` protège **tout**, y compris les contrôleurs écrits à la main → `@Public()` explicite sur chaque route publique (les 7 `GetMany`/`GetOne`, `/health`).
+- **Validation partagée** : MDA valide avec `class-validator` sur l'entité ; le front réutilise ces DTO (D1). Zod n'est donc **pas** introduit côté API pour éviter deux systèmes de validation.
+- **Secrets** : `JWT_SECRET` et `JWT_REFRESH_SECRET` distincts, obligatoires au boot (`forRoot()` lève sinon). Rotation des deux à la mise en prod.
+- **WebSockets / Presence / Cache Redis** : non utilisés au départ (`webSocket: false`, pas de `DynamicApiPresenceModule`). Le cache HTTP global de MDA peut servir aux `GetMany` publics (invalidation automatique à l'écriture) : à activer en phase 2 si le prerender ne couvre pas déjà le besoin.
+- **Dépendances transitives** : MDA tire `socket.io`, `ioredis`, `cache-manager`, `ts-morph`, `@angular-devkit/schematics`. Image Docker à mesurer ; `npm audit --omit=dev` doit rester propre.
+- **Pinning** : suivre les majeures de MDA (v6 a durci les défauts : secrets requis, bodies stricts, broadcasts authentifiés). Codemod `migrate-v5` disponible si on partait d'un code v4/v5, non pertinent ici (projet neuf).
+
+**Hors MDA, toujours à faire**
+
+- `tsconfig` : `strict: true`, target `es2022`, suppression des `any`.
+- **Config** : `@nestjs/config` + validation du schéma d'env (`class-validator` ou `envalid`) : `MONGODB_URI`, `JWT_SECRET`, `JWT_REFRESH_SECRET`, `CORS_ORIGINS`, `SWAGGER_ENABLED`, `NODE_ENV`. `.env.example` versionné. Fin du `Env.get`.
+- **Observabilité** : logs structurés (`nestjs-pino`), niveau `MONGODB_DYNAMIC_API_LOGGER` réglable, `enableShutdownHooks()`.
+- **Modèle et migration** : script idempotent qui convertit les documents existants (dates string → `Date`, `tagIdList` nanoid → `ObjectId` de `tags`, `id` nanoid conservé en champ legacy le temps de la bascule du front), exécuté sur un dump avant la prod.
+- **Dépendances** : suppression de `moment-timezone`, `nanoid`, `uuidv4`, `rimraf` (runtime), `heroku-client`, `tslint-*`, `passport*` et `@nestjs/passport|jwt|swagger|mongoose` en direct (fournis par MDA), `@fastify/*`.
+- **Docker** : multi-stage `node:22-alpine`, `npm ci --omit=dev`, utilisateur non-root, `HEALTHCHECK` sur `/health`, `.dockerignore` complet (`.env`, `.git`, `coverage`, `dist`).
 
 ### D6 — Qualité, CI/CD
 
@@ -241,7 +273,7 @@ Front
 - `robots.txt` → autoriser l'indexation ; ajouter `robots.txt` et `sitemap.xml` aux assets ; retirer les scripts Firebase compat ; supprimer `.firebase/*.cache` du dépôt ; créer `environment.staging.ts` ou retirer la configuration.
 - Scripts npm multiplateformes (`rimraf`/`shx`).
 
-API
+API (correctifs **temporaires** sur le code actuel, jetés en phase 2 lors du passage à `mongodb-dynamic-api` ; ils ferment les failles exploitables sans attendre)
 - Regénérer le lockfile ; corriger les 5 erreurs de lint.
 - **Hacher le mot de passe dans `updateUser`** et interdire `accessToken` dans `UserToUpdate`.
 - **Refresh token** : secret distinct, expiration, vérification contre la valeur hachée en base, rotation.
@@ -255,24 +287,26 @@ Livrable : release `web 1.13.0` / `api 0.2.0`, CI verte, `npm audit --omit=dev` 
 ### Phase 1 — Fondations : monorepo, CI, contrats (4–6 j)
 
 - Création du monorepo pnpm (`apps/web`, `apps/api`, `packages/contracts`, `packages/config`), import des historiques git (`git subtree`/`filter-repo`).
-- `packages/contracts` : schémas Zod des 7 ressources + auth + user, types inférés, exports pour Nest et Angular.
+- `packages/contracts` : entités `mongodb-dynamic-api` (`BaseEntity` + `@Prop` + `class-validator`) des 7 ressources et de `User`, DTO de création/mise à jour, entrées séparées `api`/`web` (voir D1).
 - GitHub Actions `ci.yml` (matrice web/api), caches pnpm, `audit`, artefacts de build.
 - `release-please`, Conventional Commits, CHANGELOG migré vers GitHub.
 - Dépréciation de CircleCI (fichier supprimé).
 
 Livrable : un seul `pnpm install && pnpm test && pnpm build` vert ; PR preview Firebase.
 
-### Phase 2 — Refonte backend (10–12 j)
+### Phase 2 — Refonte backend sur `mongodb-dynamic-api` (7–9 j)
 
-1. NestJS 12, Mongoose 9, `strict: true`, suppression des `any` (2 j).
-2. `@nestjs/config` + Zod, `/health`, `pino`, `enableShutdownHooks`, filtre d'exceptions global, versioning URI (1,5 j).
-3. **Module ressource générique** remplaçant 7 contrôleurs ; pagination/tri/filtres ; réponses typées ; OpenAPI généré depuis les schémas (3 j).
-4. **Auth v2** complète (access + refresh dédiés, `@Roles`, `APP_GUARD`, révocation) (2 j).
-5. Schémas typés, `timestamps`, dates `Date`, relation tags, **script de migration** des données Atlas + rollback (1,5 j).
-6. Tests : unitaires sur services/guards/filters, **e2e supertest + mongodb-memory-server** sur tous les endpoints (2 j).
-7. Docker multi-stage, déploiement conteneur, suppression des deps mortes (0,5 j).
+L'approche « générer plutôt qu'écrire » fait gagner 3 à 4 jours par rapport à un module générique maison. Le projet `apps/api` est **recréé à neuf** (NestJS 12, Express) plutôt que migré fichier par fichier : il ne restera presque rien du code actuel.
 
-Livrable : `api 1.0.0`, OpenAPI publié, client TypeScript généré (`openapi-typescript` ou directement les contrats Zod).
+1. Squelette : `nest new`, `DynamicApiModule.forRoot(MONGODB_URI, { useAuth, ... })`, `@nestjs/config` + validation d'env, `DynamicApiHealthModule`, `nestjs-pino`, CORS, `main.ts` minimal (0,5 j).
+2. **Entités** des 7 ressources + `User` dans `packages/contracts` (`BaseEntity`, `@Prop` typés, `class-validator`, `@ProtectedField`, `ref: 'Tag'`), scaffold via `nest g -c mongodb-dynamic-api resource` (1,5 j).
+3. **`forFeature` × 7** : `version: '1'`, `isPublic` sur les lectures, `abilityPredicate` admin sur les écritures, `populate: 'tags'`, `cascade`/`beforeDeleteCallback` sur `Tag`, `disableCache` ou cache activé selon D7 ; route `Aggregate`/`customRoutes` pour « éléments liés à une compétence » (1,5 j).
+4. **Auth** : `useAuth` complet (login par `name`, `additionalFields: ['role']`, refresh dédié avec rotation, `rateLimit` + `ThrottlerModule`, `/auth/register` fermé par `authAbilityPredicate`, cookie mode selon Q6), rotation des secrets (1 j).
+5. **Script de migration** Atlas (dates, `tagIdList` → `ObjectId`, champ `id` legacy), test sur dump, rollback documenté (1,5 j).
+6. **Tests e2e** avec `createDynamicApiTestingApp` + `supertest` : un fichier par ressource (lecture publique, écriture refusée sans token, CRUD admin, duplication, 404/400/409) + parcours auth (login, refresh, rotation, logout, replay refusé) ; tests unitaires des prédicats et callbacks (1 j).
+7. Docker multi-stage, déploiement conteneur, mesure de la taille d'image, `npm audit` (0,5 j).
+
+Livrable : `api 1.0.0`, Swagger généré par MDA (hors prod), contrats partagés consommés par le front, ancienne API maintenue en lecture seule jusqu'à la bascule du front (phase 3).
 
 ### Phase 3 — Refonte technique frontend (12–15 j)
 
@@ -300,7 +334,7 @@ Livrable : `web 2.0.0-beta` sur staging, revue visuelle, puis prod.
 ### Phase 5 — Admin v2 (6–8 j)
 
 - PrimeNG 22 + preset Aura, layout admin, `ResourceTable<T>` générique (3 j).
-- Formulaires générés depuis Zod (Signal Forms ou Reactive typés), pick-list tags, réordonnancement, upload d'images projets (si souhaité : Firebase Storage ou champ URL) (2,5 j).
+- Formulaires construits depuis les DTO `class-validator` partagés (Signal Forms ou Reactive typés), pick-list tags, réordonnancement, duplication via `DuplicateOne`, upload d'images projets (si souhaité : Firebase Storage ou champ URL) (2,5 j).
 - Gestion de session (expiration, refresh silencieux, déconnexion), toasts d'erreurs typées (1 j).
 
 ### Phase 6 — Qualité, observabilité, documentation (4–5 j)
@@ -310,7 +344,7 @@ Livrable : `web 2.0.0-beta` sur staging, revue visuelle, puis prod.
 - README par app (démarrage, variables, déploiement), ADR courts pour D1–D7, runbook (rotation secrets, restauration Atlas) (1 j).
 - Nettoyage final : SonarCloud reconfiguré sur le monorepo ou supprimé (0,5 j).
 
-**Total : 53 à 68 j.** Les phases 2 et 3 sont parallélisables si deux personnes ; sinon ordre 0 → 1 → 2 → 3 → 4 → 5 → 6.
+**Total : 50 à 65 j.** Les phases 2 et 3 sont parallélisables si deux personnes ; sinon ordre 0 → 1 → 2 → 3 → 4 → 5 → 6.
 
 ---
 
@@ -347,20 +381,16 @@ Livrable : `web 2.0.0-beta` sur staging, revue visuelle, puis prod.
 
 | Paquet | Actuel | Cible | Action |
 |---|---|---|---|
-| `@nestjs/*` | 11.1.16 | 12.x | `nest update` / `npm-check-updates` |
-| `mongoose` / `@nestjs/mongoose` | 8.20 / 11 | 9.x / 12 | Mise à jour + schémas classes |
-| `class-validator` / `class-transformer` | 0.14 / 0.5 | — ou 0.15 | **Remplacer par Zod** (`nestjs-zod`) partagé, sinon 0.15 + whitelist |
-| `passport*`, `@nestjs/passport`, `@nestjs/jwt` | 0.7 / 11 | garder ou `@nestjs/jwt` seul avec guards maison | Auth v2 ; passport-local optionnel |
-| `bcrypt` | 6 | `argon2` ou bcrypt 6 | Centraliser dans un `PasswordService` |
-| `moment-timezone` | 0.6 | — | Supprimer → `Intl`/`Date` |
-| `nanoid` | 3 | — | `crypto.randomUUID()` |
+| **`mongodb-dynamic-api`** | — | **6.2.x** | **Ajouter** : fournit CRUD, auth, validation, Swagger, health, cache, testing |
+| `@nestjs/common|core` | 11.1.16 | 12.x | Aligner sur la version exigée par MDA |
+| `@nestjs/platform-fastify`, `@fastify/basic-auth|cors|static` | 11 / 6 / 11 / 9 | — | **Supprimer** → `@nestjs/platform-express` (embarqué par MDA), `cors` natif Nest, `helmet` (Q10) |
+| `@nestjs/mongoose|jwt|passport|swagger`, `mongoose`, `passport*`, `class-validator`, `class-transformer`, `bcrypt`, `mongodb-pipeline-builder`, `dotenv` | divers | fournis par MDA | **Retirer des dépendances directes** (MDA les embarque : mongoose 8.9+, class-validator 0.14, pipeline-builder 4) ; ne garder en direct que ce qui est importé dans le code applicatif |
+| `moment-timezone` | 0.6 | — | Supprimer → `Intl`/`Date` (timestamps gérés par `BaseEntity`) |
+| `nanoid` | 3 | — | Supprimer (`id` fourni par `BaseEntity`) |
 | `uuidv4`, `rimraf` (runtime), `heroku-client`, `tslint-class-validator-rule`, `@types/heroku-client` | — | — | **Supprimer** |
-| `dotenv` | 17 | via `@nestjs/config` | Remplacer |
-| `mongodb-pipeline-builder` | 4.2 | 5.1 ou `populate` | Décision phase 2 |
-| `@fastify/static` | 9 | 10 | Mettre à jour (Swagger) |
-| ajouts | — | `@nestjs/config`, `@nestjs/terminus`, `@nestjs/throttler` ou `@fastify/rate-limit`, `@fastify/helmet`, `nestjs-pino`, `zod`, `mongodb-memory-server` | Phase 2 |
-| `jest` / `ts-jest` | 30 / 29 | Vitest 5 (monorepo) ou jest 30 + `@swc/jest` | Décision phase 1 |
-| `@compodoc/compodoc` | 1.2 | 2.0 ou — | Optionnel |
+| ajouts | — | `@nestjs/config`, `@nestjs/throttler` (requis par `rateLimit` de MDA), `nestjs-pino`, `mongodb-memory-server` (dev, pour `mongodb-dynamic-api/testing`), `supertest` (déjà présent) | Phase 2 |
+| `jest` / `ts-jest` | 30 / 29 | Vitest 5 (monorepo) ou jest 30 + `@swc/jest` | Décision phase 1 ; vérifier la compatibilité de `createDynamicApiTestingApp` avec le runner choisi |
+| `@compodoc/compodoc` | 1.2 | — | Supprimer (Swagger MDA suffit) |
 
 ---
 
@@ -377,6 +407,9 @@ Livrable : `web 2.0.0-beta` sur staging, revue visuelle, puis prod.
 | Q7 | Admin : upload d'images projets | URL externe / Firebase Storage / GridFS | Firebase Storage (déjà dans l'écosystème) ou URL simple |
 | Q8 | Garder SonarCloud ? | oui / non | Optionnel ; Lighthouse CI + couverture Vitest suffisent pour un projet perso |
 | Q9 | Données réelles dans les fixtures | anonymiser | **Oui**, dès la phase 0 |
+| Q10 | Plateforme HTTP de l'API avec `mongodb-dynamic-api` | (a) Express (défaut de MDA), (b) Fastify si MDA le supporte | **(a)** sauf si vous confirmez un support Fastify testé dans MDA |
+| Q11 | Cache HTTP MDA sur les lectures publiques | activer (mémoire) / désactiver / Redis | Activer en mémoire (une seule instance Heroku) ; Redis inutile à cette échelle |
+| Q12 | Identifiants exposés au front | garder `id` nanoid legacy / passer à l'`id` de `BaseEntity` | Passer à `BaseEntity.id`, conserver l'ancien en `legacyId` pendant une release pour les liens externes éventuels |
 
 ---
 
@@ -391,6 +424,9 @@ Livrable : `web 2.0.0-beta` sur staging, revue visuelle, puis prod.
 | Effort sous-estimé sur la refonte visuelle | Dérive | Maquettes rapides (Figma ou HTML statique) validées avant la phase 4 ; livrer page par page |
 | Monorepo : perte d'historique git | Traçabilité | `git subtree add` conserve l'historique ; tags migrés |
 | Secrets : `JWT_SECRET_KEY` partagé access/refresh | Compromission | Rotation des deux secrets à la mise en prod de l'auth v2 ; déconnexion forcée de l'admin |
+| Dépendance forte à `mongodb-dynamic-api` (lib maison) | Un bug ou un besoin non couvert bloque l'API | Vous en êtes l'auteur : les correctifs se font dans la lib et profitent aux deux projets ; `customRoutes` et `extraProviders` couvrent les cas hors CRUD ; `@Public()`/`abilityPredicate` testés en e2e |
+| Majeure MDA v7 annoncée (`multiSession: true` par défaut) | Changement de comportement du refresh | Fixer `multiSession` explicitement dans la config dès la v6 |
+| Express au lieu de Fastify | Perte de débit théorique | Non significatif pour un CV ; prerender côté front absorbe l'essentiel du trafic public |
 
 ---
 
@@ -399,7 +435,7 @@ Livrable : `web 2.0.0-beta` sur staging, revue visuelle, puis prod.
 - `pnpm install` (ou `npm ci`) **sans flag**, `lint`, `typecheck`, `test`, `build`, `e2e` verts en CI sur Node 22.
 - `npm audit --omit=dev` : 0 high/critical sur les deux apps.
 - Front : bundle initial public **< 300 ko** gzip, Lighthouse mobile ≥ 95 (perf, a11y, bonnes pratiques, SEO), 0 requête tierce au premier rendu, dark mode, WCAG AA vérifié par axe (0 violation sérieuse).
-- Back : `strict: true`, 0 `any` explicite, couverture ≥ 70 %, e2e sur 100 % des endpoints, `/health` OK, image Docker < 200 Mo, utilisateur non-root.
+- Back : `strict: true`, 0 `any` explicite, couverture ≥ 70 % sur le code applicatif (entités, prédicats, callbacks, routes custom), e2e `createDynamicApiTestingApp` sur 100 % des routes exposées, `/health` OK, image Docker < 250 Mo (MDA embarque socket.io/ioredis), utilisateur non-root.
 - Sécurité : refresh token dédié avec rotation, mots de passe toujours hachés, rate-limit actif, CORS strict, Swagger protégé/désactivé en prod.
 - Doc : README à jour par app, `.env.example`, ADR pour D1–D7, CHANGELOG généré.
 
@@ -407,7 +443,7 @@ Livrable : `web 2.0.0-beta` sur staging, revue visuelle, puis prod.
 
 ## 10. Prochaines étapes immédiates
 
-1. Valider les décisions D1–D7 et répondre aux questions Q1–Q9 (§7).
+1. Valider les décisions D1–D7 et répondre aux questions Q1–Q12 (§7), en particulier Q10 (Express vs Fastify avec MDA).
 2. Vérifier l'état réel de la prod (site Firebase, API Heroku, Atlas) et faire une **sauvegarde Atlas**.
 3. Démarrer la phase 0 sur les branches de travail actuelles : correctifs de sécurité API d'abord, puis lockfiles et tests front.
 4. Préparer les maquettes des 6 pages publiques (une journée) pour dérisquer la phase 4.
