@@ -24,7 +24,8 @@
     "module": "es2020",
     "types": [
       "vitest/globals"
-    ]
+    ],
+    "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,

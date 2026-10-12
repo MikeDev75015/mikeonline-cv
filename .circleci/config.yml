@@ -4,12 +4,6 @@ orbs:
   sonarcloud: sonarsource/sonarcloud@1.0.3
   jira: circleci/jira@1.3.1
   jq: circleci/jq@2.2.0
-  cypress: cypress-io/cypress@1.29.0
-
-executors:
-  cypress-base-16-with-chrome-and-firefox:
-    docker:
-      - image: "cypress/browsers:node14.17.0-chrome88-ff89"
 
 commands:
   dependencies-in-cache:
@@ -44,25 +38,6 @@ commands:
     steps:
       - run: git tag -f sonar && git push -f https://${SONAR_REPO_USER}:${SONAR_REPO_PASS}@bitbucket.org/${SONAR_REPO_TEAM}/${SONAR_REPO_NAME}.git sonar
 
-  cypress-post-steps:
-    description: Store test results and report as an artifact
-    steps:
-      - run:
-          name: Combine junit xml reports and delete once combined
-          command: |
-            npm run merge-reports:ci
-            rm -r -f ./cypress/results/files
-      - run: echo 'Successfully combined'
-      - store_test_results:
-          path: cypress/results
-      - store_artifacts:
-          path: cypress/results
-      - store_artifacts:
-          path: cypress/report
-      - store_artifacts:
-          path: cypress/screenshots
-      - store_artifacts:
-          path: cypress/videos
 
 jobs:
   ci-build-job:
@@ -224,41 +199,6 @@ workflows:
                 - master
                 - develop
 
-  ######################################### CYPRESS WORKFLOW - on cypress TAG ##########################################
-  ci-cypress-workflow:
-    when:
-      equal: [ << pipeline.git.tag >>, cypress ]
-    jobs:
-      - cypress/install:
-          name: ci-cypress-install-job
-          executor: cypress-base-16-with-chrome-and-firefox
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: cypress
-      - cypress/run:
-          name: ci-cypress-run-job
-          context: CYPRESS_ENV
-          requires:
-            - ci-cypress-install-job
-          executor: cypress-base-16-with-chrome-and-firefox
-          ci-build-id: 'testing-commit-${CIRCLE_SHA1}'
-          parallelism: 8
-          command: |
-            CYPRESSFILES=$(circleci tests glob "cypress/integration/**/*_spec.js" | circleci tests split --split-by=timings)
-            npm run cypress:ci $CYPRESSFILES
-          start: npm run cypress-server
-          wait-on: 'http://localhost:4201'
-          no-workspace: true
-          post-steps:
-            - cypress-post-steps
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: cypress
-
   ######################################## SONAR CLOUD WORKFLOW - on sonar TAG #########################################
   ci-sonar-workflow:
     when:
@@ -342,38 +282,7 @@ workflows:
     when:
       equal: [ << pipeline.git.tag >>, release ]
     jobs:
-#      - cypress/install:
-#          name: ci-cypress-install-job
-#          executor: cypress-base-16-with-chrome-and-firefox
-#          filters:
-#            branches:
-#              ignore: /.*/
-#            tags:
-#              only: release
-#      - cypress/run:
-#          name: ci-cypress-run-job
-#          context: CYPRESS_ENV
-#          requires:
-#            - ci-cypress-install-job
-#          executor: cypress-base-16-with-chrome-and-firefox
-#          ci-build-id: 'testing-commit-${CIRCLE_SHA1}'
-#          parallelism: 8
-#          command: |
-#            CYPRESSFILES=$(circleci tests glob "cypress/integration/**/*_spec.js" | circleci tests split --split-by=timings)
-#            npm run cypress:ci $CYPRESSFILES
-#          start: npm run cypress-server
-#          wait-on: 'http://localhost:4201'
-#          no-workspace: true
-#          post-steps:
-#            - cypress-post-steps
-#          filters:
-#            branches:
-#              ignore: /.*/
-#            tags:
-#              only: release
       - cd-release-job:
-#          requires:
-#            - ci-cypress-run-job
           context:
             - GIT
             - REPOS

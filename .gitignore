@@ -9,10 +9,6 @@
 /bazel-out
 /coverage
 /mochawesome-report
-/cypress/report
-/cypress/results
-/cypress/screenshots
-/cypress/videos
 
 # Node
 /node_modules
@@ -38,6 +34,7 @@ yarn-error.log
 
 # Miscellaneous
 /.angular/cache
+.firebase/
 .sass-cache/
 /connect.lock
 /libpeerconnection.log

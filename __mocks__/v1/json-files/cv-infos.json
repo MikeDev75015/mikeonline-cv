@@ -5,30 +5,30 @@
       "Nest.js",
       "AWS"
     ],
-    "fileName": "MickaelNODANCHE_DevOpsFullStackTS",
+    "fileName": "JeanDUPONT_DevOpsFullStackTS",
     "contact": {
-      "fullName": "Mickaël NODANCHE",
+      "fullName": "Jean DUPONT",
       "phoneNumberPartList": {
         "parts": [
           "+336",
-          "4095",
-          "59"
+          "0000",
+          "00"
         ],
-        "joiner": "4"
+        "joiner": "0"
       },
       "emailPartList": {
         "parts": [
-          "mikeonline75",
-          "gmail.com"
+          "jean.dupont",
+          "example.com"
         ],
         "joiner": "@"
       },
       "personalSituation": {
-        "birthDate": "1979-11-16T00:00:00",
-        "familyStatus": "Célibataire, 3 enfants",
+        "birthDate": "1980-01-01T00:00:00",
+        "familyStatus": "Marié, 2 enfants",
         "drivingLicense": "Permis B"
       },
-      "location": "Paris, Île De France, France",
+      "location": "Paris, France",
       "webLinkList": [
         {
           "name": "Malt",
@@ -37,25 +37,25 @@
             "alt": "malt icon"
           },
           "description": "Mon profil sur Malt",
-          "url": "https://www.malt.fr/profile/mickaelnodanche"
+          "url": "https://example.com/malt/jean-dupont"
         },
         {
           "name": "LinkedIn",
           "icon": "fab fa-linkedin-in",
           "description": "Mon profil sur LinkedIn",
-          "url": "https://www.linkedin.com/in/mnodanche"
+          "url": "https://example.com/linkedin/jean-dupont"
         },
         {
           "name": "GitHub",
           "icon": "fab fa-github",
           "description": "Mon profil sur GitHub",
-          "url": "https://github.com/MikeDev75015"
+          "url": "https://example.com/github/jean-dupont"
         },
         {
           "name": "NPM",
           "icon": "fab fa-npm",
           "description": "Mon profil sur NPM",
-          "url": "https://www.npmjs.com/~mikeonline75"
+          "url": "https://example.com/npm/jean-dupont"
         }
       ]
     },

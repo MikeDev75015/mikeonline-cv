@@ -16,7 +16,7 @@ export class AuthInterceptor implements HttpInterceptor {
       switch (authPath) {
         case AuthPath.LOGIN:
           // @ts-ignore
-          body = { accessToken: request.body.username === 'admin' ? '1234' : '5678' };
+          body = { accessToken: request.body.username === 'admin' ? '1234' : '5678', refreshToken: 'mock-refresh-token' };
           break;
         case AuthPath.LOGOUT:
           body = { message: 'SUCCESS' };

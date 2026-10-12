@@ -12,8 +12,7 @@ export class HttpRequestInterceptor implements HttpInterceptor {
   }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    if (request.url.includes(environment.API_URL)) {
-
+    if (request.url.includes(environment.API_URL) && !request.headers.has('Authorization')) {
       const accessToken = this.authService.getAccessToken();
       if (accessToken) {
         request = this.authService.setHeaderAuthorization(request, accessToken);

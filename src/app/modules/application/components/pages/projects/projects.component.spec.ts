@@ -102,6 +102,9 @@ describe('PortfolioComponent', () => {
   describe('onLoadBackgroundImage', () => {
     it('should set background image url and start animation after component timeout', async () => {
       fixture.detectChanges();
+      // Angular's change detection scheduler uses timers itself: only count the component's own calls.
+      setTimeoutSpy.mockClear();
+      clearTimeoutSpy.mockClear();
       expect(component.backgroundImage).toStrictEqual('');
       expect(component.showImage).toBeFalsy();
       expect(component['timeoutCreated']).not.toBeDefined();
@@ -123,6 +126,9 @@ describe('PortfolioComponent', () => {
   describe('onRemoveBackgroundImage', () => {
     beforeEach(async () => {
       fixture.detectChanges();
+      // Angular's change detection scheduler uses timers itself: only count the component's own calls.
+      setTimeoutSpy.mockClear();
+      clearTimeoutSpy.mockClear();
     });
 
     it('should clear timeout created if exist before remove background image', async () => {

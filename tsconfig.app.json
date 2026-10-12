@@ -17,6 +17,8 @@
     "src/**/*.mock.ts",
     "src/**/__mocks__/**/**.*",
     "src/environments/environment.prod.ts",
-    "src/environments/environment.staging.ts"
+    "src/environments/environment.staging.ts",
+    "src/test-setup.ts",
+    "src/test/**/*.ts"
   ]
 }

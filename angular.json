@@ -24,14 +24,15 @@
             "index": "src/index.html",
             "main": "src/main.ts",
             "allowedCommonJsDependencies": [
-              "hammerjs",
-              "wordcloud"
+              "tweetnacl"
             ],
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
               "src/favicon.ico",
+              "src/robots.txt",
+              "src/sitemap.xml",
               "src/assets",
               "src/manifest.webmanifest"
             ],
@@ -94,20 +95,6 @@
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
-            },
-            "cypress": {
-              "buildOptimizer": false,
-              "optimization": false,
-              "vendorChunk": true,
-              "extractLicenses": false,
-              "sourceMap": true,
-              "namedChunks": true,
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.cypress.ts"
-                }
-              ]
             }
           },
           "defaultConfiguration": "production"
@@ -117,9 +104,6 @@
           "configurations": {
             "production": {
               "buildTarget": "ocv-front:build:production"
-            },
-            "cypress": {
-              "buildTarget": "ocv-front:build:cypress"
             },
             "development": {
               "buildTarget": "ocv-front:build:development"

@@ -78,7 +78,10 @@ describe('SkillsComponent', () => {
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    // Restore DOM/timer spies (document.getElementById, window.setTimeout, ...) between tests:
+    // TestBed.createComponent locates its host element with document.querySelector('#rootN'),
+    // which jsdom resolves through document.getElementById.
+    vi.restoreAllMocks();
   });
 
   it('should create', () => {
@@ -282,10 +285,14 @@ describe('SkillsComponent', () => {
   });
 
   describe('worldCloudStopCallback', () => {
-    const getElementsByClassNameSpy = vi.spyOn(document, 'getElementsByClassName');
+    let getElementsByClassNameSpy: any;
     const wcElementMock = document.createElement('span');
     const wcElementMockWithInitOnclickAttribute = document.createElement('span');
     wcElementMockWithInitOnclickAttribute.setAttribute('init-onclick', 'true');
+
+    beforeEach(() => {
+      getElementsByClassNameSpy = vi.spyOn(document, 'getElementsByClassName');
+    });
 
     it('should do nothing if no element is found', () => {
       getElementsByClassNameSpy.mockImplementation((): any => []);

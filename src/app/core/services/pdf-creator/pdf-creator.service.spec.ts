@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { MockService } from 'ng-mocks';
 import { UtilsService } from '../../../shared';
 
 import { PdfCreatorService } from './pdf-creator.service';
@@ -9,9 +8,9 @@ describe('PdfCreatorService', () => {
     providers: [
       {
         provide: UtilsService,
-        useValue: MockService(UtilsService)
-      }
-    ]
+        useValue: {},
+      },
+    ],
   }));
 
   it('should be created', () => {

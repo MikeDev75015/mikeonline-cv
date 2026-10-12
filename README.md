@@ -1,27 +1,40 @@
-# OcvFront
+# mikeonline-cv
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.2.5.
+Frontend of the [MikeOnLine online CV](https://cv-mikeonline.web.app): Angular 21, NgRx, PrimeNG / Angular Material, PWA, hosted on Firebase Hosting. Data comes from [`mikeonline-api`](https://github.com/MikeDev75015/mikeonline-api).
 
-## Development server
+> An overhaul is in progress, see [`docs/PLAN_REFONTE.md`](./docs/PLAN_REFONTE.md) (phase 0 delivered in 1.13.0).
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Requirements
 
-## Code scaffolding
+- Node.js >= 22, npm >= 10
+- The API running locally on `http://localhost:5000` (see `src/environments/environment.ts`), or set `interceptBackendRequest: true` to serve the JSON fixtures of `__mocks__/v1/json-files` instead
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Scripts
 
-## Build
+```bash
+npm ci                 # install (lockfile is authoritative)
+npm start              # dev server on http://localhost:4200
+npm run build-prod     # production build to dist/production
+npm run build-staging  # staging build to dist/staging
+npm test               # unit tests (Vitest + jsdom)
+npm run test:watch
+npm run test-coverage
+npm run lint           # ESLint (TypeScript + templates)
+npm run deploy:prod    # build-prod + firebase deploy (needs firebase login)
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Structure
 
-## Running unit tests
+- `src/app/core`: NgRx store (actions, effects, reducers, selectors), HTTP services and interceptors, shared models
+- `src/app/modules/application`: public site (home, skills, experiences, formations, portfolio, interests)
+- `src/app/modules/admin`: back-office (sign-in, CRUD tables) behind the API authentication
+- `src/app/shared`: form wrappers, pipes, utilities
+- `__mocks__`: JSON fixtures (anonymised) and service mocks used by the tests and the optional fake backend
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Authentication (admin)
 
-## Running end-to-end tests
+`POST /auth/login` returns an access token and a refresh token, both kept in `localStorage`. The access token is added to API requests by `HttpRequestInterceptor`; on a `401 INVALID_TOKEN`, `HttpErrorInterceptor` rotates the pair through `PUT /auth/refresh-token` (refresh token as Bearer) and retries once. A failed refresh clears the session and redirects to `/admin/sign-in`.
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+## CI / deployment
 
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+GitHub Actions (`.github/workflows/ci.yml`) runs lint, tests, production build and a production dependency audit on every push. Firebase deployments are still driven by the legacy CircleCI configuration (`develop` → staging, `vX.Y.Z` tags → production) and will be migrated in phase 1 of the plan.
